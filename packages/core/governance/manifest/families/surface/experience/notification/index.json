@@ -8,15 +8,15 @@
     "components": [
       "NotificationSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/experience",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/experience/notification",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/experience",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/experience/notification",
     "publicComponents": [
       "NotificationSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ff0e46f12cec976abe896a9ca216d2b19347b0809a7285ff6101e95cedb771f8"
+    "inventoryRowDigest": "db685d7e6602807722db146a7c8fb41147bb8d04bdfb1cf0590b5665c12523b3"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/experience/notification",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+      "packages/core/src/components/surfaces/presentation/pages/experience/notification",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
     ],
     "stableParts": [
       "item-action",
@@ -152,10 +152,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-notification__item` bound by the root pair `.ds-surface.ds-notification`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css:38",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css:58",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css:65"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css:38",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css:58",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css:65"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -654,7 +654,7 @@
         "reason": "RULING R-8 excludes state and modifier classes from part admission. These are measured and recorded so the evidence survives, but they are NOT parts and are NOT written into the enforced `states` or `variantAxes` arrays: R-5 classifies data-attribute tokens, and the owner has not extended it to BEM modifier classes. Under-claiming is the safe error."
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
         "rootAnchor": ".ds-surface.ds-notification",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -709,7 +709,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
@@ -724,7 +724,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
@@ -739,7 +739,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
@@ -754,7 +754,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
@@ -786,13 +786,13 @@
         {
           "channelId": "--_ds-notification-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -812,13 +812,13 @@
         {
           "channelId": "--_ds-notification-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -846,13 +846,13 @@
         {
           "channelId": "--_ds-notification-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -872,13 +872,13 @@
         {
           "channelId": "--_ds-notification-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -898,13 +898,13 @@
         {
           "channelId": "--_ds-notification-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -924,13 +924,13 @@
         {
           "channelId": "--_ds-notification-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -949,7 +949,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
             "--ds-motion-ease-in-out",
@@ -969,7 +969,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -983,13 +983,13 @@
         {
           "channelId": "--_ds-notification-surface-gradient-mesh",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1008,7 +1008,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1021,7 +1021,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1034,7 +1034,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1048,13 +1048,13 @@
         {
           "channelId": "--_ds-notification-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/notification"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/notification-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1078,7 +1078,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1091,7 +1091,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1130,7 +1130,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1161,7 +1161,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1175,11 +1175,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

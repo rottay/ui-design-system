@@ -8,15 +8,15 @@
     "components": [
       "PatternApprovalInbox"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/workflow/approval-inbox",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/workflow/approval-inbox",
     "publicComponents": [
       "PatternApprovalInbox"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "855a2c54ff40741ad210089d9c4692e6c40497582b2be4296f7eb9fb0fb08cc8"
+    "inventoryRowDigest": "1a9799aa0b7d68554bbd8a83f9467e46358dc3709188145561a7ae3df944bf6e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,11 +28,11 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/workflow/approval-inbox/index.ts",
-      "packages/core/src/ui/patterns/workflow/approval-inbox/contracts/index.ts",
-      "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css"
+      "packages/core/src/components/patterns/workflow/approval-inbox/index.ts",
+      "packages/core/src/components/patterns/workflow/approval-inbox/contracts/index.ts",
+      "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css"
     ],
     "stableParts": [
       "batch-approve-button",
@@ -103,307 +103,307 @@
           "part": "batch-approve-button",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:489",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:227",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:357"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:489",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:357"
           ]
         },
         {
           "part": "batch-clear-button",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:500",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:228",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:358"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:500",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:358"
           ]
         },
         {
           "part": "batch-count",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:481",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:254"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:481",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:254"
           ]
         },
         {
           "part": "batch-toolbar",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:477",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:237",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:368"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:477",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:237",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:368"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:444",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:262",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:369"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:444",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:369"
           ]
         },
         {
           "part": "group",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:513",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:39",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:46",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:365"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:513",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:39",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:46",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:365"
           ]
         },
         {
           "part": "group-count",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:523",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:71"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:523",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:71"
           ]
         },
         {
           "part": "group-header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:517",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:60",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:366"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:517",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:366"
           ]
         },
         {
           "part": "group-items",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:527",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:76"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:527",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:76"
           ]
         },
         {
           "part": "group-title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:518",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:64"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:518",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:64"
           ]
         },
         {
           "part": "groups",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:509",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:34"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:509",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:34"
           ]
         },
         {
           "part": "item",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:159",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:80",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:91",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:96",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:276",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:367"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:159",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:80",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:91",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:96",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:276",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:367"
           ]
         },
         {
           "part": "item-action-button",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:222",
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:245",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:203",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:209"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:222",
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:209"
           ]
         },
         {
           "part": "item-actions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:214",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:180",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:290"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:214",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:290"
           ]
         },
         {
           "part": "item-amount",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:203",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:152"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:152"
           ]
         },
         {
           "part": "item-figures",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:201",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:145",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:285"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:285"
           ]
         },
         {
           "part": "item-main",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:177",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:102",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:281"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:177",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:281"
           ]
         },
         {
           "part": "item-meta",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:192",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:123"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:123"
           ]
         },
         {
           "part": "item-risk-badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:186"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:186"
           ]
         },
         {
           "part": "item-select",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:168"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:168"
           ]
         },
         {
           "part": "item-sla",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:171",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:374"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:374"
           ]
         },
         {
           "part": "item-sla-icon",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:207"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:207"
           ]
         },
         {
           "part": "item-submitted",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:136"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:136"
           ]
         },
         {
           "part": "item-submitted-icon",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:195"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:195"
           ]
         },
         {
           "part": "item-subtitle",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:193",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:132"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:132"
           ]
         },
         {
           "part": "item-title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:116"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:116"
           ]
         },
         {
           "part": "item-title-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:108"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:108"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:407",
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:440",
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:458",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:29",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:46",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:60"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:407",
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:440",
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:458",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:29",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:46",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:60"
           ]
         },
         {
           "part": "selection-announcer",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:466"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:466"
           ]
         },
         {
           "part": "skeleton",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:414",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:297",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:382"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:414",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:297",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:382"
           ]
         },
         {
           "part": "skeleton-group",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:416",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:309",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:370"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:416",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:309",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:370"
           ]
         },
         {
           "part": "skeleton-header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:417",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:316"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:417",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:316"
           ]
         },
         {
           "part": "skeleton-line",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:421",
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:422",
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:424",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:336",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:342",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:346"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:421",
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:422",
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:424",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:336",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:342",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:346"
           ]
         },
         {
           "part": "skeleton-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:419",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:321"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:419",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:321"
           ]
         },
         {
           "part": "skeleton-row-lines",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:420",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:330"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:420",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:330"
           ]
         }
       ],
@@ -411,22 +411,22 @@
         {
           "token": "loading=false",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:441",
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:459"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:441",
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:459"
           ],
           "state": "loading"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:408"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:408"
           ],
           "state": "loading"
         },
         {
           "token": "selected=selected || undefined",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:160"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:160"
           ],
           "state": "selected"
         }
@@ -435,65 +435,65 @@
         {
           "token": "action=approve",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:223",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:209",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:218"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:223",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:209",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:218"
           ]
         },
         {
           "token": "action=reject",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:246",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:203",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:213",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:221"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:221"
           ]
         },
         {
           "token": "risk=item.risk",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:187"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:187"
           ]
         },
         {
           "token": "urgency=critical",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:374"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:374"
           ]
         },
         {
           "token": "urgency=slaUrgency",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:206"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:206"
           ]
         },
         {
           "token": "urgency=warning",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:171"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:171"
           ]
         },
         {
           "token": "width=action",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:424",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:350"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:424",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:350"
           ]
         },
         {
           "token": "width=half",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:421",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:342"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:421",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:342"
           ]
         },
         {
           "token": "width=third",
           "at": [
-            "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx:422",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css:346"
+            "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx:422",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css:346"
           ]
         }
       ],
@@ -501,12 +501,12 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "lines": 355
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/modern/index.tsx",
             "lines": 551
           }
         ]
@@ -521,7 +521,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 36,
             "fallback": true,
             "fallbackValue": "16px",
@@ -534,7 +534,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 40,
             "fallback": false,
             "fallbackValue": null,
@@ -547,7 +547,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 41,
             "fallback": false,
             "fallbackValue": null,
@@ -560,7 +560,7 @@
           },
           {
             "name": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 42,
             "fallback": false,
             "fallbackValue": null,
@@ -573,7 +573,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 47,
             "fallback": false,
             "fallbackValue": null,
@@ -586,7 +586,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "8px",
@@ -599,7 +599,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 55,
             "fallback": true,
             "fallbackValue": "12px",
@@ -612,7 +612,7 @@
           },
           {
             "name": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "20px",
@@ -625,7 +625,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 57,
             "fallback": false,
             "fallbackValue": null,
@@ -638,7 +638,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 61,
             "fallback": false,
             "fallbackValue": null,
@@ -651,7 +651,7 @@
           },
           {
             "name": "--ds-type-label-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-sm, 14px)",
@@ -664,7 +664,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "14px",
@@ -677,7 +677,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "600",
@@ -690,7 +690,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 67,
             "fallback": false,
             "fallbackValue": null,
@@ -703,7 +703,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 72,
             "fallback": false,
             "fallbackValue": null,
@@ -716,7 +716,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 84,
             "fallback": true,
             "fallbackValue": "12px",
@@ -729,7 +729,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 85,
             "fallback": true,
             "fallbackValue": "12px",
@@ -742,7 +742,7 @@
           },
           {
             "name": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "20px",
@@ -755,7 +755,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 92,
             "fallback": false,
             "fallbackValue": null,
@@ -768,7 +768,7 @@
           },
           {
             "name": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -781,7 +781,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 104,
             "fallback": true,
             "fallbackValue": "4px",
@@ -794,7 +794,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 112,
             "fallback": true,
             "fallbackValue": "8px",
@@ -807,7 +807,7 @@
           },
           {
             "name": "--ds-type-body-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 117,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-sm, 13px)",
@@ -820,7 +820,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 117,
             "fallback": true,
             "fallbackValue": "13px",
@@ -833,7 +833,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 118,
             "fallback": true,
             "fallbackValue": "600",
@@ -846,7 +846,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 119,
             "fallback": false,
             "fallbackValue": null,
@@ -859,7 +859,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 127,
             "fallback": true,
             "fallbackValue": "12px",
@@ -872,7 +872,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 128,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-xs, 12px)",
@@ -885,7 +885,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 128,
             "fallback": true,
             "fallbackValue": "12px",
@@ -898,7 +898,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 129,
             "fallback": false,
             "fallbackValue": null,
@@ -911,7 +911,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 139,
             "fallback": true,
             "fallbackValue": "4px",
@@ -924,7 +924,7 @@
           },
           {
             "name": "--ds-numeric-tabular",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 140,
             "fallback": true,
             "fallbackValue": "tabular-nums",
@@ -937,7 +937,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 148,
             "fallback": true,
             "fallbackValue": "16px",
@@ -950,7 +950,7 @@
           },
           {
             "name": "--ds-type-body-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 153,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-sm, 14px)",
@@ -963,7 +963,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 153,
             "fallback": true,
             "fallbackValue": "14px",
@@ -976,7 +976,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 154,
             "fallback": true,
             "fallbackValue": "600",
@@ -989,7 +989,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 155,
             "fallback": false,
             "fallbackValue": null,
@@ -1002,7 +1002,7 @@
           },
           {
             "name": "--ds-numeric-tabular",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 156,
             "fallback": true,
             "fallbackValue": "tabular-nums",
@@ -1015,7 +1015,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 163,
             "fallback": true,
             "fallbackValue": "4px",
@@ -1028,7 +1028,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 164,
             "fallback": true,
             "fallbackValue": "11px",
@@ -1041,7 +1041,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 165,
             "fallback": true,
             "fallbackValue": "600",
@@ -1054,7 +1054,7 @@
           },
           {
             "name": "--ds-numeric-tabular",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 166,
             "fallback": true,
             "fallbackValue": "tabular-nums",
@@ -1067,7 +1067,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 168,
             "fallback": false,
             "fallbackValue": null,
@@ -1080,7 +1080,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 172,
             "fallback": false,
             "fallbackValue": null,
@@ -1093,7 +1093,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 176,
             "fallback": false,
             "fallbackValue": null,
@@ -1106,7 +1106,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 183,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1119,7 +1119,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 189,
             "fallback": false,
             "fallbackValue": null,
@@ -1132,7 +1132,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 191,
             "fallback": false,
             "fallbackValue": null,
@@ -1145,7 +1145,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 191,
             "fallback": false,
             "fallbackValue": null,
@@ -1158,7 +1158,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 192,
             "fallback": false,
             "fallbackValue": null,
@@ -1171,7 +1171,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 192,
             "fallback": false,
             "fallbackValue": null,
@@ -1184,7 +1184,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 193,
             "fallback": false,
             "fallbackValue": null,
@@ -1197,7 +1197,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 193,
             "fallback": false,
             "fallbackValue": null,
@@ -1210,7 +1210,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 194,
             "fallback": false,
             "fallbackValue": null,
@@ -1223,7 +1223,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 194,
             "fallback": false,
             "fallbackValue": null,
@@ -1236,7 +1236,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 198,
             "fallback": false,
             "fallbackValue": null,
@@ -1249,7 +1249,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 199,
             "fallback": false,
             "fallbackValue": null,
@@ -1262,7 +1262,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 204,
             "fallback": false,
             "fallbackValue": null,
@@ -1275,7 +1275,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 205,
             "fallback": false,
             "fallbackValue": null,
@@ -1288,7 +1288,7 @@
           },
           {
             "name": "--ds-color-success-600",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 210,
             "fallback": false,
             "fallbackValue": null,
@@ -1301,7 +1301,7 @@
           },
           {
             "name": "--ds-color-error-600",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 214,
             "fallback": false,
             "fallbackValue": null,
@@ -1314,7 +1314,7 @@
           },
           {
             "name": "--ds-color-success-600",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 219,
             "fallback": false,
             "fallbackValue": null,
@@ -1327,7 +1327,7 @@
           },
           {
             "name": "--ds-color-error-600",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 222,
             "fallback": false,
             "fallbackValue": null,
@@ -1340,7 +1340,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 229,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1353,7 +1353,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 229,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1366,7 +1366,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 229,
             "fallback": false,
             "fallbackValue": null,
@@ -1379,7 +1379,7 @@
           },
           {
             "name": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 230,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1392,7 +1392,7 @@
           },
           {
             "name": "--_ds-approval-inbox-batch-sticky-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 239,
             "fallback": true,
             "fallbackValue": "0px",
@@ -1405,7 +1405,7 @@
           },
           {
             "name": "--ds-z-index-relative-above",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 241,
             "fallback": true,
             "fallbackValue": "1",
@@ -1418,7 +1418,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 245,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1431,7 +1431,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 246,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1444,7 +1444,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 247,
             "fallback": true,
             "fallbackValue": "10px",
@@ -1457,7 +1457,7 @@
           },
           {
             "name": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 248,
             "fallback": true,
             "fallbackValue": "20px",
@@ -1470,7 +1470,7 @@
           },
           {
             "name": "--ds-color-primary-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 249,
             "fallback": false,
             "fallbackValue": null,
@@ -1483,7 +1483,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 250,
             "fallback": false,
             "fallbackValue": null,
@@ -1496,7 +1496,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 251,
             "fallback": false,
             "fallbackValue": null,
@@ -1509,7 +1509,7 @@
           },
           {
             "name": "--ds-type-body-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 255,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-sm, 13px)",
@@ -1522,7 +1522,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 255,
             "fallback": true,
             "fallbackValue": "13px",
@@ -1535,7 +1535,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 256,
             "fallback": true,
             "fallbackValue": "600",
@@ -1548,7 +1548,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 257,
             "fallback": false,
             "fallbackValue": null,
@@ -1561,7 +1561,7 @@
           },
           {
             "name": "--ds-numeric-tabular",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 258,
             "fallback": true,
             "fallbackValue": "tabular-nums",
@@ -1574,7 +1574,7 @@
           },
           {
             "name": "--ds-spacing-10",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 263,
             "fallback": true,
             "fallbackValue": "40px",
@@ -1587,7 +1587,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 264,
             "fallback": true,
             "fallbackValue": "24px",
@@ -1600,7 +1600,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 265,
             "fallback": false,
             "fallbackValue": null,
@@ -1613,7 +1613,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 266,
             "fallback": false,
             "fallbackValue": null,
@@ -1626,7 +1626,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 267,
             "fallback": false,
             "fallbackValue": null,
@@ -1639,7 +1639,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 278,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1652,7 +1652,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 299,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1665,7 +1665,7 @@
           },
           {
             "name": "--ds-motion-deliberate",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 300,
             "fallback": false,
             "fallbackValue": null,
@@ -1678,7 +1678,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 301,
             "fallback": true,
             "fallbackValue": "ease-in-out",
@@ -1691,7 +1691,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 310,
             "fallback": false,
             "fallbackValue": null,
@@ -1704,7 +1704,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 311,
             "fallback": false,
             "fallbackValue": null,
@@ -1717,7 +1717,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 312,
             "fallback": false,
             "fallbackValue": null,
@@ -1730,7 +1730,7 @@
           },
           {
             "name": "--ds-spacing-11",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 317,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1743,7 +1743,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 318,
             "fallback": false,
             "fallbackValue": null,
@@ -1756,7 +1756,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 325,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1769,7 +1769,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 326,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1782,7 +1782,7 @@
           },
           {
             "name": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 327,
             "fallback": true,
             "fallbackValue": "20px",
@@ -1795,7 +1795,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 332,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1808,7 +1808,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 337,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1821,7 +1821,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 338,
             "fallback": false,
             "fallbackValue": null,
@@ -1834,7 +1834,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 339,
             "fallback": false,
             "fallbackValue": null,
@@ -1847,7 +1847,7 @@
           },
           {
             "name": "--ds-spacing-20",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 351,
             "fallback": true,
             "fallbackValue": "80px",
@@ -1860,7 +1860,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 359,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1873,7 +1873,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 26,
             "fallback": false,
             "fallbackValue": null,
@@ -1886,7 +1886,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 27,
             "fallback": false,
             "fallbackValue": null,
@@ -1899,7 +1899,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 28,
             "fallback": false,
             "fallbackValue": null,
@@ -1912,7 +1912,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 29,
             "fallback": false,
             "fallbackValue": null,
@@ -1925,7 +1925,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -1938,7 +1938,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 82,
             "fallback": false,
             "fallbackValue": null,
@@ -1951,7 +1951,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 83,
             "fallback": false,
             "fallbackValue": null,
@@ -1964,7 +1964,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 122,
             "fallback": false,
             "fallbackValue": null,
@@ -1977,7 +1977,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 124,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -1990,7 +1990,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 124,
             "fallback": false,
             "fallbackValue": null,
@@ -2003,7 +2003,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 135,
             "fallback": false,
             "fallbackValue": null,
@@ -2016,7 +2016,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 150,
             "fallback": false,
             "fallbackValue": null,
@@ -2029,7 +2029,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 152,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -2042,7 +2042,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -2055,7 +2055,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 157,
             "fallback": false,
             "fallbackValue": null,
@@ -2068,7 +2068,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -2081,7 +2081,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 179,
             "fallback": false,
             "fallbackValue": null,
@@ -2094,7 +2094,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 182,
             "fallback": false,
             "fallbackValue": null,
@@ -2107,7 +2107,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 210,
             "fallback": false,
             "fallbackValue": null,
@@ -2120,7 +2120,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 212,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -2133,7 +2133,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 212,
             "fallback": false,
             "fallbackValue": null,
@@ -2146,7 +2146,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 222,
             "fallback": false,
             "fallbackValue": null,
@@ -2159,7 +2159,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 223,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
@@ -2172,7 +2172,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 223,
             "fallback": false,
             "fallbackValue": null,
@@ -2185,7 +2185,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 231,
             "fallback": false,
             "fallbackValue": null,
@@ -2198,7 +2198,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 238,
             "fallback": false,
             "fallbackValue": null,
@@ -2211,7 +2211,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 257,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 4%, transparent)",
@@ -2224,7 +2224,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 257,
             "fallback": false,
             "fallbackValue": null,
@@ -2237,7 +2237,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 275,
             "fallback": false,
             "fallbackValue": null,
@@ -2250,7 +2250,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 288,
             "fallback": false,
             "fallbackValue": null,
@@ -2263,7 +2263,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 292,
             "fallback": false,
             "fallbackValue": null,
@@ -2276,7 +2276,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/approval-inbox/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/approval-inbox/engines/classic/index.tsx",
             "line": 306,
             "fallback": false,
             "fallbackValue": null,
@@ -2290,289 +2290,289 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 36,
             "literal": "16px",
             "text": "gap: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 47,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 54,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 55,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 56,
             "literal": "20px",
             "text": "padding-inline: var(--ds-spacing-5, 20px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 61,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 65,
             "literal": "14px",
             "text": "font-size: var(--ds-type-label-font-size, var(--ds-font-size-sm, 14px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 84,
             "literal": "12px",
             "text": "gap: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 85,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 86,
             "literal": "20px",
             "text": "padding-inline: var(--ds-spacing-5, 20px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 92,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 104,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 112,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 117,
             "literal": "13px",
             "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 127,
             "literal": "12px",
             "text": "gap: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 128,
             "literal": "12px",
             "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 139,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 148,
             "literal": "16px",
             "text": "gap: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 153,
             "literal": "14px",
             "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 14px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 163,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 164,
             "literal": "11px",
             "text": "font-size: var(--ds-type-caption-font-size, 11px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 183,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 229,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 230,
             "literal": "2px",
             "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 239,
             "literal": "0px",
             "text": "inset-block-start: var(--_ds-approval-inbox-batch-sticky-offset, 0px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 245,
             "literal": "12px",
             "text": "gap: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 246,
             "literal": "12px",
             "text": "margin-block-end: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 247,
             "literal": "10px",
             "text": "padding-block: var(--ds-spacing-2, 10px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 248,
             "literal": "20px",
             "text": "padding-inline: var(--ds-spacing-5, 20px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 250,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 255,
             "literal": "13px",
             "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 263,
             "literal": "40px",
             "text": "padding-block: var(--ds-spacing-10, 40px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 264,
             "literal": "24px",
             "text": "padding-inline: var(--ds-spacing-6, 24px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 266,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 275,
             "literal": "34rem",
             "text": "@container ds-approval-inbox (max-width: 34rem) {"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 278,
             "literal": "8px",
             "text": "row-gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 299,
             "literal": "16px",
             "text": "gap: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 311,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 317,
             "literal": "44px",
             "text": "block-size: var(--ds-spacing-11, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 325,
             "literal": "12px",
             "text": "gap: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 326,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 327,
             "literal": "20px",
             "text": "padding-inline: var(--ds-spacing-5, 20px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 332,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 337,
             "literal": "12px",
             "text": "block-size: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 351,
             "literal": "80px",
             "text": "inline-size: var(--ds-spacing-20, 80px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 359,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 375,
             "literal": "1px",
             "text": "outline: 1px solid Highlight;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
             "line": 376,
             "literal": "1px",
             "text": "outline-offset: 1px;"
@@ -2650,7 +2650,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2682,7 +2682,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2721,13 +2721,13 @@
         {
           "channelId": "--_ds-approval-inbox-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/approval-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2745,7 +2745,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-radius-lg",
@@ -2784,7 +2784,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de avance del wizard son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2796,7 +2796,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-spacing-1",
@@ -2843,13 +2843,13 @@
         {
           "channelId": "--_ds-approval-inbox-item-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/approval-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2880,13 +2880,13 @@
         {
           "channelId": "--_ds-steps-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/approval-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2905,7 +2905,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "pasos en flujo, no flotan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-elevation-1"
@@ -2924,7 +2924,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-surface-highlight"
@@ -2943,7 +2943,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de flujo, no chrome",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2956,7 +2956,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2969,7 +2969,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "steppers en flujo, sin region pintada propia: usan los canales semanticos directos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-z-index-relative-above"
@@ -2999,13 +2999,13 @@
         {
           "channelId": "--_ds-approval-inbox-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/approval-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3029,7 +3029,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3042,7 +3042,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3081,7 +3081,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3126,13 +3126,13 @@
         {
           "channelId": "--_ds-steps-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/approval-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/approval-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3152,11 +3152,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

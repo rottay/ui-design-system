@@ -8,15 +8,15 @@
     "components": [
       "AdaptiveOverlay"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/feedback/adaptive-overlay",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/feedback/adaptive-overlay",
     "publicComponents": [
       "AdaptiveOverlay"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "260e79a86c1e916e861751c6a28cdd9e847b81cea86dacf9cb26037aee82cedc"
+    "inventoryRowDigest": "4d4dc0e220ae86246b307de5c2e9bd1a81e56dfd1dd571c2782127c220f6a683"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "UNKNOWN",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/feedback/adaptive-overlay/index.tsx",
-      "packages/core/src/ui/patterns/feedback/adaptive-overlay/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+      "packages/core/src/components/patterns/feedback/adaptive-overlay/index.tsx",
+      "packages/core/src/components/patterns/feedback/adaptive-overlay/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css"
     ],
     "stableParts": [],
     "states": [],
@@ -58,7 +58,7 @@
           "scoutAnchorClaim": null,
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css:13"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css:13"
           ]
         }
       ],
@@ -106,7 +106,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -126,7 +126,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reviewedFrom": "anatomy",
         "bindings": [
@@ -157,7 +157,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reviewedFrom": "anatomy",
         "bindings": [
@@ -189,7 +189,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reviewedFrom": "anatomy",
         "reasons": [
           {
@@ -209,7 +209,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el CTA del empty-state es un Button primitivo: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -229,7 +229,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -249,7 +249,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -275,13 +275,13 @@
         {
           "channelId": "--_ds-adaptive-overlay-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/adaptive-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -301,13 +301,13 @@
         {
           "channelId": "--_ds-adaptive-overlay-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/adaptive-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -327,13 +327,13 @@
         {
           "channelId": "--_ds-adaptive-overlay-scrim-backdrop-filter",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/adaptive-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -352,7 +352,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -372,7 +372,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -393,13 +393,13 @@
         {
           "channelId": "--_ds-adaptive-overlay-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/adaptive-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -419,13 +419,13 @@
         {
           "channelId": "--_ds-adaptive-overlay-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/adaptive-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/adaptive-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -449,7 +449,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -462,7 +462,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -508,7 +508,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -539,7 +539,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "empty-state sigue la postura; terminal-block son caracteres y queda fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -560,11 +560,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

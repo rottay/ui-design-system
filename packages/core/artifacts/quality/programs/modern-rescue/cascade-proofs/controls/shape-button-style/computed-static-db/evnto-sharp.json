@@ -10324,9 +10324,9 @@
         "packages/core/src/ui/primitives/inputs/Button/engines/classic/index.tsx",
         "packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx",
         "packages/core/src/ui/primitives/inputs/Button/engines/rustic/index.tsx",
-        "packages/core/artifacts/generated/css/verticals/bithire/index.css",
-        "packages/core/artifacts/generated/css/all-verticals/index.css",
-        "packages/core/artifacts/generated/css/verticals/rottay/index.css"
+        "packages/core/styles/bithire.css",
+        "packages/core/styles/index.css",
+        "packages/core/styles/rottay.css"
       ]
     },
     "stylesheetLaw": "A static arm removes by re-serving the baseline BYTES, so removal and baseline must hash identically and the mutation must not. A DB arm never changes the sheet, so all three hashes agree and its restore law lives in the inline memo instead.",

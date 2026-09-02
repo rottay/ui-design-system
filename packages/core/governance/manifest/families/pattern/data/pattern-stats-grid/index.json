@@ -8,15 +8,15 @@
     "components": [
       "PatternStatsGrid"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/stats-grid",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/stats-grid",
     "publicComponents": [
       "PatternStatsGrid"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d49b73deca134b38ae36ff02e44520daa4365ce0a27162b225ea86d6cbc033e8"
+    "inventoryRowDigest": "6913ce53f05d1ed61b1100ebe00b83e20fe814c2438aef213cf00858a278ec4e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,16 +28,16 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
-      "packages/core/src/ui/patterns/data/stats-grid",
-      "packages/core/src/ui/patterns/data/stats-grid/contracts/index.ts",
-      "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/data/stats-grid/foundation/layout/index.ts",
-      "packages/core/src/ui/patterns/data/stats-grid/foundation/personality/index.ts",
-      "packages/core/src/ui/patterns/data/stats-grid/index.ts"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
+      "packages/core/src/components/patterns/data/stats-grid",
+      "packages/core/src/components/patterns/data/stats-grid/contracts/index.ts",
+      "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/data/stats-grid/foundation/layout/index.ts",
+      "packages/core/src/components/patterns/data/stats-grid/foundation/personality/index.ts",
+      "packages/core/src/components/patterns/data/stats-grid/index.ts"
     ],
     "stableParts": [
       "card",
@@ -78,16 +78,16 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "a tenant control must not remove or override the status role contract on these nodes (aria-role: status) [at packages/core/src/ui/patterns/data/stats-grid/contracts/index.ts:96, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:427, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:442]",
-      "aria-busy is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-busy) [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:308]",
-      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:87]",
-      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:208, packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:156]",
-      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:258, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:263, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:268, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:277]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (39 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:82, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:89, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92]",
-      "The family assigns explicit ARIA roles in source (3 sites; roles observed: `on`, `status`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:206, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:442, packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:154]",
-      "The family sets ARIA state/label attributes in source (2 sites; observed: `aria-hidden`, `aria-busy`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:87, packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:308]",
-      "The family implements keyboard interaction handlers (2 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:208, packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:156]",
-      "The family manages `tabIndex` explicitly (2 sites); focus order is owned by the component, not by theming. [at packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:207, packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:155]"
+      "a tenant control must not remove or override the status role contract on these nodes (aria-role: status) [at packages/core/src/components/patterns/data/stats-grid/contracts/index.ts:96, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:427, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:442]",
+      "aria-busy is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-busy) [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:308]",
+      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:87]",
+      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:208, packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:156]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:258, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:263, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:268, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:277]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (39 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:82, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:89, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92]",
+      "The family assigns explicit ARIA roles in source (3 sites; roles observed: `on`, `status`); a tenant control must not remove or replace them. [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:206, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:442, packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:154]",
+      "The family sets ARIA state/label attributes in source (2 sites; observed: `aria-hidden`, `aria-busy`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:87, packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:308]",
+      "The family implements keyboard interaction handlers (2 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:208, packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:156]",
+      "The family manages `tabIndex` explicitly (2 sites); focus order is owned by the component, not by theming. [at packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:207, packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:155]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -117,12 +117,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:199",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:139",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:6",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:13",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:14",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:20"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:199",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:6",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:13",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:14",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:20"
           ],
           "atSiteCount": 8
         },
@@ -131,15 +131,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:257",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:259"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:257",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:259"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:97",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:98",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:99",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:101"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:98",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:101"
           ],
           "anchorStatus": "verified"
         },
@@ -148,10 +148,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:463"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:463"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:128"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:128"
           ],
           "anchorStatus": "verified"
         },
@@ -160,15 +160,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:442"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:442"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:123",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:124",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:125",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:131",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:132"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:123",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:124",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:125",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:131",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:132"
           ],
           "anchorStatus": "verified"
         },
@@ -177,15 +177,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:225",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:182"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:225",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:182"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:87",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:88",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:89",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:90"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:88",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:90"
           ],
           "anchorStatus": "verified"
         },
@@ -194,10 +194,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:190"
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:190"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:75"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:75"
           ],
           "anchorStatus": "verified"
         },
@@ -206,14 +206,14 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:223",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:172"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:223",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:172"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:75",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:76",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:77",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:78"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:75",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:76",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:77",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:78"
           ],
           "anchorStatus": "verified"
         },
@@ -222,12 +222,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:297",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:432",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:454",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:469",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:295",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:387"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:297",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:432",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:454",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:469",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:295",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:387"
           ],
           "atSiteCount": 7
         },
@@ -236,15 +236,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:319",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:309"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:319",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:309"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:140",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:141",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:142",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:147"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:140",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:141",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:142",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:147"
           ],
           "anchorStatus": "verified"
         },
@@ -253,12 +253,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:325",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:331",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:337",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:316",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:321",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:326"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:325",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:331",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:337",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:316",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:321",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:326"
           ],
           "atSiteCount": 12
         },
@@ -267,15 +267,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:81",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:52"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:81",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:52"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:164",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:165",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:166",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:167"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:167"
           ],
           "anchorStatus": "verified"
         },
@@ -284,10 +284,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:95"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:95"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:285"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:285"
           ],
           "anchorStatus": "verified"
         },
@@ -296,7 +296,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:89"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:89"
           ]
         },
         {
@@ -304,12 +304,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:100",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:59"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:100",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:59"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:172",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:288"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:172",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:288"
           ],
           "anchorStatus": "verified"
         },
@@ -318,14 +318,14 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:180"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:180"
           ],
           "anchorStatus": "verified"
         },
@@ -334,11 +334,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:232"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:232"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:82",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:83"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:83"
           ],
           "anchorStatus": "verified"
         },
@@ -347,7 +347,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:221"
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:221"
           ]
         },
         {
@@ -355,15 +355,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:153",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:233"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:153",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:233"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:106",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:107",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:108",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:109"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:106",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:107",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:109"
           ],
           "anchorStatus": "verified"
         },
@@ -372,7 +372,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:248"
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:248"
           ]
         },
         {
@@ -380,7 +380,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:205"
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:205"
           ]
         }
       ],
@@ -390,8 +390,8 @@
           "at": [],
           "state": "active",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:20",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:248"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:248"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -399,14 +399,14 @@
         {
           "token": "data-loading=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:122",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:123"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:122",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:123"
           ],
           "state": "loading",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:115",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:116",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:117"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:116",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:117"
           ],
           "anchorStatus": "verified"
         },
@@ -415,7 +415,7 @@
           "at": [],
           "state": "focus",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:61"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:61"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -425,7 +425,7 @@
           "at": [],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:50"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:50"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -435,7 +435,7 @@
           "at": [],
           "state": "rest",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:66"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:66"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -443,14 +443,14 @@
         {
           "token": "data-transform-state=hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:55"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:55"
           ],
           "state": "hover"
         },
         {
           "token": "data-transform-state=rest",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:71"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:71"
           ],
           "state": "rest"
         },
@@ -459,9 +459,9 @@
           "at": [],
           "state": "focus-visible",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:192",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:193",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:274"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:274"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -471,9 +471,9 @@
           "at": [],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:13",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:14",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:248"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:13",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:14",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:248"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -483,10 +483,10 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:118",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:307",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:437",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:459"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:118",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:307",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:437",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:459"
           ],
           "state": "loading"
         },
@@ -495,7 +495,7 @@
           "occurrences": 3,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:231"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:231"
           ],
           "state": "focus-visible"
         },
@@ -504,7 +504,7 @@
           "occurrences": 3,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:32"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:32"
           ],
           "state": "hover"
         },
@@ -513,7 +513,7 @@
           "occurrences": 2,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:39"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:39"
           ],
           "state": "active"
         },
@@ -522,7 +522,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_SELECTOR_ONLY_NO_SOURCE_EMITTER_FOUND",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:64"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:64"
           ],
           "state": "focus"
         },
@@ -531,7 +531,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_SELECTOR_ONLY_NO_SOURCE_EMITTER_FOUND",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:54"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:54"
           ],
           "state": "hover"
         },
@@ -540,7 +540,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_SELECTOR_ONLY_NO_SOURCE_EMITTER_FOUND",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:70"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:70"
           ],
           "state": "rest"
         },
@@ -549,7 +549,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_SELECTOR_ONLY_NO_SOURCE_EMITTER_FOUND",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:59"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:59"
           ],
           "state": "hover"
         },
@@ -558,7 +558,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_SELECTOR_ONLY_NO_SOURCE_EMITTER_FOUND",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:75"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:75"
           ],
           "state": "rest"
         }
@@ -567,132 +567,132 @@
         {
           "token": "data-change=decrease",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:212",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:213",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:99",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:100"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:212",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:100"
           ]
         },
         {
           "token": "data-change=increase",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:94"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:94"
           ]
         },
         {
           "token": "data-change=neutral",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:218",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:219",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:105",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:106"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:218",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:219",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:105",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:106"
           ]
         },
         {
           "token": "data-interactive=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:13",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:14",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:20",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:71",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:192",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:193"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:13",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:14",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:71",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:193"
           ]
         },
         {
           "token": "data-kind=head",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:176"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:176"
           ]
         },
         {
           "token": "data-kind=label",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:151"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:151"
           ]
         },
         {
           "token": "data-kind=tail",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:180"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:180"
           ]
         },
         {
           "token": "data-kind=trend",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:159"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:159"
           ]
         },
         {
           "token": "data-kind=value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:155"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:155"
           ]
         },
         {
           "token": "data-skeleton-animation=pulse",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:128"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:128"
           ]
         },
         {
           "token": "data-skeleton-animation=wave",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:133",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:134",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:135"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:133",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:135"
           ]
         },
         {
           "token": "data-variant=default",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:25",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:26",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:27",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:28",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:16",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:17"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:25",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:26",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:27",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:16",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:17"
           ]
         },
         {
           "token": "data-variant=filled",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:41",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:42",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:43",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:30",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:31",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:32"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:41",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:42",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:43",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:30",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:31",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:32"
           ]
         },
         {
           "token": "data-variant=glass",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:48",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:52",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:53",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:40"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:48",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:40"
           ]
         },
         {
           "token": "data-variant=outlined",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:33",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:34",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:35",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:36",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:23",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:24"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:33",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:34",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:24"
           ]
         },
         {
@@ -700,10 +700,10 @@
           "occurrences": 10,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:67",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:202",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:439",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:460"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:67",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:202",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:439",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:460"
           ]
         },
         {
@@ -711,9 +711,9 @@
           "occurrences": 9,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:32",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:203",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:143"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:32",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:203",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:143"
           ]
         },
         {
@@ -721,10 +721,10 @@
           "occurrences": 7,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:44",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:202",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:439",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:460"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:44",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:202",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:439",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:460"
           ]
         },
         {
@@ -732,10 +732,10 @@
           "occurrences": 7,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:52",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:202",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:439",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:460"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:52",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:202",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:439",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:460"
           ]
         },
         {
@@ -743,10 +743,10 @@
           "occurrences": 6,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:60",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:202",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:439",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:460"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:60",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:202",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:439",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:460"
           ]
         },
         {
@@ -754,9 +754,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:251",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:156",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:236"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:251",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:156",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:236"
           ]
         },
         {
@@ -764,9 +764,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:245",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:156",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:236"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:245",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:156",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:236"
           ]
         },
         {
@@ -774,9 +774,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:257",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:156",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:236"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:257",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:156",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:236"
           ]
         },
         {
@@ -784,8 +784,8 @@
           "occurrences": 3,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:136",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:299"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:136",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:299"
           ]
         },
         {
@@ -793,10 +793,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:213",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:328"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:213",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:328"
           ]
         },
         {
@@ -804,10 +804,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:181",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:328"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:181",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:328"
           ]
         },
         {
@@ -815,10 +815,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:217",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:328"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:217",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:328"
           ]
         },
         {
@@ -826,10 +826,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:189",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:328"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:189",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:328"
           ]
         },
         {
@@ -837,10 +837,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:185",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:92",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:328"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:185",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:92",
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:328"
           ]
         },
         {
@@ -848,31 +848,31 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:131",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:299"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:131",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:299"
           ]
         }
       ],
       "engineDivergence": {
         "engineDivergence": {
-          "engineSiblingDirectory": "packages/core/src/ui/patterns/data/stats-grid/engines",
+          "engineSiblingDirectory": "packages/core/src/components/patterns/data/stats-grid/engines",
           "engines": {
             "classic": {
-              "path": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
               "lines": 285,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "modern": {
-              "path": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx",
+              "path": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx",
               "lines": 498,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "rustic": {
-              "path": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
               "lines": 430,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
@@ -882,13 +882,13 @@
           "paintByEngine": {
             "modern": [
               {
-                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
                 "paintKind": "own"
               }
             ],
             "rustic": [
               {
-                "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
                 "paintKind": "own"
               }
             ]
@@ -898,21 +898,21 @@
             "classic": {
               "lines": 285,
               "files": [
-                "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx"
+                "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx"
               ],
               "fileCount": 1
             },
             "modern": {
               "lines": 498,
               "files": [
-                "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx"
+                "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx"
               ],
               "fileCount": 1
             },
             "rustic": {
               "lines": 430,
               "files": [
-                "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx"
+                "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx"
               ],
               "fileCount": 1
             }
@@ -952,7 +952,7 @@
             }
           },
           "antdImportSites": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx:23"
+            "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx:23"
           ],
           "inlineStyleAttributeSites": 29,
           "templateConstructedVariableNames": [],
@@ -985,21 +985,21 @@
         },
         "engines": {
           "classic": {
-            "path": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "lines": 285,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "modern": {
-            "path": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx",
+            "path": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx",
             "lines": 498,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "rustic": {
-            "path": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "lines": 430,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
@@ -1016,7 +1016,7 @@
             "gap": "CLASSIC_ENGINE_PAINT_NOT_ENUMERABLE",
             "detail": "The classic engine renders Ant Design components whose paint is Ant CSS-in-JS tokens, not --ds-* custom properties, so no --ds-* census can describe it from this repository.",
             "evidence": [
-              "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx:23"
+              "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx:23"
             ]
           },
           {
@@ -1057,7 +1057,7 @@
               "readSiteCount": 4,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:11",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:11",
               "landsOnProperties": [
                 "transition"
               ],
@@ -1072,7 +1072,7 @@
               "readSiteCount": 5,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:211",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:211",
               "landsOnProperties": [
                 "color",
                 "stop-color",
@@ -1091,7 +1091,7 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:92",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:92",
               "landsOnProperties": [
                 "padding"
               ],
@@ -1106,7 +1106,7 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:118",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:118",
               "landsOnProperties": [
                 "block-size",
                 "inline-size"
@@ -1121,7 +1121,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:241",
+              "firstReadAt": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:241",
               "landsOnProperties": [
                 "fontSize"
               ],
@@ -1135,7 +1135,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:242",
+              "firstReadAt": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:242",
               "landsOnProperties": [
                 "fontWeight"
               ],
@@ -1149,7 +1149,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:244",
+              "firstReadAt": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:244",
               "landsOnProperties": [
                 "letterSpacing"
               ],
@@ -1162,123 +1162,123 @@
           "hardcodedValue": [
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:15",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:10",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:15",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:10",
               "literal": "300ms",
               "property": "transition",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__card",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:16",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:16",
               "line": "background-color var(--ds-personality-animation-entrance-duration, 300ms)"
             },
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:15",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:10",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:15",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:10",
               "literal": "300ms",
               "property": "transition",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__card",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:16",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:16",
               "line": "background-color var(--ds-personality-animation-entrance-duration, 300ms)"
             },
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:15",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:10",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:15",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:10",
               "literal": "300ms",
               "property": "transition",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__card",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:16",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:16",
               "line": "background-color var(--ds-personality-animation-entrance-duration, 300ms)"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:65",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:65",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:65",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:65",
               "literal": "#fff",
               "property": "box-shadow",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__card[data-shadow-state=\"focus\"]",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:66",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:66",
               "line": "box-shadow: 0 0 0 2px var(--ds-color-bg-primary, #fff),"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:66",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:65",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:66",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:65",
               "literal": "#818cf8",
               "property": "box-shadow",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__card[data-shadow-state=\"focus\"]",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:66",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:66",
               "line": "0 0 0 4px var(--ds-color-primary-400, #818cf8);"
             },
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:92",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:92",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:92",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:92",
               "literal": "300ms",
               "property": "transition",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__trend",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:93",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:93",
               "line": "transition: transform var(--ds-personality-animation-entrance-duration, 300ms)"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:99",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:99",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:99",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:99",
               "literal": "rgba(16, 185, 129, 0.08)",
               "property": "background",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__trend[data-change=\"increase\"]",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:99",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:99",
               "line": "background: var(--ds-color-success-50, rgba(16, 185, 129, 0.08));"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:105",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:105",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:105",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:105",
               "literal": "rgba(239, 68, 68, 0.08)",
               "property": "background",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic .ds-stats-grid__trend[data-change=\"decrease\"]",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:105",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:105",
               "line": "background: var(--ds-color-error-50, rgba(239, 68, 68, 0.08));"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:128",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:128",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:128",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:128",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic[data-loading=\"true\"] [data-part=\"skeleton-bar\"]",
               "position": "DIRECT",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:128",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:128",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:133",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:133",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:133",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:133",
               "literal": "1.5s",
               "property": "animation",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic[data-skeleton-animation=\"pulse\"] [data-part=\"skeleton-bar\"]",
               "position": "DIRECT",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:133",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:133",
               "line": "animation: ds-stats-grid-pulse 1.5s ease-in-out infinite;"
             },
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:138",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:138",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:138",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:138",
               "literal": "1.4s",
               "property": "animation",
               "selector": ".ds-pattern-stats-grid.ds-engine-rustic[data-skeleton-animation=\"wave\"] [data-part=\"skeleton-bar\"]",
               "position": "DIRECT",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css:138",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css:138",
               "line": "animation: ds-stats-grid-wave 1.4s ease-in-out infinite;"
             }
           ],
@@ -1425,7 +1425,7 @@
         "variableCensus": [
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 6,
             "part": "card",
             "landsOn": "transition",
@@ -1441,7 +1441,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 6,
             "part": "card",
             "landsOn": "transition",
@@ -1457,7 +1457,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 6,
             "part": "card",
             "landsOn": "transition",
@@ -1473,7 +1473,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 6,
             "part": "card",
             "landsOn": "transition",
@@ -1489,7 +1489,7 @@
           },
           {
             "variable": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 14,
             "part": "card",
             "landsOn": "box-shadow",
@@ -1507,7 +1507,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 25,
             "part": "card",
             "landsOn": "background-color",
@@ -1523,7 +1523,7 @@
           },
           {
             "variable": "--ds-gradient-surface",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 26,
             "part": "card",
             "landsOn": "background-image",
@@ -1539,7 +1539,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 27,
             "part": "card",
             "landsOn": "box-shadow",
@@ -1555,7 +1555,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 28,
             "part": "card",
             "landsOn": "border-radius",
@@ -1571,7 +1571,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 33,
             "part": "card",
             "landsOn": "background-color",
@@ -1587,7 +1587,7 @@
           },
           {
             "variable": "--ds-gradient-surface",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 34,
             "part": "card",
             "landsOn": "background-image",
@@ -1603,7 +1603,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 35,
             "part": "card",
             "landsOn": "border",
@@ -1619,7 +1619,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 36,
             "part": "card",
             "landsOn": "border-radius",
@@ -1635,7 +1635,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 41,
             "part": "card",
             "landsOn": "background-color",
@@ -1651,7 +1651,7 @@
           },
           {
             "variable": "--ds-gradient-surface",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 42,
             "part": "card",
             "landsOn": "background-image",
@@ -1667,7 +1667,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 43,
             "part": "card",
             "landsOn": "border-radius",
@@ -1683,7 +1683,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 48,
             "part": "card",
             "landsOn": "background",
@@ -1699,7 +1699,7 @@
           },
           {
             "variable": "--ds-glass-backdrop-filter",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 50,
             "part": "card",
             "landsOn": "backdrop-filter",
@@ -1715,7 +1715,7 @@
           },
           {
             "variable": "--ds-glass-backdrop-filter",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 51,
             "part": "card",
             "landsOn": "-webkit-backdrop-filter",
@@ -1731,7 +1731,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 52,
             "part": "card",
             "landsOn": "border",
@@ -1747,7 +1747,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 53,
             "part": "card",
             "landsOn": "border-radius",
@@ -1763,7 +1763,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 61,
             "part": "card",
             "landsOn": "gap",
@@ -1779,7 +1779,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 68,
             "part": "card",
             "landsOn": "padding",
@@ -1795,7 +1795,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 68,
             "part": "card",
             "landsOn": "padding",
@@ -1811,7 +1811,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 68,
             "part": "card",
             "landsOn": "padding",
@@ -1827,7 +1827,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 77,
             "part": "label-row",
             "landsOn": "gap",
@@ -1843,7 +1843,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 78,
             "part": "label-row",
             "landsOn": "margin-block-end",
@@ -1859,7 +1859,7 @@
           },
           {
             "variable": "--ds-stats-grid-icon-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 91,
             "part": "icon",
             "landsOn": "inline-size",
@@ -1875,7 +1875,7 @@
           },
           {
             "variable": "--ds-stats-grid-icon-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 92,
             "part": "icon",
             "landsOn": "block-size",
@@ -1891,7 +1891,7 @@
           },
           {
             "variable": "--ds-font-size-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 93,
             "part": "icon",
             "landsOn": "font-size",
@@ -1907,7 +1907,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 97,
             "part": "description",
             "landsOn": "margin-block-start",
@@ -1923,7 +1923,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 98,
             "part": "description",
             "landsOn": "font-size",
@@ -1939,7 +1939,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 111,
             "part": "trend",
             "landsOn": "margin-block-start",
@@ -1955,7 +1955,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 114,
             "part": "trend",
             "landsOn": "font-size",
@@ -1971,7 +1971,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 123,
             "part": "error",
             "landsOn": "padding",
@@ -1987,7 +1987,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 124,
             "part": "error",
             "landsOn": "font-size",
@@ -2003,7 +2003,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 128,
             "part": "empty",
             "landsOn": "color",
@@ -2019,7 +2019,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 134,
             "part": "error",
             "landsOn": "gap",
@@ -2035,7 +2035,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 135,
             "part": "error",
             "landsOn": "color",
@@ -2051,7 +2051,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 142,
             "part": "skeleton",
             "landsOn": "gap",
@@ -2067,7 +2067,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 147,
             "part": "skeleton",
             "landsOn": "padding",
@@ -2083,7 +2083,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 147,
             "part": "skeleton",
             "landsOn": "padding",
@@ -2099,7 +2099,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 147,
             "part": "skeleton",
             "landsOn": "padding",
@@ -2115,7 +2115,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 168,
             "part": "sparkline",
             "landsOn": "padding-block-start",
@@ -2131,7 +2131,7 @@
           },
           {
             "variable": "--ds-stats-grid-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 172,
             "part": "sparkline-line",
             "landsOn": "stroke",
@@ -2148,7 +2148,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 172,
             "part": "sparkline-line",
             "landsOn": "stroke",
@@ -2164,7 +2164,7 @@
           },
           {
             "variable": "--ds-stats-grid-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 175,
             "part": "sparkline-stop",
             "landsOn": "stop-color",
@@ -2181,7 +2181,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 175,
             "part": "sparkline-stop",
             "landsOn": "stop-color",
@@ -2197,7 +2197,7 @@
           },
           {
             "variable": "--_ds-stats-grid-sparkline-fill-opacity",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 176,
             "part": "sparkline-stop",
             "landsOn": "stop-opacity",
@@ -2213,7 +2213,7 @@
           },
           {
             "variable": "--ds-stats-grid-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 179,
             "part": "sparkline-stop",
             "landsOn": "stop-color",
@@ -2230,7 +2230,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 179,
             "part": "sparkline-stop",
             "landsOn": "stop-color",
@@ -2246,7 +2246,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 184,
             "part": "icon",
             "landsOn": "border-radius",
@@ -2262,7 +2262,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 185,
             "part": "icon",
             "landsOn": "background",
@@ -2278,7 +2278,7 @@
           },
           {
             "variable": "--ds-stats-grid-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 186,
             "part": "icon",
             "landsOn": "color",
@@ -2295,7 +2295,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 186,
             "part": "icon",
             "landsOn": "color",
@@ -2311,7 +2311,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 192,
             "part": "card",
             "landsOn": "outline",
@@ -2328,7 +2328,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 192,
             "part": "card",
             "landsOn": "outline",
@@ -2344,7 +2344,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 197,
             "part": "description",
             "landsOn": "color",
@@ -2360,7 +2360,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 201,
             "part": "trend",
             "landsOn": "border-radius",
@@ -2376,7 +2376,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 206,
             "part": "trend",
             "landsOn": "color",
@@ -2392,7 +2392,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 207,
             "part": "trend",
             "landsOn": "background",
@@ -2408,7 +2408,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 212,
             "part": "trend",
             "landsOn": "color",
@@ -2424,7 +2424,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 213,
             "part": "trend",
             "landsOn": "background",
@@ -2440,7 +2440,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 218,
             "part": "trend",
             "landsOn": "color",
@@ -2456,7 +2456,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 219,
             "part": "trend",
             "landsOn": "background",
@@ -2472,7 +2472,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 223,
             "part": "skeleton",
             "landsOn": "background",
@@ -2488,7 +2488,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 224,
             "part": "skeleton",
             "landsOn": "box-shadow",
@@ -2504,7 +2504,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 225,
             "part": "skeleton",
             "landsOn": "border-radius",
@@ -2520,7 +2520,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 234,
             "part": "skeleton-bar",
             "landsOn": "background",
@@ -2536,7 +2536,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 234,
             "part": "skeleton-bar",
             "landsOn": "background",
@@ -2552,7 +2552,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 234,
             "part": "skeleton-bar",
             "landsOn": "background",
@@ -2568,7 +2568,7 @@
           },
           {
             "variable": "--ds-motion-attention",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 236,
             "part": "skeleton-bar",
             "landsOn": "animation",
@@ -2584,7 +2584,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "line": 237,
             "part": "skeleton-bar",
             "landsOn": "border-radius",
@@ -2600,7 +2600,7 @@
           },
           {
             "variable": "--ds-card-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 4,
             "part": "card",
             "landsOn": "box-shadow",
@@ -2616,7 +2616,7 @@
           },
           {
             "variable": "--ds-personality-animation-entrance-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 11,
             "part": "card",
             "landsOn": "transition",
@@ -2632,7 +2632,7 @@
           },
           {
             "variable": "--ds-personality-animation-entrance-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 11,
             "part": "card",
             "landsOn": "transition",
@@ -2648,7 +2648,7 @@
           },
           {
             "variable": "--ds-personality-animation-entrance-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 11,
             "part": "card",
             "landsOn": "transition",
@@ -2664,7 +2664,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 16,
             "part": "card",
             "landsOn": "background",
@@ -2681,7 +2681,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 16,
             "part": "card",
             "landsOn": "background",
@@ -2697,7 +2697,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 17,
             "part": "card",
             "landsOn": "border",
@@ -2714,7 +2714,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 17,
             "part": "card",
             "landsOn": "border",
@@ -2730,7 +2730,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 18,
             "part": "card",
             "landsOn": "border-radius",
@@ -2746,7 +2746,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 24,
             "part": "card",
             "landsOn": "border",
@@ -2763,7 +2763,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 24,
             "part": "card",
             "landsOn": "border",
@@ -2779,7 +2779,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 25,
             "part": "card",
             "landsOn": "border-radius",
@@ -2795,7 +2795,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-filled-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 30,
             "part": "card",
             "landsOn": "background",
@@ -2812,7 +2812,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 30,
             "part": "card",
             "landsOn": "background",
@@ -2828,7 +2828,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 32,
             "part": "card",
             "landsOn": "border-radius",
@@ -2844,7 +2844,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-glass-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 40,
             "part": "card",
             "landsOn": "background",
@@ -2861,7 +2861,7 @@
           },
           {
             "variable": "--ds-color-alpha-white-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 40,
             "part": "card",
             "landsOn": "background",
@@ -2877,7 +2877,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-glass-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 44,
             "part": "card",
             "landsOn": "border",
@@ -2894,7 +2894,7 @@
           },
           {
             "variable": "--ds-color-alpha-white-20",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 44,
             "part": "card",
             "landsOn": "border",
@@ -2910,7 +2910,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 45,
             "part": "card",
             "landsOn": "border-radius",
@@ -2926,7 +2926,7 @@
           },
           {
             "variable": "--ds-card-shadow-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 50,
             "part": "card",
             "landsOn": "box-shadow",
@@ -2943,7 +2943,7 @@
           },
           {
             "variable": "--ds-shadow-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 50,
             "part": "card",
             "landsOn": "box-shadow",
@@ -2959,7 +2959,7 @@
           },
           {
             "variable": "--ds-card-hover-transform",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 55,
             "part": "card",
             "landsOn": "transform",
@@ -2975,7 +2975,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 61,
             "part": "card",
             "landsOn": "box-shadow",
@@ -2991,7 +2991,7 @@
           },
           {
             "variable": "--ds-color-primary-400",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 61,
             "part": "card",
             "landsOn": "box-shadow",
@@ -3007,7 +3007,7 @@
           },
           {
             "variable": "--ds-card-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 66,
             "part": "card",
             "landsOn": "box-shadow",
@@ -3023,7 +3023,7 @@
           },
           {
             "variable": "--ds-stats-grid-label-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 75,
             "part": "label",
             "landsOn": "color",
@@ -3040,7 +3040,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 75,
             "part": "label",
             "landsOn": "color",
@@ -3056,7 +3056,7 @@
           },
           {
             "variable": "--ds-stats-grid-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 82,
             "part": "root",
             "landsOn": "color",
@@ -3074,7 +3074,7 @@
           },
           {
             "variable": "--ds-stats-grid-value-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 82,
             "part": "root",
             "landsOn": "color",
@@ -3091,7 +3091,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 82,
             "part": "root",
             "landsOn": "color",
@@ -3107,7 +3107,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 86,
             "part": "trend",
             "landsOn": "border-radius",
@@ -3123,7 +3123,7 @@
           },
           {
             "variable": "--ds-personality-animation-entrance-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 88,
             "part": "trend",
             "landsOn": "transition",
@@ -3139,7 +3139,7 @@
           },
           {
             "variable": "--ds-stats-grid-trend-positive",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 93,
             "part": "trend",
             "landsOn": "color",
@@ -3156,7 +3156,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 93,
             "part": "trend",
             "landsOn": "color",
@@ -3172,7 +3172,7 @@
           },
           {
             "variable": "--ds-color-success-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 94,
             "part": "trend",
             "landsOn": "background",
@@ -3188,7 +3188,7 @@
           },
           {
             "variable": "--ds-stats-grid-trend-negative",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 99,
             "part": "trend",
             "landsOn": "color",
@@ -3205,7 +3205,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 99,
             "part": "trend",
             "landsOn": "color",
@@ -3221,7 +3221,7 @@
           },
           {
             "variable": "--ds-color-error-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 100,
             "part": "trend",
             "landsOn": "background",
@@ -3237,7 +3237,7 @@
           },
           {
             "variable": "--ds-stats-grid-trend-neutral",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 105,
             "part": "trend",
             "landsOn": "color",
@@ -3254,7 +3254,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 105,
             "part": "trend",
             "landsOn": "color",
@@ -3270,7 +3270,7 @@
           },
           {
             "variable": "--ds-stats-grid-description-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 110,
             "part": "description",
             "landsOn": "color",
@@ -3287,7 +3287,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 110,
             "part": "description",
             "landsOn": "color",
@@ -3303,7 +3303,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 115,
             "part": "skeleton",
             "landsOn": "background",
@@ -3320,7 +3320,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 115,
             "part": "skeleton",
             "landsOn": "background",
@@ -3336,7 +3336,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 116,
             "part": "skeleton",
             "landsOn": "border",
@@ -3353,7 +3353,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 116,
             "part": "skeleton",
             "landsOn": "border",
@@ -3369,7 +3369,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 117,
             "part": "skeleton",
             "landsOn": "border-radius",
@@ -3385,7 +3385,7 @@
           },
           {
             "variable": "--ds-stats-grid-skeleton-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 122,
             "part": "skeleton-bar",
             "landsOn": "background",
@@ -3402,7 +3402,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 122,
             "part": "skeleton-bar",
             "landsOn": "background",
@@ -3418,7 +3418,7 @@
           },
           {
             "variable": "--ds-stats-grid-skeleton-wave-gradient",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
             "line": 134,
             "part": "skeleton-bar",
             "landsOn": "background-image",
@@ -3436,7 +3436,7 @@
         "variableCensusTsx": [
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 59,
             "chain": [
               "--ds-color-primary"
@@ -3447,7 +3447,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 128,
             "chain": [
               "--ds-color-success"
@@ -3458,7 +3458,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 130,
             "chain": [
               "--ds-color-error"
@@ -3469,7 +3469,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-border",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 138,
             "chain": [
               "--ds-stats-grid-card-border",
@@ -3481,7 +3481,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 138,
             "chain": [
               "--ds-color-border"
@@ -3492,7 +3492,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-filled-bg",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 140,
             "chain": [
               "--ds-stats-grid-card-filled-bg",
@@ -3504,7 +3504,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 140,
             "chain": [
               "--ds-color-bg-secondary"
@@ -3515,7 +3515,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-glass-bg",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 143,
             "chain": [
               "--ds-stats-grid-card-glass-bg",
@@ -3527,7 +3527,7 @@
           },
           {
             "variable": "--ds-color-alpha-white-50",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 143,
             "chain": [
               "--ds-color-alpha-white-50"
@@ -3538,7 +3538,7 @@
           },
           {
             "variable": "--ds-stats-grid-card-glass-border",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 145,
             "chain": [
               "--ds-stats-grid-card-glass-border",
@@ -3550,7 +3550,7 @@
           },
           {
             "variable": "--ds-color-alpha-white-20",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 145,
             "chain": [
               "--ds-color-alpha-white-20"
@@ -3561,7 +3561,7 @@
           },
           {
             "variable": "--ds-stats-grid-description-color",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 180,
             "chain": [
               "--ds-stats-grid-description-color",
@@ -3573,7 +3573,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/classic/index.tsx",
             "line": 180,
             "chain": [
               "--ds-color-text-muted"
@@ -3584,7 +3584,7 @@
           },
           {
             "variable": "--ds-stats-grid-value-font-size",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx",
             "line": 241,
             "chain": [
               "--ds-stats-grid-value-font-size"
@@ -3595,7 +3595,7 @@
           },
           {
             "variable": "--ds-stats-grid-value-font-weight",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx",
             "line": 242,
             "chain": [
               "--ds-stats-grid-value-font-weight"
@@ -3606,7 +3606,7 @@
           },
           {
             "variable": "--ds-stats-grid-value-letter-spacing",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx",
             "line": 244,
             "chain": [
               "--ds-stats-grid-value-letter-spacing"
@@ -3617,7 +3617,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "line": 63,
             "chain": [
               "--ds-color-primary"
@@ -3628,7 +3628,7 @@
           },
           {
             "variable": "--ds-card-body-padding",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "line": 147,
             "chain": [
               "--ds-card-body-padding"
@@ -3639,7 +3639,7 @@
           },
           {
             "variable": "--ds-typography-label-transform",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "line": 197,
             "chain": [
               "--ds-typography-label-transform"
@@ -3650,7 +3650,7 @@
           },
           {
             "variable": "--ds-typography-heading-letter-spacing",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "line": 199,
             "chain": [
               "--ds-typography-heading-letter-spacing"
@@ -3661,7 +3661,7 @@
           },
           {
             "variable": "--ds-typography-heading-font-weight",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "line": 211,
             "chain": [
               "--ds-typography-heading-font-weight"
@@ -3672,7 +3672,7 @@
           },
           {
             "variable": "--ds-card-body-padding",
-            "file": "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx",
             "line": 357,
             "chain": [
               "--ds-card-body-padding"
@@ -3687,14 +3687,14 @@
         "emittedVariables": {},
         "emittedVariablesTsx": {
           "--ds-stats-grid-accent": [
-            "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:189",
-            "packages/core/src/ui/patterns/data/stats-grid/engines/rustic/index.tsx:146"
+            "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:189",
+            "packages/core/src/components/patterns/data/stats-grid/engines/rustic/index.tsx:146"
           ]
         },
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
               "engine": "modern",
               "lines": 337,
               "role": "skin-css",
@@ -3703,7 +3703,7 @@
               ]
             },
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
               "engine": "rustic",
               "lines": 161,
               "role": "skin-css",
@@ -3718,7 +3718,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/display/Statistic/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:30"
+                "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:30"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -3730,7 +3730,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/foundation",
               "importSites": [
-                "packages/core/src/ui/patterns/data/stats-grid/engines/modern/index.tsx:31"
+                "packages/core/src/components/patterns/data/stats-grid/engines/modern/index.tsx:31"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -3744,13 +3744,13 @@
         "paintByEngine": {
           "modern": [
             {
-              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
               "paintKind": "own"
             }
           ],
           "rustic": [
             {
-              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid.css",
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/stats-grid/index.css",
               "paintKind": "own"
             }
           ]
@@ -3818,13 +3818,13 @@
         {
           "channelId": "--_ds-stats-grid-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3834,13 +3834,13 @@
         {
           "channelId": "--_ds-stats-grid-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3850,13 +3850,13 @@
         {
           "channelId": "--_ds-stats-grid-accent",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3865,13 +3865,13 @@
         {
           "channelId": "--_ds-stats-grid-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3881,13 +3881,13 @@
         {
           "channelId": "--_ds-stats-grid-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3897,13 +3897,13 @@
         {
           "channelId": "--_ds-stats-grid-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3913,13 +3913,13 @@
         {
           "channelId": "--_ds-stats-grid-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3951,7 +3951,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
@@ -3966,7 +3966,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
@@ -3981,7 +3981,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
@@ -3996,7 +3996,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
@@ -4020,13 +4020,13 @@
         {
           "channelId": "--_ds-stats-grid-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4056,13 +4056,13 @@
         {
           "channelId": "--_ds-stats-grid-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4092,13 +4092,13 @@
         {
           "channelId": "--_ds-stats-grid-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4117,7 +4117,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -4139,13 +4139,13 @@
         {
           "channelId": "--_ds-stats-grid-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4164,7 +4164,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -4201,13 +4201,13 @@
         {
           "channelId": "--_ds-stats-grid-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4310,13 +4310,13 @@
         {
           "channelId": "--_ds-stats-grid-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-stats-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4340,7 +4340,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4396,7 +4396,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4419,9 +4419,9 @@
               "--ds-color-success",
               "--ds-color-error"
             ],
-            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css",
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css",
             "sourceBindings": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid.css:166,246-247,252-253"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/stats-grid/index.css:166,246-247,252-253"
             ]
           }
         ],
@@ -4457,11 +4457,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

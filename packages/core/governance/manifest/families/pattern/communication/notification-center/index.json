@@ -8,15 +8,15 @@
     "components": [
       "PatternNotificationCenter"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/communication/notification-center",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/communication/notification-center",
     "publicComponents": [
       "PatternNotificationCenter"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "5345f30a65291d5409e13af363a39b17e44f7afa4e9062298e79dcf119b6a514"
+    "inventoryRowDigest": "8a5c318fb14ef77edd7f6f4982bca8a684d2dc0fe9d1892a89a2e447b560a777"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/communication/notification-center/index.ts",
-      "packages/core/src/ui/patterns/communication/notification-center/contracts/index.ts",
-      "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css"
+      "packages/core/src/components/patterns/communication/notification-center/index.ts",
+      "packages/core/src/components/patterns/communication/notification-center/contracts/index.ts",
+      "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css"
     ],
     "stableParts": [
       "action",
@@ -102,293 +102,293 @@
           "part": "action",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:417",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:243",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:303",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:66"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:417",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:243",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:303",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:66"
           ]
         },
         {
           "part": "badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:285",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:170",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:68",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:41"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:285",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:41"
           ]
         },
         {
           "part": "clear-all",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:353",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:185",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:302",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:65"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:353",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:185",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:65"
           ]
         },
         {
           "part": "dismiss",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:451",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:256",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:271",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:276",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:278",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:283"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:451",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:256",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:271",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:276",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:278",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:283"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:372",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:168",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:81"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:372",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:81"
           ]
         },
         {
           "part": "group",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:380",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:151"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:380",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:151"
           ]
         },
         {
           "part": "group-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:381",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:141",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:151"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:381",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:141",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:151"
           ]
         },
         {
           "part": "header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:336",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:106",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:114",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:327"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:336",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:106",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:114",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:327"
           ]
         },
         {
           "part": "header-actions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:338",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:123"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:338",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:123"
           ]
         },
         {
           "part": "icon",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:392",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:214",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:199",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:204",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:210"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:392",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:214",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:210"
           ]
         },
         {
           "part": "list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:368"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:368"
           ]
         },
         {
           "part": "loading-spinner",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:306"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:306"
           ]
         },
         {
           "part": "mark-all-read",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:343",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:301",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:64"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:343",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:64"
           ]
         },
         {
           "part": "mark-read",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:437",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:270",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:275",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:277",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:282",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:284"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:437",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:275",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:277",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:282",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:284"
           ]
         },
         {
           "part": "message",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:115"
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:115"
           ]
         },
         {
           "part": "overflow-note",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:470",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:157"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:470",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:157"
           ]
         },
         {
           "part": "panel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:330",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:75",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:100",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:326"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:330",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:75",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:100",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:326"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:298",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:314",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:32",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:38",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:114"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:298",
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:314",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:114"
           ]
         },
         {
           "part": "row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:388",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:201",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:183",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:193"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:388",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:193"
           ]
         },
         {
           "part": "row-body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:395",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:218"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:395",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:218"
           ]
         },
         {
           "part": "row-footer",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:404",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:242"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:404",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:242"
           ]
         },
         {
           "part": "row-heading",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:396",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:222"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:396",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:222"
           ]
         },
         {
           "part": "row-message",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:403",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:233"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:403",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:233"
           ]
         },
         {
           "part": "row-timestamp",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:406",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:251"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:406",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:251"
           ]
         },
         {
           "part": "row-title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:400",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:227",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:230"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:400",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:230"
           ]
         },
         {
           "part": "rows",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:384",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:132"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:132"
           ]
         },
         {
           "part": "timestamp",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:238",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:116"
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:238",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:116"
           ]
         },
         {
           "part": "title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:337",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:117"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:337",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:117"
           ]
         },
         {
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:269",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:359",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:362",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:33"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:269",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:359",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:362",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:33"
           ]
         },
         {
           "part": "trigger-icon",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:278",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:62"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:278",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:62"
           ]
         },
         {
           "part": "unread-dot",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:401",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:230",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:258",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:339",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:109"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:401",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:230",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:258",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:339",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:109"
           ]
         }
       ],
@@ -398,7 +398,7 @@
           "scoutAnchorClaim": null,
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:23"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:23"
           ]
         }
       ],
@@ -406,36 +406,36 @@
         {
           "token": "loading=false",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:315"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:315"
           ],
           "state": "loading"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:299",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:38"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:299",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:38"
           ],
           "state": "loading"
         },
         {
           "token": "unread=!item.read",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:389",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:400",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:202"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:389",
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:400",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:202"
           ],
           "state": "unread"
         },
         {
           "token": "unread=true",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:401",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:230",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:230",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:336",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:90"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:401",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:230",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:230",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:336",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:90"
           ],
           "state": "unread"
         }
@@ -444,66 +444,66 @@
         {
           "token": "bucket=group.bucket",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:380"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:380"
           ]
         },
         {
           "token": "placement=placement",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:331"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:331"
           ]
         },
         {
           "token": "placement=start",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:100"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:100"
           ]
         },
         {
           "token": "tenant",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:11"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:11"
           ]
         },
         {
           "token": "theme",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:11"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:11"
           ]
         },
         {
           "token": "type=error",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:213",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:104"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:104"
           ]
         },
         {
           "token": "type=info",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:204",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:95"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:95"
           ]
         },
         {
           "token": "type=item.type",
           "at": [
-            "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx:392",
-            "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx:214"
+            "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx:392",
+            "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx:214"
           ]
         },
         {
           "token": "type=success",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:98"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:98"
           ]
         },
         {
           "token": "type=warning",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css:210",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css:101"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css:210",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css:101"
           ]
         }
       ],
@@ -511,17 +511,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "lines": 250
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx",
             "lines": 481
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
             "lines": 271
           }
         ]
@@ -536,7 +536,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 42,
             "fallback": false,
             "fallbackValue": null,
@@ -549,7 +549,7 @@
           },
           {
             "name": "--ds-z-dropdown",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 79,
             "fallback": false,
             "fallbackValue": null,
@@ -562,7 +562,7 @@
           },
           {
             "name": "--ds-notification-center-panel-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 80,
             "fallback": true,
             "fallbackValue": "22.5rem",
@@ -575,7 +575,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -588,7 +588,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -601,7 +601,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 82,
             "fallback": false,
             "fallbackValue": null,
@@ -614,7 +614,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 83,
             "fallback": false,
             "fallbackValue": null,
@@ -627,7 +627,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -640,7 +640,7 @@
           },
           {
             "name": "--ds-elevation-surface-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 89,
             "fallback": false,
             "fallbackValue": null,
@@ -653,7 +653,7 @@
           },
           {
             "name": "--ds-elevation-surface-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 89,
             "fallback": false,
             "fallbackValue": null,
@@ -666,7 +666,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 90,
             "fallback": false,
             "fallbackValue": null,
@@ -679,7 +679,7 @@
           },
           {
             "name": "--ds-elevation-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 91,
             "fallback": false,
             "fallbackValue": null,
@@ -692,7 +692,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 94,
             "fallback": false,
             "fallbackValue": null,
@@ -705,7 +705,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 110,
             "fallback": false,
             "fallbackValue": null,
@@ -718,7 +718,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 111,
             "fallback": false,
             "fallbackValue": null,
@@ -731,7 +731,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 112,
             "fallback": false,
             "fallbackValue": null,
@@ -744,7 +744,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 115,
             "fallback": false,
             "fallbackValue": null,
@@ -757,7 +757,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 118,
             "fallback": false,
             "fallbackValue": null,
@@ -770,7 +770,7 @@
           },
           {
             "name": "--ds-font-family-base",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 119,
             "fallback": false,
             "fallbackValue": null,
@@ -783,7 +783,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 120,
             "fallback": false,
             "fallbackValue": null,
@@ -796,7 +796,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 121,
             "fallback": false,
             "fallbackValue": null,
@@ -809,7 +809,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 126,
             "fallback": false,
             "fallbackValue": null,
@@ -822,7 +822,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 142,
             "fallback": false,
             "fallbackValue": null,
@@ -835,7 +835,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 143,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -848,7 +848,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 144,
             "fallback": false,
             "fallbackValue": null,
@@ -861,7 +861,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 145,
             "fallback": false,
             "fallbackValue": null,
@@ -874,7 +874,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 146,
             "fallback": true,
             "fallbackValue": "0.6875rem",
@@ -887,7 +887,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -900,7 +900,7 @@
           },
           {
             "name": "--ds-letter-spacing-wider",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 148,
             "fallback": false,
             "fallbackValue": null,
@@ -913,7 +913,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -926,7 +926,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 158,
             "fallback": false,
             "fallbackValue": null,
@@ -939,7 +939,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 159,
             "fallback": false,
             "fallbackValue": null,
@@ -952,7 +952,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 160,
             "fallback": false,
             "fallbackValue": null,
@@ -965,7 +965,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 161,
             "fallback": false,
             "fallbackValue": null,
@@ -978,7 +978,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 162,
             "fallback": true,
             "fallbackValue": "0.6875rem",
@@ -991,7 +991,7 @@
           },
           {
             "name": "--ds-spacing-12",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "3rem",
@@ -1004,7 +1004,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 179,
             "fallback": false,
             "fallbackValue": null,
@@ -1017,7 +1017,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 180,
             "fallback": false,
             "fallbackValue": null,
@@ -1030,7 +1030,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 184,
             "fallback": false,
             "fallbackValue": null,
@@ -1043,7 +1043,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 187,
             "fallback": false,
             "fallbackValue": null,
@@ -1056,7 +1056,7 @@
           },
           {
             "name": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 194,
             "fallback": false,
             "fallbackValue": null,
@@ -1069,7 +1069,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 202,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -1082,7 +1082,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 205,
             "fallback": false,
             "fallbackValue": null,
@@ -1095,7 +1095,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 208,
             "fallback": false,
             "fallbackValue": null,
@@ -1108,7 +1108,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 211,
             "fallback": false,
             "fallbackValue": null,
@@ -1121,7 +1121,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 214,
             "fallback": false,
             "fallbackValue": null,
@@ -1134,7 +1134,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 225,
             "fallback": false,
             "fallbackValue": null,
@@ -1147,7 +1147,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 228,
             "fallback": false,
             "fallbackValue": null,
@@ -1160,7 +1160,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 231,
             "fallback": false,
             "fallbackValue": null,
@@ -1173,7 +1173,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 234,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -1186,7 +1186,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 235,
             "fallback": false,
             "fallbackValue": null,
@@ -1199,7 +1199,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 236,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -1212,7 +1212,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 246,
             "fallback": false,
             "fallbackValue": null,
@@ -1225,7 +1225,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 247,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -1238,7 +1238,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 252,
             "fallback": false,
             "fallbackValue": null,
@@ -1251,7 +1251,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 253,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -1264,7 +1264,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 263,
             "fallback": false,
             "fallbackValue": null,
@@ -1277,7 +1277,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 273,
             "fallback": false,
             "fallbackValue": null,
@@ -1290,7 +1290,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 273,
             "fallback": false,
             "fallbackValue": null,
@@ -1303,7 +1303,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 293,
             "fallback": false,
             "fallbackValue": null,
@@ -1316,7 +1316,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 294,
             "fallback": false,
             "fallbackValue": null,
@@ -1329,7 +1329,7 @@
           },
           {
             "name": "--ds-notification-center-touch-target",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 306,
             "fallback": true,
             "fallbackValue": "2.75rem",
@@ -1342,7 +1342,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 360,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1355,7 +1355,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 363,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1368,7 +1368,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 35,
             "fallback": false,
             "fallbackValue": null,
@@ -1381,7 +1381,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 36,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1394,7 +1394,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 43,
             "fallback": false,
             "fallbackValue": null,
@@ -1407,7 +1407,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 44,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -1420,7 +1420,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 44,
             "fallback": false,
             "fallbackValue": null,
@@ -1433,7 +1433,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 49,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-primary)",
@@ -1446,7 +1446,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 49,
             "fallback": false,
             "fallbackValue": null,
@@ -1459,7 +1459,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 50,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1472,7 +1472,7 @@
           },
           {
             "name": "--ds-shadow-xl",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 51,
             "fallback": false,
             "fallbackValue": null,
@@ -1485,7 +1485,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -1498,7 +1498,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 54,
             "fallback": false,
             "fallbackValue": null,
@@ -1511,7 +1511,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 59,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -1524,7 +1524,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 59,
             "fallback": false,
             "fallbackValue": null,
@@ -1537,7 +1537,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 68,
             "fallback": false,
             "fallbackValue": null,
@@ -1550,7 +1550,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 76,
             "fallback": false,
             "fallbackValue": null,
@@ -1563,7 +1563,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 82,
             "fallback": false,
             "fallbackValue": null,
@@ -1576,7 +1576,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 88,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-100)",
@@ -1589,7 +1589,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -1602,7 +1602,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 91,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-muted)",
@@ -1615,7 +1615,7 @@
           },
           {
             "name": "--ds-color-bg-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 91,
             "fallback": false,
             "fallbackValue": null,
@@ -1628,7 +1628,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 96,
             "fallback": false,
             "fallbackValue": null,
@@ -1641,7 +1641,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 99,
             "fallback": false,
             "fallbackValue": null,
@@ -1654,7 +1654,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 102,
             "fallback": false,
             "fallbackValue": null,
@@ -1667,7 +1667,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 105,
             "fallback": false,
             "fallbackValue": null,
@@ -1680,7 +1680,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 111,
             "fallback": false,
             "fallbackValue": null,
@@ -1693,7 +1693,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 117,
             "fallback": false,
             "fallbackValue": null,
@@ -1706,7 +1706,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 36,
             "fallback": false,
             "fallbackValue": null,
@@ -1719,7 +1719,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 37,
             "fallback": false,
             "fallbackValue": null,
@@ -1732,7 +1732,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 38,
             "fallback": false,
             "fallbackValue": null,
@@ -1745,7 +1745,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 39,
             "fallback": false,
             "fallbackValue": null,
@@ -1758,7 +1758,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 119,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200, #e5e7eb)",
@@ -1771,7 +1771,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 119,
             "fallback": true,
             "fallbackValue": "#e5e7eb",
@@ -1784,7 +1784,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 120,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-900, #171717)",
@@ -1797,7 +1797,7 @@
           },
           {
             "name": "--ds-color-neutral-900",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 120,
             "fallback": true,
             "fallbackValue": "#171717",
@@ -1810,7 +1810,7 @@
           },
           {
             "name": "--ds-notification-center-unread-bg",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 151,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-50)",
@@ -1823,7 +1823,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 151,
             "fallback": false,
             "fallbackValue": null,
@@ -1836,7 +1836,7 @@
           },
           {
             "name": "--ds-notification-center-unread-dot",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 175,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-500)",
@@ -1849,7 +1849,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 175,
             "fallback": false,
             "fallbackValue": null,
@@ -1862,7 +1862,7 @@
           },
           {
             "name": "--ds-notification-center-message-color",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 186,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-secondary)",
@@ -1875,7 +1875,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 186,
             "fallback": false,
             "fallbackValue": null,
@@ -1888,7 +1888,7 @@
           },
           {
             "name": "--ds-notification-center-timestamp-color",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 199,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-tertiary)",
@@ -1901,7 +1901,7 @@
           },
           {
             "name": "--ds-color-text-tertiary",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/classic/index.tsx",
             "line": 199,
             "fallback": false,
             "fallbackValue": null,
@@ -1914,7 +1914,7 @@
           },
           {
             "name": "--ds-notification-center-list-max-height",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/modern/index.tsx",
             "line": 369,
             "fallback": true,
             "fallbackValue": "22.5rem",
@@ -1927,7 +1927,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
             "line": 88,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1940,7 +1940,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
             "line": 179,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1953,7 +1953,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
             "line": 225,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1966,7 +1966,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
             "line": 233,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1979,7 +1979,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/notification-center/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/notification-center/engines/rustic/index.tsx",
             "line": 238,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1993,187 +1993,187 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 51,
             "literal": "40px",
             "text": "block-size: 40px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 52,
             "literal": "40px",
             "text": "inline-size: 40px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 70,
             "literal": "0.25rem",
             "text": "inset-block-start: -0.25rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 71,
             "literal": "0.25rem",
             "text": "inset-inline-end: -0.25rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 80,
             "literal": "22.5rem",
             "text": "inline-size: var(--ds-notification-center-panel-width, 22.5rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 94,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 115,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 143,
             "literal": "0.25rem",
             "text": "padding-block-end: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 146,
             "literal": "0.6875rem",
             "text": "font-size: var(--ds-font-size-2xs, 0.6875rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 160,
             "literal": "1px",
             "text": "border-block-start: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 162,
             "literal": "0.6875rem",
             "text": "font-size: var(--ds-font-size-2xs, 0.6875rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 171,
             "literal": "3rem",
             "text": "padding-block: var(--ds-spacing-12, 3rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 184,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 202,
             "literal": "0.25rem",
             "text": "margin-block-start: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 234,
             "literal": "0.25rem",
             "text": "margin-block-start: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 236,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 247,
             "literal": "0.25rem",
             "text": "margin-block-start: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 253,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 260,
             "literal": "0.375rem",
             "text": "inline-size: 0.375rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 261,
             "literal": "0.375rem",
             "text": "block-size: 0.375rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 291,
             "literal": "20rem",
             "text": "@container ds-notification-panel (max-width: 20rem) {"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 306,
             "literal": "2.75rem",
             "text": "min-block-size: var(--ds-notification-center-touch-target, 2.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 328,
             "literal": "1px",
             "text": "border: 1px solid ButtonText;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 360,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
             "line": 363,
             "literal": "44px",
             "text": "min-inline-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 36,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 42,
             "literal": "8px",
             "text": "border-radius: 8px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 50,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 54,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 59,
             "literal": "1px",
             "text": "border-bottom: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/notification-center/index.css",
             "line": 88,
             "literal": "1px",
             "text": "border-bottom: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));"
@@ -2226,7 +2226,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -2253,7 +2253,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -2289,13 +2289,13 @@
         {
           "channelId": "--_ds-notification-center-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/notification-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2313,7 +2313,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -2339,7 +2339,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -2369,13 +2369,13 @@
         {
           "channelId": "--_ds-notification-center-panel-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/notification-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2392,7 +2392,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -2444,13 +2444,13 @@
         {
           "channelId": "--_ds-notification-center-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/notification-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/notification-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2469,7 +2469,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -2495,7 +2495,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "legibilidad del mensaje: mate; la tinta manda",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -2520,7 +2520,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de conversacion, no chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2540,7 +2540,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -2560,7 +2560,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -2584,7 +2584,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -2610,7 +2610,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2623,7 +2623,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -2669,7 +2669,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2708,7 +2708,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los ticks de estado del mensaje son iconos de la libreria",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -2729,11 +2729,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

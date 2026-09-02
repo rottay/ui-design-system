@@ -1,7 +1,7 @@
 # Evidencia persistida - 2026-08 (snapshots inmutables)
 
 Persistencia ejecutada por el paquete documental del asiento 2026-08-23 de
-`docs/ROADMAP-EJECUCION-2026-08-19.md` (correccion C5, con el alcance ampliado
+`docs/history/programs/architecture-refactor/2026-08/execution/index.md` (correccion C5, con el alcance ampliado
 que fijo la revision Fable de esa fecha).
 
 Motivo: `/private/tmp` es medio volatil y la cadena probatoria del ledger vivia

@@ -8,15 +8,15 @@
     "components": [
       "RecordFieldGrid"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/record/field-grid",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/record/field-grid",
     "publicComponents": [
       "RecordFieldGrid"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "cd7eee6abbd2a5a687379275973b97ef85e756a82c031cf4792841f01d86b645"
+    "inventoryRowDigest": "1b64da1752a9d0384cc698fce15b194f90aef087b447712b0082a548305101ed"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/record/field-grid",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+      "packages/core/src/components/structures/record/field-grid",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
     ],
     "stableParts": [
       "field-grid"
@@ -44,8 +44,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:682, packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:683]",
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:600]"
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:682, packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:683]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:600]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -72,7 +72,7 @@
         {
           "part": "field-grid",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/record/field-grid/index.tsx:43"
+          "anchor": "packages/core/src/components/structures/record/field-grid/index.tsx:43"
         }
       ],
       "partCensus": {
@@ -99,16 +99,16 @@
           "token": "structure=record",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:261",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:262",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:263"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:261",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:262",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:263"
           ]
         },
         {
           "token": "data-structure",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/record/field-grid/index.tsx:44"
+            "packages/core/src/components/structures/record/field-grid/index.tsx:44"
           ]
         }
       ],
@@ -118,15 +118,15 @@
             "token": "@container ds-record-fields (inline-size < 30rem) >> .ds-structure.ds-record[data-part='field-grid']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:600"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:600"
             ]
           },
           {
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:682",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:683"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:682",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:683"
             ]
           }
         ],
@@ -143,7 +143,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css": {
             "rows": 14,
             "layer": "engine-agnostic skin"
           }
@@ -230,7 +230,7 @@
           {
             "variable": "--_ds-record-field-grid-gap",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:246",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:246",
             "selector": ".ds-structure.ds-record[data-part='field-grid']",
             "states": [],
             "landsOn": "gap",
@@ -243,14 +243,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:600"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:600"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-record-density",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:246",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:246",
             "selector": ".ds-structure.ds-record[data-part='field-grid']",
             "states": [],
             "landsOn": "gap",
@@ -263,14 +263,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:115"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-divider-width",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:262",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:262",
             "selector": ".ds-structure.ds-record[data-part='field-grid'][data-structure='record']",
             "states": [
               "structure=record"
@@ -285,7 +285,7 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1782",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1782",
               "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:239"
             ],
             "declarationSiteCount": 2
@@ -293,7 +293,7 @@
           {
             "variable": "--ds-edge-standard-width",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:263",
             "selector": ".ds-structure.ds-record[data-part='field-grid'][data-structure='record']",
             "states": [
               "structure=record"
@@ -308,7 +308,7 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728",
               "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212",
               "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:217",
               "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:222"
@@ -318,7 +318,7 @@
           {
             "variable": "--ds-color-border-secondary",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:263",
             "selector": ".ds-structure.ds-record[data-part='field-grid'][data-structure='record']",
             "states": [
               "structure=record"
@@ -334,16 +334,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:231",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2136",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:30"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
             ],
             "declarationSiteCount": 7
           },
           {
             "variable": "--ds-radius-lg",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:264",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:264",
             "selector": ".ds-structure.ds-record[data-part='field-grid'][data-structure='record']",
             "states": [
               "structure=record"
@@ -359,16 +359,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-border-secondary",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:265",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:265",
             "selector": ".ds-structure.ds-record[data-part='field-grid'][data-structure='record']",
             "states": [
               "structure=record"
@@ -384,16 +384,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:231",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2136",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:30"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
             ],
             "declarationSiteCount": 7
           },
           {
             "variable": "--_ds-record-density",
             "part": "field-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:600",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:600",
             "selector": "@container ds-record-fields (inline-size < 30rem) >> .ds-structure.ds-record[data-part='field-grid']",
             "states": [
               "@container ds-record-fields (inline-size < 30rem) >> .ds-structure.ds-record[data-part='field-grid']"
@@ -408,7 +408,7 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:115"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:115"
             ],
             "declarationSiteCount": 1
           }
@@ -425,7 +425,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:246",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:246",
                   "part": "field-grid",
                   "landsOn": "gap",
                   "fallbackPresent": true,
@@ -445,7 +445,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:246",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:246",
                   "part": "field-grid",
                   "landsOn": "gap",
                   "fallbackPresent": true,
@@ -454,7 +454,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:600",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:600",
                   "part": "field-grid",
                   "landsOn": "--_ds-record-field-grid-gap",
                   "fallbackPresent": true,
@@ -463,7 +463,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:603",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:603",
                   "part": "field-grid",
                   "landsOn": "padding",
                   "fallbackPresent": true,
@@ -472,7 +472,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:603",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:603",
                   "part": "field-grid",
                   "landsOn": "padding",
                   "fallbackPresent": true,
@@ -492,7 +492,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:262",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:262",
                   "part": "field-grid",
                   "landsOn": "gap",
                   "fallbackPresent": true,
@@ -502,7 +502,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1782"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1782"
             },
             {
               "variable": "--ds-edge-standard-width",
@@ -512,7 +512,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:263",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:263",
                   "part": "field-grid",
                   "landsOn": "border",
                   "fallbackPresent": true,
@@ -521,7 +521,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:291",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:291",
                   "part": "field-grid",
                   "landsOn": "outline",
                   "fallbackPresent": true,
@@ -530,7 +530,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:316",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:316",
                   "part": "field-grid",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -540,7 +540,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
             },
             {
               "variable": "--ds-color-border-secondary",
@@ -550,7 +550,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:263",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:263",
                   "part": "field-grid",
                   "landsOn": "border",
                   "fallbackPresent": false,
@@ -559,7 +559,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:265",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:265",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -568,7 +568,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:316",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:316",
                   "part": "field-grid",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -578,7 +578,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:148"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:148"
             },
             {
               "variable": "--ds-radius-lg",
@@ -588,7 +588,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:264",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:264",
                   "part": "field-grid",
                   "landsOn": "border-radius",
                   "fallbackPresent": true,
@@ -598,7 +598,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771"
             },
             {
               "variable": "--ds-surface-card",
@@ -608,7 +608,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:277",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:277",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -617,7 +617,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:282",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:282",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -626,7 +626,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:290",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:290",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -635,7 +635,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:300",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:300",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -644,7 +644,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:315",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:315",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -654,7 +654,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             },
             {
               "variable": "--ds-color-bg-elevated",
@@ -664,7 +664,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:277",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:277",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -673,7 +673,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:282",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:282",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -682,7 +682,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:290",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:290",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -691,7 +691,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:300",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:300",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -700,7 +700,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:315",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:315",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -710,7 +710,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140"
             },
             {
               "variable": "--ds-color-bg-secondary",
@@ -720,7 +720,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:282",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:282",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -729,7 +729,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:290",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:290",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -738,7 +738,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:300",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:300",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -748,7 +748,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:138"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138"
             },
             {
               "variable": "--ds-color-border",
@@ -758,7 +758,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:291",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:291",
                   "part": "field-grid",
                   "landsOn": "outline",
                   "fallbackPresent": false,
@@ -768,7 +768,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:147"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:147"
             },
             {
               "variable": "--ds-focus-ring-width",
@@ -778,7 +778,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:307",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:307",
                   "part": "field-grid",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -788,7 +788,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:872"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:872"
             },
             {
               "variable": "--ds-focus-ring-color",
@@ -798,7 +798,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:307",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:307",
                   "part": "field-grid",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -808,7 +808,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:879"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:879"
             },
             {
               "variable": "--ds-color-primary",
@@ -818,7 +818,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:307",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:307",
                   "part": "field-grid",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -828,7 +828,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156"
             },
             {
               "variable": "--ds-color-error",
@@ -838,7 +838,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:315",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:315",
                   "part": "field-grid",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -847,7 +847,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:316",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:316",
                   "part": "field-grid",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -857,7 +857,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106"
             },
             {
               "variable": "--_ds-record-field-measure",
@@ -867,7 +867,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/ui/structures/record/field-grid/index.tsx:33",
+                  "at": "packages/core/src/components/structures/record/field-grid/index.tsx:33",
                   "part": "(component-inline)",
                   "landsOn": "(inline-style)",
                   "fallbackPresent": true,
@@ -885,81 +885,81 @@
         "inertFallbackChainSample": [
           {
             "name": "--ds-divider-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:262",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:262",
             "fallback": "1px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1782"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1782"
           },
           {
             "name": "--ds-edge-standard-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:263",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:263",
             "fallback": "1px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
           },
           {
             "name": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:264",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:264",
             "fallback": "14px",
-            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:44"
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:44"
           },
           {
             "name": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:277",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:277",
             "fallback": "var(--ds-color-bg-elevated)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
           },
           {
             "name": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:282",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:282",
             "fallback": "var(--ds-color-bg-elevated)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
           },
           {
             "name": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:290",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:290",
             "fallback": "var(--ds-color-bg-elevated)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
           },
           {
             "name": "--ds-edge-standard-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:291",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:291",
             "fallback": "1px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
           },
           {
             "name": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:300",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:300",
             "fallback": "var(--ds-color-bg-elevated)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
           },
           {
             "name": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:307",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:307",
             "fallback": "2px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:872"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:872"
           },
           {
             "name": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:307",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:307",
             "fallback": "var(--ds-color-primary)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:879"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:879"
           },
           {
             "name": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:315",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:315",
             "fallback": "var(--ds-color-bg-elevated)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
           },
           {
             "name": "--ds-edge-standard-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css:316",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css:316",
             "fallback": "1px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:728"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:728"
           }
         ],
         "inertFallbackChainSites": 12,
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
             "line": 600,
             "property": "--_ds-record-field-grid-gap",
             "literal": "10px",
@@ -967,7 +967,7 @@
             "atRule": "@container ds-record-fields (inline-size < 30rem)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
             "line": 603,
             "property": "padding",
             "literal": "10px",
@@ -975,7 +975,7 @@
             "atRule": "@container ds-record-fields (inline-size < 30rem)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
             "line": 603,
             "property": "padding",
             "literal": "12px",
@@ -983,7 +983,7 @@
             "atRule": "@container ds-record-fields (inline-size < 30rem)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
             "line": 689,
             "property": "outline",
             "literal": "1px",
@@ -991,7 +991,7 @@
             "atRule": "@media (forced-colors: active)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
             "line": 699,
             "property": "outline",
             "literal": "2px",
@@ -1001,7 +1001,7 @@
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css": {
               "rows": 14,
               "layer": "engine-agnostic skin"
             }
@@ -1029,7 +1029,7 @@
             "styleAttribute": 1
           },
           "perFile": {
-            "packages/core/src/ui/structures/record/field-grid/index.tsx": {
+            "packages/core/src/components/structures/record/field-grid/index.tsx": {
               "classNameOccurrences": 1,
               "dataPartOccurrences": 1,
               "styleAttributeOccurrences": 1,
@@ -1108,7 +1108,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1139,7 +1139,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1185,13 +1185,13 @@
         {
           "channelId": "--_ds-record-field-grid-title-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1201,13 +1201,13 @@
         {
           "channelId": "--_ds-record-field-grid-value-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1237,13 +1237,13 @@
         {
           "channelId": "--_ds-record-field-grid-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1262,7 +1262,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las acciones del record son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1284,13 +1284,13 @@
         {
           "channelId": "--_ds-record-field-grid-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1308,7 +1308,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1340,7 +1340,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la ficha no anima por si misma; sus interactivos heredan sockets de inputs",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
             "--ds-motion-ease-out"
@@ -1382,7 +1382,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de trabajo: mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1412,7 +1412,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1426,13 +1426,13 @@
         {
           "channelId": "--_ds-record-header-tint",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1469,13 +1469,13 @@
         {
           "channelId": "--_ds-record-field-grid-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1485,13 +1485,13 @@
         {
           "channelId": "--_ds-record-field-grid-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1515,7 +1515,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1528,7 +1528,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1567,7 +1567,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1611,13 +1611,13 @@
         {
           "channelId": "--_ds-record-field-grid-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/record/record-field-grid"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/record.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/record/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1637,11 +1637,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

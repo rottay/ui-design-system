@@ -271,8 +271,8 @@ Effort: S (< 1 day agent work) / M (1-3 days) / L (1-2 weeks) / XL (multi-week p
 > APPROVED (owner 2026-07-07) — converted to WO-CRA-10; the lane block is now the executable spec.
 
 - **What**: a systematic promote-to-DS review of the app kits that already passed production
-  use in bithire: the `src/ui/details` detail-shell family, signal-card, create-door chooser,
-  and the collection table kit overlaps in evnto `src/ui/tables`. Each candidate gets the
+  use in bithire: the `src/components/details` detail-shell family, signal-card, create-door chooser,
+  and the collection table kit overlaps in evnto `src/components/tables`. Each candidate gets the
   ownership test; what passes moves into structures/patterns with config seams; what fails is
   documented as app-owned forever.
 - **Why**: bithire already paid the design cost of these; evnto/platform are about to rebuild
@@ -494,7 +494,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **What** — `infrastructure/compilers/kernel/runtime/brand-theme/index.ts:768-771` emits `--ds-table-row-bg-hover` AND
   `--ds-table-row-hover-bg`, `--ds-table-row-bg-striped` AND `--ds-table-row-striped-bg`. Every
   component consumes only the `-bg-hover` / `-bg-striped` spelling (4 and 6 references under
-  `src/ui/`); the other two have no consumer anywhere in the DS or in app-bithire,
+  `src/components/`); the other two have no consumer anywhere in the DS or in app-bithire,
   app-platform, or app-evnto.
 - **Why it matters** — `pnpm --filter @rottay/design-system run lint` fails on `audit-integration`
   with two `orphan-premium-var` violations, and has done so since before 2026-07-09 (reproduced
@@ -591,7 +591,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-38 There are two Modal component families
 - **Found** — 2026-07-09, while attributing a test failure. **Not a new discovery:** WO-ARC-01's own "Why" section already names both (`primitives/feedback/Modal/Modal.types.ts:215` and `primitives/overlay/Modal/Modal.types.ts:15`, each with its own `engines/`, `compound/` and `tests/`), and its Do-NOT assigns the merge decision to WO-ARC-03. Recorded here so the finding is not lost between lanes, not as an independent find.
-- **Evidence** — `packages/core/src/ui/primitives/overlay/Modal/` and `packages/core/src/ui/primitives/feedback/Modal/` both exist, both carry a `Modal.types.ts`, and both are engine-switched. The taxonomy in `CLAUDE.md` puts overlays under `overlay/` and feedback under `feedback/`; a Modal cannot be in both.
+- **Evidence** — `packages/core/src/components/primitives/overlay/Modal/` and `packages/core/src/components/primitives/feedback/Modal/` both exist, both carry a `Modal.types.ts`, and both are engine-switched. The taxonomy in `CLAUDE.md` puts overlays under `overlay/` and feedback under `feedback/`; a Modal cannot be in both.
 - **Why it matters** — This is the shape of every defect this program has found: one path follows a rule, a duplicated path ignores it, and a gate scans only one. A consumer importing `Modal` gets whichever the barrel exports; a fix applied to one is invisible in the other. The Toast `default` variant and the two chrome compilers were exactly this.
 - **Ask** — Determine which is canonical, whether both are reachable from the public barrel, and whether any app imports the non-canonical one. Then delete or merge. Needs an owner decision because it may be a breaking export change.
 - **Status** — OPEN.
@@ -758,8 +758,8 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
   ```
   npx vitest run --config vitest.config.ts \
-    src/ui/patterns/data/list-toolbar \
-    src/ui/surfaces/presentation/pages/workspace/collection-workspace
+    src/components/patterns/data/list-toolbar \
+    src/components/surfaces/presentation/pages/workspace/collection-workspace
   #  x ListToolbar > renders the compact mobile toolbar through the modern engine  (1808ms)
   #    Unable to find an accessible element with the role "button" and name /create event/i
   #  Tests  1 failed | 40 passed (41)
@@ -767,7 +767,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
   Each file alone passes. Order does not matter, so it is not sequential pollution -- vitest runs the two files in parallel threads, and the failing test spends **1808ms** before giving up. `findByRole`'s default timeout is 1000ms. The button it cannot find lives behind an engine's lazy boundary; under CPU contention the chunk does not resolve inside the window.
 
-  **CORRECTION, same day.** This entry first called the reproducer "deterministic", on two observations out of two. Measured properly under a machine running six agents: **3 failures in 11 runs**. It is a probabilistic race whose failure rate rises with load, not a certainty. Two observations are not a rate. The distinction matters: a fix validated against a reproducer that fires 1 run in 4 has told you almost nothing, and one candidate fix passed that reproducer 15 times in a row while breaking **498 of 795 tests** in `src/ui/primitives/display` and doubling that subset's wall time. A race is closed by measuring the class, never by watching the instance.
+  **CORRECTION, same day.** This entry first called the reproducer "deterministic", on two observations out of two. Measured properly under a machine running six agents: **3 failures in 11 runs**. It is a probabilistic race whose failure rate rises with load, not a certainty. Two observations are not a rate. The distinction matters: a fix validated against a reproducer that fires 1 run in 4 has told you almost nothing, and one candidate fix passed that reproducer 15 times in a row while breaking **498 of 795 tests** in `src/components/primitives/display` and doubling that subset's wall time. A race is closed by measuring the class, never by watching the instance.
 - **The fix is not a longer timeout.** Widening a race window hides it. Make the resolution deterministic -- preload the engine module in the test setup, or render through a resolved component -- so the assertion no longer competes with a scheduler.
 - **Ask** — one WO. Start from the reproducer above. Then sweep every `getBy*` that follows a `rerender` or a preceding `await findBy*` in a `renderSurface`/engine-lazy tree and make it wait. Then, if instances remain, reproduce under `--sequence.shuffle` with a fixed seed to find the polluting test, or `--pool=forks --poolOptions.forks.singleFork` to prove it is cross-test state rather than timing. Fix the leak; do not raise a timeout. Then record in the ledger that the count is exact, not typical.
 - **Status** — OPEN.
@@ -913,7 +913,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 
 ### P-61 WO-ARC-08 owes a docs-engineering catalog update that this session could not write
 - **Found** — 2026-07-10, at WO-ARC-08 done, by the DS agent honoring the session's docs-engineering READ-ONLY constraint.
-- **Evidence** — ARC-08 made three catalog-visible changes that the DS CLAUDE.md documentation rule says MUST be reflected in `docs-engineering/engineering/design-system/`: (1) a contract-type addition — `priority?: 'low'` on `ColumnDef` (`patterns/foundation/types.ts`), which belongs in `foundations/contracts/README.md`; (2) a new responsive capability on the data-table pattern — container-query column-priority collapse (`container-name: ds-table` + the `@container ds-table (max-width:640px)` rule), which belongs in `components/patterns/data/README.md`; (3) the first two consumers of ARC-05's container-fluid type ramps (collection title + metric-card value), a `foundations/tokens/README.md` note that the fluid ramps are no longer zero-consumer. The `roadmap-status.mjs done` reminder ("update the matching docs-engineering CURRENT lines") points at the same debt.
+- **Evidence** — ARC-08 made three catalog-visible changes that the DS CLAUDE.md documentation rule says MUST be reflected in `docs-engineering/engineering/design-system/`: (1) a contract-type addition — `priority?: 'low'` on `ColumnDef` (`patterns/foundation/types.ts`), which belongs in `foundations/contracts/README.md`; (2) a new responsive capability on the data-table pattern — container-query column-priority collapse (`container-name: ds-table` + the `@container ds-table (max-width:640px)` rule), which belongs in `components/patterns/data/README.md`; (3) the first two consumers of ARC-05's container-fluid type ramps (collection title + metric-card value), a `foundations/tokens/README.md` note that the fluid ramps are no longer zero-consumer. The `scripts/maintain/roadmap/status/index.mjs done` reminder ("update the matching docs-engineering CURRENT lines") points at the same debt.
 - **Why it matters** — docs-engineering is the AI documentation hub; a contract field and a responsive mechanism that are undocumented there are invisible to every other agent that reads the catalog before the code. The gap is small but it is exactly the "convention not gate" class that rots silently.
 - **Ask** — one docs-authorized pass (or an owner lift of the READ-ONLY fence for the DS's own catalog) to add the three notes above. Purely documentation; no code. Scope is the DS catalog only — no product/vertical chapters are touched.
 - **Status** — OPEN.
@@ -922,7 +922,7 @@ outside WO-GAT-03's Files fence, so none was fixed drive-by. They are reproducib
 - **Found** — 2026-07-10, by the WO-ARC-09 infra executor: running `--update-baseline` to seed the new `arc09.inlinePaint.*` counters rewrote the whole baseline and surfaced two counters whose committed baseline no longer matches reality.
 - **Evidence** — `effects.gradientConsumers`: baseline 3, current **1**. `themeCss.lineCount`: baseline 1692, current **1351**. The line-count drop is benign (theme.css legitimately drained ~341 lines since the baseline; decrease-only, so it just went un-refreshed). The gradient-consumer drop is the concerning one: two render-layer files that used to read `var(--ds-gradient-*)` no longer do. It still PASSES `--check` because `effects.gradientConsumers` is a MIN floor of 1 (WO-ENG-05 wired the 1/0/0 dead layer up) and the baseline VALUE is informational to that check — so a drop from 3 to 1 gates nothing. The pixel gate for gradient is `effects.spec.ts` (decodes a screenshot), not this counter.
 - **Why it matters** — WO-ENG-05 raised gradient consumers off the dead floor; a silent regression back toward it is exactly the "convention not gate" erosion the counter was meant to stop, but the MIN-floor design lets it slide from 3 to 1 unnoticed. I reverted both baseline values to their committed state so the ARC-09 infra commit stays surgical (only the 13 `arc09.inlinePaint.*` keys added), which means the staleness is preserved, not fixed.
-- **Ask** — (a) identify which two files stopped consuming `var(--ds-gradient-*)` (git-blame the count from 3→1) and decide whether that is an intended change or a regression; if intended, refresh the baseline to 1 and consider raising the MIN floor is NOT wanted (floor stays 1); if a regression, restore the consumers. (b) Refresh `themeCss.lineCount` to 1351 in a deliberate, explained commit. Drill for (a): re-run `node scripts/infrastructure/engine-token-audit.mjs` and read `effects.gradientConsumers`.
+- **Ask** — (a) identify which two files stopped consuming `var(--ds-gradient-*)` (git-blame the count from 3→1) and decide whether that is an intended change or a regression; if intended, refresh the baseline to 1 and consider raising the MIN floor is NOT wanted (floor stays 1); if a regression, restore the consumers. (b) Refresh `themeCss.lineCount` to 1351 in a deliberate, explained commit. Drill for (a): re-run `node scripts/check/engine-token-audit.mjs` and read `effects.gradientConsumers`.
 - **Status** — OPEN.
 
 ### P-63 Table pre-existing visual defects ARC-09 surfaced but (correctly) preserved byte-exact

@@ -8,15 +8,15 @@
     "components": [
       "VisuallyHidden"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/foundation/VisuallyHidden",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/foundation/visually-hidden",
     "publicComponents": [
       "VisuallyHidden"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "a762a1aced1655a56d8675e38d7c0d5cbfb629ad28a78d671c4610f61aca35ce"
+    "inventoryRowDigest": "c03b3a7f219a0f332621db8d3d4566248e02c10195933a7f2d14b1b994152d40"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/foundation/VisuallyHidden/index.tsx",
-      "packages/core/src/ui/primitives/foundation/VisuallyHidden/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/visually-hidden.css"
+      "packages/core/src/components/primitives/foundation/visually-hidden/index.tsx",
+      "packages/core/src/components/primitives/foundation/visually-hidden/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/visually-hidden/index.css"
     ],
     "stableParts": [],
     "states": [],
@@ -38,7 +38,7 @@
     "propertyGroups": [],
     "invariants": [
       "The clip recipe is not themeable: no CSS custom property participates, so no tenant control can make hidden content visible or vice versa. [at foundation/tokens/css/presentation/components/visually-hidden.css]",
-      "focusable gates tab reachability, and a caller's negative tabIndex passes through unchanged rather than being overridden. [at primitives/foundation/VisuallyHidden/index.tsx:29-31]"
+      "focusable gates tab reachability, and a caller's negative tabIndex passes through unchanged rather than being overridden. [at primitives/foundation/visually-hidden/index.tsx:29-31]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -61,7 +61,7 @@
           "scoutAnchorClaim": "class ds-visually-hidden (+ ds-visually-hidden--focusable). NO data-part.",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "primitives/foundation/VisuallyHidden/index.tsx:32-38"
+            "primitives/foundation/visually-hidden/index.tsx:32-38"
           ]
         }
       ],
@@ -73,7 +73,7 @@
           {
             "token": "focusable",
             "at": [
-              "primitives/foundation/VisuallyHidden/index.tsx:29-38"
+              "primitives/foundation/visually-hidden/index.tsx:29-38"
             ]
           }
         ],
@@ -125,7 +125,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -144,7 +144,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -163,7 +163,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -218,7 +218,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -291,8 +291,8 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -312,7 +312,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -391,7 +391,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -448,7 +448,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -498,11 +498,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "PatternFileManager"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/file-manager",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/file-manager",
     "publicComponents": [
       "PatternFileManager"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ed24c6dfe0dd9666a545b579590c69f6cd0091ce485dbb3f199d3c238f299b73"
+    "inventoryRowDigest": "98768f6b421ee791004c36b5e7b0e3db78b71b33a200188a0a3c8503c58a9e33"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
-      "packages/core/src/ui/patterns/data/file-manager",
-      "packages/core/src/ui/patterns/data/file-manager/contracts/index.ts",
-      "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/data/file-manager/index.ts"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
+      "packages/core/src/components/patterns/data/file-manager",
+      "packages/core/src/components/patterns/data/file-manager/contracts/index.ts",
+      "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/data/file-manager/index.ts"
     ],
     "stableParts": [
       "body",
@@ -90,28 +90,28 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "a tenant control must not remove or override the button role contract on these nodes (aria-role: button) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:488]",
-      "a tenant control must not remove or override the group role contract on these nodes (aria-role: group) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479]",
-      "aria-current is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-current) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:264]",
-      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:349, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:358, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:388, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479]",
-      "aria-labelledby is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-labelledby) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:445, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:461]",
-      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:490]",
-      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:493]",
-      "<table> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: table) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:347]",
-      "<tbody> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: tbody) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:366]",
-      "<td> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: td) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:377, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:392, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:434, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:435]",
-      "<th> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: th) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:355, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:362]",
-      "<thead> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: thead) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:351]",
-      "<tr> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: tr) [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:352, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:371]",
-      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:343, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:357, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:358, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:362 and more]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (64 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:241, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:246, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:254, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:259]",
-      "The family assigns explicit ARIA roles in source (2 sites; roles observed: `group`, `button`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:488]",
-      "The family sets ARIA state/label attributes in source (8 sites; observed: `aria-label`, `aria-labelledby`, `aria-current`, `aria-pressed`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:264, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:349, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:358, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:388]",
-      "The family renders semantic HTML elements directly (17 sites; observed: `td`, `button`, `th`, `thead`, `tr`); the element semantics are structural and are not a themeable choice. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:351, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:352, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361]",
-      "Table header cells carry an explicit `scope` attribute (5 sites); header/data association must survive any restyle. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:357, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361, packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:362]",
-      "The family implements keyboard interaction handlers (1 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:493]",
-      "The family manages `tabIndex` explicitly (1 sites); focus order is owned by the component, not by theming. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:489]",
-      "The family generates stable ids with React `useId` (1 sites) to bind labels and controls; those bindings must not be broken by a recipe. [at packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:144]"
+      "a tenant control must not remove or override the button role contract on these nodes (aria-role: button) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:488]",
+      "a tenant control must not remove or override the group role contract on these nodes (aria-role: group) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:479]",
+      "aria-current is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-current) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:264]",
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:349, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:358, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:388, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:479]",
+      "aria-labelledby is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-labelledby) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:445, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:461]",
+      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:490]",
+      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:493]",
+      "<table> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: table) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:347]",
+      "<tbody> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: tbody) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:366]",
+      "<td> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: td) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:377, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:392, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:434, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:435]",
+      "<th> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: th) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:355, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:361, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:362]",
+      "<thead> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: thead) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:351]",
+      "<tr> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: tr) [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:352, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:371]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:343, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:357, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:358, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:362 and more]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (64 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:241, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:246, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:254, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:259]",
+      "The family assigns explicit ARIA roles in source (2 sites; roles observed: `group`, `button`); a tenant control must not remove or replace them. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:479, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:488]",
+      "The family sets ARIA state/label attributes in source (8 sites; observed: `aria-label`, `aria-labelledby`, `aria-current`, `aria-pressed`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:264, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:349, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:358, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:388]",
+      "The family renders semantic HTML elements directly (17 sites; observed: `td`, `button`, `th`, `thead`, `tr`); the element semantics are structural and are not a themeable choice. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:351, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:352, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:361]",
+      "Table header cells carry an explicit `scope` attribute (5 sites); header/data association must survive any restyle. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:357, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:360, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:361, packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:362]",
+      "The family implements keyboard interaction handlers (1 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:493]",
+      "The family manages `tabIndex` explicitly (1 sites); focus order is owned by the component, not by theming. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:489]",
+      "The family generates stable ids with React `useId` (1 sites) to bind labels and controls; those bindings must not be broken by a recipe. [at packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:144]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -141,10 +141,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:259"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:259"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:25"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:25"
           ],
           "anchorStatus": "verified"
         },
@@ -153,11 +153,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:262",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:195"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:262",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:195"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:44"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:44"
           ],
           "anchorStatus": "verified"
         },
@@ -166,10 +166,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:203"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:203"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:45"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:45"
           ],
           "anchorStatus": "verified"
         },
@@ -178,8 +178,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:196",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:201"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:196",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:201"
           ]
         },
         {
@@ -187,11 +187,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:382",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:276"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:382",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:276"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:233"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:233"
           ],
           "anchorStatus": "verified"
         },
@@ -200,10 +200,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:259"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:259"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:62"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:62"
           ],
           "anchorStatus": "verified"
         },
@@ -212,10 +212,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:355"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:355"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:230"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:230"
           ],
           "anchorStatus": "verified"
         },
@@ -224,10 +224,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:361"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:361"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:212"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:212"
           ],
           "anchorStatus": "verified"
         },
@@ -236,15 +236,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:334",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:245"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:334",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:245"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:161",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:164",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:167"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:167"
           ],
           "anchorStatus": "verified"
         },
@@ -253,12 +253,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:435"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:435"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:208"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:208"
           ],
           "anchorStatus": "verified"
         },
@@ -267,13 +267,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:342",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:252"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:342",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:252"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:173",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:174",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:175"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:175"
           ],
           "anchorStatus": "verified"
         },
@@ -282,15 +282,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:501"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:401",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:501"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:132",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:133",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:134",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:135"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:133",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:135"
           ],
           "anchorStatus": "verified"
         },
@@ -299,11 +299,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:299",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:216"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:299",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:216"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:49"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:49"
           ],
           "anchorStatus": "verified"
         },
@@ -312,13 +312,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:430",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:294"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:430",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:294"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:65",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:66"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:66"
           ],
           "anchorStatus": "verified"
         },
@@ -327,7 +327,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:297"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:297"
           ]
         },
         {
@@ -335,11 +335,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:497"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:497"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:143"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:143"
           ],
           "anchorStatus": "verified"
         },
@@ -348,15 +348,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:415",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:292"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:415",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:292"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:71",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:72",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:73",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:74"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:71",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:72",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:74"
           ],
           "anchorStatus": "verified"
         },
@@ -365,15 +365,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:479"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:479"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:238",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:239",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:240",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:244",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:249"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:238",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:240",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:244",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:249"
           ],
           "anchorStatus": "verified"
         },
@@ -382,15 +382,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:336"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:336"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:261",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:262",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:263",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:267",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:270"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:261",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:263",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:267",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:270"
           ],
           "anchorStatus": "verified"
         },
@@ -399,15 +399,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:495"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:495"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:300",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:301",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:302",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:303",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:304"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:300",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:303",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:304"
           ],
           "anchorStatus": "verified"
         },
@@ -416,15 +416,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:439",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:455",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:305",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:319"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:439",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:455",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:305",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:319"
           ],
           "atSiteCount": 10,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:123",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:126"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:123",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:126"
           ],
           "anchorStatus": "verified"
         },
@@ -433,11 +433,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:437"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:437"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:60",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:61"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:60",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:61"
           ],
           "anchorStatus": "verified"
         },
@@ -446,15 +446,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:507",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:352"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:507",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:352"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:314",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:315",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:316",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:317"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:314",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:317"
           ],
           "anchorStatus": "verified"
         },
@@ -463,12 +463,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:346"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:346"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:180",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:181",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:182"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:182"
           ],
           "anchorStatus": "verified"
         },
@@ -477,15 +477,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:347"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:347"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:185",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:187",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:190",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:191"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:185",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:190",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:191"
           ],
           "anchorStatus": "verified"
         },
@@ -494,10 +494,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:146"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:146"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:33"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:33"
           ],
           "anchorStatus": "verified"
         },
@@ -506,10 +506,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:300"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:300"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:41"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:41"
           ],
           "anchorStatus": "verified"
         },
@@ -518,13 +518,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:393"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:393"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:54",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:55",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:56",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:57"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:54",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:57"
           ],
           "anchorStatus": "verified"
         },
@@ -533,12 +533,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:239",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:252",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:139",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:5",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:10"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:239",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:252",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:139",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:5",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:10"
           ],
           "atSiteCount": 10
         },
@@ -547,15 +547,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:371",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:267"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:371",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:267"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:218",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:221",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:222",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:226"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:218",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:226"
           ],
           "anchorStatus": "verified"
         },
@@ -564,7 +564,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:434"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:434"
           ]
         },
         {
@@ -572,7 +572,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:246"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:246"
           ]
         },
         {
@@ -580,15 +580,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:194"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:194"
           ],
           "atSiteCount": 8,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:30",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:31",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:32",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:33"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:30",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:31",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:33"
           ],
           "anchorStatus": "verified"
         },
@@ -597,12 +597,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:287",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:307",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:210",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:225",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:22",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:23"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:287",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:307",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:210",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:22",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:23"
           ],
           "atSiteCount": 9
         },
@@ -611,12 +611,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:285"
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:285"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:37",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:38",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:39"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:37",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:38",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:39"
           ],
           "anchorStatus": "verified"
         },
@@ -625,13 +625,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:230"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:230"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:15",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:16",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:17",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:18"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:15",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:16",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:17",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:18"
           ],
           "anchorStatus": "verified"
         }
@@ -642,8 +642,8 @@
           "scoutAnchorClaim": "data-part attribute in source JSX",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:284",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:345"
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:284",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:345"
           ]
         },
         {
@@ -651,9 +651,9 @@
           "scoutAnchorClaim": "data-part selector in family paint sheet only",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:116",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:118"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:116",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:118"
           ]
         },
         {
@@ -661,18 +661,18 @@
           "scoutAnchorClaim": "data-part",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:169"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:169"
           ]
         }
       ],
       "partCensus": {
         "dynamicPartExpressions": [
           {
-            "site": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:285",
+            "site": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:285",
             "expression": "item.type === 'folder' ? 'folder-icon' : 'file-icon'"
           },
           {
-            "site": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:346",
+            "site": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:346",
             "expression": "item.type === 'folder' ? 'folder-icon' : 'file-icon'"
           }
         ]
@@ -683,7 +683,7 @@
           "at": [],
           "state": "active",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:289"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:289"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -693,11 +693,11 @@
           "at": [],
           "state": "drag-over",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:167",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:168",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:362",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:363",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:364"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:362",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:363",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:364"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -705,34 +705,34 @@
         {
           "token": "data-loading=false",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:10",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:11",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:12"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:10",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:11",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:12"
           ],
           "state": "loading"
         },
         {
           "token": "data-loading=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:17",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:18",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:19",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:20"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:17",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:18",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:19",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:20"
           ],
           "state": "loading"
         },
         {
           "token": "data-selected=false",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:274",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:282",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:347"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:274",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:282",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:347"
           ],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:277",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:285",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:289"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:277",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:289"
           ],
           "anchorStatus": "verified"
         },
@@ -741,12 +741,12 @@
           "at": [],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:221",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:222",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:226",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:292",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:296",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:297"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:221",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:297"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -756,7 +756,7 @@
           "at": [],
           "state": "focus",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:98"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:98"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -766,11 +766,11 @@
           "at": [],
           "state": "focus-visible",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:102",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:103",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:270",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:271",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:357"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:271",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:357"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -778,14 +778,14 @@
         {
           "token": "hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:285"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:285"
           ],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:92",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:226",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:282"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:282"
           ],
           "anchorStatus": "verified"
         },
@@ -794,10 +794,10 @@
           "occurrences": 14,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:281",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:374",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:485",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:259"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:281",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:374",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:485",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:259"
           ],
           "state": "selected"
         },
@@ -806,7 +806,7 @@
           "occurrences": 10,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:149"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:149"
           ],
           "state": "focus-visible"
         },
@@ -815,10 +815,10 @@
           "occurrences": 8,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:337",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:374",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:485",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:259"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:337",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:374",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:485",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:259"
           ],
           "state": "selected"
         },
@@ -827,8 +827,8 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:221",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:336"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:221",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:336"
           ],
           "state": "drag-over"
         },
@@ -837,7 +837,7 @@
           "occurrences": 5,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:139"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:139"
           ],
           "state": "hover"
         },
@@ -846,10 +846,10 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:49",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:242",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:255",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:142"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:49",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:242",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:255",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:142"
           ],
           "state": "loading"
         },
@@ -858,10 +858,10 @@
           "occurrences": 3,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:42",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:242",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:255",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:142"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:42",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:242",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:255",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:142"
           ],
           "state": "loading"
         },
@@ -870,10 +870,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:419",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:242",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:255",
-            "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx:142"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:419",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:242",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:255",
+            "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx:142"
           ],
           "state": "loading"
         },
@@ -882,7 +882,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:353"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:353"
           ],
           "state": "active"
         },
@@ -891,7 +891,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:145"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:145"
           ],
           "state": "focus"
         }
@@ -900,59 +900,59 @@
         {
           "token": "data-action=delete",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:126",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:57"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:57"
           ]
         },
         {
           "token": "data-action=delete-selected",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:28",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:29"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:29"
           ]
         },
         {
           "token": "data-action=rename",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:123"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:123"
           ]
         },
         {
           "token": "data-action=upload",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:22",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:23",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:24"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:22",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:24"
           ]
         },
         {
           "token": "data-file-kind=folder",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:143"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:143"
           ]
         },
         {
           "token": "data-file-kind=image",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:146"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:146"
           ]
         },
         {
           "token": "data-file-kind=other",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:155"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:155"
           ]
         },
         {
           "token": "data-file-kind=pdf",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:149"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:149"
           ]
         },
         {
           "token": "data-file-kind=text",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:152"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:152"
           ]
         },
         {
@@ -960,10 +960,10 @@
           "occurrences": 3,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:29",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:29",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:322"
           ]
         },
         {
@@ -971,10 +971,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:179",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:179",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:322"
           ]
         },
         {
@@ -982,10 +982,10 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:35",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:35",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:322"
           ]
         },
         {
@@ -993,10 +993,10 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:176",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:291",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:311",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:322"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:176",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:291",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:311",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:322"
           ]
         },
         {
@@ -1004,10 +1004,10 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:196",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:196",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:401"
           ]
         },
         {
@@ -1015,10 +1015,10 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:199",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:199",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:401"
           ]
         },
         {
@@ -1026,10 +1026,10 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:208",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:208",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:401"
           ]
         },
         {
@@ -1037,10 +1037,10 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:202",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:202",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:401"
           ]
         },
         {
@@ -1048,33 +1048,33 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:205",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:397",
-            "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:401"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:205",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:397",
+            "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:401"
           ]
         }
       ],
       "engineDivergence": {
         "engineDivergence": {
-          "engineSiblingDirectory": "packages/core/src/ui/patterns/data/file-manager/engines",
+          "engineSiblingDirectory": "packages/core/src/components/patterns/data/file-manager/engines",
           "engines": {
             "classic": {
-              "path": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
               "lines": 344,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "modern": {
-              "path": "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx",
+              "path": "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx",
               "lines": 518,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "rustic": {
-              "path": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
               "lines": 363,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
@@ -1084,13 +1084,13 @@
           "paintByEngine": {
             "modern": [
               {
-                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
                 "paintKind": "own"
               }
             ],
             "rustic": [
               {
-                "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
                 "paintKind": "own"
               }
             ]
@@ -1100,21 +1100,21 @@
             "classic": {
               "lines": 344,
               "files": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx"
+                "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx"
               ],
               "fileCount": 1
             },
             "modern": {
               "lines": 518,
               "files": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx"
+                "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx"
               ],
               "fileCount": 1
             },
             "rustic": {
               "lines": 363,
               "files": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx"
+                "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx"
               ],
               "fileCount": 1
             }
@@ -1150,7 +1150,7 @@
             }
           },
           "antdImportSites": [
-            "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:21"
+            "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:21"
           ],
           "inlineStyleAttributeSites": 51,
           "templateConstructedVariableNames": [],
@@ -1183,21 +1183,21 @@
         },
         "engines": {
           "classic": {
-            "path": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "lines": 344,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "modern": {
-            "path": "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx",
+            "path": "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx",
             "lines": 518,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "rustic": {
-            "path": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "lines": 363,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
@@ -1214,7 +1214,7 @@
             "gap": "CLASSIC_ENGINE_PAINT_NOT_ENUMERABLE",
             "detail": "The classic engine renders Ant Design components whose paint is Ant CSS-in-JS tokens, not --ds-* custom properties, so no --ds-* census can describe it from this repository.",
             "evidence": [
-              "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:21"
+              "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:21"
             ]
           },
           {
@@ -1240,10 +1240,10 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 2,
               "noFallbackReadSites": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:74",
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:87"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:74",
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:87"
               ],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css:74",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css:74",
               "landsOnProperties": [
                 "background"
               ],
@@ -1258,7 +1258,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:215",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:215",
               "landsOnProperties": [
                 "min-block-size"
               ],
@@ -1272,7 +1272,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:129",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:129",
               "landsOnProperties": [
                 "color"
               ],
@@ -1286,7 +1286,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:140",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:140",
               "landsOnProperties": [
                 "color"
               ],
@@ -1300,7 +1300,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:394",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:394",
               "landsOnProperties": [
                 "min-block-size"
               ],
@@ -1314,7 +1314,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:132",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:132",
               "landsOnProperties": [
                 "text-underline-offset"
               ],
@@ -1328,7 +1328,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:131",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:131",
               "landsOnProperties": [
                 "text-decoration-thickness"
               ],
@@ -1341,7 +1341,7 @@
           "hardcodedValue": [
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:49",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:49",
               "literal": "#1677ff",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1350,7 +1350,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:52",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:52",
               "literal": "#dc2626",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1359,7 +1359,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:55",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:55",
               "literal": "#16a34a",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1368,7 +1368,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:58",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:58",
               "literal": "#8c8c8c",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1377,7 +1377,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:180",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:180",
               "literal": "#faad14",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1386,7 +1386,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:255",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:255",
               "literal": "#1677ff",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1395,7 +1395,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:258",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:258",
               "literal": "#e6f7ff",
               "property": "background",
               "selector": "TSX",
@@ -1404,7 +1404,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:263",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:263",
               "literal": "#faad14",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1413,7 +1413,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx:322",
+              "at": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx:322",
               "literal": "rgba(0,0,0,0.45)",
               "property": "color",
               "selector": "TSX",
@@ -1567,7 +1567,7 @@
         "variableCensus": [
           {
             "variable": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 10,
             "part": "root",
             "landsOn": "background",
@@ -1583,7 +1583,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 11,
             "part": "root",
             "landsOn": "border-radius",
@@ -1599,7 +1599,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 12,
             "part": "root",
             "landsOn": "box-shadow",
@@ -1615,7 +1615,7 @@
           },
           {
             "variable": "--ds-spacing-12",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "padding-block",
@@ -1631,7 +1631,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 25,
             "part": "body",
             "landsOn": "padding",
@@ -1647,7 +1647,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 33,
             "part": "toolbar",
             "landsOn": "gap",
@@ -1663,7 +1663,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 34,
             "part": "toolbar",
             "landsOn": "margin-block-end",
@@ -1679,7 +1679,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 39,
             "part": "toolbar-actions",
             "landsOn": "gap",
@@ -1695,7 +1695,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 56,
             "part": "name-cell",
             "landsOn": "gap",
@@ -1711,7 +1711,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 61,
             "part": "item-actions",
             "landsOn": "gap",
@@ -1727,7 +1727,7 @@
           },
           {
             "variable": "--ds-file-manager-link-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 81,
             "part": "folder-link",
             "landsOn": "color",
@@ -1745,7 +1745,7 @@
           },
           {
             "variable": "--ds-color-link",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 81,
             "part": "folder-link",
             "landsOn": "color",
@@ -1762,7 +1762,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 81,
             "part": "folder-link",
             "landsOn": "color",
@@ -1778,7 +1778,7 @@
           },
           {
             "variable": "--ds-link-underline-thickness",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 83,
             "part": "folder-link",
             "landsOn": "text-decoration-thickness",
@@ -1794,7 +1794,7 @@
           },
           {
             "variable": "--ds-link-underline-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 84,
             "part": "folder-link",
             "landsOn": "text-underline-offset",
@@ -1810,7 +1810,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 85,
             "part": "folder-link",
             "landsOn": "transition",
@@ -1826,7 +1826,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 85,
             "part": "folder-link",
             "landsOn": "transition",
@@ -1842,7 +1842,7 @@
           },
           {
             "variable": "--ds-file-manager-link-hover-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 92,
             "part": "folder-link",
             "landsOn": "color",
@@ -1862,7 +1862,7 @@
           },
           {
             "variable": "--ds-color-link-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 92,
             "part": "folder-link",
             "landsOn": "color",
@@ -1881,7 +1881,7 @@
           },
           {
             "variable": "--ds-color-primary-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 92,
             "part": "folder-link",
             "landsOn": "color",
@@ -1899,7 +1899,7 @@
           },
           {
             "variable": "--ds-shadow-focus-ring",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 103,
             "part": "folder-link",
             "landsOn": "box-shadow",
@@ -1915,7 +1915,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 110,
             "part": "folder-link",
             "landsOn": "min-block-size",
@@ -1933,7 +1933,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 123,
             "part": "item-action",
             "landsOn": "color",
@@ -1949,7 +1949,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 126,
             "part": "item-action",
             "landsOn": "color",
@@ -1965,7 +1965,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 143,
             "part": "folder-icon",
             "landsOn": "color",
@@ -1981,7 +1981,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 146,
             "part": "file-icon",
             "landsOn": "color",
@@ -1997,7 +1997,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 149,
             "part": "file-icon",
             "landsOn": "color",
@@ -2013,7 +2013,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 152,
             "part": "file-icon",
             "landsOn": "color",
@@ -2029,7 +2029,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 155,
             "part": "file-icon",
             "landsOn": "color",
@@ -2045,7 +2045,7 @@
           },
           {
             "variable": "--ds-file-manager-content-min-height",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 160,
             "part": "content",
             "landsOn": "min-block-size",
@@ -2061,7 +2061,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 161,
             "part": "content",
             "landsOn": "border-radius",
@@ -2077,7 +2077,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 164,
             "part": "content",
             "landsOn": "transition",
@@ -2093,7 +2093,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 164,
             "part": "content",
             "landsOn": "transition",
@@ -2109,7 +2109,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 164,
             "part": "content",
             "landsOn": "transition",
@@ -2125,7 +2125,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 164,
             "part": "content",
             "landsOn": "transition",
@@ -2141,7 +2141,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 167,
             "part": "content",
             "landsOn": "background",
@@ -2157,7 +2157,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 168,
             "part": "content",
             "landsOn": "box-shadow",
@@ -2173,7 +2173,7 @@
           },
           {
             "variable": "--ds-spacing-12",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 175,
             "part": "empty",
             "landsOn": "padding-block",
@@ -2189,7 +2189,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 182,
             "part": "list-scroll",
             "landsOn": "scrollbar-color",
@@ -2205,7 +2205,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 187,
             "part": "list-table",
             "landsOn": "font-size",
@@ -2221,7 +2221,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 190,
             "part": "list-table",
             "landsOn": "padding-block",
@@ -2237,7 +2237,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 191,
             "part": "list-table",
             "landsOn": "padding-inline",
@@ -2253,7 +2253,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 192,
             "part": "list-table",
             "landsOn": "border-block-end",
@@ -2269,7 +2269,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 193,
             "part": "list-table",
             "landsOn": "color",
@@ -2285,7 +2285,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 194,
             "part": "list-table",
             "landsOn": "font-weight",
@@ -2301,7 +2301,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 198,
             "part": "list-table",
             "landsOn": "padding-block",
@@ -2317,7 +2317,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 199,
             "part": "list-table",
             "landsOn": "padding-inline",
@@ -2333,7 +2333,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 201,
             "part": "list-table",
             "landsOn": "border-block-end",
@@ -2349,7 +2349,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 206,
             "part": "date-cell",
             "landsOn": "color",
@@ -2365,7 +2365,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 218,
             "part": "row",
             "landsOn": "transition",
@@ -2381,7 +2381,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 218,
             "part": "row",
             "landsOn": "transition",
@@ -2397,7 +2397,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 218,
             "part": "row",
             "landsOn": "transition",
@@ -2413,7 +2413,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 218,
             "part": "row",
             "landsOn": "transition",
@@ -2429,7 +2429,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 221,
             "part": "row",
             "landsOn": "background",
@@ -2445,7 +2445,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 222,
             "part": "row",
             "landsOn": "box-shadow",
@@ -2461,7 +2461,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 226,
             "part": "row",
             "landsOn": "background",
@@ -2479,7 +2479,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 240,
             "part": "grid",
             "landsOn": "gap",
@@ -2495,7 +2495,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 261,
             "part": "grid-card",
             "landsOn": "padding",
@@ -2511,7 +2511,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 263,
             "part": "grid-card",
             "landsOn": "border-radius",
@@ -2527,7 +2527,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 267,
             "part": "grid-card",
             "landsOn": "transition",
@@ -2543,7 +2543,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 267,
             "part": "grid-card",
             "landsOn": "transition",
@@ -2559,7 +2559,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 267,
             "part": "grid-card",
             "landsOn": "transition",
@@ -2575,7 +2575,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 267,
             "part": "grid-card",
             "landsOn": "transition",
@@ -2591,7 +2591,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 267,
             "part": "grid-card",
             "landsOn": "transition",
@@ -2607,7 +2607,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 267,
             "part": "grid-card",
             "landsOn": "transition",
@@ -2623,7 +2623,7 @@
           },
           {
             "variable": "--ds-shadow-focus-ring",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 271,
             "part": "grid-card",
             "landsOn": "box-shadow",
@@ -2639,7 +2639,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 274,
             "part": "grid-card",
             "landsOn": "background",
@@ -2655,7 +2655,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 277,
             "part": "grid-card",
             "landsOn": "border",
@@ -2671,7 +2671,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 282,
             "part": "grid-card",
             "landsOn": "background",
@@ -2689,7 +2689,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 285,
             "part": "grid-card",
             "landsOn": "border-color",
@@ -2707,7 +2707,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 285,
             "part": "grid-card",
             "landsOn": "border-color",
@@ -2725,7 +2725,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 289,
             "part": "grid-card",
             "landsOn": "background",
@@ -2741,7 +2741,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 292,
             "part": "grid-card",
             "landsOn": "background",
@@ -2757,7 +2757,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 296,
             "part": "grid-card",
             "landsOn": "border",
@@ -2773,7 +2773,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 297,
             "part": "grid-card",
             "landsOn": "box-shadow",
@@ -2789,7 +2789,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 303,
             "part": "grid-card-body",
             "landsOn": "gap",
@@ -2805,7 +2805,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 305,
             "part": "grid-card-body",
             "landsOn": "padding",
@@ -2821,7 +2821,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 318,
             "part": "item-name",
             "landsOn": "font-size",
@@ -2837,7 +2837,7 @@
           },
           {
             "variable": "--ds-file-manager-touch-target",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 326,
             "part": "item-action",
             "landsOn": "min-block-size",
@@ -2855,7 +2855,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "line": 386,
             "part": "item-action",
             "landsOn": "min-block-size",
@@ -2873,7 +2873,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 4,
             "part": "root",
             "landsOn": "border",
@@ -2890,7 +2890,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 4,
             "part": "root",
             "landsOn": "border",
@@ -2906,7 +2906,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 5,
             "part": "root",
             "landsOn": "border-radius",
@@ -2922,7 +2922,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 6,
             "part": "root",
             "landsOn": "background",
@@ -2939,7 +2939,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 6,
             "part": "root",
             "landsOn": "background",
@@ -2955,7 +2955,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 10,
             "part": "toolbar",
             "landsOn": "border-bottom",
@@ -2972,7 +2972,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 10,
             "part": "toolbar",
             "landsOn": "border-bottom",
@@ -2988,7 +2988,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 15,
             "part": "view-toggle",
             "landsOn": "border-radius",
@@ -3004,7 +3004,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 16,
             "part": "view-toggle",
             "landsOn": "border",
@@ -3021,7 +3021,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 16,
             "part": "view-toggle",
             "landsOn": "border",
@@ -3037,7 +3037,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 17,
             "part": "view-toggle",
             "landsOn": "background",
@@ -3054,7 +3054,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 17,
             "part": "view-toggle",
             "landsOn": "background",
@@ -3070,7 +3070,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 18,
             "part": "view-toggle",
             "landsOn": "color",
@@ -3087,7 +3087,7 @@
           },
           {
             "variable": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 18,
             "part": "view-toggle",
             "landsOn": "color",
@@ -3103,7 +3103,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 22,
             "part": "toolbar-action",
             "landsOn": "background",
@@ -3119,7 +3119,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 23,
             "part": "toolbar-action",
             "landsOn": "color",
@@ -3136,7 +3136,7 @@
           },
           {
             "variable": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 23,
             "part": "toolbar-action",
             "landsOn": "color",
@@ -3152,7 +3152,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 24,
             "part": "toolbar-action",
             "landsOn": "border-color",
@@ -3168,7 +3168,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 28,
             "part": "toolbar-action",
             "landsOn": "color",
@@ -3184,7 +3184,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 29,
             "part": "toolbar-action",
             "landsOn": "border-color",
@@ -3200,7 +3200,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 33,
             "part": "loading-label",
             "landsOn": "color",
@@ -3217,7 +3217,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 33,
             "part": "loading-label",
             "landsOn": "color",
@@ -3233,7 +3233,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 41,
             "part": "modified-at",
             "landsOn": "color",
@@ -3250,7 +3250,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 41,
             "part": "modified-at",
             "landsOn": "color",
@@ -3266,7 +3266,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 45,
             "part": "breadcrumb-current",
             "landsOn": "color",
@@ -3283,7 +3283,7 @@
           },
           {
             "variable": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 45,
             "part": "breadcrumb-current",
             "landsOn": "color",
@@ -3299,7 +3299,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 51,
             "part": "item-action",
             "landsOn": "color",
@@ -3315,7 +3315,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 57,
             "part": "item-action",
             "landsOn": "color",
@@ -3331,7 +3331,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 62,
             "part": "column-header",
             "landsOn": "border-bottom",
@@ -3348,7 +3348,7 @@
           },
           {
             "variable": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 62,
             "part": "column-header",
             "landsOn": "border-bottom",
@@ -3364,7 +3364,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 66,
             "part": "row",
             "landsOn": "background",
@@ -3381,7 +3381,7 @@
           },
           {
             "variable": "--ds-color-bg-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 66,
             "part": "row",
             "landsOn": "background",
@@ -3397,7 +3397,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 70,
             "part": "grid-card",
             "landsOn": "border-radius",
@@ -3413,7 +3413,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 78,
             "part": "grid-card",
             "landsOn": "border",
@@ -3429,7 +3429,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 79,
             "part": "grid-card",
             "landsOn": "background",
@@ -3446,7 +3446,7 @@
           },
           {
             "variable": "--ds-color-bg-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
             "line": 79,
             "part": "grid-card",
             "landsOn": "background",
@@ -3464,7 +3464,7 @@
         "variableCensusTsx": [
           {
             "variable": "--ds-color-primary-500",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 49,
             "chain": [
               "--ds-color-primary-500"
@@ -3475,7 +3475,7 @@
           },
           {
             "variable": "--ds-color-error-600",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 52,
             "chain": [
               "--ds-color-error-600"
@@ -3486,7 +3486,7 @@
           },
           {
             "variable": "--ds-color-success-600",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 55,
             "chain": [
               "--ds-color-success-600"
@@ -3497,7 +3497,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 58,
             "chain": [
               "--ds-color-text-tertiary"
@@ -3508,7 +3508,7 @@
           },
           {
             "variable": "--ds-color-warning-500",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 180,
             "chain": [
               "--ds-color-warning-500"
@@ -3519,7 +3519,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 255,
             "chain": [
               "--ds-color-primary-500"
@@ -3530,7 +3530,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 258,
             "chain": [
               "--ds-color-primary-50"
@@ -3541,7 +3541,7 @@
           },
           {
             "variable": "--ds-color-warning-500",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 263,
             "chain": [
               "--ds-color-warning-500"
@@ -3552,7 +3552,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/classic/index.tsx",
             "line": 322,
             "chain": [
               "--ds-color-text-secondary"
@@ -3563,7 +3563,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 55,
             "chain": [
               "--ds-font-size-sm"
@@ -3574,7 +3574,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 157,
             "chain": [
               "--ds-font-size-sm"
@@ -3585,7 +3585,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 259,
             "chain": [
               "--ds-font-size-xs"
@@ -3596,7 +3596,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 297,
             "chain": [
               "--ds-font-size-sm"
@@ -3607,7 +3607,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 300,
             "chain": [
               "--ds-font-size-sm"
@@ -3618,7 +3618,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 309,
             "chain": [
               "--ds-font-size-xs"
@@ -3629,7 +3629,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 323,
             "chain": [
               "--ds-font-size-xs"
@@ -3640,7 +3640,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/data/file-manager/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/file-manager/engines/rustic/index.tsx",
             "line": 352,
             "chain": [
               "--ds-font-size-xs"
@@ -3657,7 +3657,7 @@
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
               "engine": "modern",
               "lines": 468,
               "role": "skin-css",
@@ -3666,7 +3666,7 @@
               ]
             },
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
               "engine": "rustic",
               "lines": 89,
               "role": "skin-css",
@@ -3681,7 +3681,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/navigation/Breadcrumb/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:46"
+                "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:46"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -3693,7 +3693,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Button/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:42"
+                "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:42"
               ],
               "renderSiteCount": 6,
               "engines": [
@@ -3705,7 +3705,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Checkbox/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:43"
+                "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:43"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -3717,7 +3717,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/display/Empty/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:45"
+                "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:45"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -3729,7 +3729,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/feedback/Spinner/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/data/file-manager/engines/modern/index.tsx:44"
+                "packages/core/src/components/patterns/data/file-manager/engines/modern/index.tsx:44"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -3743,13 +3743,13 @@
         "paintByEngine": {
           "modern": [
             {
-              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
               "paintKind": "own"
             }
           ],
           "rustic": [
             {
-              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager.css",
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/file-manager/index.css",
               "paintKind": "own"
             }
           ]
@@ -3825,13 +3825,13 @@
         {
           "channelId": "--_ds-file-manager-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3841,13 +3841,13 @@
         {
           "channelId": "--_ds-file-manager-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3857,13 +3857,13 @@
         {
           "channelId": "--_ds-file-manager-link-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3872,13 +3872,13 @@
         {
           "channelId": "--_ds-file-manager-link-hover-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3887,13 +3887,13 @@
         {
           "channelId": "--_ds-file-manager-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3903,13 +3903,13 @@
         {
           "channelId": "--_ds-file-manager-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3919,13 +3919,13 @@
         {
           "channelId": "--_ds-file-manager-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3935,13 +3935,13 @@
         {
           "channelId": "--_ds-file-manager-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3973,7 +3973,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
@@ -3988,7 +3988,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
@@ -4003,7 +4003,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
@@ -4018,7 +4018,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
@@ -4042,13 +4042,13 @@
         {
           "channelId": "--_ds-file-manager-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4077,13 +4077,13 @@
         {
           "channelId": "--_ds-file-manager-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4112,13 +4112,13 @@
         {
           "channelId": "--_ds-file-manager-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4137,7 +4137,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -4160,13 +4160,13 @@
         {
           "channelId": "--_ds-file-manager-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4176,13 +4176,13 @@
         {
           "channelId": "--_ds-file-manager-content-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4200,7 +4200,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -4237,13 +4237,13 @@
         {
           "channelId": "--_ds-file-manager-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4345,13 +4345,13 @@
         {
           "channelId": "--_ds-file-manager-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/file-manager"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4375,7 +4375,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4431,7 +4431,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4456,9 +4456,9 @@
               "--ds-color-error",
               "--ds-color-info"
             ],
-            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css",
+            "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css",
             "sourceBindings": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager.css:180,197,200,203,206"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/file-manager/index.css:180,197,200,203,206"
             ]
           }
         ],
@@ -4493,11 +4493,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

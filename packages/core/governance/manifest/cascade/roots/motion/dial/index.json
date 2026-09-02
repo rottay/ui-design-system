@@ -3,6 +3,7 @@
   "rootId": "motion.dial",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-motion-duration-scale",
     "emission": [
       {
@@ -22,7 +23,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-motion-fast (120ms)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 103,
       "state": "LIVE"
     },
@@ -33,7 +34,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-motion-normal (200ms)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 106,
       "state": "LIVE"
     },
@@ -43,7 +44,7 @@
       "rule": {
         "kind": "calc-multiply"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 109,
       "state": "LIVE"
     },
@@ -53,7 +54,7 @@
       "rule": {
         "kind": "calc-multiply"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 112,
       "state": "LIVE"
     },
@@ -64,7 +65,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-motion-slow (320ms)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 115,
       "state": "LIVE"
     },
@@ -74,7 +75,7 @@
       "rule": {
         "kind": "calc-multiply"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 118,
       "state": "LIVE"
     },
@@ -86,7 +87,7 @@
         "value": "120ms",
         "why": "INALCANZABLE: pineado, no emitido, fuera del allowlist (delta canon: rebind-or-retire)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 94,
       "state": "LIVE"
     },
@@ -98,7 +99,7 @@
         "value": "200ms",
         "why": "inalcanzable"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 95,
       "state": "LIVE"
     },
@@ -110,7 +111,7 @@
         "value": "320ms",
         "why": "inalcanzable"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 96,
       "state": "LIVE"
     },
@@ -122,7 +123,7 @@
         "value": "500ms",
         "why": "inalcanzable"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 97,
       "state": "LIVE"
     },
@@ -134,7 +135,7 @@
         "value": "cubic-bezier(0.16,1,0.3,1)",
         "why": "inalcanzable"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 123,
       "state": "LIVE"
     },
@@ -146,7 +147,7 @@
         "value": "cubic-bezier(0.4,0,0.6,1)",
         "why": "inalcanzable"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
       "line": 124,
       "state": "LIVE"
     }

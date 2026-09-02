@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Density posture",
   "valueType": "enum",
@@ -36,11 +36,11 @@
   "dependsOn": [],
   "compatibility": "additive; the three density vocabularies (contracts/tokens/schema) are recorded debt — unification is a breaking alignment owned by a future wave",
   "productiveConsumerWitness": {
-    "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts",
+    "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts",
     "symbol": "useDensity"
   },
   "calibration": {
-    "assessmentState": "COMPUTED_VERIFIED",
+    "assessmentState": "IMPLEMENTED",
     "normalizedStops": [
       {
         "id": "compact",
@@ -56,23 +56,15 @@
         "value": 1.15
       }
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/rottay-compact.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/bithire-compact.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/evnto-compact.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/rottay-spacious.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/bithire-spacious.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/evnto-spacious.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "color remains fixed",
       "motion remains fixed",
       "border remains fixed",
       "numeric instance gaps remain exact"
     ],
-    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The computed half is done and receipted on all three verticals through both doors at both non-identity stops; nothing further is measurable by this instrument for the preset-size axis. density.mode stays COMPUTED_VERIFIED (rank 3) until a sighted reviewer accepts it.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "negativeControlsScopeNote": "Density scales the ROOM and the CONTROL alike, which is what separates its negative set from rhythm's. Four phrases are declared and four are deliberately NOT. DECLARED: colour and motion (density shares no channel with either), border (measured: no site composes --ds-density-effective-scale with a border width or radius), and numeric instance gaps, bound to space-modern-numeric-gap/root -- the unscaled rule at presentation/components/skin/layout-primitives.css:614 carries no multiplier, so an instance that asked for 8px still reads 8px. NOT DECLARED, and none of them is an oversight: \"control height remains fixed\" and \"touch target remains fixed\" are FALSE for this control -- Input/engines/modern/index.tsx:170 multiplies the resolved control height by --ds-density-effective-scale, and Button/engines/modern/index.tsx:279,295 scale padding-x and gap. Rhythm may claim them (\"rhythm scales the room around a control, never the control\"); density may not, and declaring them would assert the opposite of what the engine does. \"font metrics remain fixed\" and \"icon size remains fixed\" are true for every target this calibration measured but FALSE at control level: runtime/engines/modern/skin/menu.css:401 composes a font-size from the density scale. They are therefore narrowed to the family root rather than claimed for the control.",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
@@ -80,14 +72,14 @@
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
-      "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
-      "packages/core/src/foundation/tokens/css/foundation/base/density.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-      "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
+      "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "packages/core/src/foundation/tokens/css/foundation/base/density/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
+      "packages/core/src/components/primitives/layout/Space/engines/modern/index.tsx"
     ],
     "evidenceKindLabellingRule": "Every one of the six artifacts proves BOTH a computed delta and an exact restore; each is a three-phase both-arm run. evidenceKind names the ROLE the receipt is claimed for, not the only thing its artifact contains: the three compact receipts are claimed as static-db-computed-parity and the three spacious receipts as exact-restore. A reader who wants the other half of either receipt will find it in the same artifact.",
     "measuredResult": {
-      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1, Node 22.17.0. Run AFTER H-1: the static arm composes its stop over the vertical's published BrandTheme, so it measures the theme production ships.",
+      "instrument": "packages/core/scripts/check/tokens/cascade/probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1, Node 22.17.0. Run AFTER H-1: the static arm composes its stop over the vertical's published BrandTheme, so it measures the theme production ships.",
       "scenarios": "6 = {rottay,bithire,evnto} x {compact,spacious}, both ingress doors on ONE scene, both themes. All six self-check harness-live with zero guard failures; ingressEquivalence holds with 0 differing rows in all six; restore.exact true and negativeControls.held true on every arm of every scenario.",
       "directChannel": "--ds-density-mode-factor read directly on token-readout moved on BOTH arms in all six: 1 -> 0.85 at compact and 1 -> 1.15 at spacious, identical on the static and DB doors. This is the pin that matters: --ds-density-scale is emitted UNCONDITIONALLY by the compiler seed, so a non-empty lowering proves nothing about the stop. Only the mode factor does.",
       "verticalBaselines": "The three verticals do NOT share a baseline and the run kept them apart: --ds-density-scale reads 1 (rottay), 0.9 (bithire) and 1.125 (evnto) on the static arm, each vertical's own authored value. Before H-1 all three lowered as 1.",

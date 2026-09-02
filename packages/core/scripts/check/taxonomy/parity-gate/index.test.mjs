@@ -88,27 +88,29 @@ function buildCleanFixture() {
 
   // Both roots are planted explicitly: the manifest no longer lives inside the
   // programme folder, so creating one no longer creates the other. The
-  // inventory is one flat file, and each family cell is a flat
-  // `<layer>/<group>/<slug>.json` file -- the L0 shape, not a per-slug folder.
-  fs.mkdirSync(programRoot, { recursive: true });
+  // inventory is one file under its own folder, and each family cell owns a
+  // `<layer>/<group>/<slug>/index.json` folder.
+  fs.mkdirSync(path.join(programRoot, 'family-inventory'), { recursive: true });
   fs.mkdirSync(path.join(manifestRoot, 'families/primitive/display'), {
     recursive: true,
   });
   fs.writeFileSync(
-    path.join(programRoot, 'family-inventory.json'),
+    path.join(programRoot, 'family-inventory/index.json'),
     JSON.stringify({ denominator: rows.length, rows }, null, 2),
   );
   fs.writeFileSync(
     path.join(manifestRoot, 'index.json'),
     JSON.stringify(
-      { families: rows.map((row) => ({ familyId: row.id, path: `manifest/families/${row.id}.json` })) },
+      { families: rows.map((row) => ({ familyId: row.id, path: `manifest/families/${row.id}/index.json` })) },
       null,
       2,
     ),
   );
   for (const row of rows) {
+    const cellDir = path.join(manifestRoot, `families/${row.id}`);
+    fs.mkdirSync(cellDir, { recursive: true });
     fs.writeFileSync(
-      path.join(manifestRoot, `families/${row.id}.json`),
+      path.join(cellDir, 'index.json'),
       JSON.stringify({ familyId: row.id }, null, 2),
     );
   }
@@ -149,10 +151,6 @@ function audit(fixture) {
     // takes the default and checks all five.
     registries: [{ file: 'primitives.ts', layers: ['primitive'] }],
     rootEntryFile: path.join(fixture.root, 'packages/core/src/index.ts'),
-    // The real 101-entry override table names rows this two-row fixture does
-    // not have; every one of those would reject as "unknown" against it, so
-    // the fixture supplies no overrides at all.
-    relocationOverrides: [],
   });
 }
 
@@ -178,7 +176,7 @@ function publishedNames(fixture) {
 }
 
 function mutateInventory(fixture, mutate) {
-  const file = path.join(fixture.programRoot, 'family-inventory.json');
+  const file = path.join(fixture.programRoot, 'family-inventory/index.json');
   const inventory = JSON.parse(fs.readFileSync(file, 'utf8'));
   mutate(inventory);
   fs.writeFileSync(file, JSON.stringify(inventory, null, 2));
@@ -315,13 +313,13 @@ test('a support folder beside families is not reported as unowned', () => {
   assert.deepEqual(audit(fixture).violations, [], 'support owners are not families');
 });
 
-// The relocation adapter proves every row's owner up front, before any
+// The owner resolver proves every row's owner up front, before any
 // binding runs, so a row it cannot place never reaches the `violations`
 // array -- it rejects the whole audit call with a RelocationError naming
 // every row it could not resolve. These two drills therefore assert on the
 // thrown error, not on `result.violations`.
 
-test('a planted ghost sourceOwner fails (relocation rejects it as missing)', () => {
+test('a planted ghost sourceOwner fails (resolution rejects it as missing)', () => {
   const fixture = buildCleanFixture();
   mutateInventory(fixture, (inventory) => {
     inventory.rows[0].sourceOwner = `${UI_ROOT}/primitives/display/Vanished`;
@@ -339,7 +337,7 @@ test('a planted ghost sourceOwner fails (relocation rejects it as missing)', () 
   );
 });
 
-test('a sourceOwner outside the UI tree fails (relocation rejects it as missing)', () => {
+test('a sourceOwner outside the UI tree fails (resolution rejects it as missing)', () => {
   const fixture = buildCleanFixture();
   mutateInventory(fixture, (inventory) => {
     inventory.rows[0].sourceOwner = 'packages/core/src/foundation/tokens';
@@ -356,8 +354,10 @@ test('a sourceOwner outside the UI tree fails (relocation rejects it as missing)
 
 test('a manifest cell without an inventory row fails', () => {
   const fixture = buildCleanFixture();
+  const orphanDir = path.join(fixture.manifestRoot, 'families/primitive/display/orphan');
+  fs.mkdirSync(orphanDir, { recursive: true });
   fs.writeFileSync(
-    path.join(fixture.manifestRoot, 'families/primitive/display/orphan.json'),
+    path.join(orphanDir, 'index.json'),
     JSON.stringify({ familyId: 'primitive/display/orphan' }),
   );
   const result = audit(fixture);
@@ -367,7 +367,9 @@ test('a manifest cell without an inventory row fails', () => {
 
 test('an inventory row without a manifest cell fails', () => {
   const fixture = buildCleanFixture();
-  fs.rmSync(path.join(fixture.manifestRoot, 'families/primitive/display/badge.json'));
+  fs.rmSync(path.join(fixture.manifestRoot, 'families/primitive/display/badge'), {
+    recursive: true,
+  });
   const result = audit(fixture);
   assert.ok(
     result.violations.some((violation) => /has no .*manifest\/families cell/.test(violation.detail)),
@@ -386,27 +388,25 @@ test('a family missing from the manifest index fails', () => {
   );
 });
 
-// --- flat manifest layout + fail-closed roots ---------------------------
-// The manifest graduated from a per-slug folder (`families/<id>/index.json`)
-// to one flat file per cell (`families/<layer>/<group>/<slug>.json`). These
-// drills prove the flat shape is read correctly, a malformed or duplicate
+// --- manifest cell layout + fail-closed roots ---------------------------
+// A family cell owns a folder: `families/<layer>/<group>/<slug>/index.json`.
+// These drills prove that shape is read correctly, a malformed or duplicate
 // cell is refused rather than silently dropped, and a missing root fails
 // loudly rather than degrading to an empty pass.
 
-test('a manifest cell using the flat <layer>/<group>/<slug>.json shape matches its inventory row (L0 shape)', () => {
+test('a manifest cell using the <layer>/<group>/<slug>/index.json shape matches its inventory row', () => {
   const fixture = buildCleanFixture();
   const result = audit(fixture);
   assert.ok(
     !kinds(result).includes('manifest-parity'),
-    'the flat cell layout the fixture already plants must not be reported as a mismatch',
+    'the cell layout the fixture already plants must not be reported as a mismatch',
   );
 });
 
-test('a malformed manifest cell (a nested */index remnant) fails and names the file', () => {
+test('a malformed manifest cell (a flat <slug>.json remnant) fails and names the file', () => {
   const fixture = buildCleanFixture();
-  fs.mkdirSync(path.join(fixture.manifestRoot, 'families/primitive/display/stale'), { recursive: true });
   fs.writeFileSync(
-    path.join(fixture.manifestRoot, 'families/primitive/display/stale/index.json'),
+    path.join(fixture.manifestRoot, 'families/primitive/display/stale.json'),
     JSON.stringify({ familyId: 'primitive/display/stale' }),
   );
   const result = audit(fixture);
@@ -414,7 +414,7 @@ test('a malformed manifest cell (a nested */index remnant) fails and names the f
     (violation) => violation.kind === 'manifest-parity' && /malformed/.test(violation.detail),
   );
   assert.equal(found.length, 1);
-  assert.match(found[0].detail, /stale\/index\.json/);
+  assert.match(found[0].detail, /stale\.json/);
 });
 
 test('a manifest cell with a double .json extension fails and names the file', () => {
@@ -431,14 +431,14 @@ test('a manifest cell with a double .json extension fails and names the file', (
   assert.match(found[0].detail, /double \.json extension/);
 });
 
-test('two manifest cells deriving the same flat id fail and name the file', () => {
+test('two manifest cells deriving the same id fail and name the file', () => {
   // Two DIFFERENT real files can never derive the same id from a plain
   // relative-path-minus-extension -- two dirents cannot share one relative
   // path -- so this drives the guard the only honest way available: through
   // the injectable file list, exactly as the resolver drills above inject a
   // fixture barrel instead of the real one.
   const fixture = buildCleanFixture();
-  const cell = path.join(fixture.manifestRoot, 'families/primitive/display/avatar.json');
+  const cell = path.join(fixture.manifestRoot, 'families/primitive/display/avatar/index.json');
   const result = auditTaxonomyParity({
     repositoryRoot: fixture.root,
     programRoot: fixture.programRoot,
@@ -447,13 +447,12 @@ test('two manifest cells deriving the same flat id fail and name the file', () =
     registries: [{ file: 'primitives.ts', layers: ['primitive'] }],
     rootEntryFile: path.join(fixture.root, 'packages/core/src/index.ts'),
     listFamilyManifestFiles: () => [cell, cell],
-    relocationOverrides: [],
   });
   const found = result.violations.filter(
     (violation) => violation.kind === 'manifest-parity' && /both derive the id/.test(violation.detail),
   );
   assert.equal(found.length, 1);
-  assert.match(found[0].detail, /avatar\.json/);
+  assert.match(found[0].detail, /avatar\/index\.json/);
 });
 
 test('a missing program root fails loudly and names the path', () => {
@@ -468,7 +467,6 @@ test('a missing program root fails loudly and names the path', () => {
         showroomRegistryRoot: fixture.registryRoot,
         registries: [{ file: 'primitives.ts', layers: ['primitive'] }],
         rootEntryFile: path.join(fixture.root, 'packages/core/src/index.ts'),
-        relocationOverrides: [],
       }),
     (error) => {
       assert.ok(error.message.includes(missingRoot), 'the error must name the missing program root');
@@ -489,7 +487,6 @@ test('a missing manifest root fails loudly and names the path (the silent skip i
         showroomRegistryRoot: fixture.registryRoot,
         registries: [{ file: 'primitives.ts', layers: ['primitive'] }],
         rootEntryFile: path.join(fixture.root, 'packages/core/src/index.ts'),
-        relocationOverrides: [],
       }),
     (error) => {
       assert.ok(error.message.includes(missingRoot), 'the error must name the missing manifest root');
@@ -498,7 +495,7 @@ test('a missing manifest root fails loudly and names the path (the silent skip i
   );
 });
 
-test('a row whose owner exists under neither prefix and has no override rejects the relocation, naming the row', () => {
+test('a row whose owner does not exist rejects the resolution, naming the row', () => {
   const fixture = buildCleanFixture();
   mutateInventory(fixture, (inventory) => {
     inventory.rows[0].sourceOwner = 'packages/core/src/nowhere/Ghost';

@@ -1,2 +1,0 @@
-drill "count-drift" (cambia el conteo de un carrier en la corrida B; el veredicto debe fallar): comparacion limpia verde; con la perturbacion el comparador FALLO como debe
-  FAIL(inducido): alert|bithire|390 :: [alert-error] estructura: conteo de "alert-error": 1 -> 2

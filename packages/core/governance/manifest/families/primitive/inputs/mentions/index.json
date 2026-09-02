@@ -8,15 +8,15 @@
     "components": [
       "Mentions"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/Mentions",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/mentions",
     "publicComponents": [
       "Mentions"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1f88dad741a516737c730f74ffc41bfa0ece328e8a2db4f0ed17da447ed5a3fa"
+    "inventoryRowDigest": "bc1e78d812b032ba3e55e4ec28d4f7e9448b466bb7e28029496bf0005a404b7b"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css",
-      "packages/core/src/ui/primitives/inputs/Mentions"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css",
+      "packages/core/src/components/primitives/inputs/mentions"
     ],
     "stableParts": [
       "textarea",
@@ -59,8 +59,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The editor keeps role=\"textbox\" with aria-multiline and aria-haspopup=\"listbox\" and deliberately does NOT emit aria-expanded, because the textbox role does not support it; a tenant control must not add it. [at packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:40, packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:42, packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:342, packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:344]",
-      "aria-activedescendant must reference an element that exists at that moment; the suggestion list is role=\"listbox\" with role=\"option\" children and the loading row keeps the option role with aria-disabled. [at packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:157, packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:346, packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:363, packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:367]"
+      "The editor keeps role=\"textbox\" with aria-multiline and aria-haspopup=\"listbox\" and deliberately does NOT emit aria-expanded, because the textbox role does not support it; a tenant control must not add it. [at packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:40, packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:42, packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:342, packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:344]",
+      "aria-activedescendant must reference an element that exists at that moment; the suggestion list is role=\"listbox\" with role=\"option\" children and the loading row keeps the option role with aria-disabled. [at packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:157, packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:346, packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:363, packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:367]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -83,9 +83,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:350",
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:322",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:73"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:350",
+            "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:322",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:73"
           ]
         },
         {
@@ -93,9 +93,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:362",
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:330",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:158"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:362",
+            "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:158"
           ]
         },
         {
@@ -103,9 +103,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:385",
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:342",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:219"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:385",
+            "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:342",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:219"
           ]
         },
         {
@@ -113,8 +113,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:367",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:273"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:367",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:273"
           ]
         },
         {
@@ -122,8 +122,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:396",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:262"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:396",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:262"
           ]
         },
         {
@@ -131,9 +131,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:401",
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:350",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:57"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:401",
+            "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:350",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:57"
           ]
         },
         {
@@ -141,9 +141,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx:324",
-            "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:293",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:69"
+            "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx:324",
+            "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:293",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:69"
           ]
         }
       ],
@@ -153,7 +153,7 @@
           "scoutAnchorClaim": "element:from, element:to",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:186"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:186"
           ]
         }
       ],
@@ -162,7 +162,7 @@
           "token": "data-disabled='true'",
           "occurrences": 24,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:99"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:99"
           ],
           "state": "disabled"
         },
@@ -170,7 +170,7 @@
           "token": "pseudo:focus",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:99"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:99"
           ],
           "state": "focus"
         },
@@ -178,7 +178,7 @@
           "token": "data-active='true'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:242"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:242"
           ],
           "state": "active"
         },
@@ -186,7 +186,7 @@
           "token": "data-status='error'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:116"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:116"
           ],
           "state": "error"
         },
@@ -194,7 +194,7 @@
           "token": "data-status='warning'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:119"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:119"
           ],
           "state": "warning"
         },
@@ -202,7 +202,7 @@
           "token": "pseudo:hover",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:99"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:99"
           ],
           "state": "hover"
         },
@@ -210,7 +210,7 @@
           "token": "[data-status]",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:99"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:99"
           ],
           "state": "status"
         },
@@ -218,7 +218,7 @@
           "token": "data-readonly='true'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:152"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:152"
           ],
           "state": "readonly"
         },
@@ -226,7 +226,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:255"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:255"
           ],
           "state": "focus-visible"
         },
@@ -234,7 +234,7 @@
           "token": "data-mention-active='true'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:209"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:209"
           ],
           "state": "mention-active"
         },
@@ -242,7 +242,7 @@
           "token": "pseudo:active",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:103"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:103"
           ],
           "state": "active"
         }
@@ -252,21 +252,21 @@
           "token": "data-placement='bottom'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:200"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:200"
           ]
         },
         {
           "token": "data-placement='top'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:195"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:195"
           ]
         },
         {
           "token": "data-autosize='true'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:91"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:91"
           ]
         }
       ],
@@ -275,49 +275,49 @@
           "token": "data-part='root'",
           "occurrences": 131,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:69"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:69"
           ]
         },
         {
           "token": "data-part='textarea'",
           "occurrences": 46,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:73"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:73"
           ]
         },
         {
           "token": "data-part='option'",
           "occurrences": 31,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:219"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:219"
           ]
         },
         {
           "token": "data-part='dropdown'",
           "occurrences": 30,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:158"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:158"
           ]
         },
         {
           "token": "data-part='loading'",
           "occurrences": 16,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:273"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:273"
           ]
         },
         {
           "token": "data-part='empty'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:273"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:273"
           ]
         },
         {
           "token": "data-part='option-label'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:262"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:262"
           ]
         }
       ],
@@ -325,22 +325,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Mentions/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/mentions/engines/classic/index.tsx",
             "lines": 92
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Mentions/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/mentions/engines/modern/index.tsx",
             "lines": 415
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx",
             "lines": 364
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "loading",
           "UNATTRIBUTED(elementSelector)",
@@ -475,7 +475,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:168",
                 "part": "dropdown",
                 "property": "max-block-size",
                 "hasFallback": true,
@@ -503,7 +503,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:30",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:30",
                 "part": "textarea",
                 "property": "background-color",
                 "hasFallback": false,
@@ -531,7 +531,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:28",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:28",
                 "part": "textarea",
                 "property": "border",
                 "hasFallback": false,
@@ -559,7 +559,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:145",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
@@ -587,7 +587,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:37",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:37",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
@@ -616,14 +616,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:127",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:127",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-border-focus, var(--ds-color-primary))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:34",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:34",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
@@ -653,14 +653,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:99",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-control-border-hover)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:103",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:103",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
@@ -688,7 +688,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:40",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:40",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
@@ -716,7 +716,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:147",
                 "part": "textarea",
                 "property": "opacity",
                 "hasFallback": true,
@@ -744,7 +744,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:44",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:44",
                 "part": "dropdown",
                 "property": "background-color",
                 "hasFallback": false,
@@ -772,7 +772,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:263",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:263",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "maxHeight",
                 "hasFallback": false,
@@ -800,7 +800,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:45",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:45",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -828,7 +828,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:46",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:46",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -856,7 +856,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:163",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": true,
@@ -884,7 +884,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:57",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:57",
                 "part": "empty",
                 "property": "color",
                 "hasFallback": false,
@@ -912,7 +912,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:249",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:249",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -940,14 +940,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:81",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:153",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": true,
@@ -975,7 +975,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:144",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": true,
@@ -1007,21 +1007,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:242",
                 "part": "option",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:249",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:249",
                 "part": "option",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "color-mix(in srgb, var(--ds-color-primary) 9%, var(--ds-surface-card))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:53",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:53",
                 "part": "option",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1049,7 +1049,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:267",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:267",
                 "part": "option",
                 "property": "cursor",
                 "hasFallback": true,
@@ -1077,7 +1077,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:268",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:268",
                 "part": "option",
                 "property": "opacity",
                 "hasFallback": true,
@@ -1107,14 +1107,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:222",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:222",
                 "part": "option",
                 "property": "padding",
                 "hasFallback": true,
                 "fallback": "var(--ds-spacing-2) var(--ds-spacing-3)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:275",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:275",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -1142,7 +1142,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:224",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:224",
                 "part": "option",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -1172,7 +1172,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:302",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:302",
                 "part": "option",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -1200,7 +1200,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:248",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:248",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -1228,7 +1228,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:106",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:106",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": true,
@@ -1256,7 +1256,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions.css:29",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/mentions/index.css:29",
                 "part": "textarea",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1284,21 +1284,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:130",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-shadow-focus, var(--ds-focus-ring))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:133",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:136",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:136",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1329,7 +1329,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:268",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:268",
                 "part": "option",
                 "property": "opacity",
                 "hasFallback": false,
@@ -1363,28 +1363,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:77",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:77",
                 "part": "textarea",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:145",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:154",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:154",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:288",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:288",
                 "part": "loading",
                 "property": "border",
                 "hasFallback": false,
@@ -1416,7 +1416,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:171",
                 "part": "dropdown",
                 "property": "scrollbar-color",
                 "hasFallback": false,
@@ -1449,14 +1449,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:173",
                 "part": "dropdown",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:209",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:209",
                 "part": "dropdown",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1488,7 +1488,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:116",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1529,28 +1529,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:83",
                 "part": "textarea",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:127",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:127",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:209",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:209",
                 "part": "dropdown",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:242",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
@@ -1582,7 +1582,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:143",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:143",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": false,
@@ -1614,7 +1614,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:106",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:106",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": false,
@@ -1647,28 +1647,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:82",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:82",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:112",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:152",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:152",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:226",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:226",
                 "part": "option",
                 "property": "color",
                 "hasFallback": false,
@@ -1700,7 +1700,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:275",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:275",
                 "part": "loading",
                 "property": "color",
                 "hasFallback": false,
@@ -1732,7 +1732,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:119",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1763,7 +1763,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:167",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:167",
                 "part": "dropdown",
                 "property": "padding",
                 "hasFallback": false,
@@ -1795,7 +1795,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:179",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1826,7 +1826,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:179",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1857,14 +1857,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:178",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:178",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -1895,21 +1895,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:130",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:133",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:136",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:136",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1941,7 +1941,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:255",
                 "part": "option",
                 "property": "outline",
                 "hasFallback": true,
@@ -1973,14 +1973,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:255",
                 "part": "option",
                 "property": "outline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:256",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:256",
                 "part": "option",
                 "property": "outline-offset",
                 "hasFallback": false,
@@ -2012,7 +2012,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:242",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:242",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -2043,14 +2043,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:278",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:278",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:285",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:285",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -2082,14 +2082,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:81",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:153",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": true,
@@ -2121,7 +2121,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:144",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": false,
@@ -2153,7 +2153,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:145",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2186,14 +2186,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:83",
                 "part": "textarea",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:127",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:127",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2225,7 +2225,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:106",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:106",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": true,
@@ -2256,7 +2256,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:147",
                 "part": "textarea",
                 "property": "opacity",
                 "hasFallback": false,
@@ -2288,7 +2288,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:133",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2320,7 +2320,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:75",
                 "part": "textarea",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2351,7 +2351,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:74",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:74",
                 "part": "textarea",
                 "property": "padding",
                 "hasFallback": false,
@@ -2382,7 +2382,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:74",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:74",
                 "part": "textarea",
                 "property": "padding",
                 "hasFallback": false,
@@ -2413,7 +2413,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:107",
                 "part": "textarea",
                 "property": "opacity",
                 "hasFallback": false,
@@ -2444,7 +2444,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:153",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": true,
@@ -2475,7 +2475,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:154",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:154",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2506,7 +2506,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:152",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:152",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": true,
@@ -2537,7 +2537,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:113",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:113",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": false,
@@ -2568,7 +2568,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:112",
                 "part": "textarea",
                 "property": "color",
                 "hasFallback": true,
@@ -2600,7 +2600,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:130",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2631,21 +2631,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": true,
@@ -2676,21 +2676,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-ease-out)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-ease-out)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": true,
@@ -2722,7 +2722,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:136",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:136",
                 "part": "textarea",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2755,14 +2755,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:99",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:103",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:103",
                 "part": "textarea",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2793,7 +2793,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:182",
                 "part": "dropdown",
                 "property": "animation",
                 "hasFallback": true,
@@ -2826,28 +2826,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:182",
                 "part": "dropdown",
                 "property": "animation",
                 "hasFallback": false,
@@ -2882,28 +2882,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:88",
                 "part": "textarea",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:182",
                 "part": "dropdown",
                 "property": "animation",
                 "hasFallback": false,
@@ -2935,7 +2935,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:182",
                 "part": "dropdown",
                 "property": "animation",
                 "hasFallback": true,
@@ -2967,7 +2967,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:291",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:291",
                 "part": "loading",
                 "property": "animation",
                 "hasFallback": false,
@@ -2999,7 +2999,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:290",
                 "part": "loading",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3030,7 +3030,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:172",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3062,14 +3062,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:78",
                 "part": "textarea",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:224",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:224",
                 "part": "option",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3101,14 +3101,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:197",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:197",
                 "part": "dropdown",
                 "property": "margin-block-end",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:202",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:202",
                 "part": "dropdown",
                 "property": "margin-block-start",
                 "hasFallback": false,
@@ -3139,7 +3139,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:222",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:222",
                 "part": "option",
                 "property": "padding",
                 "hasFallback": false,
@@ -3171,14 +3171,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:222",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:222",
                 "part": "option",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:273",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:273",
                 "part": "loading",
                 "property": "padding",
                 "hasFallback": false,
@@ -3210,7 +3210,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:289",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:289",
                 "part": "loading",
                 "property": "border-block-start-color",
                 "hasFallback": true,
@@ -3241,7 +3241,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:291",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:291",
                 "part": "loading",
                 "property": "animation",
                 "hasFallback": true,
@@ -3272,7 +3272,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:288",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:288",
                 "part": "loading",
                 "property": "border",
                 "hasFallback": true,
@@ -3306,21 +3306,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:178",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:242",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:249",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:249",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
@@ -3351,14 +3351,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:81",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:153",
                 "part": "textarea",
                 "property": "background",
                 "hasFallback": false,
@@ -3391,7 +3391,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:302",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:302",
                 "part": "option",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -3422,7 +3422,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:253",
+                "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:253",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "transition",
                 "hasFallback": false,
@@ -3453,7 +3453,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:163",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": false,
@@ -3507,7 +3507,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css:342",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css:342",
             "sourceKind": "modern-skin-css",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition-duration",
@@ -3515,7 +3515,7 @@
             "declaration": "transition-duration: 0.01ms;"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Mentions/engines/rustic/index.tsx:279",
+            "at": "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx:279",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3601,13 +3601,13 @@
         {
           "channelId": "--_ds-mentions-accent-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3617,13 +3617,13 @@
         {
           "channelId": "--_ds-mentions-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3633,13 +3633,13 @@
         {
           "channelId": "--_ds-mentions-border-disabled",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3648,13 +3648,13 @@
         {
           "channelId": "--_ds-mentions-border-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3663,13 +3663,13 @@
         {
           "channelId": "--_ds-mentions-input-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3678,13 +3678,13 @@
         {
           "channelId": "--_ds-mentions-input-bg-disabled",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3693,13 +3693,13 @@
         {
           "channelId": "--_ds-mentions-option-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3708,13 +3708,13 @@
         {
           "channelId": "--_ds-mentions-placeholder-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3723,13 +3723,13 @@
         {
           "channelId": "--_ds-mentions-error-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3739,13 +3739,13 @@
         {
           "channelId": "--_ds-mentions-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3799,13 +3799,13 @@
         {
           "channelId": "--_ds-mentions-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3825,13 +3825,13 @@
         {
           "channelId": "--_ds-mentions-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3841,13 +3841,13 @@
         {
           "channelId": "--_ds-mentions-option-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3900,13 +3900,13 @@
         {
           "channelId": "--_ds-mentions-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3916,13 +3916,13 @@
         {
           "channelId": "--_ds-dropdown-max-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3931,13 +3931,13 @@
         {
           "channelId": "--_ds-mentions-option-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3973,13 +3973,13 @@
         {
           "channelId": "--_ds-mentions-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4087,13 +4087,13 @@
         {
           "channelId": "--_ds-mentions-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4103,13 +4103,13 @@
         {
           "channelId": "--_ds-mentions-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4119,13 +4119,13 @@
         {
           "channelId": "--_ds-mentions-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4135,13 +4135,13 @@
         {
           "channelId": "--_ds-mentions-border-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4150,13 +4150,13 @@
         {
           "channelId": "--_ds-mentions-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4179,7 +4179,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4235,7 +4235,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4263,7 +4263,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
         ]
       }
     },
@@ -4278,13 +4278,13 @@
         {
           "channelId": "--_ds-mentions-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/mentions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/mentions/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4304,11 +4304,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "PatternPricingTable"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/commerce/pricing-table",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/commerce/pricing-table",
     "publicComponents": [
       "PatternPricingTable"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "4008c253365b1812861b044bf4be42ea9c086f6f4260c6b8c7c9c74f3fbf6715"
+    "inventoryRowDigest": "a32381328fdd87b03a4ce1b57bc542640b160aa74e8e3af326698a23d1fcf41a"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/commerce/pricing-table/index.ts",
-      "packages/core/src/ui/patterns/commerce/pricing-table/contracts/index.ts",
-      "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css"
+      "packages/core/src/components/patterns/commerce/pricing-table/index.ts",
+      "packages/core/src/components/patterns/commerce/pricing-table/contracts/index.ts",
+      "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css"
     ],
     "stableParts": [
       "category-header",
@@ -109,313 +109,313 @@
           "part": "category-header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:412",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:225",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:86"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:412",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:86"
           ]
         },
         {
           "part": "cta",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:382"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:382"
           ]
         },
         {
           "part": "cta-button",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:199",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:73",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:80"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:80"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:222"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:222"
           ]
         },
         {
           "part": "feature-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:426"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:426"
           ]
         },
         {
           "part": "feature-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:435"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:435"
           ]
         },
         {
           "part": "feature-label-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:240",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:91"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:240",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:91"
           ]
         },
         {
           "part": "feature-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:422",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:239"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:422",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:239"
           ]
         },
         {
           "part": "feature-value",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:66",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:79",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:91",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:33",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:39",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:41"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:66",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:79",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:91",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:33",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:39",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:41"
           ]
         },
         {
           "part": "feature-value-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:244",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:92"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:244",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:92"
           ]
         },
         {
           "part": "features-head",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:292"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:292"
           ]
         },
         {
           "part": "loading-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:101",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:11"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:101",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:11"
           ]
         },
         {
           "part": "plan-badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:275",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:318",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:146",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:32",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:36"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:275",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:318",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:146",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:36"
           ]
         },
         {
           "part": "plan-card",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:313",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:171",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:55",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:59",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:64"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:313",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:64"
           ]
         },
         {
           "part": "plan-column",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:168",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:47"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:47"
           ]
         },
         {
           "part": "plan-description",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:372",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:69"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:372",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:69"
           ]
         },
         {
           "part": "plan-head",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:303"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:303"
           ]
         },
         {
           "part": "plan-name",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:329"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:329"
           ]
         },
         {
           "part": "price",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:337"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:337"
           ]
         },
         {
           "part": "price-amount",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:347",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:355"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:347",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:355"
           ]
         },
         {
           "part": "price-currency",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:341"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:341"
           ]
         },
         {
           "part": "price-note",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:191",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:68"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:191",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:68"
           ]
         },
         {
           "part": "price-period",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:364"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:364"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:164",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:217",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:232",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:96",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:7"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:164",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:217",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:232",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:96",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:7"
           ]
         },
         {
           "part": "scroll",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:284"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:284"
           ]
         },
         {
           "part": "skeleton-plan",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:190"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:190"
           ]
         },
         {
           "part": "skeleton-plans",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:183"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:183"
           ]
         },
         {
           "part": "skeleton-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:203"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:203"
           ]
         },
         {
           "part": "skeleton-rows",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:196"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:196"
           ]
         },
         {
           "part": "skeleton-toggle",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:177"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:177"
           ]
         },
         {
           "part": "spinner",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:170"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:170"
           ]
         },
         {
           "part": "table-heading",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:161",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:46",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:51"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:46",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:51"
           ]
         },
         {
           "part": "toggle",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:242",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:118"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:242",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:118"
           ]
         },
         {
           "part": "toggle-control",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:254"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:254"
           ]
         },
         {
           "part": "toggle-input",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:122"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:122"
           ]
         },
         {
           "part": "toggle-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:247",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:269"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:247",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:269"
           ]
         },
         {
           "part": "toggle-thumb",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:134",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:27"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:27"
           ]
         },
         {
           "part": "toggle-track",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:128",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:15",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:19",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:23"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:15",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:19",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:23"
           ]
         },
         {
           "part": "value-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:449"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:449"
           ]
         }
       ],
@@ -423,66 +423,66 @@
         {
           "token": "active=cycle === 'monthly' ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:248"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:248"
           ],
           "state": "active"
         },
         {
           "token": "active=cycle === 'yearly' ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:270"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:270"
           ],
           "state": "active"
         },
         {
           "token": "active=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:122"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:122"
           ],
           "state": "active"
         },
         {
           "token": "highlighted=false",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:64"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:64"
           ],
           "state": "highlighted"
         },
         {
           "token": "highlighted=isHighlighted",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:314",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:383",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:168",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:171",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:200"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:314",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:383",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:168",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:171",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:200"
           ],
           "state": "highlighted"
         },
         {
           "token": "highlighted=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:355",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:59",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:80"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:355",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:80"
           ],
           "state": "highlighted"
         },
         {
           "token": "loading=false",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:218",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:233",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:110"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:218",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:233",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:110"
           ],
           "state": "loading"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:165",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:97"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:165",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:97"
           ],
           "state": "loading"
         }
@@ -491,76 +491,76 @@
         {
           "token": "cycle=billingCycle ?? 'monthly'",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:98",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:111",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:118",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:128",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:134"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:98",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:111",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:118",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:128",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:134"
           ]
         },
         {
           "token": "cycle=cycle",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:166",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:219",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:234",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:243"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:166",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:219",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:234",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:243"
           ]
         },
         {
           "token": "cycle=monthly",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:19"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:19"
           ]
         },
         {
           "token": "cycle=yearly",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:23"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:23"
           ]
         },
         {
           "token": "feature-state=custom",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:92",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:41",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:300"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:92",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:41",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:300"
           ]
         },
         {
           "token": "feature-state=excluded",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:80",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:39",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:296",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:371",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:100"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:80",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:39",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:371",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:100"
           ]
         },
         {
           "token": "feature-state=included",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:67",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:33",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:292",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css:369",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:96"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:67",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:33",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css:369",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:96"
           ]
         },
         {
           "token": "variant=popular",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:318",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:41"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:318",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:41"
           ]
         },
         {
           "token": "variant=savings",
           "at": [
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx:275",
-            "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx:146",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css:36"
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx:275",
+            "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css:36"
           ]
         }
       ],
@@ -568,17 +568,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "lines": 220
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/modern/index.tsx",
             "lines": 467
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "lines": 257
           }
         ]
@@ -588,7 +588,7 @@
         "variableCensus": [
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 37,
             "fallback": false,
             "fallbackValue": null,
@@ -601,7 +601,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 71,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-secondary)",
@@ -614,7 +614,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 71,
             "fallback": false,
             "fallbackValue": null,
@@ -627,7 +627,7 @@
           },
           {
             "name": "--ds-motion-attention",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 73,
             "fallback": true,
             "fallbackValue": "1.5s",
@@ -640,7 +640,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "ease-in-out",
@@ -653,7 +653,7 @@
           },
           {
             "name": "--ds-spacing-8",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 80,
             "fallback": true,
             "fallbackValue": "2rem",
@@ -666,7 +666,7 @@
           },
           {
             "name": "--ds-radius-full",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 81,
             "fallback": true,
             "fallbackValue": "9999px",
@@ -679,7 +679,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "16px",
@@ -692,7 +692,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "16px",
@@ -705,7 +705,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 91,
             "fallback": true,
             "fallbackValue": "12px",
@@ -718,7 +718,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 95,
             "fallback": true,
             "fallbackValue": "8px",
@@ -731,7 +731,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 99,
             "fallback": true,
             "fallbackValue": "8px",
@@ -744,7 +744,7 @@
           },
           {
             "name": "--ds-spacing-8",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 104,
             "fallback": true,
             "fallbackValue": "2rem",
@@ -757,7 +757,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 112,
             "fallback": true,
             "fallbackValue": "12px",
@@ -770,7 +770,7 @@
           },
           {
             "name": "--ds-spacing-8",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 113,
             "fallback": true,
             "fallbackValue": "2rem",
@@ -783,7 +783,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 116,
             "fallback": false,
             "fallbackValue": null,
@@ -796,7 +796,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 117,
             "fallback": false,
             "fallbackValue": null,
@@ -809,7 +809,7 @@
           },
           {
             "name": "--ds-pricing-table-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 118,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-fast)",
@@ -822,7 +822,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 118,
             "fallback": false,
             "fallbackValue": null,
@@ -835,7 +835,7 @@
           },
           {
             "name": "--ds-pricing-table-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 119,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-ease-out)",
@@ -848,7 +848,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 119,
             "fallback": false,
             "fallbackValue": null,
@@ -861,7 +861,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 123,
             "fallback": false,
             "fallbackValue": null,
@@ -874,7 +874,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 124,
             "fallback": false,
             "fallbackValue": null,
@@ -887,7 +887,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 137,
             "fallback": false,
             "fallbackValue": null,
@@ -900,7 +900,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 137,
             "fallback": false,
             "fallbackValue": null,
@@ -913,7 +913,7 @@
           },
           {
             "name": "--ds-pricing-table-features-head-min-inline-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 147,
             "fallback": true,
             "fallbackValue": "12rem",
@@ -926,7 +926,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 148,
             "fallback": true,
             "fallbackValue": "8px",
@@ -939,7 +939,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 149,
             "fallback": true,
             "fallbackValue": "12px",
@@ -952,7 +952,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 150,
             "fallback": false,
             "fallbackValue": null,
@@ -965,7 +965,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 151,
             "fallback": false,
             "fallbackValue": null,
@@ -978,7 +978,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -991,7 +991,7 @@
           },
           {
             "name": "--ds-spacing-36",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 159,
             "fallback": true,
             "fallbackValue": "9rem",
@@ -1004,7 +1004,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 160,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1017,7 +1017,7 @@
           },
           {
             "name": "--ds-pricing-table-card-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 169,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-2, 8px)",
@@ -1030,7 +1030,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 169,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1043,7 +1043,7 @@
           },
           {
             "name": "--ds-pricing-table-card-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 170,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-4, 16px)",
@@ -1056,7 +1056,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 170,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1069,7 +1069,7 @@
           },
           {
             "name": "--ds-pricing-table-hairline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1082,7 +1082,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 171,
             "fallback": false,
             "fallbackValue": null,
@@ -1095,7 +1095,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 172,
             "fallback": false,
             "fallbackValue": null,
@@ -1108,7 +1108,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 173,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-elevated)",
@@ -1121,7 +1121,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 173,
             "fallback": false,
             "fallbackValue": null,
@@ -1134,7 +1134,7 @@
           },
           {
             "name": "--ds-pricing-table-highlight-frame-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 177,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1147,7 +1147,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -1160,7 +1160,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 180,
             "fallback": false,
             "fallbackValue": null,
@@ -1173,7 +1173,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 180,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-elevated)",
@@ -1186,7 +1186,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 180,
             "fallback": false,
             "fallbackValue": null,
@@ -1199,7 +1199,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 184,
             "fallback": true,
             "fallbackValue": "4px",
@@ -1212,7 +1212,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 187,
             "fallback": false,
             "fallbackValue": null,
@@ -1225,7 +1225,7 @@
           },
           {
             "name": "--ds-font-size-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 188,
             "fallback": false,
             "fallbackValue": null,
@@ -1238,7 +1238,7 @@
           },
           {
             "name": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 189,
             "fallback": false,
             "fallbackValue": null,
@@ -1251,7 +1251,7 @@
           },
           {
             "name": "--ds-line-height-heading",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 190,
             "fallback": true,
             "fallbackValue": "1.2",
@@ -1264,7 +1264,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 199,
             "fallback": false,
             "fallbackValue": null,
@@ -1277,7 +1277,7 @@
           },
           {
             "name": "--ds-font-size-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 202,
             "fallback": false,
             "fallbackValue": null,
@@ -1290,7 +1290,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 203,
             "fallback": false,
             "fallbackValue": null,
@@ -1303,7 +1303,7 @@
           },
           {
             "name": "--ds-pricing-table-price-amount-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 207,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-fluid-3xl)",
@@ -1316,7 +1316,7 @@
           },
           {
             "name": "--ds-font-size-fluid-3xl",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 207,
             "fallback": false,
             "fallbackValue": null,
@@ -1329,7 +1329,7 @@
           },
           {
             "name": "--ds-font-weight-extrabold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 208,
             "fallback": true,
             "fallbackValue": "var(--ds-font-weight-bold)",
@@ -1342,7 +1342,7 @@
           },
           {
             "name": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 208,
             "fallback": false,
             "fallbackValue": null,
@@ -1355,7 +1355,7 @@
           },
           {
             "name": "--ds-letter-spacing-tight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 210,
             "fallback": true,
             "fallbackValue": "-0.025em",
@@ -1368,7 +1368,7 @@
           },
           {
             "name": "--ds-line-height-heading",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 211,
             "fallback": true,
             "fallbackValue": "1.2",
@@ -1381,7 +1381,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 215,
             "fallback": false,
             "fallbackValue": null,
@@ -1394,7 +1394,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 216,
             "fallback": false,
             "fallbackValue": null,
@@ -1407,7 +1407,7 @@
           },
           {
             "name": "--ds-line-height-normal",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 217,
             "fallback": true,
             "fallbackValue": "1.5",
@@ -1420,7 +1420,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 225,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1433,7 +1433,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 230,
             "fallback": true,
             "fallbackValue": "24px",
@@ -1446,7 +1446,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 230,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1459,7 +1459,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 231,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1472,7 +1472,7 @@
           },
           {
             "name": "--ds-pricing-table-hairline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 232,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1485,7 +1485,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 232,
             "fallback": false,
             "fallbackValue": null,
@@ -1498,7 +1498,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 233,
             "fallback": false,
             "fallbackValue": null,
@@ -1511,7 +1511,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 234,
             "fallback": false,
             "fallbackValue": null,
@@ -1524,7 +1524,7 @@
           },
           {
             "name": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 235,
             "fallback": false,
             "fallbackValue": null,
@@ -1537,7 +1537,7 @@
           },
           {
             "name": "--ds-letter-spacing-wide",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 236,
             "fallback": true,
             "fallbackValue": "0.025em",
@@ -1550,7 +1550,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 244,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1563,7 +1563,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 245,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1576,7 +1576,7 @@
           },
           {
             "name": "--ds-pricing-table-hairline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 247,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1589,7 +1589,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 247,
             "fallback": false,
             "fallbackValue": null,
@@ -1602,7 +1602,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 248,
             "fallback": false,
             "fallbackValue": null,
@@ -1615,7 +1615,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 252,
             "fallback": false,
             "fallbackValue": null,
@@ -1628,7 +1628,7 @@
           },
           {
             "name": "--ds-font-weight-regular",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 255,
             "fallback": true,
             "fallbackValue": "400",
@@ -1641,7 +1641,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 264,
             "fallback": false,
             "fallbackValue": null,
@@ -1654,7 +1654,7 @@
           },
           {
             "name": "--ds-pricing-table-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 267,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-fast)",
@@ -1667,7 +1667,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 267,
             "fallback": false,
             "fallbackValue": null,
@@ -1680,7 +1680,7 @@
           },
           {
             "name": "--ds-pricing-table-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 268,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-ease-out)",
@@ -1693,7 +1693,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 268,
             "fallback": false,
             "fallbackValue": null,
@@ -1706,7 +1706,7 @@
           },
           {
             "name": "--ds-pricing-table-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 269,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-fast)",
@@ -1719,7 +1719,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 269,
             "fallback": false,
             "fallbackValue": null,
@@ -1732,7 +1732,7 @@
           },
           {
             "name": "--ds-pricing-table-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 270,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-ease-out)",
@@ -1745,7 +1745,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 270,
             "fallback": false,
             "fallbackValue": null,
@@ -1758,7 +1758,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 275,
             "fallback": false,
             "fallbackValue": null,
@@ -1771,7 +1771,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 280,
             "fallback": false,
             "fallbackValue": null,
@@ -1784,7 +1784,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 281,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1797,7 +1797,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 281,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1810,7 +1810,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 281,
             "fallback": false,
             "fallbackValue": null,
@@ -1823,7 +1823,7 @@
           },
           {
             "name": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 282,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1836,7 +1836,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 293,
             "fallback": false,
             "fallbackValue": null,
@@ -1849,7 +1849,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 297,
             "fallback": false,
             "fallbackValue": null,
@@ -1862,7 +1862,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 301,
             "fallback": false,
             "fallbackValue": null,
@@ -1875,7 +1875,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 309,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1888,7 +1888,7 @@
           },
           {
             "name": "--ds-pricing-table-price-amount-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 312,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-fluid-2xl)",
@@ -1901,7 +1901,7 @@
           },
           {
             "name": "--ds-font-size-fluid-2xl",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 312,
             "fallback": false,
             "fallbackValue": null,
@@ -1914,7 +1914,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 316,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1927,7 +1927,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 317,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1940,7 +1940,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 326,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-elevated)",
@@ -1953,7 +1953,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 326,
             "fallback": false,
             "fallbackValue": null,
@@ -1966,7 +1966,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 12,
             "fallback": false,
             "fallbackValue": null,
@@ -1979,7 +1979,7 @@
           },
           {
             "name": "--ds-color-neutral-300",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 20,
             "fallback": false,
             "fallbackValue": null,
@@ -1992,7 +1992,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 24,
             "fallback": false,
             "fallbackValue": null,
@@ -2005,7 +2005,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 29,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-primary)",
@@ -2018,7 +2018,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 29,
             "fallback": false,
             "fallbackValue": null,
@@ -2031,7 +2031,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 33,
             "fallback": true,
             "fallbackValue": "6px",
@@ -2044,7 +2044,7 @@
           },
           {
             "name": "--ds-color-success-600",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 37,
             "fallback": true,
             "fallbackValue": "var(--ds-color-success)",
@@ -2057,7 +2057,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 37,
             "fallback": false,
             "fallbackValue": null,
@@ -2070,7 +2070,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 38,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -2083,7 +2083,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 38,
             "fallback": false,
             "fallbackValue": null,
@@ -2096,7 +2096,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 42,
             "fallback": false,
             "fallbackValue": null,
@@ -2109,7 +2109,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 43,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -2122,7 +2122,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 43,
             "fallback": false,
             "fallbackValue": null,
@@ -2135,7 +2135,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 52,
             "fallback": false,
             "fallbackValue": null,
@@ -2148,7 +2148,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "12px",
@@ -2161,7 +2161,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 60,
             "fallback": false,
             "fallbackValue": null,
@@ -2174,7 +2174,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 61,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-muted)",
@@ -2187,7 +2187,7 @@
           },
           {
             "name": "--ds-color-bg-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 61,
             "fallback": false,
             "fallbackValue": null,
@@ -2200,7 +2200,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -2213,7 +2213,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 65,
             "fallback": false,
             "fallbackValue": null,
@@ -2226,7 +2226,7 @@
           },
           {
             "name": "--ds-color-text-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 70,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2239,7 +2239,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 70,
             "fallback": false,
             "fallbackValue": null,
@@ -2252,7 +2252,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2265,7 +2265,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 75,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -2278,7 +2278,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -2291,7 +2291,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 76,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-primary)",
@@ -2304,7 +2304,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 76,
             "fallback": false,
             "fallbackValue": null,
@@ -2317,7 +2317,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 77,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -2330,7 +2330,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 77,
             "fallback": false,
             "fallbackValue": null,
@@ -2343,7 +2343,7 @@
           },
           {
             "name": "--ds-button-primary-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 81,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -2356,7 +2356,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -2369,7 +2369,7 @@
           },
           {
             "name": "--ds-button-primary-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 82,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-on-primary, var(--ds-color-text-inverse))",
@@ -2382,7 +2382,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 82,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -2395,7 +2395,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 82,
             "fallback": false,
             "fallbackValue": null,
@@ -2408,7 +2408,7 @@
           },
           {
             "name": "--ds-button-primary-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 83,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -2421,7 +2421,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 83,
             "fallback": false,
             "fallbackValue": null,
@@ -2434,7 +2434,7 @@
           },
           {
             "name": "--ds-color-text-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2447,7 +2447,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -2460,7 +2460,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 88,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -2473,7 +2473,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -2486,7 +2486,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 93,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-100)",
@@ -2499,7 +2499,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 93,
             "fallback": false,
             "fallbackValue": null,
@@ -2512,7 +2512,7 @@
           },
           {
             "name": "--ds-color-success-600",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 97,
             "fallback": true,
             "fallbackValue": "var(--ds-color-success)",
@@ -2525,7 +2525,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -2538,7 +2538,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 101,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -2551,7 +2551,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 101,
             "fallback": false,
             "fallbackValue": null,
@@ -2564,7 +2564,7 @@
           },
           {
             "name": "--ds-color-success-600",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 34,
             "fallback": true,
             "fallbackValue": "#16a34a",
@@ -2577,7 +2577,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 37,
             "fallback": true,
             "fallbackValue": "#d4d4d8",
@@ -2590,7 +2590,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 109,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -2603,7 +2603,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 125,
             "fallback": true,
             "fallbackValue": "#1677ff",
@@ -2616,7 +2616,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 126,
             "fallback": true,
             "fallbackValue": "#eff6ff",
@@ -2629,7 +2629,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 138,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -2642,7 +2642,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 146,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -2655,7 +2655,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 187,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -2668,7 +2668,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 188,
             "fallback": true,
             "fallbackValue": "#f0f0f0",
@@ -2681,7 +2681,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/classic/index.tsx",
             "line": 196,
             "fallback": true,
             "fallbackValue": "#f0f0f0",
@@ -2694,7 +2694,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 56,
             "fallback": true,
             "fallbackValue": "14px",
@@ -2707,7 +2707,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 119,
             "fallback": true,
             "fallbackValue": "14px",
@@ -2720,7 +2720,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 144,
             "fallback": true,
             "fallbackValue": "14px",
@@ -2733,7 +2733,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 161,
             "fallback": true,
             "fallbackValue": "14px",
@@ -2746,7 +2746,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 191,
             "fallback": true,
             "fallbackValue": "12px",
@@ -2759,7 +2759,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 194,
             "fallback": true,
             "fallbackValue": "12px",
@@ -2772,7 +2772,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 230,
             "fallback": true,
             "fallbackValue": "12px",
@@ -2785,7 +2785,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/commerce/pricing-table/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/commerce/pricing-table/engines/rustic/index.tsx",
             "line": 240,
             "fallback": true,
             "fallbackValue": "14px",
@@ -2799,331 +2799,331 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 53,
             "literal": "1px",
             "text": "inline-size: 1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 54,
             "literal": "1px",
             "text": "block-size: 1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 56,
             "literal": "1px",
             "text": "margin: -1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 73,
             "literal": "1.5s",
             "text": "var(--ds-motion-attention, 1.5s)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 77,
             "literal": "180px",
             "text": "inline-size: 180px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 78,
             "literal": "32px",
             "text": "min-block-size: 32px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 80,
             "literal": "2rem",
             "text": "margin-block-end: var(--ds-spacing-8, 2rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 81,
             "literal": "9999px",
             "text": "border-radius: var(--ds-radius-full, 9999px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 85,
             "literal": "220px",
             "text": "grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 86,
             "literal": "16px",
             "text": "gap: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 87,
             "literal": "16px",
             "text": "margin-block-end: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 90,
             "literal": "240px",
             "text": "min-block-size: 240px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 91,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 95,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 98,
             "literal": "44px",
             "text": "min-block-size: 44px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 99,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 104,
             "literal": "2rem",
             "text": "padding-block: var(--ds-spacing-8, 2rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 112,
             "literal": "12px",
             "text": "gap: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 113,
             "literal": "2rem",
             "text": "margin-block-end: var(--ds-spacing-8, 2rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 147,
             "literal": "12rem",
             "text": "min-inline-size: var(--ds-pricing-table-features-head-min-inline-size, 12rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 148,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 149,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 159,
             "literal": "9rem",
             "text": "min-inline-size: var(--ds-spacing-36, 9rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 160,
             "literal": "8px",
             "text": "padding: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 169,
             "literal": "8px",
             "text": "gap: var(--ds-pricing-table-card-gap, var(--ds-spacing-2, 8px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 170,
             "literal": "16px",
             "text": "padding: var(--ds-pricing-table-card-padding, var(--ds-spacing-4, 16px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 171,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 177,
             "literal": "2px",
             "text": "border: var(--ds-pricing-table-highlight-frame-width, 2px) solid var(--ds-color-primary);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 184,
             "literal": "4px",
             "text": "margin-block-end: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 210,
             "literal": "0.025em",
             "text": "letter-spacing: var(--ds-letter-spacing-tight, -0.025em);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 225,
             "literal": "8px",
             "text": "margin-block-start: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 230,
             "literal": "24px",
             "text": "padding-block: var(--ds-spacing-6, 24px) var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 230,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-6, 24px) var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 231,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 232,
             "literal": "1px",
             "text": "border-block-start: 1px solid var(--ds-pricing-table-hairline, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 236,
             "literal": "0.025em",
             "text": "letter-spacing: var(--ds-letter-spacing-wide, 0.025em);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 244,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 245,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 246,
             "literal": "1px",
             "text": "border-block-end: 1px solid"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 264,
             "literal": "1px",
             "text": "border-block-end: 1px dotted var(--ds-color-text-muted);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 281,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 282,
             "literal": "2px",
             "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 307,
             "literal": "640px",
             "text": "@container (max-width: 640px) {"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 309,
             "literal": "12px",
             "text": "padding: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 316,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
             "line": 317,
             "literal": "8px",
             "text": "padding-inline: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 16,
             "literal": "12px",
             "text": "border-radius: 12px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 33,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 56,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 60,
             "literal": "2px",
             "text": "border: 2px solid var(--ds-color-primary);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 65,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 74,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 75,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 88,
             "literal": "1px",
             "text": "border-top: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pricing-table/index.css",
             "line": 93,
             "literal": "1px",
             "text": "border-top: 1px solid var(--ds-color-border-secondary, var(--ds-color-neutral-100));"
@@ -3164,13 +3164,13 @@
         {
           "channelId": "--_ds-pricing-table-hairline",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3187,7 +3187,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -3218,7 +3218,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -3255,13 +3255,13 @@
         {
           "channelId": "--_ds-pricing-table-price-amount-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3270,13 +3270,13 @@
         {
           "channelId": "--_ds-pricing-table-price-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3306,13 +3306,13 @@
         {
           "channelId": "--_ds-pricing-table-card-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3331,7 +3331,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el CTA de plan es un Button primitivo: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -3360,13 +3360,13 @@
         {
           "channelId": "--_ds-pricing-table-card-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3375,13 +3375,13 @@
         {
           "channelId": "--_ds-pricing-table-card-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3390,13 +3390,13 @@
         {
           "channelId": "--_ds-pricing-table-features-head-min-inline-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3414,7 +3414,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los gaps entre columnas son comparabilidad, no respiracion: airearlos separa lo que debe leerse junto",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -3458,13 +3458,13 @@
         {
           "channelId": "--_ds-pricing-table-motion-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3473,13 +3473,13 @@
         {
           "channelId": "--_ds-pricing-table-motion-timing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3497,7 +3497,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el tier destacado se levanta sobre los demas; es la unica elevacion del patron",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -3517,7 +3517,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "tabla densa de decision: mate, mismo argumento que pattern/data",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -3537,7 +3537,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de decision, no chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -3557,7 +3557,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -3577,7 +3577,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la tabla de precios pinta su encabezado por familia, mismo rol que --ds-table-header-bg",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -3606,13 +3606,13 @@
         {
           "channelId": "--_ds-pricing-table-column-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3622,13 +3622,13 @@
         {
           "channelId": "--_ds-pricing-table-highlight-frame-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/commerce/pricing-table"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pricing-table/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3651,7 +3651,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3664,7 +3664,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -3710,7 +3710,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3747,7 +3747,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los checks de la lista de features son iconos de la libreria y siguen la postura",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -3768,11 +3768,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

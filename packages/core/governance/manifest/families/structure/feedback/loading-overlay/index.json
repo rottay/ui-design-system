@@ -8,15 +8,15 @@
     "components": [
       "LoadingOverlay"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/feedback/loading-overlay",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/feedback/loading-overlay",
     "publicComponents": [
       "LoadingOverlay"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "583f05e155f22b5d481ab41c33550655bfc5ba0d11f374566687111633112ea0"
+    "inventoryRowDigest": "3b92c3f946074b99fb7d86d743494ee14cc3e42c6bfe9c7617e38afc58f04197"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/feedback/loading-overlay",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+      "packages/core/src/components/structures/feedback/loading-overlay",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
     ],
     "stableParts": [
       "root",
@@ -45,10 +45,10 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:180]",
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:201, packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:202, packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:203]",
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:190]",
-      "the family stamps role='status' [at packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:68]"
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:180]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:201, packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:202, packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:203]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:190]",
+      "the family stamps role='status' [at packages/core/src/components/structures/feedback/loading-overlay/index.tsx:68]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -76,7 +76,7 @@
           "anchorKind": "data-part",
           "anchor": "root-class-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:66"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:66"
           ]
         },
         {
@@ -84,10 +84,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:72",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:137",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:138",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:190"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:137",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:138",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:190"
           ]
         },
         {
@@ -95,11 +95,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:88",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:167"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:88",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:159",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:162",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:167"
           ]
         },
         {
@@ -107,9 +107,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:74",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:180"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:74",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:149",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:180"
           ]
         },
         {
@@ -117,10 +117,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:80",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:167",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:173",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:174"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:80",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:167",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:173",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:174"
           ]
         },
         {
@@ -128,8 +128,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:78",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:142"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:78",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:142"
           ]
         }
       ],
@@ -138,7 +138,7 @@
           "token": "aria-busy",
           "axis": "aria-attribute",
           "at": [
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:70"
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:70"
           ],
           "state": "aria-busy"
         }
@@ -149,23 +149,23 @@
             "token": "@container ds-loading-overlay (max-height: 200px) >> .ds-loading-overlay[data-part='root'] [data-part='content']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:190"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:190"
             ]
           },
           {
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:201",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:202",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:203"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:201",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:202",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:203"
             ]
           },
           {
             "token": "@media(prefers-reduced-motion: reduce)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:180"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:180"
             ]
           }
         ],
@@ -177,14 +177,14 @@
             "token": "aria-hidden",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:91"
+              "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:91"
             ]
           },
           {
             "token": "aria-live",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:69"
+              "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:69"
             ]
           }
         ],
@@ -196,9 +196,9 @@
             "token": "::before",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:124",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:125",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:126"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:124",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:125",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:126"
             ]
           }
         ],
@@ -210,21 +210,21 @@
             "token": "dot-index=1",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:159"
             ]
           },
           {
             "token": "dot-index=2",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:162"
             ]
           },
           {
             "token": "data-dot-index",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx:89"
+              "packages/core/src/components/structures/feedback/loading-overlay/index.tsx:89"
             ]
           }
         ],
@@ -233,7 +233,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css": {
             "rows": 32,
             "layer": "engine-agnostic skin"
           }
@@ -257,7 +257,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:104",
             "selector": ".ds-loading-overlay[data-part='root']",
             "states": [],
             "landsOn": "--_ds-loading-overlay-stack-gap",
@@ -270,15 +270,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-loading-overlay-z",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:112",
             "selector": ".ds-loading-overlay[data-part='root']",
             "states": [],
             "landsOn": "z-index",
@@ -296,7 +296,7 @@
           {
             "variable": "--ds-z-index-overlay",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:112",
             "selector": ".ds-loading-overlay[data-part='root']",
             "states": [],
             "landsOn": "z-index",
@@ -309,14 +309,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:935"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:935"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-loading-overlay-scrim-opacity",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:128",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:128",
             "selector": ".ds-loading-overlay[data-part='root']::before",
             "states": [
               "::before"
@@ -336,7 +336,7 @@
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:129",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:129",
             "selector": ".ds-loading-overlay[data-part='root']::before",
             "states": [
               "::before"
@@ -351,8 +351,8 @@
             "fallbackKind": "literal-color",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -361,7 +361,7 @@
           {
             "variable": "--_ds-loading-overlay-stack-gap",
             "part": "content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:138",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:138",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='content']",
             "states": [],
             "landsOn": "gap",
@@ -374,14 +374,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:104"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:104"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-loading-overlay-dot-gap",
             "part": "status",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:142",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:142",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='status']",
             "states": [],
             "landsOn": "gap",
@@ -394,14 +394,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:105"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:105"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-loading-overlay-pulse-duration",
             "part": "logo",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:149",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='logo']",
             "states": [],
             "landsOn": "animation",
@@ -419,7 +419,7 @@
           {
             "variable": "--ds-motion-glacial",
             "part": "logo",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:149",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='logo']",
             "states": [],
             "landsOn": "animation",
@@ -432,16 +432,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:928"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-in-out",
             "part": "logo",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:149",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:149",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='logo']",
             "states": [],
             "landsOn": "animation",
@@ -454,14 +454,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:124"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:124"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-loading-overlay-dots-duration",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:154",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot']",
             "states": [],
             "landsOn": "animation",
@@ -479,7 +479,7 @@
           {
             "variable": "--ds-motion-glacial",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:154",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot']",
             "states": [],
             "landsOn": "animation",
@@ -492,16 +492,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:928"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-in-out",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:154",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:154",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot']",
             "states": [],
             "landsOn": "animation",
@@ -514,14 +514,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:124"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:124"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-loading-overlay-dots-duration",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:159",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1']",
             "states": [
               "dot-index=1"
@@ -541,7 +541,7 @@
           {
             "variable": "--ds-motion-glacial",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:159",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:159",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='1']",
             "states": [
               "dot-index=1"
@@ -556,16 +556,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:928"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--_ds-loading-overlay-dots-duration",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:162",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2']",
             "states": [
               "dot-index=2"
@@ -585,7 +585,7 @@
           {
             "variable": "--ds-motion-glacial",
             "part": "dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:162",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='dot'][data-dot-index='2']",
             "states": [
               "dot-index=2"
@@ -600,16 +600,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:97",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:401",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:928"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:401",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:928"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "message",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:167",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='message'], .ds-loading-overlay[data-part='root'] [data-part='dot']",
             "states": [],
             "landsOn": "color",
@@ -624,15 +624,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-font-mono",
             "part": "message",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css:173",
             "selector": ".ds-loading-overlay[data-part='root'] [data-part='message']",
             "states": [],
             "landsOn": "font-family",
@@ -645,14 +645,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:504"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:504"
             ],
             "declarationSiteCount": 1
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css": {
               "rows": 32,
               "layer": "engine-agnostic skin"
             }
@@ -679,7 +679,7 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/feedback/loading-overlay/index.tsx": {
+            "packages/core/src/components/structures/feedback/loading-overlay/index.tsx": {
               "classNameOccurrences": 1,
               "dataPartOccurrences": 8,
               "styleAttributeOccurrences": 0,
@@ -755,7 +755,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -780,7 +780,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -805,7 +805,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -832,13 +832,13 @@
         {
           "channelId": "--_ds-loading-overlay-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/loading-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -857,7 +857,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los CTA de retry/back son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -870,7 +870,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "EXCEPCION - z adjudicado": [
             "--ds-loading-overlay-z",
@@ -890,7 +890,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -912,13 +912,13 @@
         {
           "channelId": "--_ds-loading-dots-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/loading-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -937,7 +937,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el estado lo senalan scrim y motion, no sombra: elevar el loading seria doble señal",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -951,13 +951,13 @@
         {
           "channelId": "--_ds-loading-overlay-backdrop",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/loading-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -966,13 +966,13 @@
         {
           "channelId": "--_ds-loading-overlay-scrim-opacity",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/loading-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -990,7 +990,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback estructural, no chrome",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1003,7 +1003,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1016,7 +1016,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el scrim del loading-overlay es un canal semantico global, no chrome de familia: una fuente unica (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1030,13 +1030,13 @@
         {
           "channelId": "--_ds-loading-overlay-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/loading-overlay"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/loading-overlay/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1060,7 +1060,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1073,7 +1073,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1112,7 +1112,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1138,7 +1138,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el spinner es un grafico de motion, no un icono de la libreria de postura",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1152,11 +1152,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

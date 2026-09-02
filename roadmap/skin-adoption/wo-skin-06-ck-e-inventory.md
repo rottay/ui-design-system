@@ -1,6 +1,6 @@
 # WO-SKIN-06 checkpoint CK-E (visualization) paint inventory (read-only)
 
-All paths relative to `packages/core/src/ui/patterns/visualization/`. Same
+All paths relative to `packages/core/src/components/patterns/visualization/`. Same
 channel scope as WO-SKIN-02/03/04/06 precedents: a "site" is an object-literal style
 key named `background*`, `border*`, `outline*`, `color`, `boxShadow`, `textShadow`,
 `fill`, `stroke`, `accentColor`, `filter`, `backdropFilter`, `WebkitBackdropFilter`, or
@@ -21,7 +21,7 @@ own line-by-line grep of the same file taken minutes apart. None of this changes
 file's A/B/C composition — every discrepancy found was traced to either a genuine
 concurrent edit elsewhere in this session or (once, for `line-chart`) a stale figure
 from the very first census grep of this task. **Re-run
-`node scripts/infrastructure/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/visualization`
+`node scripts/check/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/visualization`
 before a migration contract is cut from this document.** The counts quoted per file
 below are this inventory's own verified re-derivation (grep + manual bracket-count
 against the file actually read), not a single frozen census pull.
@@ -62,7 +62,7 @@ Two secondary counter-behavior findings, checked by direct testing of
 `countArc09PaintInFile` (not inferred from reading):
 
 - **The triage's §7.5 "TypeScript interface member" blind spot is fixed.** The current
-  lexer (`scripts/tooling/libraries/inline-paint-counter.mjs`) tracks `typeBodyDepths` and excludes
+  lexer (`scripts/libraries/inline-paint-counter.mjs`) tracks `typeBodyDepths` and excludes
   `interface X { ... }` / `type X = { ... }` bodies structurally. Confirmed by isolated
   repro (`interface Foo { color: string }` → 0) and by re-deriving `use-chart-theme.ts`'s
   4 counted sites by hand: none of them are the file's own `background: string;`

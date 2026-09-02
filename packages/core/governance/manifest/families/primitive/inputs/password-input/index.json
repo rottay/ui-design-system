@@ -8,15 +8,15 @@
     "components": [
       "PasswordInput"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/PasswordInput",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/password-input",
     "publicComponents": [
       "PasswordInput"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "71cc2f00807f1fd43b52f158c7a11ae99d819651aff80bdbdfc5141c2e994ecc"
+    "inventoryRowDigest": "a8c5e9c8c2febc71a72233757202ac3109aa089e550c82fbdc63a6358bea1a0e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css",
-      "packages/core/src/ui/primitives/inputs/PasswordInput"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css",
+      "packages/core/src/components/primitives/inputs/password-input"
     ],
     "stableParts": [
       "root",
@@ -63,9 +63,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The Caps Lock hint is a role=\"status\" aria-live=\"polite\" region on data-part=\"caps-lock-hint\". [at packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:299, packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:21]",
-      "The strength meter is a role=\"progressbar\" whose aria-valuenow is aligned with the same table that drives the visual widths, so paint and announcement cannot diverge. [at packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:308, packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:311, packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:46]",
-      "aria-invalid / aria-required / aria-describedby are stamped on the control and the error message is role=\"alert\". [at packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:277, packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:278, packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:279, packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:329]"
+      "The Caps Lock hint is a role=\"status\" aria-live=\"polite\" region on data-part=\"caps-lock-hint\". [at packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:299, packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:21]",
+      "The strength meter is a role=\"progressbar\" whose aria-valuenow is aligned with the same table that drives the visual widths, so paint and announcement cannot diverge. [at packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:308, packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:311, packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:46]",
+      "aria-invalid / aria-required / aria-describedby are stamped on the control and the error message is role=\"alert\". [at packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:277, packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:278, packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:279, packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:329]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -88,9 +88,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:245",
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:165",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:65"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:245",
+            "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:65"
           ]
         },
         {
@@ -98,9 +98,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:284",
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:174",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:133"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:284",
+            "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:133"
           ]
         },
         {
@@ -108,9 +108,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:321",
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:204",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:361"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:321",
+            "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:361"
           ]
         },
         {
@@ -118,9 +118,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:306",
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:196",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:340"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:306",
+            "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:340"
           ]
         },
         {
@@ -128,9 +128,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:329",
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:216",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:409"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:329",
+            "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:409"
           ]
         },
         {
@@ -138,8 +138,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:54"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:54"
           ]
         },
         {
@@ -147,8 +147,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:325",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:387"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:325",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:387"
           ]
         },
         {
@@ -156,9 +156,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:21",
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:299",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:400"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:21",
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:299",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:400"
           ]
         },
         {
@@ -166,8 +166,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:304",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:333"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:304",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:333"
           ]
         },
         {
@@ -175,8 +175,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:320",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:355"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:320",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:355"
           ]
         },
         {
@@ -184,7 +184,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx:257"
+            "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx:257"
           ]
         }
       ],
@@ -193,7 +193,7 @@
           "token": "data-disabled='true'",
           "occurrences": 20,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270"
           ],
           "state": "disabled"
         },
@@ -201,7 +201,7 @@
           "token": "data-error='true'",
           "occurrences": 14,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270"
           ],
           "state": "error"
         },
@@ -209,7 +209,7 @@
           "token": "data-state~='focused'",
           "occurrences": 10,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270"
           ],
           "state": "focused"
         },
@@ -217,7 +217,7 @@
           "token": "data-readonly='true'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270"
           ],
           "state": "readonly"
         },
@@ -225,7 +225,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:171"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:171"
           ],
           "state": "focus-visible"
         },
@@ -233,7 +233,7 @@
           "token": "pseudo:active",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:179"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:179"
           ],
           "state": "active"
         },
@@ -241,7 +241,7 @@
           "token": "data-state~='hovered'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270"
           ],
           "state": "hovered"
         },
@@ -249,7 +249,7 @@
           "token": "pseudo:disabled",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:186"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:186"
           ],
           "state": "disabled"
         },
@@ -257,7 +257,7 @@
           "token": "pseudo:focus",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:41"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:41"
           ],
           "state": "focus"
         },
@@ -265,7 +265,7 @@
           "token": "pseudo:hover",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:164"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:164"
           ],
           "state": "hover"
         }
@@ -275,91 +275,91 @@
           "token": "data-variant='unstyled'",
           "occurrences": 25,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:257"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:257"
           ]
         },
         {
           "token": "data-variant='flushed'",
           "occurrences": 15,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:249"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:249"
           ]
         },
         {
           "token": "data-variant='filled'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:244"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:244"
           ]
         },
         {
           "token": "data-size='lg'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:219"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:219"
           ]
         },
         {
           "token": "data-size='md'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:211"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:211"
           ]
         },
         {
           "token": "data-size='sm'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:203"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:203"
           ]
         },
         {
           "token": "data-size='xl'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:227"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:227"
           ]
         },
         {
           "token": "data-size='xs'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:195"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:195"
           ]
         },
         {
           "token": "data-strength='fair'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:373"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:373"
           ]
         },
         {
           "token": "data-strength='good'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:377"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:377"
           ]
         },
         {
           "token": "data-strength='strong'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:381"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:381"
           ]
         },
         {
           "token": "data-strength='weak'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:369"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:369"
           ]
         },
         {
           "token": "[data-variant]",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:239"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:239"
           ]
         }
       ],
@@ -368,70 +368,70 @@
           "token": "data-part='root'",
           "occurrences": 174,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:65"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:65"
           ]
         },
         {
           "token": "data-part='field'",
           "occurrences": 53,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:54"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:54"
           ]
         },
         {
           "token": "data-part='visibility-toggle'",
           "occurrences": 41,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:133"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:133"
           ]
         },
         {
           "token": "data-part='strength-meter'",
           "occurrences": 36,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:333"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:333"
           ]
         },
         {
           "token": "data-part='strength-track'",
           "occurrences": 21,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:340"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:340"
           ]
         },
         {
           "token": "data-part='strength-fill'",
           "occurrences": 16,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:361"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:361"
           ]
         },
         {
           "token": "data-part='strength-segment'",
           "occurrences": 16,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:355"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:355"
           ]
         },
         {
           "token": "data-part='error-message'",
           "occurrences": 8,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:409"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:409"
           ]
         },
         {
           "token": "data-part='strength-label'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:387"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:387"
           ]
         },
         {
           "token": "data-part='caps-lock-hint'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:400"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:400"
           ]
         }
       ],
@@ -439,22 +439,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx",
             "lines": 156
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/password-input/engines/modern/index.tsx",
             "lines": 338
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx",
             "lines": 231
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "field",
           "strength-label",
@@ -654,7 +654,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:187",
                 "part": "visibility-toggle",
                 "property": "opacity",
                 "hasFallback": true,
@@ -682,7 +682,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:311",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:311",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -711,14 +711,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:140",
                 "part": "visibility-toggle",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-action-size, var(--ds-input-md-icon-size))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:144",
                 "part": "visibility-toggle",
                 "property": "block-size",
                 "hasFallback": true,
@@ -746,7 +746,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:79",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:79",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -774,7 +774,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:70",
                 "part": "root",
                 "property": "gap",
                 "hasFallback": true,
@@ -802,7 +802,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:58",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:58",
                 "part": "field",
                 "property": "gap",
                 "hasFallback": true,
@@ -831,28 +831,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:89",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-input, var(--ds-radius-md))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:196",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-xs-radius, var(--ds-input-xs-border-radius, var(--ds-radius-input, var(--ds-radius-md))))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:204",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-sm-radius, var(--ds-input-sm-border-radius, var(--ds-radius-input, var(--ds-radius-md))))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:212",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -880,7 +880,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:373",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:373",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": true,
@@ -908,7 +908,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:111",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": false,
@@ -936,7 +936,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:377",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:377",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": true,
@@ -964,7 +964,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:381",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:381",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": true,
@@ -992,7 +992,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:351",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:351",
                 "part": "strength-track",
                 "property": "background",
                 "hasFallback": true,
@@ -1020,7 +1020,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:349",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:349",
                 "part": "strength-track",
                 "property": "block-size",
                 "hasFallback": true,
@@ -1048,7 +1048,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:350",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:350",
                 "part": "strength-track",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -1076,7 +1076,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:369",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:369",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": true,
@@ -1104,7 +1104,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:309",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:309",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -1132,7 +1132,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:309",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:309",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -1164,21 +1164,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:239",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:239",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:299",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:299",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:310",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:310",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1212,21 +1212,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:166",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:166",
                 "part": "visibility-toggle",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:173",
                 "part": "visibility-toggle",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:181",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:181",
                 "part": "visibility-toggle",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1262,21 +1262,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:290",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:369",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:369",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:410",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:410",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": false,
@@ -1314,28 +1314,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:77",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:77",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "#ff4d4f"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:89",
                 "part": "root",
                 "property": "border-bottom-color",
                 "hasFallback": true,
                 "fallback": "#ff4d4f"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:115",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:115",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "#ff4d4f"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:179",
+                "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:179",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "weak",
                 "hasFallback": true,
@@ -1367,7 +1367,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:46",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:46",
                 "part": "root",
                 "property": "background-color",
                 "hasFallback": true,
@@ -1402,14 +1402,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:107",
                 "part": "strength-track",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "#e8e8e8"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:125",
+                "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:125",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "backgroundColor",
                 "hasFallback": true,
@@ -1442,14 +1442,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:70",
                 "part": "root",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#d9d9d9"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:83",
                 "part": "root",
                 "property": "border-bottom",
                 "hasFallback": true,
@@ -1484,21 +1484,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:78",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:280",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:280",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:377",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:377",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": false,
@@ -1530,7 +1530,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:41",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:41",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1566,21 +1566,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:74",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:74",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "#1890ff"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:86",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:86",
                 "part": "root",
                 "property": "border-bottom-color",
                 "hasFallback": true,
                 "fallback": "#1890ff"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:183",
+                "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:183",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "good",
                 "hasFallback": true,
@@ -1612,7 +1612,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:381",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:381",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": false,
@@ -1644,7 +1644,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:185",
+                "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:185",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "strong",
                 "hasFallback": true,
@@ -1676,7 +1676,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:305",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:305",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -1709,14 +1709,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:119",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:146",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:146",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": false,
@@ -1753,28 +1753,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:77",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:77",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:164",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:171",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:179",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": false,
@@ -1809,21 +1809,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:388",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:388",
                 "part": "strength-label",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:400",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:400",
                 "part": "caps-lock-hint",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:101",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:101",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": true,
@@ -1855,7 +1855,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:373",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:373",
                 "part": "strength-fill",
                 "property": "background",
                 "hasFallback": false,
@@ -1886,7 +1886,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:181",
+                "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:181",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fair",
                 "hasFallback": true,
@@ -1920,28 +1920,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:140",
                 "part": "visibility-toggle",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:144",
                 "part": "visibility-toggle",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:195",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:203",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:203",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
@@ -1973,21 +1973,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:175",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:175",
                 "part": "visibility-toggle",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:281",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:281",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:294",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:294",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -2019,7 +2019,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:106",
+                "at": "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:106",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -2052,21 +2052,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:389",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:389",
                 "part": "strength-label",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:401",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:401",
                 "part": "caps-lock-hint",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:411",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:411",
                 "part": "error-message",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2099,21 +2099,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:390",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:390",
                 "part": "strength-label",
                 "property": "font-weight",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:402",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:402",
                 "part": "caps-lock-hint",
                 "property": "font-weight",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:412",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:412",
                 "part": "error-message",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -2144,7 +2144,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:92",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:92",
                 "part": "root",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -2175,7 +2175,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:182",
                 "part": "visibility-toggle",
                 "property": "transform",
                 "hasFallback": true,
@@ -2206,7 +2206,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:175",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:175",
                 "part": "visibility-toggle",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2237,7 +2237,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:149",
                 "part": "visibility-toggle",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -2269,14 +2269,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:140",
                 "part": "visibility-toggle",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-md-icon-size)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:144",
                 "part": "visibility-toggle",
                 "property": "block-size",
                 "hasFallback": true,
@@ -2307,7 +2307,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:146",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:146",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": true,
@@ -2338,7 +2338,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:324",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:324",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2369,7 +2369,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:323",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:323",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -2400,7 +2400,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:322",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:322",
                 "part": "root",
                 "property": "-webkit-text-fill-color",
                 "hasFallback": true,
@@ -2433,28 +2433,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:79",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:79",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:279",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:279",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:289",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:289",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -2486,7 +2486,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:309",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:309",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -2518,14 +2518,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:279",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:279",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:285",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -2557,14 +2557,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:275",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:275",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -2596,14 +2596,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:239",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:239",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-border)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:299",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:299",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2635,7 +2635,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:310",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:310",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2668,14 +2668,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:78",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:280",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:280",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2707,7 +2707,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:271",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:271",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2738,7 +2738,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:81",
                 "part": "root",
                 "property": "border-style",
                 "hasFallback": false,
@@ -2769,14 +2769,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:80",
                 "part": "root",
                 "property": "border-width",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:251",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:251",
                 "part": "root",
                 "property": "border-width",
                 "hasFallback": false,
@@ -2807,14 +2807,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:78",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-border-focus, var(--ds-color-primary))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:323",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:323",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": false,
@@ -2845,7 +2845,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:147",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": false,
@@ -2878,21 +2878,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:165",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:165",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-inset)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:172",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-inset)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:180",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": true,
@@ -2923,7 +2923,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:148",
                 "part": "visibility-toggle",
                 "property": "border",
                 "hasFallback": false,
@@ -2956,21 +2956,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:166",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:166",
                 "part": "visibility-toggle",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-border-subtle)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:173",
                 "part": "visibility-toggle",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-border-subtle)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:181",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:181",
                 "part": "visibility-toggle",
                 "property": "border-color",
                 "hasFallback": true,
@@ -3002,7 +3002,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:146",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:146",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": true,
@@ -3036,21 +3036,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:164",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:171",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:179",
                 "part": "visibility-toggle",
                 "property": "color",
                 "hasFallback": true,
@@ -3081,7 +3081,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:149",
                 "part": "visibility-toggle",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -3114,21 +3114,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:77",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:77",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:124",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:322",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:322",
                 "part": "root",
                 "property": "-webkit-text-fill-color",
                 "hasFallback": true,
@@ -3160,7 +3160,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:305",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:305",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
@@ -3192,7 +3192,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:119",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
@@ -3224,14 +3224,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:186",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:186",
                 "part": "visibility-toggle",
                 "property": "cursor",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:312",
                 "part": "root",
                 "property": "cursor",
                 "hasFallback": false,
@@ -3262,7 +3262,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:313",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:313",
                 "part": "root",
                 "property": "opacity",
                 "hasFallback": false,
@@ -3293,7 +3293,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:289",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:289",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -3325,7 +3325,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:290",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -3356,7 +3356,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:410",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:410",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
@@ -3387,7 +3387,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:412",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:412",
                 "part": "error-message",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -3419,7 +3419,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:294",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:294",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -3451,7 +3451,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:244",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -3483,7 +3483,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:285",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -3515,7 +3515,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:275",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:275",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -3547,7 +3547,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:245",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:245",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -3578,7 +3578,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:91",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:91",
                 "part": "root",
                 "property": "font-family",
                 "hasFallback": false,
@@ -3609,7 +3609,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:92",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:92",
                 "part": "root",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -3640,7 +3640,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:70",
                 "part": "root",
                 "property": "gap",
                 "hasFallback": true,
@@ -3674,21 +3674,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:389",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:389",
                 "part": "strength-label",
                 "property": "font-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-font-size-xs)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:401",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:401",
                 "part": "caps-lock-hint",
                 "property": "font-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-font-size-xs)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:411",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:411",
                 "part": "error-message",
                 "property": "font-size",
                 "hasFallback": true,
@@ -3721,21 +3721,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:391",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:391",
                 "part": "strength-label",
                 "property": "line-height",
                 "hasFallback": true,
                 "fallback": "var(--ds-line-height-snug)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:403",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:403",
                 "part": "caps-lock-hint",
                 "property": "line-height",
                 "hasFallback": true,
                 "fallback": "var(--ds-line-height-snug)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:413",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:413",
                 "part": "error-message",
                 "property": "line-height",
                 "hasFallback": true,
@@ -3767,7 +3767,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:90",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:90",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -3798,7 +3798,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:93",
                 "part": "root",
                 "property": "letter-spacing",
                 "hasFallback": false,
@@ -3829,7 +3829,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:220",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:220",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -3860,7 +3860,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:222",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:222",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": false,
@@ -3891,7 +3891,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:219",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:219",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
@@ -3922,7 +3922,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:223",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:223",
                 "part": "root",
                 "property": "line-height",
                 "hasFallback": false,
@@ -3953,7 +3953,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:221",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:221",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -3985,7 +3985,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:220",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:220",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -4016,7 +4016,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:212",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -4048,7 +4048,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:214",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:214",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": false,
@@ -4079,7 +4079,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:211",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:211",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
@@ -4111,14 +4111,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:140",
                 "part": "visibility-toggle",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:144",
                 "part": "visibility-toggle",
                 "property": "block-size",
                 "hasFallback": false,
@@ -4149,7 +4149,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:215",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:215",
                 "part": "root",
                 "property": "line-height",
                 "hasFallback": false,
@@ -4180,7 +4180,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:213",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:213",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -4212,7 +4212,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:212",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -4243,7 +4243,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:58",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:58",
                 "part": "field",
                 "property": "gap",
                 "hasFallback": true,
@@ -4274,7 +4274,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:120",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:120",
                 "part": "root",
                 "property": "opacity",
                 "hasFallback": false,
@@ -4305,7 +4305,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:298",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:298",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -4336,7 +4336,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:299",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:299",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -4367,7 +4367,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:300",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:300",
                 "part": "root",
                 "property": "border-style",
                 "hasFallback": false,
@@ -4398,7 +4398,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:301",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:301",
                 "part": "root",
                 "property": "cursor",
                 "hasFallback": false,
@@ -4429,7 +4429,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:125",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:125",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -4460,7 +4460,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:124",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
@@ -4492,14 +4492,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:281",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:281",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:294",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:294",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -4530,7 +4530,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:90",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:90",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -4561,7 +4561,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:204",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -4592,7 +4592,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:206",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:206",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": false,
@@ -4623,7 +4623,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:203",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:203",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
@@ -4654,7 +4654,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:207",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:207",
                 "part": "root",
                 "property": "line-height",
                 "hasFallback": false,
@@ -4685,7 +4685,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:205",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:205",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -4717,7 +4717,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:204",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -4752,21 +4752,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:428",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:428",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:432",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:432",
                 "part": "visibility-toggle",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:435",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:435",
                 "part": "visibility-toggle",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -4798,28 +4798,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
@@ -4851,28 +4851,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-ease-out)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-ease-out)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-ease-out)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": true,
@@ -4903,7 +4903,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:228",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:228",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -4934,7 +4934,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:230",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:230",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": false,
@@ -4965,7 +4965,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:227",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:227",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
@@ -4996,7 +4996,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:231",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:231",
                 "part": "root",
                 "property": "line-height",
                 "hasFallback": false,
@@ -5027,7 +5027,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:229",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:229",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -5059,7 +5059,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:228",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:228",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -5090,7 +5090,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:196",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -5121,7 +5121,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:198",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:198",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": false,
@@ -5152,7 +5152,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:195",
                 "part": "root",
                 "property": "--_ds-password-resolved-height",
                 "hasFallback": false,
@@ -5183,7 +5183,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:199",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:199",
                 "part": "root",
                 "property": "line-height",
                 "hasFallback": false,
@@ -5214,7 +5214,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:197",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:197",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -5246,7 +5246,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:196",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -5279,21 +5279,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:391",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:391",
                 "part": "strength-label",
                 "property": "line-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:403",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:403",
                 "part": "caps-lock-hint",
                 "property": "line-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:413",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:413",
                 "part": "error-message",
                 "property": "line-height",
                 "hasFallback": false,
@@ -5324,7 +5324,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:271",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:271",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
@@ -5357,28 +5357,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
@@ -5411,28 +5411,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:99",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
@@ -5464,7 +5464,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:365",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:365",
                 "part": "strength-fill",
                 "property": "transition",
                 "hasFallback": false,
@@ -5497,14 +5497,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:149",
                 "part": "visibility-toggle",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:350",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:350",
                 "part": "strength-track",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -5536,28 +5536,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:89",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:196",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:204",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:212",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": true,
@@ -5590,28 +5590,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:89",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:196",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:204",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:212",
                 "part": "root",
                 "property": "--_ds-password-resolved-radius",
                 "hasFallback": false,
@@ -5642,7 +5642,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:102",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:102",
                 "part": "visibility-toggle",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -5673,7 +5673,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:58",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:58",
                 "part": "field",
                 "property": "gap",
                 "hasFallback": false,
@@ -5705,14 +5705,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:70",
                 "part": "root",
                 "property": "gap",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:335",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:335",
                 "part": "strength-meter",
                 "property": "gap",
                 "hasFallback": false,
@@ -5743,7 +5743,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:61",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:61",
                 "part": "field",
                 "property": "scroll-margin-block",
                 "hasFallback": true,
@@ -5774,7 +5774,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:309",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:309",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -5806,28 +5806,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:79",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:79",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:270",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:270",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:279",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:279",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:289",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:289",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -5862,28 +5862,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:165",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:165",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:172",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:180",
                 "part": "visibility-toggle",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:244",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -5914,7 +5914,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:351",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:351",
                 "part": "strength-track",
                 "property": "background",
                 "hasFallback": false,
@@ -5949,21 +5949,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:428",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:428",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:432",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:432",
                 "part": "visibility-toggle",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:435",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:435",
                 "part": "visibility-toggle",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -6006,7 +6006,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css:443",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css:443",
             "sourceKind": "modern-skin-css",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition-duration",
@@ -6014,7 +6014,7 @@
             "declaration": "transition-duration: 0.01ms;"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:36",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:36",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -6022,7 +6022,7 @@
             "declaration": "color: var(--ds-color-text-primary, #1a1a1a);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:41",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "box-shadow",
@@ -6030,7 +6030,7 @@
             "declaration": "box-shadow: 0 0 0 2px var(--ds-color-primary-100, rgba(24, 144, 255, 0.2));"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:46",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "background-color",
@@ -6038,7 +6038,7 @@
             "declaration": "background-color: var(--ds-color-neutral-100, #f5f5f5);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:70",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:70",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -6046,7 +6046,7 @@
             "declaration": "border: 1px solid var(--ds-color-neutral-300, #d9d9d9);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:74",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:74",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-color",
@@ -6054,7 +6054,7 @@
             "declaration": "border-color: var(--ds-color-primary-500, #1890ff);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:77",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-color",
@@ -6062,7 +6062,7 @@
             "declaration": "border-color: var(--ds-color-error-500, #ff4d4f);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:83",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-bottom",
@@ -6070,7 +6070,7 @@
             "declaration": "border-bottom: 2px solid var(--ds-color-neutral-300, #d9d9d9);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:86",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:86",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-bottom-color",
@@ -6078,7 +6078,7 @@
             "declaration": "border-bottom-color: var(--ds-color-primary-500, #1890ff);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:89",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-bottom-color",
@@ -6086,7 +6086,7 @@
             "declaration": "border-bottom-color: var(--ds-color-error-500, #ff4d4f);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:101",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:101",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -6094,7 +6094,7 @@
             "declaration": "color: var(--ds-color-text-secondary, #666);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:106",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:106",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_RADIUS_DIRECT",
             "property": "border-radius",
@@ -6102,7 +6102,7 @@
             "declaration": "border-radius: 2px;"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:107",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:107",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "background-color",
@@ -6110,7 +6110,7 @@
             "declaration": "background-color: var(--ds-color-neutral-200, #e8e8e8);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:110",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:110",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_RADIUS_DIRECT",
             "property": "border-radius",
@@ -6118,7 +6118,7 @@
             "declaration": "border-radius: 2px;"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input.css:115",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/password-input/index.css:115",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -6126,7 +6126,7 @@
             "declaration": "color: var(--ds-color-error-500, #ff4d4f);"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:179",
+            "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:179",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "weak",
@@ -6134,7 +6134,7 @@
             "declaration": "weak: 'var(--ds-color-error-500, #ff4d4f)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:181",
+            "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:181",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "fair",
@@ -6142,7 +6142,7 @@
             "declaration": "fair: 'var(--ds-color-warning-500, #faad14)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:183",
+            "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:183",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "good",
@@ -6150,7 +6150,7 @@
             "declaration": "good: 'var(--ds-color-primary-500, #1890ff)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/contracts/index.ts:185",
+            "at": "packages/core/src/components/primitives/inputs/password-input/contracts/index.ts:185",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "strong",
@@ -6158,7 +6158,7 @@
             "declaration": "strong: 'var(--ds-color-success-500, #52c41a)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:124",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:124",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_RADIUS_DIRECT",
             "property": "borderRadius",
@@ -6166,7 +6166,7 @@
             "declaration": "borderRadius: '2px',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:125",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:125",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "backgroundColor",
@@ -6174,7 +6174,7 @@
             "declaration": "backgroundColor: 'var(--ds-color-neutral-200, #e8e8e8)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:134",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:134",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_RADIUS_DIRECT",
             "property": "borderRadius",
@@ -6182,7 +6182,7 @@
             "declaration": "borderRadius: '2px',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:135",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:135",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -6190,7 +6190,7 @@
             "declaration": "transition: 'width 0.3s ease, background-color 0.3s ease',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:135",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:135",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -6198,7 +6198,7 @@
             "declaration": "transition: 'width 0.3s ease, background-color 0.3s ease',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/classic/index.tsx:145",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/classic/index.tsx:145",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -6206,7 +6206,7 @@
             "declaration": "color: 'var(--ds-color-error-500, #ff4d4f)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:122",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:122",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -6214,7 +6214,7 @@
             "declaration": "transition: 'border-color 0.2s ease, box-shadow 0.2s ease',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:122",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:122",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -6222,7 +6222,7 @@
             "declaration": "transition: 'border-color 0.2s ease, box-shadow 0.2s ease',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:208",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:208",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -6230,7 +6230,7 @@
             "declaration": "transition: 'width 0.3s ease, background-color 0.3s ease',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/PasswordInput/engines/rustic/index.tsx:208",
+            "at": "packages/core/src/components/primitives/inputs/password-input/engines/rustic/index.tsx:208",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -6329,13 +6329,13 @@
         {
           "channelId": "--_ds-password-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6344,13 +6344,13 @@
         {
           "channelId": "--_ds-password-strength-track-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6359,13 +6359,13 @@
         {
           "channelId": "--_ds-password-strength-weak",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6374,13 +6374,13 @@
         {
           "channelId": "--_ds-password-strength-fair",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6389,13 +6389,13 @@
         {
           "channelId": "--_ds-password-strength-good",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6404,13 +6404,13 @@
         {
           "channelId": "--_ds-password-strength-strong",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6510,13 +6510,13 @@
         {
           "channelId": "--_ds-password-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6525,13 +6525,13 @@
         {
           "channelId": "--_ds-password-strength-track-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6580,13 +6580,13 @@
         {
           "channelId": "--_ds-password-action-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6595,13 +6595,13 @@
         {
           "channelId": "--_ds-password-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6610,13 +6610,13 @@
         {
           "channelId": "--_ds-password-message-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6625,13 +6625,13 @@
         {
           "channelId": "--_ds-password-strength-track-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/password-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6833,7 +6833,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -6889,7 +6889,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -6917,7 +6917,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/password-input/index.css"
         ]
       }
     },
@@ -6962,11 +6962,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "PatternShiftMatrix"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/workflow/shift-matrix",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/workflow/shift-matrix",
     "publicComponents": [
       "PatternShiftMatrix"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "c63dce2a43443743ffbaace90743733fbbfafc16c94f59c3a3660d48adab227f"
+    "inventoryRowDigest": "5dcaec218351fd2e9071d67df8e0f9c526018d06e82e86cc2928cf5379809e05"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,11 +28,11 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/workflow/shift-matrix/index.ts",
-      "packages/core/src/ui/patterns/workflow/shift-matrix/contracts/index.ts",
-      "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+      "packages/core/src/components/patterns/workflow/shift-matrix/index.ts",
+      "packages/core/src/components/patterns/workflow/shift-matrix/contracts/index.ts",
+      "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css"
     ],
     "stableParts": [
       "cell",
@@ -89,203 +89,203 @@
           "part": "cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:130",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:135",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:211",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:215"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:135",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:215"
           ]
         },
         {
           "part": "cell-button",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:147",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:183",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:191"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:147",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:191"
           ]
         },
         {
           "part": "cell-empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:187",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:262"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:262"
           ]
         },
         {
           "part": "cell-ratio",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:174",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:211",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:220",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:229",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:242"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:242"
           ]
         },
         {
           "part": "cell-staff",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:180",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:253"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:253"
           ]
         },
         {
           "part": "cell-static",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:239",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:146"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:146"
           ]
         },
         {
           "part": "corner-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:142",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:58",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:66",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:73",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:82",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:107"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:142",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:58",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:66",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:107"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:121",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:300"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:300"
           ]
         },
         {
           "part": "legend",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:251",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:268",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:346"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:251",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:268",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:346"
           ]
         },
         {
           "part": "legend-item",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:253",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:279",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:287",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:291",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:295"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:291",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:295"
           ]
         },
         {
           "part": "role-header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:155",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:67",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:77",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:128",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:349"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:67",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:77",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:349"
           ]
         },
         {
           "part": "role-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:128",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:130",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:349",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:351"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:349",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:351"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:101",
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:120",
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:129",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:28",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:35",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:107"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:101",
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:120",
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:107"
           ]
         },
         {
           "part": "skeleton",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:108",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:306",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:370"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:306",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:370"
           ]
         },
         {
           "part": "skeleton-header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:316",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:321",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:347"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:321",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:347"
           ]
         },
         {
           "part": "skeleton-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:111",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:325"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:325"
           ]
         },
         {
           "part": "slot-header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:146",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:59",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:95",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:108",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:112",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:345"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:95",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:345"
           ]
         },
         {
           "part": "table",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:139",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:47"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:47"
           ]
         },
         {
           "part": "table-body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:152"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:152"
           ]
         },
         {
           "part": "table-head",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:140"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:140"
           ]
         },
         {
           "part": "table-region",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:134",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:42"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:42"
           ]
         }
       ],
@@ -295,7 +295,7 @@
           "scoutAnchorClaim": null,
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:191"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:191"
           ]
         },
         {
@@ -303,7 +303,7 @@
           "scoutAnchorClaim": null,
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:192"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:192"
           ]
         }
       ],
@@ -311,44 +311,44 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:35",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:343"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:343"
           ],
           "state": "loading"
         },
         {
           "token": "loading=false",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:120",
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:129"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:120",
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:129"
           ],
           "state": "loading"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:102"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:102"
           ],
           "state": "loading"
         },
         {
           "token": "state=focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:199"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:199"
           ],
           "state": "focus-visible"
         },
         {
           "token": "state=hovered",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:182"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:182"
           ],
           "state": "hovered"
         },
         {
           "token": "state=pressed",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:183"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:183"
           ],
           "state": "pressed"
         }
@@ -357,38 +357,38 @@
         {
           "token": "assignable=assignable || undefined",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:199"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:199"
           ]
         },
         {
           "token": "coverage=critical",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:224",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:229",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:295"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:224",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:295"
           ]
         },
         {
           "token": "coverage=full",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:211",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:287"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:287"
           ]
         },
         {
           "token": "coverage=gap",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:215",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:220",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:291"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:291"
           ]
         },
         {
           "token": "coverage=status",
           "at": [
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:198",
-            "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx:253"
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:198",
+            "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx:253"
           ]
         }
       ],
@@ -396,12 +396,12 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "lines": 308
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/modern/index.tsx",
             "lines": 261
           }
         ]
@@ -416,7 +416,7 @@
         "variableCensus": [
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 29,
             "fallback": false,
             "fallbackValue": null,
@@ -429,7 +429,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 30,
             "fallback": false,
             "fallbackValue": null,
@@ -442,7 +442,7 @@
           },
           {
             "name": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 31,
             "fallback": false,
             "fallbackValue": null,
@@ -455,7 +455,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 36,
             "fallback": false,
             "fallbackValue": null,
@@ -468,7 +468,7 @@
           },
           {
             "name": "--_ds-shift-matrix-region-max-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 44,
             "fallback": true,
             "fallbackValue": "none",
@@ -481,7 +481,7 @@
           },
           {
             "name": "--ds-type-body-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-sm, 13px)",
@@ -494,7 +494,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "13px",
@@ -507,7 +507,7 @@
           },
           {
             "name": "--_ds-shift-matrix-header-z",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 62,
             "fallback": true,
             "fallbackValue": "2",
@@ -520,7 +520,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 63,
             "fallback": false,
             "fallbackValue": null,
@@ -533,7 +533,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 70,
             "fallback": false,
             "fallbackValue": null,
@@ -546,7 +546,7 @@
           },
           {
             "name": "--_ds-shift-matrix-corner-z",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "3",
@@ -559,7 +559,7 @@
           },
           {
             "name": "--_ds-shift-matrix-role-z",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 78,
             "fallback": true,
             "fallbackValue": "1",
@@ -572,7 +572,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 83,
             "fallback": true,
             "fallbackValue": "12px",
@@ -585,7 +585,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 84,
             "fallback": true,
             "fallbackValue": "16px",
@@ -598,7 +598,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 85,
             "fallback": false,
             "fallbackValue": null,
@@ -611,7 +611,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "11px",
@@ -624,7 +624,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "600",
@@ -637,7 +637,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 96,
             "fallback": true,
             "fallbackValue": "12px",
@@ -650,7 +650,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 97,
             "fallback": true,
             "fallbackValue": "16px",
@@ -663,7 +663,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 98,
             "fallback": false,
             "fallbackValue": null,
@@ -676,7 +676,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 99,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-xs, 12px)",
@@ -689,7 +689,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 99,
             "fallback": true,
             "fallbackValue": "12px",
@@ -702,7 +702,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 100,
             "fallback": true,
             "fallbackValue": "600",
@@ -715,7 +715,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -728,7 +728,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 113,
             "fallback": false,
             "fallbackValue": null,
@@ -741,7 +741,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 118,
             "fallback": true,
             "fallbackValue": "14px",
@@ -754,7 +754,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 119,
             "fallback": true,
             "fallbackValue": "16px",
@@ -767,7 +767,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 120,
             "fallback": false,
             "fallbackValue": null,
@@ -780,7 +780,7 @@
           },
           {
             "name": "--ds-type-body-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 121,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-sm, 13px)",
@@ -793,7 +793,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 121,
             "fallback": true,
             "fallbackValue": "13px",
@@ -806,7 +806,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 122,
             "fallback": true,
             "fallbackValue": "600",
@@ -819,7 +819,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 131,
             "fallback": false,
             "fallbackValue": null,
@@ -832,7 +832,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 136,
             "fallback": false,
             "fallbackValue": null,
@@ -845,7 +845,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 152,
             "fallback": true,
             "fallbackValue": "4px",
@@ -858,7 +858,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 155,
             "fallback": true,
             "fallbackValue": "10px",
@@ -871,7 +871,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 156,
             "fallback": true,
             "fallbackValue": "12px",
@@ -884,7 +884,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 176,
             "fallback": false,
             "fallbackValue": null,
@@ -897,7 +897,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 176,
             "fallback": false,
             "fallbackValue": null,
@@ -910,7 +910,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -923,7 +923,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -936,7 +936,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 200,
             "fallback": true,
             "fallbackValue": "2px",
@@ -949,7 +949,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 200,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -962,7 +962,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 200,
             "fallback": false,
             "fallbackValue": null,
@@ -975,7 +975,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 201,
             "fallback": true,
             "fallbackValue": "2px",
@@ -988,7 +988,7 @@
           },
           {
             "name": "--ds-color-success-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 207,
             "fallback": false,
             "fallbackValue": null,
@@ -1001,7 +1001,7 @@
           },
           {
             "name": "--ds-color-success-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 208,
             "fallback": false,
             "fallbackValue": null,
@@ -1014,7 +1014,7 @@
           },
           {
             "name": "--ds-color-success-ink",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 212,
             "fallback": false,
             "fallbackValue": null,
@@ -1027,7 +1027,7 @@
           },
           {
             "name": "--ds-color-warning-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 216,
             "fallback": false,
             "fallbackValue": null,
@@ -1040,7 +1040,7 @@
           },
           {
             "name": "--ds-color-warning-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 217,
             "fallback": false,
             "fallbackValue": null,
@@ -1053,7 +1053,7 @@
           },
           {
             "name": "--ds-color-warning-ink",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 221,
             "fallback": false,
             "fallbackValue": null,
@@ -1066,7 +1066,7 @@
           },
           {
             "name": "--ds-color-error-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 225,
             "fallback": false,
             "fallbackValue": null,
@@ -1079,7 +1079,7 @@
           },
           {
             "name": "--ds-color-error-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 226,
             "fallback": false,
             "fallbackValue": null,
@@ -1092,7 +1092,7 @@
           },
           {
             "name": "--ds-color-error-ink",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 230,
             "fallback": false,
             "fallbackValue": null,
@@ -1105,7 +1105,7 @@
           },
           {
             "name": "--ds-color-border-focus",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 237,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1118,7 +1118,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 237,
             "fallback": false,
             "fallbackValue": null,
@@ -1131,7 +1131,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 245,
             "fallback": true,
             "fallbackValue": "4px",
@@ -1144,7 +1144,7 @@
           },
           {
             "name": "--ds-font-size-base",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 246,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1157,7 +1157,7 @@
           },
           {
             "name": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 247,
             "fallback": true,
             "fallbackValue": "700",
@@ -1170,7 +1170,7 @@
           },
           {
             "name": "--ds-numeric-tabular",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 249,
             "fallback": true,
             "fallbackValue": "tabular-nums",
@@ -1183,7 +1183,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 254,
             "fallback": true,
             "fallbackValue": "10px",
@@ -1196,7 +1196,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 255,
             "fallback": false,
             "fallbackValue": null,
@@ -1209,7 +1209,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 263,
             "fallback": false,
             "fallbackValue": null,
@@ -1222,7 +1222,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 264,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-xs, 12px)",
@@ -1235,7 +1235,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 264,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1248,7 +1248,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 272,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1261,7 +1261,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 273,
             "fallback": true,
             "fallbackValue": "10px",
@@ -1274,7 +1274,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 274,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1287,7 +1287,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 275,
             "fallback": false,
             "fallbackValue": null,
@@ -1300,7 +1300,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 276,
             "fallback": false,
             "fallbackValue": null,
@@ -1313,7 +1313,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 282,
             "fallback": true,
             "fallbackValue": "6px",
@@ -1326,7 +1326,7 @@
           },
           {
             "name": "--ds-type-caption-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 283,
             "fallback": true,
             "fallbackValue": "11px",
@@ -1339,7 +1339,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 284,
             "fallback": false,
             "fallbackValue": null,
@@ -1352,7 +1352,7 @@
           },
           {
             "name": "--ds-color-success-ink",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 288,
             "fallback": false,
             "fallbackValue": null,
@@ -1365,7 +1365,7 @@
           },
           {
             "name": "--ds-color-warning-ink",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 292,
             "fallback": false,
             "fallbackValue": null,
@@ -1378,7 +1378,7 @@
           },
           {
             "name": "--ds-color-error-ink",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 296,
             "fallback": false,
             "fallbackValue": null,
@@ -1391,7 +1391,7 @@
           },
           {
             "name": "--ds-spacing-10",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 301,
             "fallback": true,
             "fallbackValue": "40px",
@@ -1404,7 +1404,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 302,
             "fallback": true,
             "fallbackValue": "24px",
@@ -1417,7 +1417,7 @@
           },
           {
             "name": "--ds-motion-deliberate",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 307,
             "fallback": false,
             "fallbackValue": null,
@@ -1430,7 +1430,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 308,
             "fallback": true,
             "fallbackValue": "ease-in-out",
@@ -1443,7 +1443,7 @@
           },
           {
             "name": "--ds-spacing-11",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 317,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1456,7 +1456,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 318,
             "fallback": false,
             "fallbackValue": null,
@@ -1469,7 +1469,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 322,
             "fallback": false,
             "fallbackValue": null,
@@ -1482,7 +1482,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 327,
             "fallback": true,
             "fallbackValue": "4px",
@@ -1495,7 +1495,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 328,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1508,7 +1508,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 329,
             "fallback": false,
             "fallbackValue": null,
@@ -1521,7 +1521,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 330,
             "fallback": false,
             "fallbackValue": null,
@@ -1534,7 +1534,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 337,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1547,7 +1547,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 34,
             "fallback": false,
             "fallbackValue": null,
@@ -1560,7 +1560,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 35,
             "fallback": false,
             "fallbackValue": null,
@@ -1573,7 +1573,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 36,
             "fallback": false,
             "fallbackValue": null,
@@ -1586,7 +1586,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 42,
             "fallback": false,
             "fallbackValue": null,
@@ -1599,7 +1599,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 43,
             "fallback": false,
             "fallbackValue": null,
@@ -1612,7 +1612,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 44,
             "fallback": false,
             "fallbackValue": null,
@@ -1625,7 +1625,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 45,
             "fallback": false,
             "fallbackValue": null,
@@ -1638,7 +1638,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 50,
             "fallback": false,
             "fallbackValue": null,
@@ -1651,7 +1651,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 51,
             "fallback": false,
             "fallbackValue": null,
@@ -1664,7 +1664,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 52,
             "fallback": false,
             "fallbackValue": null,
@@ -1677,7 +1677,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 53,
             "fallback": false,
             "fallbackValue": null,
@@ -1690,7 +1690,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 82,
             "fallback": false,
             "fallbackValue": null,
@@ -1703,7 +1703,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 84,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -1716,7 +1716,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 84,
             "fallback": false,
             "fallbackValue": null,
@@ -1729,7 +1729,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 95,
             "fallback": false,
             "fallbackValue": null,
@@ -1742,7 +1742,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 110,
             "fallback": false,
             "fallbackValue": null,
@@ -1755,7 +1755,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 112,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -1768,7 +1768,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 112,
             "fallback": false,
             "fallbackValue": null,
@@ -1781,7 +1781,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 122,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 10%, transparent)",
@@ -1794,7 +1794,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 122,
             "fallback": false,
             "fallbackValue": null,
@@ -1807,7 +1807,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 129,
             "fallback": false,
             "fallbackValue": null,
@@ -1820,7 +1820,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 138,
             "fallback": false,
             "fallbackValue": null,
@@ -1833,7 +1833,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 151,
             "fallback": false,
             "fallbackValue": null,
@@ -1846,7 +1846,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 153,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
@@ -1859,7 +1859,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -1872,7 +1872,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 160,
             "fallback": false,
             "fallbackValue": null,
@@ -1885,7 +1885,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 178,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
@@ -1898,7 +1898,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 178,
             "fallback": false,
             "fallbackValue": null,
@@ -1911,7 +1911,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 190,
             "fallback": false,
             "fallbackValue": null,
@@ -1924,7 +1924,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 197,
             "fallback": false,
             "fallbackValue": null,
@@ -1937,7 +1937,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 247,
             "fallback": false,
             "fallbackValue": null,
@@ -1950,7 +1950,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 264,
             "fallback": false,
             "fallbackValue": null,
@@ -1963,7 +1963,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 282,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
@@ -1976,7 +1976,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 282,
             "fallback": false,
             "fallbackValue": null,
@@ -1989,7 +1989,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 283,
             "fallback": false,
             "fallbackValue": null,
@@ -2002,7 +2002,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 287,
             "fallback": false,
             "fallbackValue": null,
@@ -2015,7 +2015,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 288,
             "fallback": false,
             "fallbackValue": null,
@@ -2028,7 +2028,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 289,
             "fallback": false,
             "fallbackValue": null,
@@ -2041,7 +2041,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/workflow/shift-matrix/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/workflow/shift-matrix/engines/classic/index.tsx",
             "line": 300,
             "fallback": false,
             "fallbackValue": null,
@@ -2055,301 +2055,301 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 36,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 51,
             "literal": "13px",
             "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 83,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 84,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 86,
             "literal": "11px",
             "text": "font-size: var(--ds-type-caption-font-size, 11px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 88,
             "literal": "0.04em",
             "text": "letter-spacing: 0.04em;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 92,
             "literal": "160px",
             "text": "min-inline-size: 160px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 96,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 97,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 99,
             "literal": "12px",
             "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 104,
             "literal": "120px",
             "text": "min-inline-size: 120px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 109,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 113,
             "literal": "1px",
             "text": "border-inline-start: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 118,
             "literal": "14px",
             "text": "padding-block: var(--ds-spacing-3, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 119,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 121,
             "literal": "13px",
             "text": "font-size: var(--ds-type-body-font-size, var(--ds-font-size-sm, 13px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 131,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 136,
             "literal": "1px",
             "text": "border-inline-start: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 152,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 154,
             "literal": "56px",
             "text": "min-block-size: 56px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 155,
             "literal": "10px",
             "text": "padding-block: var(--ds-spacing-2, 10px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 156,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 200,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 201,
             "literal": "2px",
             "text": "outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 208,
             "literal": "1px",
             "text": "box-shadow: inset 0 0 0 1px var(--ds-color-success-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 217,
             "literal": "1px",
             "text": "box-shadow: inset 0 0 0 1px var(--ds-color-warning-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 226,
             "literal": "1px",
             "text": "box-shadow: inset 0 0 0 1px var(--ds-color-error-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 237,
             "literal": "2px",
             "text": "box-shadow: inset 0 0 0 2px var(--ds-color-border-focus, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 245,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 246,
             "literal": "16px",
             "text": "font-size: var(--ds-font-size-base, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 254,
             "literal": "10px",
             "text": "font-size: var(--ds-type-caption-font-size, 10px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 264,
             "literal": "12px",
             "text": "font-size: var(--ds-type-caption-font-size, var(--ds-font-size-xs, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 272,
             "literal": "16px",
             "text": "gap: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 273,
             "literal": "10px",
             "text": "padding-block: var(--ds-spacing-2, 10px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 274,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 275,
             "literal": "1px",
             "text": "border-block-start: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 282,
             "literal": "6px",
             "text": "gap: var(--ds-spacing-1, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 283,
             "literal": "11px",
             "text": "font-size: var(--ds-type-caption-font-size, 11px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 301,
             "literal": "40px",
             "text": "padding-block: var(--ds-spacing-10, 40px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 302,
             "literal": "24px",
             "text": "padding-inline: var(--ds-spacing-6, 24px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 317,
             "literal": "44px",
             "text": "block-size: var(--ds-spacing-11, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 322,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 326,
             "literal": "56px",
             "text": "block-size: 56px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 327,
             "literal": "4px",
             "text": "margin-block: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 328,
             "literal": "12px",
             "text": "margin-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 337,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 358,
             "literal": "1px",
             "text": "outline: 1px solid ButtonText;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 359,
             "literal": "1px",
             "text": "outline-offset: -1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 363,
             "literal": "2px",
             "text": "outline: 2px solid Highlight;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
             "line": 364,
             "literal": "2px",
             "text": "outline-offset: -2px;"
@@ -2428,7 +2428,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2461,7 +2461,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2500,13 +2500,13 @@
         {
           "channelId": "--_ds-shift-matrix-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/shift-matrix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2524,7 +2524,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-radius-lg",
@@ -2562,7 +2562,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de avance del wizard son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2574,7 +2574,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-spacing-1",
@@ -2619,13 +2619,13 @@
         {
           "channelId": "--_ds-shift-matrix-item-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/shift-matrix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2656,13 +2656,13 @@
         {
           "channelId": "--_ds-steps-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/shift-matrix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2681,7 +2681,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "pasos en flujo, no flotan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-elevation-1"
@@ -2700,7 +2700,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2713,7 +2713,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de flujo, no chrome",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2726,7 +2726,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2739,7 +2739,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "steppers en flujo, sin region pintada propia: usan los canales semanticos directos",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2763,13 +2763,13 @@
         {
           "channelId": "--_ds-shift-matrix-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/shift-matrix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2793,7 +2793,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2806,7 +2806,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2845,7 +2845,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2901,13 +2901,13 @@
         {
           "channelId": "--_ds-steps-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/workflow/shift-matrix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2927,11 +2927,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "PatternTenantPreview"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/customization/tenant-preview",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/customization/tenant-preview",
     "publicComponents": [
       "PatternTenantPreview"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2692d698fb6548777439f13338bf2f45419d5677318c491c0b9c286eb0511638"
+    "inventoryRowDigest": "2963f8a9a14b9ec45a3508dbe16db245deeb82d70cf6da8429c062b398631988"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/customization/tenant-preview/index.ts",
-      "packages/core/src/ui/patterns/customization/tenant-preview/contracts/index.ts",
-      "packages/core/src/ui/patterns/customization/tenant-preview/runtime/preview-css/index.ts",
-      "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css"
+      "packages/core/src/components/patterns/customization/tenant-preview/index.ts",
+      "packages/core/src/components/patterns/customization/tenant-preview/contracts/index.ts",
+      "packages/core/src/components/patterns/customization/tenant-preview/runtime/preview-css/index.ts",
+      "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css"
     ],
     "stableParts": [
       "badge",
@@ -104,293 +104,293 @@
           "part": "badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:419",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:422",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:425",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:457",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:466",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:427"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:419",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:422",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:425",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:457",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:466",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:427"
           ]
         },
         {
           "part": "body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:257",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:34"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:257",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:34"
           ]
         },
         {
           "part": "button",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:370",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:373",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:376",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:307",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:319",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:331"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:370",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:373",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:376",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:307",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:319",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:331"
           ]
         },
         {
           "part": "header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:259",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:155",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:42",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:49",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:247",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:264"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:259",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:42",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:49",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:247",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:264"
           ]
         },
         {
           "part": "logo",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:166",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:53",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:60"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:60"
           ]
         },
         {
           "part": "palette",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:300",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:336",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:187",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:204",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:258",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:112"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:300",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:336",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:187",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:204",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:258",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:112"
           ]
         },
         {
           "part": "palette-groups",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:295",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:106"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:295",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:106"
           ]
         },
         {
           "part": "palette-section",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:291"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:291"
           ]
         },
         {
           "part": "personality-grid",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:488",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:222"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:488",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:222"
           ]
         },
         {
           "part": "personality-tile",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:490",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:603",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:227",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:200"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:490",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:603",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:200"
           ]
         },
         {
           "part": "personality-tile-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:491",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:232"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:491",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:232"
           ]
         },
         {
           "part": "personality-tile-value",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:492",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:236"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:492",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:236"
           ]
         },
         {
           "part": "preview-card-body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:389",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:372",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:121"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:389",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:372",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:121"
           ]
         },
         {
           "part": "preview-card-title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:363",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:117"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:363",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:117"
           ]
         },
         {
           "part": "preview-table-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:442",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:445",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:448",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:455",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:456",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:461"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:442",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:445",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:448",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:455",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:456",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:461"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:235",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:140",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:26",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:48",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:66",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:81"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:235",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:140",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:26",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:48",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:66",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:81"
           ]
         },
         {
           "part": "sample-card",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:387",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:357",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:55",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:65",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:110"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:387",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:357",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:110"
           ]
         },
         {
           "part": "sample-input",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:402",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:399",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:56",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:68"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:402",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:399",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:68"
           ]
         },
         {
           "part": "sample-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:369",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:418",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:149"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:369",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:418",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:149"
           ]
         },
         {
           "part": "sample-table",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:439",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:457",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:174",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:180",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:187",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:192"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:439",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:457",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:192"
           ]
         },
         {
           "part": "samples",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:363",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:144"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:363",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:144"
           ]
         },
         {
           "part": "section-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:292",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:362",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:485",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:89"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:292",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:362",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:485",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:89"
           ]
         },
         {
           "part": "sub-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:368",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:386",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:399",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:417",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:435",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:98"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:368",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:386",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:399",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:417",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:435",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:98"
           ]
         },
         {
           "part": "swatch",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:305",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:341",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:215",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:269",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:119",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:127"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:305",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:341",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:215",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:269",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:119",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:127"
           ]
         },
         {
           "part": "swatch-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:297",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:319",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:333",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:188",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:194",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:229"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:297",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:319",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:333",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:188",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:194",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:229"
           ]
         },
         {
           "part": "table-head",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:441",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:465",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:199",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:266"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:441",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:465",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:266"
           ]
         },
         {
           "part": "table-scroll",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:438",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:165",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:170"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:438",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:170"
           ]
         },
         {
           "part": "tenant-name",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:274",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:67",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:33"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:274",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:67",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:33"
           ]
         },
         {
           "part": "tenant-slug",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:279",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:82",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:37"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:279",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:37"
           ]
         }
       ],
@@ -398,42 +398,42 @@
         {
           "token": "status=active",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:419",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:457",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:139",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:187"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:419",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:457",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:139",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:187"
           ],
           "state": "active"
         },
         {
           "token": "status=draft",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:425",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:151"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:425",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:151"
           ],
           "state": "draft"
         },
         {
           "token": "status=label.toLowerCase()",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:428"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:428"
           ],
           "state": "label.toLowerCase()"
         },
         {
           "token": "status=pending",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:422",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:466",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:145",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:194"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:422",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:466",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:194"
           ],
           "state": "pending"
         },
         {
           "token": "status=row.status.toLowerCase()",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:523"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:523"
           ],
           "state": "row.status.toLowerCase()"
         }
@@ -442,112 +442,112 @@
         {
           "token": "align=end",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:448",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:461",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:470",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:188"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:448",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:461",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:470",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:188"
           ]
         },
         {
           "token": "palette=all",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:292",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:188"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:292",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:188"
           ]
         },
         {
           "token": "palette=personality",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:557"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:557"
           ]
         },
         {
           "token": "palette=primary",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:296",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:297",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:300",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:306",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:320",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:192"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:296",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:297",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:300",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:306",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:320",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:192"
           ]
         },
         {
           "token": "palette=secondary",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:332",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:333",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:336",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:342",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:246",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:249"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:332",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:333",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:336",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:342",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:246",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:249"
           ]
         },
         {
           "token": "sample-variant=default",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:376"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:376"
           ]
         },
         {
           "token": "sample-variant=outlined",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:373"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:373"
           ]
         },
         {
           "token": "sample-variant=primary",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:370"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:370"
           ]
         },
         {
           "token": "step=500",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css:136"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css:136"
           ]
         },
         {
           "token": "step=step",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:307",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:321",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:343",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:217",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:231",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:271"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:307",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:321",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:343",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:217",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:231",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:271"
           ]
         },
         {
           "token": "variant=default",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:332",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:99"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:332",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:99"
           ]
         },
         {
           "token": "variant=head",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:442",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:445",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:448",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:468",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:479",
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:490"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:442",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:445",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:448",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:468",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:479",
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:490"
           ]
         },
         {
           "token": "variant=outlined",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:320",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:92"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:320",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:92"
           ]
         },
         {
           "token": "variant=primary",
           "at": [
-            "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:308",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css:84"
+            "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:308",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css:84"
           ]
         }
       ],
@@ -556,9 +556,9 @@
           {
             "token": "ds-tenant-preview-root=preview.safeSlug",
             "at": [
-              "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx:168",
-              "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx:239",
-              "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx:144"
+              "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx:168",
+              "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx:239",
+              "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx:144"
             ]
           }
         ],
@@ -568,17 +568,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "lines": 512
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/modern/index.tsx",
             "lines": 501
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/rustic/index.tsx",
             "lines": 631
           }
         ]
@@ -593,7 +593,7 @@
         "variableCensus": [
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 29,
             "fallback": false,
             "fallbackValue": null,
@@ -606,7 +606,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 30,
             "fallback": false,
             "fallbackValue": null,
@@ -619,7 +619,7 @@
           },
           {
             "name": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 31,
             "fallback": false,
             "fallbackValue": null,
@@ -632,7 +632,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 37,
             "fallback": false,
             "fallbackValue": null,
@@ -645,7 +645,7 @@
           },
           {
             "name": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 38,
             "fallback": true,
             "fallbackValue": "1.25rem",
@@ -658,7 +658,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 45,
             "fallback": false,
             "fallbackValue": null,
@@ -671,7 +671,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 46,
             "fallback": false,
             "fallbackValue": null,
@@ -684,7 +684,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 50,
             "fallback": false,
             "fallbackValue": null,
@@ -697,7 +697,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 58,
             "fallback": false,
             "fallbackValue": null,
@@ -710,7 +710,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 74,
             "fallback": false,
             "fallbackValue": null,
@@ -723,7 +723,7 @@
           },
           {
             "name": "--ds-font-family-base",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -736,7 +736,7 @@
           },
           {
             "name": "--ds-font-size-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 76,
             "fallback": false,
             "fallbackValue": null,
@@ -749,7 +749,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 77,
             "fallback": false,
             "fallbackValue": null,
@@ -762,7 +762,7 @@
           },
           {
             "name": "--ds-line-height-tight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 78,
             "fallback": false,
             "fallbackValue": null,
@@ -775,7 +775,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 84,
             "fallback": false,
             "fallbackValue": null,
@@ -788,7 +788,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 85,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -801,7 +801,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 90,
             "fallback": false,
             "fallbackValue": null,
@@ -814,7 +814,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 91,
             "fallback": false,
             "fallbackValue": null,
@@ -827,7 +827,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 92,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -840,7 +840,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 93,
             "fallback": false,
             "fallbackValue": null,
@@ -853,7 +853,7 @@
           },
           {
             "name": "--ds-letter-spacing-wide",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 95,
             "fallback": false,
             "fallbackValue": null,
@@ -866,7 +866,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 99,
             "fallback": false,
             "fallbackValue": null,
@@ -879,7 +879,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 100,
             "fallback": false,
             "fallbackValue": null,
@@ -892,7 +892,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 101,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -905,7 +905,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -918,7 +918,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 117,
             "fallback": false,
             "fallbackValue": null,
@@ -931,7 +931,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 131,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -944,7 +944,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 132,
             "fallback": false,
             "fallbackValue": null,
@@ -957,7 +957,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 133,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -970,7 +970,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 138,
             "fallback": true,
             "fallbackValue": "0.625rem",
@@ -983,7 +983,7 @@
           },
           {
             "name": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 139,
             "fallback": true,
             "fallbackValue": "700",
@@ -996,7 +996,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -1009,7 +1009,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -1022,7 +1022,7 @@
           },
           {
             "name": "--ds-tenant-preview-input-max-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 156,
             "fallback": true,
             "fallbackValue": "20rem",
@@ -1035,7 +1035,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 160,
             "fallback": false,
             "fallbackValue": null,
@@ -1048,7 +1048,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 161,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -1061,7 +1061,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1074,7 +1074,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1087,7 +1087,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 171,
             "fallback": false,
             "fallbackValue": null,
@@ -1100,7 +1100,7 @@
           },
           {
             "name": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 172,
             "fallback": true,
             "fallbackValue": "2px",
@@ -1113,7 +1113,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -1126,7 +1126,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 182,
             "fallback": false,
             "fallbackValue": null,
@@ -1139,7 +1139,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 183,
             "fallback": false,
             "fallbackValue": null,
@@ -1152,7 +1152,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 194,
             "fallback": false,
             "fallbackValue": null,
@@ -1165,7 +1165,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 195,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -1178,7 +1178,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 196,
             "fallback": false,
             "fallbackValue": null,
@@ -1191,7 +1191,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 200,
             "fallback": false,
             "fallbackValue": null,
@@ -1204,7 +1204,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 206,
             "fallback": false,
             "fallbackValue": null,
@@ -1217,7 +1217,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 218,
             "fallback": false,
             "fallbackValue": null,
@@ -1230,7 +1230,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 225,
             "fallback": false,
             "fallbackValue": null,
@@ -1243,7 +1243,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 228,
             "fallback": false,
             "fallbackValue": null,
@@ -1256,7 +1256,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 229,
             "fallback": false,
             "fallbackValue": null,
@@ -1269,7 +1269,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 230,
             "fallback": false,
             "fallbackValue": null,
@@ -1282,7 +1282,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 233,
             "fallback": false,
             "fallbackValue": null,
@@ -1295,7 +1295,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 234,
             "fallback": true,
             "fallbackValue": "0.6875rem",
@@ -1308,7 +1308,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 237,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -1321,7 +1321,7 @@
           },
           {
             "name": "--ds-font-weight-medium",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 238,
             "fallback": false,
             "fallbackValue": null,
@@ -1334,7 +1334,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 16,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1347,7 +1347,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 16,
             "fallback": false,
             "fallbackValue": null,
@@ -1360,7 +1360,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 17,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1373,7 +1373,7 @@
           },
           {
             "name": "--ds-color-surface",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 18,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-primary)",
@@ -1386,7 +1386,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 18,
             "fallback": false,
             "fallbackValue": null,
@@ -1399,7 +1399,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 19,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -1412,7 +1412,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 19,
             "fallback": false,
             "fallbackValue": null,
@@ -1425,7 +1425,7 @@
           },
           {
             "name": "--ds-shadow-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 20,
             "fallback": false,
             "fallbackValue": null,
@@ -1438,7 +1438,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 26,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1451,7 +1451,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 26,
             "fallback": false,
             "fallbackValue": null,
@@ -1464,7 +1464,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 30,
             "fallback": true,
             "fallbackValue": "6px",
@@ -1477,7 +1477,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 34,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -1490,7 +1490,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 34,
             "fallback": false,
             "fallbackValue": null,
@@ -1503,7 +1503,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 39,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1516,7 +1516,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 39,
             "fallback": false,
             "fallbackValue": null,
@@ -1529,7 +1529,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 46,
             "fallback": true,
             "fallbackValue": "6px",
@@ -1542,7 +1542,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 76,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1555,7 +1555,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 76,
             "fallback": false,
             "fallbackValue": null,
@@ -1568,7 +1568,7 @@
           },
           {
             "name": "--ds-button-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 80,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-sm)",
@@ -1581,7 +1581,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 80,
             "fallback": false,
             "fallbackValue": null,
@@ -1594,7 +1594,7 @@
           },
           {
             "name": "--ds-button-primary-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-500)",
@@ -1607,7 +1607,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 86,
             "fallback": false,
             "fallbackValue": null,
@@ -1620,7 +1620,7 @@
           },
           {
             "name": "--ds-button-primary-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-on-primary)",
@@ -1633,7 +1633,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -1646,7 +1646,7 @@
           },
           {
             "name": "--ds-button-primary-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 88,
             "fallback": true,
             "fallbackValue": "var(--ds-shadow-sm)",
@@ -1659,7 +1659,7 @@
           },
           {
             "name": "--ds-shadow-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -1672,7 +1672,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 93,
             "fallback": false,
             "fallbackValue": null,
@@ -1685,7 +1685,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 95,
             "fallback": false,
             "fallbackValue": null,
@@ -1698,7 +1698,7 @@
           },
           {
             "name": "--ds-button-secondary-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 101,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1711,7 +1711,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 101,
             "fallback": false,
             "fallbackValue": null,
@@ -1724,7 +1724,7 @@
           },
           {
             "name": "--ds-color-surface-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 104,
             "fallback": false,
             "fallbackValue": null,
@@ -1737,7 +1737,7 @@
           },
           {
             "name": "--ds-button-secondary-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 106,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -1750,7 +1750,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 106,
             "fallback": false,
             "fallbackValue": null,
@@ -1763,7 +1763,7 @@
           },
           {
             "name": "--ds-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 111,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1776,7 +1776,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 111,
             "fallback": false,
             "fallbackValue": null,
@@ -1789,7 +1789,7 @@
           },
           {
             "name": "--ds-card-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 112,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-sm)",
@@ -1802,7 +1802,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 112,
             "fallback": false,
             "fallbackValue": null,
@@ -1815,7 +1815,7 @@
           },
           {
             "name": "--ds-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 113,
             "fallback": true,
             "fallbackValue": "var(--ds-color-surface)",
@@ -1828,7 +1828,7 @@
           },
           {
             "name": "--ds-color-surface",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 113,
             "fallback": false,
             "fallbackValue": null,
@@ -1841,7 +1841,7 @@
           },
           {
             "name": "--ds-card-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 114,
             "fallback": true,
             "fallbackValue": "var(--ds-shadow-sm)",
@@ -1854,7 +1854,7 @@
           },
           {
             "name": "--ds-shadow-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 114,
             "fallback": false,
             "fallbackValue": null,
@@ -1867,7 +1867,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 118,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -1880,7 +1880,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 118,
             "fallback": false,
             "fallbackValue": null,
@@ -1893,7 +1893,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 122,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1906,7 +1906,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 122,
             "fallback": false,
             "fallbackValue": null,
@@ -1919,7 +1919,7 @@
           },
           {
             "name": "--ds-input-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 127,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1932,7 +1932,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 127,
             "fallback": false,
             "fallbackValue": null,
@@ -1945,7 +1945,7 @@
           },
           {
             "name": "--ds-input-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 128,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-sm)",
@@ -1958,7 +1958,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 128,
             "fallback": false,
             "fallbackValue": null,
@@ -1971,7 +1971,7 @@
           },
           {
             "name": "--ds-input-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 130,
             "fallback": true,
             "fallbackValue": "var(--ds-color-surface)",
@@ -1984,7 +1984,7 @@
           },
           {
             "name": "--ds-color-surface",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 130,
             "fallback": false,
             "fallbackValue": null,
@@ -1997,7 +1997,7 @@
           },
           {
             "name": "--ds-input-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 131,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -2010,7 +2010,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 131,
             "fallback": false,
             "fallbackValue": null,
@@ -2023,7 +2023,7 @@
           },
           {
             "name": "--ds-badge-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 135,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-sm)",
@@ -2036,7 +2036,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 135,
             "fallback": false,
             "fallbackValue": null,
@@ -2049,7 +2049,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 140,
             "fallback": false,
             "fallbackValue": null,
@@ -2062,7 +2062,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 141,
             "fallback": false,
             "fallbackValue": null,
@@ -2075,7 +2075,7 @@
           },
           {
             "name": "--ds-color-warning-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 146,
             "fallback": false,
             "fallbackValue": null,
@@ -2088,7 +2088,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -2101,7 +2101,7 @@
           },
           {
             "name": "--ds-color-surface-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 152,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-secondary)",
@@ -2114,7 +2114,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -2127,7 +2127,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 153,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2140,7 +2140,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -2153,7 +2153,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 159,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -2166,7 +2166,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 159,
             "fallback": false,
             "fallbackValue": null,
@@ -2179,7 +2179,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 174,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -2192,7 +2192,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 174,
             "fallback": false,
             "fallbackValue": null,
@@ -2205,7 +2205,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 182,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -2218,7 +2218,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 182,
             "fallback": false,
             "fallbackValue": null,
@@ -2231,7 +2231,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 188,
             "fallback": false,
             "fallbackValue": null,
@@ -2244,7 +2244,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 189,
             "fallback": false,
             "fallbackValue": null,
@@ -2257,7 +2257,7 @@
           },
           {
             "name": "--ds-color-surface-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 195,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-secondary)",
@@ -2270,7 +2270,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 195,
             "fallback": false,
             "fallbackValue": null,
@@ -2283,7 +2283,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 196,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2296,7 +2296,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 196,
             "fallback": false,
             "fallbackValue": null,
@@ -2309,7 +2309,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 201,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -2322,7 +2322,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 201,
             "fallback": false,
             "fallbackValue": null,
@@ -2335,7 +2335,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 202,
             "fallback": true,
             "fallbackValue": "6px",
@@ -2348,7 +2348,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 205,
             "fallback": false,
             "fallbackValue": null,
@@ -2361,7 +2361,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 212,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2374,7 +2374,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 212,
             "fallback": false,
             "fallbackValue": null,
@@ -2387,7 +2387,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 218,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -2400,7 +2400,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 218,
             "fallback": false,
             "fallbackValue": null,
@@ -2413,7 +2413,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 139,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -2426,7 +2426,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 139,
             "fallback": false,
             "fallbackValue": null,
@@ -2439,7 +2439,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 140,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2452,7 +2452,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 140,
             "fallback": false,
             "fallbackValue": null,
@@ -2465,7 +2465,7 @@
           },
           {
             "name": "--ds-color-text-tertiary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 141,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -2478,7 +2478,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 141,
             "fallback": false,
             "fallbackValue": null,
@@ -2491,7 +2491,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 142,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-elevated, #ffffff)",
@@ -2504,7 +2504,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 142,
             "fallback": true,
             "fallbackValue": "#ffffff",
@@ -2517,7 +2517,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 143,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-muted)",
@@ -2530,7 +2530,7 @@
           },
           {
             "name": "--ds-color-bg-muted",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 143,
             "fallback": false,
             "fallbackValue": null,
@@ -2543,7 +2543,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 144,
             "fallback": true,
             "fallbackValue": "var(--ds-color-alpha-black-10)",
@@ -2556,7 +2556,7 @@
           },
           {
             "name": "--ds-color-alpha-black-10",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 144,
             "fallback": false,
             "fallbackValue": null,
@@ -2569,7 +2569,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 145,
             "fallback": true,
             "fallbackValue": "var(--ds-color-alpha-black-5)",
@@ -2582,7 +2582,7 @@
           },
           {
             "name": "--ds-color-alpha-black-5",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 145,
             "fallback": false,
             "fallbackValue": null,
@@ -2595,7 +2595,7 @@
           },
           {
             "name": "--ds-shadow-sm",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 333,
             "fallback": false,
             "fallbackValue": null,
@@ -2608,7 +2608,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 384,
             "fallback": false,
             "fallbackValue": null,
@@ -2621,7 +2621,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 384,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -2634,7 +2634,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/ui/patterns/customization/tenant-preview/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/customization/tenant-preview/engines/classic/index.tsx",
             "line": 384,
             "fallback": false,
             "fallbackValue": null,
@@ -2648,217 +2648,217 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 38,
             "literal": "1.25rem",
             "text": "padding: var(--ds-spacing-5, 1.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 50,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 54,
             "literal": "2rem",
             "text": "inline-size: 2rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 55,
             "literal": "2rem",
             "text": "block-size: 2rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 85,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 92,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 101,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 124,
             "literal": "2rem",
             "text": "block-size: 2rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 128,
             "literal": "1.5rem",
             "text": "block-size: 1.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 131,
             "literal": "0.25rem",
             "text": "margin-block-end: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 133,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 138,
             "literal": "0.625rem",
             "text": "font-size: var(--ds-font-size-2xs, 0.625rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 156,
             "literal": "20rem",
             "text": "max-inline-size: var(--ds-tenant-preview-input-max-width, 20rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 161,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 171,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 172,
             "literal": "2px",
             "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 195,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 200,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 206,
             "literal": "1px",
             "text": "border-block-end: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 224,
             "literal": "8.75rem",
             "text": "grid-template-columns: repeat(auto-fill, minmax(8.75rem, 1fr));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 234,
             "literal": "0.6875rem",
             "text": "font-size: var(--ds-font-size-2xs, 0.6875rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 237,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
             "line": 246,
             "literal": "20rem",
             "text": "@container ds-tenant-preview (inline-size < 20rem) {"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 16,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 17,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 25,
             "literal": "1px",
             "text": "border-bottom: 1px solid"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 30,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 46,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 93,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-primary-500);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 100,
             "literal": "1px",
             "text": "border: 1px solid"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 111,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-card-border, var(--ds-color-border-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 127,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-input-border, var(--ds-color-border-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 158,
             "literal": "2px",
             "text": "border-bottom: 2px solid"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 181,
             "literal": "1px",
             "text": "border-bottom: 1px solid"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 201,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tenant-preview/index.css",
             "line": 202,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
@@ -2919,7 +2919,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -2949,7 +2949,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -2974,7 +2974,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -3005,7 +3005,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.radius-scale",
@@ -3031,7 +3031,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -3060,13 +3060,13 @@
         {
           "channelId": "--_ds-tenant-preview-input-max-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/customization/tenant-preview"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tenant-preview/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3084,7 +3084,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -3115,7 +3115,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -3135,7 +3135,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -3160,7 +3160,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -3180,7 +3180,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -3200,7 +3200,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -3220,7 +3220,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -3240,7 +3240,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "chrome.anatomy",
@@ -3270,7 +3270,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3283,7 +3283,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -3329,7 +3329,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3360,7 +3360,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -3381,11 +3381,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

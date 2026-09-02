@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Family recipe profile",
   "valueType": "profile-id",
@@ -57,11 +57,7 @@
         "law": "STATIC ARM ONLY, NOT RECEIPTED (same law as rottay/identity above). bithire authors `recipes: RECIPES` where `const RECIPES: BrandRecipeSelection = { schemaVersion: 1, profile: 'rottay/network-professional@1' }` (bithire/index.ts:3172) -- selecting an id namespaced 'rottay/...' is not a defect: the namespace names the REGISTRY's own provenance (foundation/tokens/ts/presentation/recipe-profiles), not which vertical may select it. evnto authors NO `recipes` field at all in its exported `evntoBrandTheme` (grep-confirmed: only a comment placeholder, `@governor none -- gap aceptado: capability recipes no autorada en evnto`) -- a genuine, explicit gap, not identity by absence-of-evidence, so evnto has no identity stop for this control."
       }
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/recipe-profile/computed-static-db/bithire-technical-sharp.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/recipe-profile/computed-static-db/rottay-network-professional.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/recipe-profile/computed-static-db/rottay-editorial-round.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
@@ -73,13 +69,13 @@
     "negativeControlsScopeNote": "`font metrics remain fixed` is deliberately NOT declared for this control: --ds-recipe-profile is pure selection provenance (a quoted id string, never consumed by any live CSS reader -- see witnessScopeNote), so asserting a font-metrics negative control here would assert against a property this control has no mechanism to move in the first place, not a meaningful boundary. The 4 declared negatives hold trivially for the same reason -- the channel this control writes shares no consume site with color/geometry/typography/motion because it has no consume site at all yet.",
     "witnessScopeNote": "DT RULING (F4B-15): the witness is documented by the TWO real surfaces, with their exact scopes, rather than one field implying a single closed loop that does not exist. (a) --ds-recipe-profile (CSS): emitted in the compiled artifacts of rottay/bithire (facade/artifacts/rottay/index.css:767, facade/artifacts/bithire/index.css:817) -- grep-confirmed, NO production CSS file or component reads it; the compiler's own comment (brand-theme/index.ts:2071-2072) calls it selection provenance, published for whoever mounts it, not paint. (b) RecipeProfileProvider (JS, provider/index.tsx): a real, functioning consumer, but of `resolvedRuntimeConfig.appearance?.recipeProfile` (the DB-normalized TenantAppearance shape) -- NEVER of the CSS channel this control declares, and NEVER populated for the 3 code-owned verticals (today's actual production): `getCodeOwnedRuntimeConfig` (tenant/foundation/configuration/registry/index.ts:155-162) destructures `appearance` OUT of the projected config and never restores it, and the one alternate channel motion/expressive ride (`governedBehavior`, `projectGovernedBehavior` in the same file) does not carry `recipes` either -- verified by reading its body, only `motion`/`expressive` are handled. The two surfaces are architecturally decoupled; this is not a defect this control's own write-set can fix, and no consumer was invented to paper over it (D-1b law).",
     "recipesFloorAsymmetryNote": "`tenantPostureFloors` does NOT project `recipes` (only typography/surfaces/motion, tenant-theme/index.ts:1830-1844) -- the DB arm's composition of `recipes` depends ENTIRELY on `resolveTheme`'s generic `mergeDeep` (tenant-theme/index.ts:2007), with no E-1/W-B-style floor re-applying it at the end of `compileTheme`. Measured as sufficient for this control's own shape (W-B's argument, reused): there is no vertical-authored 'ladder' for recipe selection that could out-rank a tenant's own choice post-merge the way surfaces.elevation or typography's pairing preset could -- a real asymmetry against the other floored fields, named here rather than silently matched to their pattern.",
-    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts",
       "packages/core/src/foundation/tokens/ts/presentation/recipe-profiles/index.ts",
-      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+      "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"
     ],
     "catalog": [
       "rottay/technical-sharp@1",

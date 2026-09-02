@@ -8,15 +8,15 @@
     "components": [
       "Calendar"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Calendar",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/calendar",
     "publicComponents": [
       "Calendar"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "93bf6242fbfc0d2363c73f4c0df9a4eff6de97b5c4456b3a787428cb2284fdb4"
+    "inventoryRowDigest": "5e97d7071f2c4d2cb39f5368b8d755a32cef983a92e462e2aff83e0721a4b9ef"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Calendar/index.tsx",
-      "packages/core/src/ui/primitives/display/Calendar/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Calendar/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/display/calendar/index.tsx",
+      "packages/core/src/components/primitives/display/calendar/contracts/index.ts",
+      "packages/core/src/components/primitives/display/calendar/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root",
@@ -61,10 +61,10 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "The grid keeps ARIA grid semantics: role='grid' on the grid part, role='gridcell' on cells, role='columnheader' on weekday headers, role='row' on the weekday row. [at packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:490, packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:515, packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:481, packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:479]",
-      "Exactly one cell is in the roving tab order; keyboard focus is moved by querying [data-part='cell'][tabindex='0']. [at packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:350]",
-      "Selected, today and disabled cells re-assert distinguishable paint under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:382, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:387, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:390]",
-      "Hover and press paint never apply to a disabled or selected cell. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:428, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:439]"
+      "The grid keeps ARIA grid semantics: role='grid' on the grid part, role='gridcell' on cells, role='columnheader' on weekday headers, role='row' on the weekday row. [at packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:490, packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:515, packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:481, packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:479]",
+      "Exactly one cell is in the roving tab order; keyboard focus is moved by querying [data-part='cell'][tabindex='0']. [at packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:350]",
+      "Selected, today and disabled cells re-assert distinguishable paint under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:382, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:387, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:390]",
+      "Hover and press paint never apply to a disabled or selected cell. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:428, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:439]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -87,9 +87,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:432",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:246",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:197"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:432",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:197"
           ]
         },
         {
@@ -97,8 +97,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:439",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:248"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:439",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:248"
           ]
         },
         {
@@ -106,11 +106,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-direction axis",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:441",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:442",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:467",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:468",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:251"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:441",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:442",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:467",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:468",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:251"
           ]
         },
         {
@@ -118,9 +118,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-active axis + aria-pressed",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:447",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:457",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:258"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:447",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:457",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:258"
           ]
         },
         {
@@ -128,8 +128,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute (aria-hidden glyph)",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:62",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:68"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:62",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:68"
           ]
         },
         {
@@ -137,7 +137,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='row'",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:479"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:479"
           ]
         },
         {
@@ -145,8 +145,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='columnheader'",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:481",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:322"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:481",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:322"
           ]
         },
         {
@@ -154,9 +154,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='grid'",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:490",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:551",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:329"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:490",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:551",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:329"
           ]
         },
         {
@@ -164,10 +164,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='gridcell'",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:515",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:565",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:346",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:197"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:515",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:565",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:197"
           ]
         },
         {
@@ -175,9 +175,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:529",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:575",
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:362"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:529",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:575",
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:362"
           ]
         },
         {
@@ -185,8 +185,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-outside-month + aria-hidden",
           "at": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:497",
-            "packages/core/src/ui/primitives/display/Calendar/engines/modern/index.tsx:541"
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:497",
+            "packages/core/src/components/primitives/display/calendar/engines/modern/index.tsx:541"
           ]
         }
       ],
@@ -195,27 +195,27 @@
           "token": "hovered",
           "note": "CSS :hover, hover-capable-gated, and explicitly excluded on selected/disabled cells",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:302",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:303",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:428"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:303",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:428"
           ],
           "state": "hover"
         },
         {
           "token": "pressed",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:323",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:324",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:439"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:323",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:324",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:439"
           ],
           "state": "active-pressed"
         },
         {
           "token": "focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:312",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:313",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:314"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:312",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:313",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:314"
           ],
           "state": "focus-visible"
         },
@@ -223,7 +223,7 @@
           "token": "disabled",
           "note": "data-disabled on the cell; nav/mode controls use the native :disabled pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:197"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:197"
           ],
           "state": "disabled"
         },
@@ -231,7 +231,7 @@
           "token": "selected",
           "note": "data-selected='true' on the cell",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:362"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:362"
           ],
           "state": "selected"
         },
@@ -239,7 +239,7 @@
           "token": "today",
           "note": "data-today='true', painted only when not also selected",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:408"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:408"
           ],
           "state": "today"
         }
@@ -249,13 +249,13 @@
           {
             "token": "prefers-reduced-motion: reduce",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:448"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:448"
             ]
           },
           {
             "token": "forced-colors: active",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:381"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:381"
             ]
           }
         ],
@@ -267,7 +267,7 @@
             "token": "mode-toggle active",
             "note": "data-active='true'",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:258"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:258"
             ]
           }
         ],
@@ -276,7 +276,7 @@
       "engineDivergence": {
         "classic": {
           "dataPartEmissions": 0,
-          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1848-1907"
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1848-1907"
         },
         "modern": {
           "dataPartEmissions": 11
@@ -285,7 +285,7 @@
           "dataPartEmissions": 9,
           "note": "no weekday-row and no double-nav-icon parts; root carries role='application' rather than the modern header/grid split",
           "anchors": [
-            "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:246"
+            "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:246"
           ]
         }
       },
@@ -295,7 +295,7 @@
           {
             "variable": "--ds-calendar-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:41",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:41",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -312,7 +312,7 @@
           {
             "variable": "--ds-calendar-compact-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:47",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:47",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -329,7 +329,7 @@
           {
             "variable": "--ds-calendar-header-margin",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:53",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:53",
             "landsOn": "margin-bottom",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -346,7 +346,7 @@
           {
             "variable": "--ds-calendar-header-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:78",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:78",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -363,7 +363,7 @@
           {
             "variable": "--ds-calendar-transition",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:95",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:95",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -380,7 +380,7 @@
           {
             "variable": "--ds-calendar-disabled-opacity",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:98",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:98",
             "landsOn": "opacity",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -397,7 +397,7 @@
           {
             "variable": "--ds-calendar-transition",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Calendar/engines/rustic/index.tsx:110",
+            "at": "packages/core/src/components/primitives/display/calendar/engines/rustic/index.tsx:110",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -414,7 +414,7 @@
           {
             "variable": "--ds-calendar-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:99",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:99",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -431,7 +431,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:99",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:99",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -450,7 +450,7 @@
           {
             "variable": "--ds-calendar-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:100",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -467,7 +467,7 @@
           {
             "variable": "--ds-radius-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:100",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -484,7 +484,7 @@
           {
             "variable": "--ds-calendar-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:106",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:106",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -501,7 +501,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:106",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:106",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -518,7 +518,7 @@
           {
             "variable": "--ds-calendar-compact-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:112",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:112",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -535,7 +535,7 @@
           {
             "variable": "--ds-calendar-compact-width-coarse",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:116",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:116",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -552,7 +552,7 @@
           {
             "variable": "--ds-calendar-header-margin-block-end",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:127",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:127",
             "landsOn": "margin-block-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -569,7 +569,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:127",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:127",
             "landsOn": "margin-block-end",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -586,7 +586,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:132",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -603,7 +603,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:137",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:137",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -620,7 +620,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:138",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:138",
             "landsOn": "margin-block-end",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -637,7 +637,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:143",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:143",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -654,7 +654,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:148",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:148",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -671,7 +671,7 @@
           {
             "variable": "--ds-calendar-day-color-other",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:166",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:166",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -688,7 +688,7 @@
           {
             "variable": "--ds-color-text-disabled",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:166",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:166",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -707,7 +707,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:167",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -724,7 +724,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:172",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:172",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -741,7 +741,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:183",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:183",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -758,7 +758,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:186",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:186",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -775,7 +775,7 @@
           {
             "variable": "--ds-calendar-year-cell-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:190",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:190",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -792,7 +792,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:190",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:190",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -809,7 +809,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:195",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:195",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -826,7 +826,7 @@
           {
             "variable": "--ds-calendar-cell-disabled-opacity",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:198",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:198",
             "landsOn": "opacity",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -843,7 +843,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:212",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -860,7 +860,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:215",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:215",
             "landsOn": "margin-block-start",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -877,7 +877,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:216",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:216",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -894,7 +894,7 @@
           {
             "variable": "--ds-calendar-header-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:224",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:224",
             "landsOn": "border-block-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -911,7 +911,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:224",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:224",
             "landsOn": "border-block-end",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -928,7 +928,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:237",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:237",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -945,7 +945,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:241",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:241",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -962,7 +962,7 @@
           {
             "variable": "--ds-radius-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:242",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:242",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -979,7 +979,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:247",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -996,7 +996,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:247",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1013,7 +1013,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:247",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1030,7 +1030,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:247",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:247",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1047,7 +1047,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:255",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:255",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1064,7 +1064,7 @@
           {
             "variable": "--ds-font-weight-semibold",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:256",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:256",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1081,7 +1081,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:259",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:259",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1098,7 +1098,7 @@
           {
             "variable": "--ds-calendar-active-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:266",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:266",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1115,7 +1115,7 @@
           {
             "variable": "--ds-color-white",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:266",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:266",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1132,7 +1132,7 @@
           {
             "variable": "--ds-calendar-nav-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:304",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:304",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1149,7 +1149,7 @@
           {
             "variable": "--ds-button-ghost-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:304",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:304",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1166,7 +1166,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:304",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:304",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1185,7 +1185,7 @@
           {
             "variable": "--ds-calendar-focus-ring",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:315",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:315",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1202,7 +1202,7 @@
           {
             "variable": "--ds-focus-ring",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:315",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:315",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1219,7 +1219,7 @@
           {
             "variable": "--ds-calendar-nav-bg-active",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:325",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:325",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1236,7 +1236,7 @@
           {
             "variable": "--ds-color-interactive-bg-active",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:325",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:325",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1253,7 +1253,7 @@
           {
             "variable": "--ds-button-ghost-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:325",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:325",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1272,7 +1272,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:333",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:333",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1289,7 +1289,7 @@
           {
             "variable": "--ds-font-weight-medium",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:334",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1306,7 +1306,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:338",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:338",
             "landsOn": "padding-block",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1323,7 +1323,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:339",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:339",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1340,7 +1340,7 @@
           {
             "variable": "--ds-calendar-cell-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:351",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:351",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1357,7 +1357,7 @@
           {
             "variable": "--ds-radius-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:351",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:351",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1374,7 +1374,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:357",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1391,7 +1391,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:357",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1408,7 +1408,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:357",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1425,7 +1425,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:357",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1442,7 +1442,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:357",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1459,7 +1459,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:357",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:357",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1476,7 +1476,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:363",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:363",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1493,7 +1493,7 @@
           {
             "variable": "--ds-calendar-selected-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:371",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:371",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1510,7 +1510,7 @@
           {
             "variable": "--ds-color-white",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:371",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:371",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1527,7 +1527,7 @@
           {
             "variable": "--ds-font-weight-semibold",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:374",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:374",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1544,7 +1544,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:409",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:409",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1561,7 +1561,7 @@
           {
             "variable": "--ds-font-weight-semibold",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:413",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:413",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1578,7 +1578,7 @@
           {
             "variable": "--ds-color-interactive-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:431",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:431",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1595,7 +1595,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:431",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:431",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1614,7 +1614,7 @@
           {
             "variable": "--ds-color-interactive-bg-active",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:442",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:442",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1631,7 +1631,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:442",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:442",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1650,7 +1650,7 @@
           {
             "variable": "--ds-touch-target-min",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css:462",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css:462",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1667,7 +1667,7 @@
           {
             "variable": "--ds-calendar-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:37",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1684,7 +1684,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:37",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1703,7 +1703,7 @@
           {
             "variable": "--ds-calendar-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:38",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1720,7 +1720,7 @@
           {
             "variable": "--ds-calendar-shadow",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:39",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1737,7 +1737,7 @@
           {
             "variable": "--ds-shadow-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:39",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1754,7 +1754,7 @@
           {
             "variable": "--ds-calendar-nav-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:46",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1771,7 +1771,7 @@
           {
             "variable": "--ds-calendar-nav-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:47",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1788,7 +1788,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:47",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1805,7 +1805,7 @@
           {
             "variable": "--ds-calendar-hover-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:50",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1822,7 +1822,7 @@
           {
             "variable": "--ds-color-bg-muted",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:50",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1839,7 +1839,7 @@
           {
             "variable": "--ds-color-neutral-100",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:50",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1856,7 +1856,7 @@
           {
             "variable": "--ds-calendar-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:53",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1873,7 +1873,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:53",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1892,7 +1892,7 @@
           {
             "variable": "--ds-calendar-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:54",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1909,7 +1909,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:54",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1928,7 +1928,7 @@
           {
             "variable": "--ds-calendar-nav-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:55",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1945,7 +1945,7 @@
           {
             "variable": "--ds-calendar-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:58",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:58",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1962,7 +1962,7 @@
           {
             "variable": "--ds-color-primary-500",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:58",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:58",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1979,7 +1979,7 @@
           {
             "variable": "--ds-calendar-primary-text",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:59",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1996,7 +1996,7 @@
           {
             "variable": "--ds-color-text-inverse",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:59",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2013,7 +2013,7 @@
           {
             "variable": "--ds-color-bg-base",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:59",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2032,7 +2032,7 @@
           {
             "variable": "--ds-calendar-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:60",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:60",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2049,7 +2049,7 @@
           {
             "variable": "--ds-color-primary-500",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:60",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:60",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2066,7 +2066,7 @@
           {
             "variable": "--ds-calendar-header-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:65",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:65",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2083,7 +2083,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:65",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:65",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2102,7 +2102,7 @@
           {
             "variable": "--ds-calendar-cell-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:71",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:71",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2119,7 +2119,7 @@
           {
             "variable": "--ds-calendar-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:76",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2136,7 +2136,7 @@
           {
             "variable": "--ds-color-primary-500",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:76",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2153,7 +2153,7 @@
           {
             "variable": "--ds-calendar-primary-text",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:77",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2170,7 +2170,7 @@
           {
             "variable": "--ds-color-text-inverse",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:77",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2187,7 +2187,7 @@
           {
             "variable": "--ds-color-bg-base",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:77",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2206,7 +2206,7 @@
           {
             "variable": "--ds-calendar-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:80",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:80",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2223,7 +2223,7 @@
           {
             "variable": "--ds-color-primary-500",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:80",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:80",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2240,7 +2240,7 @@
           {
             "variable": "--ds-calendar-hover-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:83",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2257,7 +2257,7 @@
           {
             "variable": "--ds-color-bg-muted",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:83",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2274,7 +2274,7 @@
           {
             "variable": "--ds-color-neutral-100",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/calendar/index.css:83",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2291,7 +2291,7 @@
           {
             "variable": "--ds-calendar-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1848",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1848",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2308,7 +2308,7 @@
           {
             "variable": "--ds-calendar-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1849",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1849",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2325,7 +2325,7 @@
           {
             "variable": "--ds-calendar-header-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1853",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1853",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2342,7 +2342,7 @@
           {
             "variable": "--ds-calendar-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1854",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1854",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2359,7 +2359,7 @@
           {
             "variable": "--ds-calendar-header-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1859",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1859",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2376,7 +2376,7 @@
           {
             "variable": "--ds-calendar-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1863",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1863",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2393,7 +2393,7 @@
           {
             "variable": "--ds-calendar-weekday-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1867",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1867",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2410,7 +2410,7 @@
           {
             "variable": "--ds-calendar-weekday-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1868",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1868",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2427,7 +2427,7 @@
           {
             "variable": "--ds-calendar-header-font-weight",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1869",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1869",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2444,7 +2444,7 @@
           {
             "variable": "--ds-calendar-cell-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1873",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1873",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2461,7 +2461,7 @@
           {
             "variable": "--ds-calendar-cell-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1877",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1877",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2478,7 +2478,7 @@
           {
             "variable": "--ds-calendar-cell-bg-today",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1881",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1881",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2495,7 +2495,7 @@
           {
             "variable": "--ds-calendar-cell-color-today",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1882",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1882",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2512,7 +2512,7 @@
           {
             "variable": "--ds-calendar-cell-color-today",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1886",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1886",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2529,7 +2529,7 @@
           {
             "variable": "--ds-calendar-cell-bg-selected",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1890",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1890",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2546,7 +2546,7 @@
           {
             "variable": "--ds-calendar-cell-color-selected",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1891",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1891",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2563,7 +2563,7 @@
           {
             "variable": "--ds-calendar-cell-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1892",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1892",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2580,7 +2580,7 @@
           {
             "variable": "--ds-calendar-cell-color-disabled",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1896",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1896",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2597,7 +2597,7 @@
           {
             "variable": "--ds-calendar-cell-bg-today",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1900",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1900",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2614,7 +2614,7 @@
           {
             "variable": "--ds-calendar-cell-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1904",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1904",
             "landsOn": "min-width",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2631,7 +2631,7 @@
           {
             "variable": "--ds-calendar-cell-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1905",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1905",
             "landsOn": "height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2648,7 +2648,7 @@
           {
             "variable": "--ds-calendar-cell-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1906",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1906",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2665,7 +2665,7 @@
           {
             "variable": "--ds-calendar-cell-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1907",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1907",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2761,13 +2761,13 @@
         {
           "channelId": "--_ds-calendar-active-ink",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2776,13 +2776,13 @@
         {
           "channelId": "--_ds-calendar-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2791,13 +2791,13 @@
         {
           "channelId": "--_ds-calendar-day-color-other",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2806,13 +2806,13 @@
         {
           "channelId": "--_ds-calendar-header-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2821,13 +2821,13 @@
         {
           "channelId": "--_ds-calendar-nav-bg-active",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2836,13 +2836,13 @@
         {
           "channelId": "--_ds-calendar-nav-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2851,13 +2851,13 @@
         {
           "channelId": "--_ds-calendar-selected-ink",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2951,13 +2951,13 @@
         {
           "channelId": "--_ds-calendar-cell-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2966,13 +2966,13 @@
         {
           "channelId": "--_ds-calendar-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3017,13 +3017,13 @@
         {
           "channelId": "--_ds-calendar-compact-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3032,13 +3032,13 @@
         {
           "channelId": "--_ds-calendar-compact-width-coarse",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3047,13 +3047,13 @@
         {
           "channelId": "--_ds-calendar-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3062,13 +3062,13 @@
         {
           "channelId": "--_ds-calendar-year-cell-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3096,13 +3096,13 @@
         {
           "channelId": "--_ds-calendar-header-margin-block-end",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3122,7 +3122,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ],
         "reviewedFrom": "anatomy",
@@ -3162,7 +3162,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -3187,7 +3187,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -3252,13 +3252,13 @@
         {
           "channelId": "--_ds-calendar-focus-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/calendar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/calendar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3281,7 +3281,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3338,7 +3338,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3388,11 +3388,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

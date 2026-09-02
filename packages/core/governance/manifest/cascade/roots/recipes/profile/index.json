@@ -3,6 +3,7 @@
   "rootId": "recipe-profile",
   "tier": "pro",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-recipe-profile",
     "emission": [
       {

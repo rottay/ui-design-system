@@ -8,15 +8,15 @@
     "components": [
       "AuthSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/experience",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/experience/auth",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/experience",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/experience/auth",
     "publicComponents": [
       "AuthSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1b257fb4931709595bce80ff70c78632c9148954e9c62642f2ead16854a3e1ac"
+    "inventoryRowDigest": "b3fff06f638b21ad56d7c94ef51c32bc9c607a3fb9cb49864b0d2b1bdddce353"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/experience/auth",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+      "packages/core/src/components/surfaces/presentation/pages/experience/auth",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
     ],
     "stableParts": [
       "auth-skeleton-cta",
@@ -116,7 +116,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-auth__eyebrow` bound by the root pair `.ds-surface.ds-auth`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:102"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:102"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -125,7 +125,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-auth__form-panel` bound by the root pair `.ds-surface.ds-auth`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:91"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:91"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -800,7 +800,7 @@
         }
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
         "rootAnchor": ".ds-surface.ds-auth",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -872,7 +872,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
@@ -887,7 +887,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
@@ -902,7 +902,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
@@ -917,7 +917,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
@@ -941,13 +941,13 @@
         {
           "channelId": "--_ds-auth-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -967,13 +967,13 @@
         {
           "channelId": "--_ds-auth-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1001,13 +1001,13 @@
         {
           "channelId": "--_ds-auth-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1027,13 +1027,13 @@
         {
           "channelId": "--_ds-auth-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1053,13 +1053,13 @@
         {
           "channelId": "--_ds-auth-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1079,13 +1079,13 @@
         {
           "channelId": "--_ds-auth-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1104,7 +1104,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
             "--ds-motion-ease-in-out"
@@ -1123,7 +1123,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1137,13 +1137,13 @@
         {
           "channelId": "--_ds-auth-surface-gradient-mesh",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1162,7 +1162,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1175,7 +1175,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1188,7 +1188,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1202,13 +1202,13 @@
         {
           "channelId": "--_ds-auth-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/auth"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1232,7 +1232,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1245,7 +1245,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1284,7 +1284,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1315,7 +1315,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1329,11 +1329,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

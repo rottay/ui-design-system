@@ -8,15 +8,15 @@
     "components": [
       "Collapse"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/layout/Collapse",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/layout/collapse",
     "publicComponents": [
       "Collapse"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "17278080f217cc4c92b5aa3530c5854035c9f4e41cb5171d40f64b4694bde407"
+    "inventoryRowDigest": "ab0f1e3c813637d7cd90449c4e4aad2911d0726a3109553474aefd88bad89b74"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,19 +28,18 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Collapse/index.ts",
-      "packages/core/src/ui/primitives/layout/Collapse/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Collapse/runtime/tokens/index.ts",
-      "packages/core/src/ui/primitives/layout/Collapse/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/layout/Collapse/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/layout/Collapse/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/collapse.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
-      "packages/core/src/foundation/tokens/css/runtime/bridges/collapse.css",
-      "packages/core/src/foundation/tokens/css/runtime/bridges/collapse-paint.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/layout/collapse/index.ts",
+      "packages/core/src/components/primitives/layout/collapse/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/collapse/runtime/tokens/index.ts",
+      "packages/core/src/components/primitives/layout/collapse/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/layout/collapse/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/layout/collapse/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/collapse/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/bridges/collapse/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root",
@@ -683,13 +682,13 @@
         {
           "channelId": "--_ds-collapse-arrow-hover-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -698,13 +697,13 @@
         {
           "channelId": "--_ds-collapse-content-default-idle-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -713,13 +712,13 @@
         {
           "channelId": "--_ds-collapse-content-default-idle-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -728,13 +727,13 @@
         {
           "channelId": "--_ds-collapse-content-ghost-idle-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -743,13 +742,13 @@
         {
           "channelId": "--_ds-collapse-header-default-disabled-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -758,13 +757,13 @@
         {
           "channelId": "--_ds-collapse-header-default-disabled-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -773,13 +772,13 @@
         {
           "channelId": "--_ds-collapse-header-default-expanded-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -788,13 +787,13 @@
         {
           "channelId": "--_ds-collapse-header-default-expanded-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -803,13 +802,13 @@
         {
           "channelId": "--_ds-collapse-header-default-idle-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -818,13 +817,13 @@
         {
           "channelId": "--_ds-collapse-header-default-idle-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -833,13 +832,13 @@
         {
           "channelId": "--_ds-collapse-header-ghost-idle-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -848,13 +847,13 @@
         {
           "channelId": "--_ds-collapse-root-default-idle-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -863,13 +862,13 @@
         {
           "channelId": "--_ds-collapse-root-ghost-idle-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -886,7 +885,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Vocabulario tipografico gobernado (tabla pairing/packs): no es brazo compartido, es exclusion del control que lo absorbe": [
             "--ds-collapse-header-default-idle-font-weight"
@@ -913,7 +912,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -934,13 +933,13 @@
         {
           "channelId": "--_ds-collapse-content-default-idle-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -949,13 +948,13 @@
         {
           "channelId": "--_ds-collapse-content-default-idle-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -964,13 +963,13 @@
         {
           "channelId": "--_ds-collapse-header-default-idle-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -979,13 +978,13 @@
         {
           "channelId": "--_ds-collapse-header-default-idle-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1013,13 +1012,13 @@
         {
           "channelId": "--_ds-collapse-root-default-idle-border-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1028,13 +1027,13 @@
         {
           "channelId": "--_ds-collapse-root-ghost-idle-border-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1083,13 +1082,13 @@
         {
           "channelId": "--_ds-collapse-content-default-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1098,13 +1097,13 @@
         {
           "channelId": "--_ds-collapse-content-default-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1113,13 +1112,13 @@
         {
           "channelId": "--_ds-collapse-content-lg-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1128,13 +1127,13 @@
         {
           "channelId": "--_ds-collapse-content-lg-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1143,13 +1142,13 @@
         {
           "channelId": "--_ds-collapse-content-sm-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1158,13 +1157,13 @@
         {
           "channelId": "--_ds-collapse-content-sm-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1173,13 +1172,13 @@
         {
           "channelId": "--_ds-collapse-header-default-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1188,13 +1187,13 @@
         {
           "channelId": "--_ds-collapse-header-default-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1203,13 +1202,13 @@
         {
           "channelId": "--_ds-collapse-header-ghost-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1218,13 +1217,13 @@
         {
           "channelId": "--_ds-collapse-header-ghost-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1233,13 +1232,13 @@
         {
           "channelId": "--_ds-collapse-header-lg-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1248,13 +1247,13 @@
         {
           "channelId": "--_ds-collapse-header-lg-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1263,13 +1262,13 @@
         {
           "channelId": "--_ds-collapse-header-sm-idle-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1278,13 +1277,13 @@
         {
           "channelId": "--_ds-collapse-header-sm-idle-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1311,13 +1310,13 @@
         {
           "channelId": "--_ds-collapse-extra-margin-inline-start",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1345,13 +1344,13 @@
         {
           "channelId": "--_ds-collapse-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1360,13 +1359,13 @@
         {
           "channelId": "--_ds-collapse-transition-timing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1385,13 +1384,13 @@
         {
           "channelId": "--_ds-collapse-root-default-idle-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1400,13 +1399,13 @@
         {
           "channelId": "--_ds-collapse-root-ghost-idle-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1433,13 +1432,13 @@
         {
           "channelId": "--_ds-collapse-header-default-disabled-opacity",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1457,7 +1456,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1527,13 +1526,13 @@
         {
           "channelId": "--_ds-collapse-arrow-focus-ring-radius",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1542,13 +1541,13 @@
         {
           "channelId": "--_ds-collapse-header-focus-ring-radius",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1557,13 +1556,13 @@
         {
           "channelId": "--_ds-collapse-root-default-idle-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1572,13 +1571,13 @@
         {
           "channelId": "--_ds-collapse-root-default-idle-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/collapse/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/collapse"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/collapse/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1601,7 +1600,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1658,7 +1657,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1708,11 +1707,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

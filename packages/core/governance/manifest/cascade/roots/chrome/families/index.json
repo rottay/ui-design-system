@@ -3,6 +3,7 @@
   "rootId": "chrome.families",
   "tier": "pro",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-button-primary-bg",
     "emission": [
       {

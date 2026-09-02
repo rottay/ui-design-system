@@ -8,15 +8,15 @@
     "components": [
       "Tree"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Tree",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/tree",
     "publicComponents": [
       "Tree"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "511818eb81d260eb66c93ca68a8e7aed40782cf4191a4698487c4d359706378a"
+    "inventoryRowDigest": "b2ea0a7790542b571a1a6f8801554bf2f601231dc83a7473aa3696e853ae1452"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,26 +28,26 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Tree/Tree.stories.tsx",
-      "packages/core/src/ui/primitives/display/Tree/index.tsx",
-      "packages/core/src/ui/primitives/display/Tree/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Tree/runtime/tree-behavior/index.ts",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.filtered-keyboard-reach.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.modern-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.modern-paint-ownership.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.premium-ground.test.ts",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.rustic-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.set-semantics.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/tests/Tree.typeahead.test.tsx",
-      "packages/core/src/ui/primitives/display/Tree/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/Tree/compound/index.ts",
-      "packages/core/src/ui/primitives/display/Tree/compound/TreeNode/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css"
+      "packages/core/src/components/primitives/display/tree/tree.stories.tsx",
+      "packages/core/src/components/primitives/display/tree/index.tsx",
+      "packages/core/src/components/primitives/display/tree/contracts/index.ts",
+      "packages/core/src/components/primitives/display/tree/runtime/tree-behavior/index.ts",
+      "packages/core/src/components/primitives/display/tree/tests/tree.filtered-keyboard-reach.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.modern-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.modern-paint-ownership.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.premium-ground.test.ts",
+      "packages/core/src/components/primitives/display/tree/tests/tree.rustic-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.set-semantics.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.test.tsx",
+      "packages/core/src/components/primitives/display/tree/tests/tree.typeahead.test.tsx",
+      "packages/core/src/components/primitives/display/tree/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/tree/compound/index.ts",
+      "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css"
     ],
     "stableParts": [
       "tree-node-highlight",
@@ -88,12 +88,12 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The root is a declared tree widget: role=\"tree\" with aria-label, aria-multiselectable and a roving tabIndex at packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:1059-1063.",
-      "Each row carries the complete treeitem state contract: role, aria-selected, aria-expanded, aria-disabled, aria-checked, aria-level, aria-posinset, aria-setsize, aria-busy and tabIndex at packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:389-398.",
-      "Keyboard navigation is owned by the root: onKeyDown at packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:1062.",
-      "The switcher spacer and connectors are decorative: aria-hidden at packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:456.",
-      "Checkbox selection uses a real input with an accessible name and tri-state handling: type=\"checkbox\" at packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:464 with aria-label at :473 and indeterminate at :459-460.",
-      "Reduced-motion and forced-colors floors exist in the modern skin: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:352 and :46, :264."
+      "The root is a declared tree widget: role=\"tree\" with aria-label, aria-multiselectable and a roving tabIndex at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:1059-1063.",
+      "Each row carries the complete treeitem state contract: role, aria-selected, aria-expanded, aria-disabled, aria-checked, aria-level, aria-posinset, aria-setsize, aria-busy and tabIndex at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:389-398.",
+      "Keyboard navigation is owned by the root: onKeyDown at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:1062.",
+      "The switcher spacer and connectors are decorative: aria-hidden at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:456.",
+      "Checkbox selection uses a real input with an accessible name and tri-state handling: type=\"checkbox\" at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:464 with aria-label at :473 and indeterminate at :459-460.",
+      "Reduced-motion and forced-colors floors exist in the modern skin: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:352 and :46, :264."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -116,8 +116,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:96",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:63"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:96",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:63"
           ]
         },
         {
@@ -125,8 +125,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:138",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:384"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:138",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:384"
           ]
         },
         {
@@ -134,8 +134,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:322",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:373"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:322",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:373"
           ]
         },
         {
@@ -143,12 +143,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:330",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:341",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:351",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:362",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:267",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:284"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:330",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:341",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:351",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:362",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:267",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:284"
           ],
           "atSiteCount": 8
         },
@@ -157,8 +157,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:400",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:407"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:400",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:407"
           ]
         },
         {
@@ -166,7 +166,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:431"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:431"
           ]
         },
         {
@@ -174,8 +174,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:435",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:439"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:435",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:439"
           ]
         },
         {
@@ -183,7 +183,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:456"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:456"
           ]
         },
         {
@@ -191,8 +191,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:465",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:459"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:465",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:459"
           ]
         },
         {
@@ -200,8 +200,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:480",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:477"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:480",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:477"
           ]
         },
         {
@@ -209,8 +209,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:488",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:484"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:488",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:484"
           ]
         },
         {
@@ -218,8 +218,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:1056",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:944"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:1056",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:944"
           ]
         }
       ],
@@ -227,12 +227,12 @@
         {
           "token": "disabled",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:151",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:152",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:153",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:173"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:153",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:173"
           ],
           "atSiteCount": 10,
           "state": "disabled"
@@ -240,12 +240,12 @@
         {
           "token": "selected",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:156",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:157",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:161",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:162",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:173"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:162",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:173"
           ],
           "atSiteCount": 10,
           "state": "selected"
@@ -253,12 +253,12 @@
         {
           "token": "hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:173",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:174",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:74",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:75",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:76"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:74",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:75",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:76"
           ],
           "atSiteCount": 9,
           "state": "hover"
@@ -266,31 +266,31 @@
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:181",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:183"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:183"
           ],
           "state": "active"
         },
         {
           "token": "focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:215",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:216",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:217",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:218"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:217",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:218"
           ],
           "state": "focus-visible"
         },
         {
           "token": "expanded",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:248",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:249",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:250",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:86",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:87",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:88"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:248",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:250",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:86",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:88"
           ],
           "atSiteCount": 8,
           "state": "expanded"
@@ -298,41 +298,41 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:55",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:429",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:431",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:434"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:55",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:429",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:431",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:434"
           ],
           "state": "loading",
           "citationsUnverified": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:397"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:397"
           ],
           "anchorStatus": "verified"
         },
         {
           "token": "checked",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:393",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:403"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:393",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:403"
           ],
           "state": "checked"
         },
         {
           "token": "hidden",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:456"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:456"
           ],
           "state": "hidden"
         },
         {
           "token": "indeterminate",
           "at": [
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:459",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:460",
-            "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:468",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:454",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:455",
-            "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:464"
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:459",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:460",
+            "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:468",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:454",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:455",
+            "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:464"
           ],
           "state": "indeterminate"
         },
@@ -388,31 +388,31 @@
           {
             "token": "rtl",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:258",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:259",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:260"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:258",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:259",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:260"
             ]
           },
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:352",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:353",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:354",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:355",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:356",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:357"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:352",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:353",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:354",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:355",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:356",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:357"
             ]
           },
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:360",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:361",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:362",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:363",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:364",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:365"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:360",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:361",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:362",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:363",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:364",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:365"
             ],
             "atSiteCount": 10
           }
@@ -452,8 +452,8 @@
       },
       "scoutGaps": {
         "assessmentConfidenceGaps": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:279 themes [data-part='indicator'], a part Tree never emits; it belongs to packages/core/src/ui/primitives/foundation/loading-indicator/index.tsx composed at packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:431. See unresolved CROSS-FAMILY-PART-REACH-INDICATOR.",
-          "A tenant-gated second paint owner reads a no-fallback namespace at packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:355-366, attributed to the root and node parts by class rather than by data-part. See unresolved TENANT-BRIDGE-IS-A-SECOND-PAINT-OWNER."
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:279 themes [data-part='indicator'], a part Tree never emits; it belongs to packages/core/src/components/primitives/foundation/loading-indicator/index.tsx composed at packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:431. See unresolved CROSS-FAMILY-PART-REACH-INDICATOR.",
+          "A tenant-gated second paint owner reads a no-fallback namespace at packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:355-366, attributed to the root and node parts by class rather than by data-part. See unresolved TENANT-BRIDGE-IS-A-SECOND-PAINT-OWNER."
         ]
       },
       "propertyGroupCensusNote": {
@@ -528,7 +528,7 @@
         "variableCensus": [
           {
             "variable": "--ds-tree-indent",
-            "readAt": "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:272",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:272",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -540,7 +540,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "packages/core/src/ui/primitives/display/Tree/engines/modern/index.tsx:272",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/modern/index.tsx:272",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -552,7 +552,7 @@
           },
           {
             "variable": "--ds-tree-font-family",
-            "readAt": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:934",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:934",
             "fallback": "-apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -564,7 +564,7 @@
           },
           {
             "variable": "--ds-tree-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:935",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:935",
             "fallback": "14px",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -576,7 +576,7 @@
           },
           {
             "variable": "--ds-tree-line-height",
-            "readAt": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:936",
+            "readAt": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:936",
             "fallback": "1.5",
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -588,7 +588,7 @@
           },
           {
             "variable": "--ds-tree-node-opacity",
-            "readAt": "packages/core/src/ui/primitives/display/Tree/compound/TreeNode/index.tsx:62",
+            "readAt": "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx:62",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -600,7 +600,7 @@
           },
           {
             "variable": "--ds-tree-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:73",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -611,7 +611,7 @@
           },
           {
             "variable": "--ds-tree-line-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:79",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:79",
             "fallback": "var(--ds-color-border)",
             "landsOnProperty": "border-color",
             "propertyGroup": "color",
@@ -622,7 +622,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:79",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:79",
             "fallback": null,
             "landsOnProperty": "border-color",
             "propertyGroup": "color",
@@ -633,7 +633,7 @@
           },
           {
             "variable": "--ds-tree-line-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:82",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:82",
             "fallback": null,
             "landsOnProperty": "border-left-width",
             "propertyGroup": "border",
@@ -644,7 +644,7 @@
           },
           {
             "variable": "--ds-tree-line-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:85",
             "fallback": null,
             "landsOnProperty": "border-top-width",
             "propertyGroup": "border",
@@ -655,7 +655,7 @@
           },
           {
             "variable": "--ds-tree-drop-indicator-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:104",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -666,7 +666,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:104",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -677,7 +677,7 @@
           },
           {
             "variable": "--ds-motion-slow",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:105",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:105",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -688,7 +688,7 @@
           },
           {
             "variable": "--_ds-tree-row-padding-block",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:131",
             "fallback": "4px",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -699,7 +699,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:131",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -710,7 +710,7 @@
           },
           {
             "variable": "--_ds-tree-row-padding-inline",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:132",
             "fallback": "8px",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -721,7 +721,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:132",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -732,7 +732,7 @@
           },
           {
             "variable": "--ds-tree-node-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:134",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:134",
             "fallback": "var(--ds-radius-md)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -743,7 +743,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:134",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:134",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -754,7 +754,7 @@
           },
           {
             "variable": "--ds-tree-node-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:135",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:135",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -765,7 +765,7 @@
           },
           {
             "variable": "--ds-tree-node-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:136",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -776,7 +776,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:140",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:140",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -787,7 +787,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:140",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:140",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -798,7 +798,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:141",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:141",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -809,7 +809,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:141",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:141",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -820,7 +820,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:142",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:142",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -831,7 +831,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:142",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:142",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -842,7 +842,7 @@
           },
           {
             "variable": "--ds-tree-node-color-disabled",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:151",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:151",
             "fallback": "var(--ds-color-text-disabled)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -853,7 +853,7 @@
           },
           {
             "variable": "--ds-color-text-disabled",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:151",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:151",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -864,7 +864,7 @@
           },
           {
             "variable": "--ds-tree-disabled-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:153",
             "fallback": "0.5",
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -875,7 +875,7 @@
           },
           {
             "variable": "--ds-tree-node-bg-selected",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:157",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
             "fallback": "color-mix(in srgb, var(--ds-color-primary) 10%, transparent)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -886,7 +886,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:157",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:157",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -897,7 +897,7 @@
           },
           {
             "variable": "--ds-tree-node-color-selected",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:158",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -908,7 +908,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:158",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:158",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -919,7 +919,7 @@
           },
           {
             "variable": "--ds-tree-node-font-weight-selected",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:161",
             "fallback": "var(--ds-font-weight-medium)",
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -930,7 +930,7 @@
           },
           {
             "variable": "--ds-font-weight-medium",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:161",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -941,7 +941,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:165",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:165",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -952,7 +952,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:166",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:166",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -963,7 +963,7 @@
           },
           {
             "variable": "--ds-tree-node-bg-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:174",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:174",
             "fallback": "color-mix(in srgb, var(--ds-surface-inset) 50%, transparent)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -974,7 +974,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:174",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:174",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -985,7 +985,7 @@
           },
           {
             "variable": "--_ds-tree-row-bg-active",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:182",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:182",
             "fallback": "color-mix(in srgb, var(--ds-surface-inset) 75%, transparent)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -996,7 +996,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:182",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:182",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1007,7 +1007,7 @@
           },
           {
             "variable": "--_ds-tree-dragging-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:194",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:194",
             "fallback": "0.55",
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -1018,7 +1018,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:201",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:201",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1029,7 +1029,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:202",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:202",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1040,7 +1040,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:207",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:207",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1051,7 +1051,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:208",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:208",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1062,7 +1062,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:216",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
             "fallback": null,
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -1073,7 +1073,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:216",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -1084,7 +1084,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:216",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:216",
             "fallback": null,
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -1095,7 +1095,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:217",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:217",
             "fallback": null,
             "landsOnProperty": "outline-offset",
             "propertyGroup": "border",
@@ -1106,7 +1106,7 @@
           },
           {
             "variable": "--ds-tree-switcher-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:222",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:222",
             "fallback": null,
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -1117,7 +1117,7 @@
           },
           {
             "variable": "--ds-tree-switcher-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:223",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:223",
             "fallback": null,
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -1128,7 +1128,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:228",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:228",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1139,7 +1139,7 @@
           },
           {
             "variable": "--ds-tree-icon-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:233",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:233",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1150,7 +1150,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:233",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:233",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1161,7 +1161,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:244",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:244",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1172,7 +1172,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:244",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:244",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1183,7 +1183,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:245",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:245",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1194,7 +1194,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:245",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:245",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1205,7 +1205,7 @@
           },
           {
             "variable": "--ds-tree-loading-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:271",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:271",
             "fallback": "16px",
             "landsOnProperty": "inline-size",
             "propertyGroup": "size",
@@ -1216,7 +1216,7 @@
           },
           {
             "variable": "--ds-tree-loading-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:272",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:272",
             "fallback": "16px",
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -1227,7 +1227,7 @@
           },
           {
             "variable": "--ds-tree-loading-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:280",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:280",
             "fallback": "16px",
             "landsOnProperty": "inline-size",
             "propertyGroup": "size",
@@ -1238,7 +1238,7 @@
           },
           {
             "variable": "--ds-tree-loading-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:281",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:281",
             "fallback": "16px",
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -1249,7 +1249,7 @@
           },
           {
             "variable": "--ds-tree-switcher-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:284",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:284",
             "fallback": null,
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -1260,7 +1260,7 @@
           },
           {
             "variable": "--ds-tree-checkbox-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:291",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:291",
             "fallback": "16px",
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -1271,7 +1271,7 @@
           },
           {
             "variable": "--ds-tree-checkbox-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:292",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:292",
             "fallback": "16px",
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -1282,7 +1282,7 @@
           },
           {
             "variable": "--ds-tree-checkbox-margin",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:293",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:293",
             "fallback": null,
             "landsOnProperty": "margin-inline-end",
             "propertyGroup": "spacing",
@@ -1293,7 +1293,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:296",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:296",
             "fallback": null,
             "landsOnProperty": "accent-color",
             "propertyGroup": "color",
@@ -1304,7 +1304,7 @@
           },
           {
             "variable": "--ds-tree-icon-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:299",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:299",
             "fallback": null,
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -1315,7 +1315,7 @@
           },
           {
             "variable": "--ds-tree-icon-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:300",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:300",
             "fallback": null,
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -1326,7 +1326,7 @@
           },
           {
             "variable": "--ds-tree-icon-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:305",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:305",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1337,7 +1337,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:310",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:310",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1348,7 +1348,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:311",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:311",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1359,7 +1359,7 @@
           },
           {
             "variable": "--ds-tree-filtered-out-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:324",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:324",
             "fallback": "0.4",
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -1370,7 +1370,7 @@
           },
           {
             "variable": "--ds-tree-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:332",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:332",
             "fallback": "var(--ds-touch-target-min, 44px)",
             "landsOnProperty": "min-block-size",
             "propertyGroup": "size",
@@ -1381,7 +1381,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:332",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:332",
             "fallback": "44px",
             "landsOnProperty": "min-block-size",
             "propertyGroup": "size",
@@ -1392,7 +1392,7 @@
           },
           {
             "variable": "--ds-tree-switcher-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:344",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:344",
             "fallback": null,
             "landsOnProperty": "inset-block",
             "propertyGroup": "spacing",
@@ -1403,7 +1403,7 @@
           },
           {
             "variable": "--ds-tree-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:344",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:344",
             "fallback": "var(--ds-touch-target-min, 44px)",
             "landsOnProperty": "inset-block",
             "propertyGroup": "spacing",
@@ -1414,7 +1414,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:344",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:344",
             "fallback": "44px",
             "landsOnProperty": "inset-block",
             "propertyGroup": "spacing",
@@ -1425,7 +1425,7 @@
           },
           {
             "variable": "--ds-tree-switcher-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:345",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:345",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -1436,7 +1436,7 @@
           },
           {
             "variable": "--ds-tree-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:345",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:345",
             "fallback": "var(--ds-touch-target-min, 44px)",
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -1447,7 +1447,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:345",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:345",
             "fallback": "44px",
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -1458,7 +1458,7 @@
           },
           {
             "variable": "--ds-tree-line-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:40",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:40",
             "fallback": "var(--ds-color-border-primary)",
             "landsOnProperty": "border-left",
             "propertyGroup": "border",
@@ -1469,7 +1469,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:40",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:40",
             "fallback": null,
             "landsOnProperty": "border-left",
             "propertyGroup": "border",
@@ -1480,7 +1480,7 @@
           },
           {
             "variable": "--ds-tree-line-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:43",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:43",
             "fallback": "var(--ds-color-border-primary)",
             "landsOnProperty": "border-top",
             "propertyGroup": "border",
@@ -1491,7 +1491,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:43",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:43",
             "fallback": null,
             "landsOnProperty": "border-top",
             "propertyGroup": "border",
@@ -1502,7 +1502,7 @@
           },
           {
             "variable": "--ds-tree-drop-indicator-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:49",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1513,7 +1513,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:49",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1524,7 +1524,7 @@
           },
           {
             "variable": "--ds-tree-node-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:55",
             "fallback": "4px",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1535,7 +1535,7 @@
           },
           {
             "variable": "--ds-tree-node-selected-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:61",
             "fallback": "var(--ds-color-alpha-primary-10)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1546,7 +1546,7 @@
           },
           {
             "variable": "--ds-color-alpha-primary-10",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:61",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1557,7 +1557,7 @@
           },
           {
             "variable": "--ds-tree-node-selected-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:62",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:62",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1568,7 +1568,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:62",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:62",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1579,7 +1579,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:63",
             "fallback": "var(--ds-tree-node-selected-color)",
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1590,7 +1590,7 @@
           },
           {
             "variable": "--ds-tree-node-selected-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:63",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1601,7 +1601,7 @@
           },
           {
             "variable": "--ds-tree-drop-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:66",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:66",
             "fallback": "rgba(59, 130, 246, 0.05)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1612,7 +1612,7 @@
           },
           {
             "variable": "--ds-tree-drop-indicator-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:69",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:69",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1623,7 +1623,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:69",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:69",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1634,7 +1634,7 @@
           },
           {
             "variable": "--ds-tree-focus-ring-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:72",
             "fallback": "var(--ds-color-primary-200, rgba(59, 130, 246, 0.3))",
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1645,7 +1645,7 @@
           },
           {
             "variable": "--ds-color-primary-200",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:72",
             "fallback": "rgba(59, 130, 246, 0.3)",
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1656,7 +1656,7 @@
           },
           {
             "variable": "--ds-tree-node-hover-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:75",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:75",
             "fallback": "rgba(0, 0, 0, 0.04)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1667,7 +1667,7 @@
           },
           {
             "variable": "--ds-tree-checkbox-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:90",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "accent-color",
             "propertyGroup": "color",
@@ -1678,7 +1678,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:90",
             "fallback": null,
             "landsOnProperty": "accent-color",
             "propertyGroup": "color",
@@ -1689,7 +1689,7 @@
           },
           {
             "variable": "--ds-tree-highlight-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:93",
             "fallback": "#fef3c7",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1700,7 +1700,7 @@
           },
           {
             "variable": "--ds-tree-highlight-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:94",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:94",
             "fallback": "#92400e",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1711,7 +1711,7 @@
           },
           {
             "variable": "--ds-tree-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:356",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:356",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1722,7 +1722,7 @@
           },
           {
             "variable": "--ds-tree-node-padding",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:360",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:360",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -1733,7 +1733,7 @@
           },
           {
             "variable": "--ds-tree-node-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:361",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:361",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1744,7 +1744,7 @@
           },
           {
             "variable": "--ds-transition-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:362",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:362",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1755,7 +1755,7 @@
           },
           {
             "variable": "--ds-tree-node-bg-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:366",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:366",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1771,121 +1771,121 @@
           {
             "kind": "spacing",
             "literal": "2px",
-            "at": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:65",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:65",
             "declaration": "padding"
           },
           {
             "kind": "duration",
             "literal": "0.8s",
-            "at": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:88",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:88",
             "declaration": "animation"
           },
           {
             "kind": "duration",
             "literal": "0.15s",
-            "at": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:102",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:102",
             "declaration": "animation"
           },
           {
             "kind": "spacing",
             "literal": "4px",
-            "at": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:215",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:215",
             "declaration": "padding"
           },
           {
             "kind": "spacing",
             "literal": "8px",
-            "at": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:215",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:215",
             "declaration": "padding"
           },
           {
             "kind": "duration",
             "literal": "0.3s",
-            "at": "packages/core/src/ui/primitives/display/Tree/engines/rustic/index.tsx:234",
+            "at": "packages/core/src/components/primitives/display/tree/engines/rustic/index.tsx:234",
             "declaration": "transition"
           },
           {
             "kind": "spacing",
             "literal": "4px",
-            "at": "packages/core/src/ui/primitives/display/Tree/compound/TreeNode/index.tsx:61",
+            "at": "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx:61",
             "declaration": "padding"
           },
           {
             "kind": "spacing",
             "literal": "8px",
-            "at": "packages/core/src/ui/primitives/display/Tree/compound/TreeNode/index.tsx:61",
+            "at": "packages/core/src/components/primitives/display/tree/compound/tree-node/index.tsx:61",
             "declaration": "padding"
           },
           {
             "kind": "radius",
             "literal": "9999px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:103",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:103",
             "declaration": "border-radius"
           },
           {
             "kind": "spacing",
             "literal": "2px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:308",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:308",
             "declaration": "padding-inline"
           },
           {
             "kind": "radius",
             "literal": "2px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:309",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:309",
             "declaration": "border-radius"
           },
           {
             "kind": "shadow",
             "literal": "none",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:365",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:365",
             "declaration": "box-shadow"
           },
           {
             "kind": "shadow",
             "literal": "inset 0 0 0 2px Highlight",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css:376",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css:376",
             "declaration": "box-shadow"
           },
           {
             "kind": "radius",
             "literal": "1px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:50",
             "declaration": "border-radius"
           },
           {
             "kind": "color",
             "literal": "rgba(59, 130, 246, 0.05))",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:66",
             "declaration": "background-color"
           },
           {
             "kind": "color",
             "literal": "rgba(59, 130, 246, 0.3)))",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:72",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:72",
             "declaration": "box-shadow"
           },
           {
             "kind": "color",
             "literal": "rgba(0, 0, 0, 0.04))",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:75",
             "declaration": "background-color"
           },
           {
             "kind": "color",
             "literal": "#fef3c7",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:93",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:93",
             "declaration": "background-color"
           },
           {
             "kind": "color",
             "literal": "#92400e",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:94",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:94",
             "declaration": "color"
           },
           {
             "kind": "radius",
             "literal": "2px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css:95",
             "declaration": "border-radius"
           }
         ],
@@ -1916,13 +1916,13 @@
         {
           "channelId": "--_ds-tree-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1931,13 +1931,13 @@
         {
           "channelId": "--_ds-tree-node-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1946,13 +1946,13 @@
         {
           "channelId": "--_ds-tree-node-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1961,13 +1961,13 @@
         {
           "channelId": "--_ds-tree-node-bg-selected",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1976,13 +1976,13 @@
         {
           "channelId": "--_ds-tree-node-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1991,13 +1991,13 @@
         {
           "channelId": "--_ds-tree-node-color-selected",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2006,13 +2006,13 @@
         {
           "channelId": "--_ds-tree-node-color-disabled",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2021,13 +2021,13 @@
         {
           "channelId": "--_ds-tree-icon-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2036,13 +2036,13 @@
         {
           "channelId": "--_ds-tree-line-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2051,13 +2051,13 @@
         {
           "channelId": "--_ds-tree-drop-indicator-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2076,13 +2076,13 @@
         {
           "channelId": "--_ds-tree-node-font-weight-selected",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2159,13 +2159,13 @@
         {
           "channelId": "--_ds-tree-node-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2201,13 +2201,13 @@
         {
           "channelId": "--_ds-tree-checkbox-margin",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2216,13 +2216,13 @@
         {
           "channelId": "--_ds-tree-checkbox-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2231,13 +2231,13 @@
         {
           "channelId": "--_ds-tree-switcher-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2255,7 +2255,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2270,7 +2270,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Solo canales compartidos de motion; nada propio que cubrir. Opacidades NO cubiertas (effect): --ds-tree-disabled-opacity, --ds-tree-filtered-out-opacity"
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Solo canales compartidos de motion; nada propio que cubrir. Opacidades NO cubiertas (effect): --ds-tree-disabled-opacity, --ds-tree-filtered-out-opacity"
           }
         ],
         "reviewedFrom": "anatomy"
@@ -2314,13 +2314,13 @@
         {
           "channelId": "--_ds-tree-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2339,7 +2339,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2387,13 +2387,13 @@
         {
           "channelId": "--_ds-tree-line-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2416,7 +2416,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2472,7 +2472,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2500,7 +2500,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
         ]
       }
     },
@@ -2515,13 +2515,13 @@
         {
           "channelId": "--_ds-tree-icon-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/tree/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2530,13 +2530,13 @@
         {
           "channelId": "--_ds-tree-loading-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tree"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2555,11 +2555,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

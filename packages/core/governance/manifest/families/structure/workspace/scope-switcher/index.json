@@ -8,15 +8,15 @@
     "components": [
       "ScopeSwitcher"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/scope-switcher",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/scope-switcher",
     "publicComponents": [
       "ScopeSwitcher"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1138ac85d6c9101a83d8b7e16bbe5813db5682c5b16b8713f702ba1205300880"
+    "inventoryRowDigest": "5fba3bb0e79b947c751df9211122f073ce41be7e58005a9769d8de4342c07c6d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/workspace/scope-switcher",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+      "packages/core/src/components/structures/workspace/scope-switcher",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
     ],
     "stableParts": [
       "root",
@@ -44,8 +44,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:104]",
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:114, packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:115, packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:118]"
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:104]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:114, packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:115, packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:118]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -72,17 +72,17 @@
         {
           "part": "root",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/scope-switcher/index.tsx:79"
+          "anchor": "packages/core/src/components/structures/workspace/scope-switcher/index.tsx:79"
         },
         {
           "part": "switcher",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/scope-switcher/index.tsx:87"
+          "anchor": "packages/core/src/components/structures/workspace/scope-switcher/index.tsx:87"
         },
         {
           "part": "count-badge",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/scope-switcher/index.tsx:94"
+          "anchor": "packages/core/src/components/structures/workspace/scope-switcher/index.tsx:94"
         }
       ],
       "stateAnchors": [
@@ -94,8 +94,8 @@
           "token": "active=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:98",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:99"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:98",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:99"
           ],
           "state": "active"
         },
@@ -103,7 +103,7 @@
           "token": "data-active",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/scope-switcher/index.tsx:94"
+            "packages/core/src/components/structures/workspace/scope-switcher/index.tsx:94"
           ],
           "state": "active"
         }
@@ -113,24 +113,24 @@
           "token": "inline=false",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:63",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:114"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:63",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:114"
           ]
         },
         {
           "token": "inline=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:67",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:68"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:67",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:68"
           ]
         },
         {
           "token": "data-inline",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/scope-switcher/index.tsx:80"
+            "packages/core/src/components/structures/workspace/scope-switcher/index.tsx:80"
           ]
         }
       ],
@@ -140,16 +140,16 @@
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:114",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:115",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:118"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:114",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:115",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:118"
             ]
           },
           {
             "token": "@media(prefers-reduced-motion: reduce)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:104"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:104"
             ]
           }
         ],
@@ -158,7 +158,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css": {
             "rows": 35,
             "layer": "engine-agnostic skin"
           }
@@ -249,7 +249,7 @@
           {
             "variable": "--ds-spacing-2",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:52",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root']",
             "states": [],
             "landsOn": "padding-block",
@@ -262,15 +262,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-spacing-4",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:53",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:53",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root']",
             "states": [],
             "landsOn": "padding-inline",
@@ -283,15 +283,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-spacing-4",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:56",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:56",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root']",
             "states": [],
             "landsOn": "scroll-padding-inline",
@@ -304,15 +304,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--_ds-scope-switcher-overflow-fade",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:60",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:60",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root']",
             "states": [],
             "landsOn": "mask-image",
@@ -330,7 +330,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:63",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'][data-inline='false']",
             "states": [
               "inline=false"
@@ -346,16 +346,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'][data-inline='false']",
             "states": [
               "inline=false"
@@ -371,14 +371,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'][data-inline='false']",
             "states": [
               "inline=false"
@@ -393,8 +393,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -403,7 +403,7 @@
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'][data-inline='false']",
             "states": [
               "inline=false"
@@ -419,14 +419,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'][data-inline='false']",
             "states": [
               "inline=false"
@@ -441,8 +441,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -451,7 +451,7 @@
           {
             "variable": "--ds-spacing-1",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:81",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:81",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "margin-inline-start",
@@ -464,15 +464,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:78",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:78",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:85",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "background",
@@ -485,8 +485,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -495,7 +495,7 @@
           {
             "variable": "--ds-color-text-muted",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:86",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "color",
@@ -510,15 +510,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-font-size-2xs",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:87",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "font-size",
@@ -531,14 +531,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:87",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "font-size",
@@ -551,14 +551,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:93",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "transition",
@@ -571,16 +571,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:93",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "transition",
@@ -593,14 +593,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:93",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "transition",
@@ -613,16 +613,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:93",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge']",
             "states": [],
             "landsOn": "transition",
@@ -635,14 +635,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-primary",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:98",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:98",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true']",
             "states": [
               "active=true"
@@ -657,17 +657,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "count-badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:99",
             "selector": ".ds-structure.ds-scope-switcher[data-part='root'] [data-part='count-badge'][data-active='true']",
             "states": [
               "active=true"
@@ -682,10 +682,10 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           }
@@ -702,7 +702,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:52",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:52",
                   "part": "root",
                   "landsOn": "padding-block",
                   "fallbackPresent": true,
@@ -712,7 +712,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             },
             {
               "variable": "--ds-spacing-4",
@@ -722,7 +722,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:53",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:53",
                   "part": "root",
                   "landsOn": "padding-inline",
                   "fallbackPresent": true,
@@ -731,7 +731,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:56",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:56",
                   "part": "root",
                   "landsOn": "scroll-padding-inline",
                   "fallbackPresent": true,
@@ -741,7 +741,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             },
             {
               "variable": "--_ds-scope-switcher-overflow-fade",
@@ -751,7 +751,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:60",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:60",
                   "part": "root",
                   "landsOn": "mask-image",
                   "fallbackPresent": true,
@@ -771,7 +771,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:63",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:63",
                   "part": "root",
                   "landsOn": "border-bottom",
                   "fallbackPresent": false,
@@ -791,7 +791,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -800,7 +800,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -810,7 +810,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             },
             {
               "variable": "--ds-color-bg-primary",
@@ -821,7 +821,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -830,7 +830,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:64",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:64",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -839,7 +839,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:85",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:85",
                   "part": "count-badge",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -849,7 +849,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:137"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:137"
             },
             {
               "variable": "--ds-spacing-1",
@@ -859,7 +859,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:81",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:81",
                   "part": "count-badge",
                   "landsOn": "margin-inline-start",
                   "fallbackPresent": true,
@@ -869,7 +869,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684"
             },
             {
               "variable": "--ds-color-text-muted",
@@ -879,7 +879,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:86",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:86",
                   "part": "count-badge",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -889,7 +889,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:145"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:145"
             },
             {
               "variable": "--ds-font-size-2xs",
@@ -899,7 +899,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:87",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:87",
                   "part": "count-badge",
                   "landsOn": "font-size",
                   "fallbackPresent": true,
@@ -909,7 +909,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             },
             {
               "variable": "--ds-font-size-xs",
@@ -919,7 +919,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:87",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:87",
                   "part": "count-badge",
                   "landsOn": "font-size",
                   "fallbackPresent": false,
@@ -929,7 +929,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             },
             {
               "variable": "--ds-motion-fast",
@@ -939,7 +939,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:94",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:94",
                   "part": "count-badge",
                   "landsOn": "transition",
                   "fallbackPresent": false,
@@ -948,7 +948,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:95",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:95",
                   "part": "count-badge",
                   "landsOn": "transition",
                   "fallbackPresent": false,
@@ -958,7 +958,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             },
             {
               "variable": "--ds-motion-ease-out",
@@ -968,7 +968,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:94",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:94",
                   "part": "count-badge",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -977,7 +977,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:95",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:95",
                   "part": "count-badge",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -987,7 +987,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             },
             {
               "variable": "--ds-color-primary",
@@ -997,7 +997,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:98",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:98",
                   "part": "count-badge",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1006,7 +1006,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:99",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:99",
                   "part": "count-badge",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -1016,7 +1016,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156"
             }
           ]
         },
@@ -1024,51 +1024,51 @@
         "inertFallbackChainSample": [
           {
             "name": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:52",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:52",
             "fallback": "8px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
           },
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:53",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:53",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:56",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:56",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:81",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:81",
             "fallback": "4px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684"
           },
           {
             "name": "--ds-font-size-2xs",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:87",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:87",
             "fallback": "var(--ds-font-size-xs)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:94",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:94",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css:95",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css:95",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           }
         ],
         "inertFallbackChainSites": 7,
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
             "line": 63,
             "property": "border-bottom",
             "literal": "1px",
@@ -1076,7 +1076,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
             "line": 79,
             "property": "min-inline-size",
             "literal": "18px",
@@ -1084,7 +1084,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
             "line": 80,
             "property": "block-size",
             "literal": "18px",
@@ -1092,7 +1092,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
             "line": 83,
             "property": "padding-inline",
             "literal": "6px",
@@ -1100,7 +1100,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
             "line": 84,
             "property": "border-radius",
             "literal": "999px",
@@ -1108,7 +1108,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
             "line": 118,
             "property": "outline",
             "literal": "1px",
@@ -1118,7 +1118,7 @@
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css": {
               "rows": 35,
               "layer": "engine-agnostic skin"
             }
@@ -1147,7 +1147,7 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/workspace/scope-switcher/index.tsx": {
+            "packages/core/src/components/structures/workspace/scope-switcher/index.tsx": {
               "classNameOccurrences": 1,
               "dataPartOccurrences": 3,
               "styleAttributeOccurrences": 0,
@@ -1194,13 +1194,13 @@
         {
           "channelId": "--_ds-scope-switcher-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1218,7 +1218,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1243,7 +1243,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1268,7 +1268,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -1302,13 +1302,13 @@
         {
           "channelId": "--_ds-scope-switcher-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1328,13 +1328,13 @@
         {
           "channelId": "--_ds-scope-switcher-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1354,13 +1354,13 @@
         {
           "channelId": "--_ds-scope-switcher-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1380,13 +1380,13 @@
         {
           "channelId": "--_ds-scope-switcher-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1414,13 +1414,13 @@
         {
           "channelId": "--_ds-scope-switcher-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1439,7 +1439,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo plano; lo flotante usa sockets overlay",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1469,7 +1469,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1500,13 +1500,13 @@
         {
           "channelId": "--_ds-scope-switcher-panel-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1526,13 +1526,13 @@
         {
           "channelId": "--_ds-scope-switcher-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1556,7 +1556,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1612,7 +1612,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1639,13 +1639,13 @@
         {
           "channelId": "--_ds-scope-switcher-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/scope-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scope-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1665,11 +1665,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

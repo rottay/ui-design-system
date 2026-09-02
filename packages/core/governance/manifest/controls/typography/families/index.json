@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Explicit font stacks",
   "valueType": "font-stack",
@@ -34,7 +34,7 @@
   "dependsOn": [],
   "compatibility": "additive; Arabic-safe tail is a compiler invariant either way",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/foundation/themes/default.css",
+    "consumer": "src/foundation/tokens/css/foundation/themes/default/index.css",
     "symbol": "--ds-font-family-mono"
   },
   "calibration": {
@@ -78,16 +78,11 @@
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
-      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
+      "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-base-quoted.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-base-unquoted.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-heading-quoted.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-heading-unquoted.json.receipt.json"
-    ],
-    "supersededEvidence": "SUPERSEDED_BY_LIVE_FENCE (DT adjudication, F4B-16 close, 2026-08-25): compound-editorial-plus-explicit-heading.json.receipt.json retired from staticDbParityEvidenceIds above. The producer ad-hoc (/tmp/f4b14-compound-case.mjs) no longer exists -- the receipt's freshness is not re-verifiable by construction. The law it measured (explicit family wins in the compound case, both halves, both doors) is cerca viva by TWO live fences: capability-propagation/index.test.ts:573 (\"does not let one capability move another capability's exclusive channel\", green in CI, same BASE_DOC shape :141-146) AND e2-composed-pairing.test.ts (9 drills, both doors -- STATIC :58 and DB :74 -- covering the exact composed shape, including (iii) F4B-11 preserved and the negative \"a pairing with NO explicit family still lowers the pairing\"). The measurement was verified twice in F4B-14 (Fable ACCEPT postaudit). The artifact and its receipt stay on disk as historical record; evidence is not deleted, only re-classified.",
+    "staticDbParityEvidenceIds": [],
+    "supersededEvidence": "SUPERSEDED_BY_LIVE_FENCE (DT adjudication, F4B-16 close, 2026-08-25): compound-editorial-plus-explicit-heading.json.receipt.json retired from staticDbParityEvidenceIds above. The producer ad-hoc (/tmp/f4b14-compound-case.mjs) no longer exists -- the receipt's freshness is not re-verifiable by construction. The law it measured (explicit family wins in the compound case, both halves, both doors) is cerca viva by TWO live fences: capability-propagation/index.test.ts:573 (\"does not let one capability move another capability's exclusive channel\", green in CI, same BASE_DOC shape :141-146) AND e2-composed-pairing.test.ts (9 drills, both doors -- STATIC :58 and DB :74 -- covering the exact composed shape, including (iii) F4B-11 preserved and the negative \"a pairing with NO explicit family still lowers the pairing\"). The measurement was verified twice in F4B-14 (independent audit ACCEPT postaudit). The artifact and its receipt stay on disk as historical record; evidence is not deleted, only re-classified.",
     "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
@@ -96,7 +91,7 @@
       "motion remains fixed"
     ],
     "sharedChannelPrecedence": "DT ADJUDICATION (F4B-14), NOW MEASURED TRUE ON BOTH THE ISOLATED AND THE COMPOUND CASE (E-2 landed, F4B-14 close). typography.pairing and typography.families declare the SAME 2 primary channels (--ds-font-family-base, --ds-font-family-heading), and the documented law (TenantAppearanceGeneral's own source comment, themes/index.ts:3166-3168: 'Compiler-owned font pairing preset applied before the free-form families; explicit fontFamilyBase/Heading always win') now holds in BOTH shapes: (a) ISOLATED -- no typePairing in the document, explicit family writes the channel directly (this control's own 12 receipted stops, staticDbParityEvidenceIds above). (b) COMPOUND -- typePairing AND an explicit family authored in the SAME document, exactly capability-propagation's own BASE_DOC shape (index.test.ts:141-146). Before E-2 this was FALSE AS WRITTEN (measured this packet, pre-fix: pairing's expansion silently won, an explicit fontFamilyHeading mutation produced ZERO channel movement) -- the real, measured cause of capability-propagation's `does not let one capability move another capability's exclusive channel` (index.test.ts:573), now GREEN. E-2 (tenantPostureFloors re-projects the tenant's own explicit family LAST, after the pairing expansion already ran -- brand-theme/index.ts + tenant-theme/index.ts) fixed the compound case without touching the isolated one (re-verified: isolated stops still 12/12 pass=true post-E-2-rebuild). Re-measured directly this packet, both doors, all 3 verticals, byte-exact to the literal WITH its Arabic-safe fallback tail (`'Zilla Slab', Georgia, \"Noto Sans Arabic\", serif`, matching the wrapper the body uses, not the raw string) -- receipted as `compound-editorial-plus-explicit-heading.json.receipt.json`, staticDbParityEvidenceIds above. families is the explicit dial; pairing is the preset that fills whatever families leaves undeclared -- one final writer per compile with a defined precedence, now true in every authored shape measured.",
-    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "catalog": [
       "editorial-display",
       "editorial-text",
@@ -105,7 +100,7 @@
       "geometric-display",
       "plex-mono"
     ],
-    "catalogLaw": "catalogo en calibration, NO en enumValues: domain se regenera desde el registro (scripts/foundation/tokens/manifest/generation/index.mjs:201-236), que hoy no declara enumValues para este control; y el kind derivado saltaria a `closed-enum` (generator.mjs:186), que seria FALSO aqui. Copia literal de TENANT_THEME_FONT_PACK_IDS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:473-480). ALCANCE: no son stacks completos ni el dominio total del control. El valor autorado sigue siendo una lista font-family libre; lo CERRADO es el allowlist de packs code-owned que esa lista puede referenciar como `var(--ds-font-pack-<id>)`, y cualquier otro `var()` o fallback queda rechazado por isSafeFontFamily (packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:605-631, allowlist en :625). Los ids llevan sufijo de rol porque un slot var() carga UNA lista de familias: un pack que cambia display y body son dos variables (misma fuente, :467-472).",
+    "catalogLaw": "catalogo en calibration, NO en enumValues: domain se regenera desde el registro (scripts/generate/tokens/manifest/generation/index.mjs:201-236), que hoy no declara enumValues para este control; y el kind derivado saltaria a `closed-enum` (generator.mjs:186), que seria FALSO aqui. Copia literal de TENANT_THEME_FONT_PACK_IDS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:473-480). ALCANCE: no son stacks completos ni el dominio total del control. El valor autorado sigue siendo una lista font-family libre; lo CERRADO es el allowlist de packs code-owned que esa lista puede referenciar como `var(--ds-font-pack-<id>)`, y cualquier otro `var()` o fallback queda rechazado por isSafeFontFamily (packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts:605-631, allowlist en :625). Los ids llevan sufijo de rol porque un slot var() carga UNA lista de familias: un pack que cambia display y body son dos variables (misma fuente, :467-472).",
     "channels": [
       "--ds-font-family-base",
       "--ds-font-family-heading",

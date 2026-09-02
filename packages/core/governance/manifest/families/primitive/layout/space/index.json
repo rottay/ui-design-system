@@ -8,15 +8,15 @@
     "components": [
       "Space"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/layout/Space",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/layout/space",
     "publicComponents": [
       "Space"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "6be16c2b1f923a5ed82b7c4a1d4e7b2cba06f0ffc522cbeae93d6b593846b9eb"
+    "inventoryRowDigest": "1572f8deeef43dfc2af5fd64c9fa8e34a49df6acbb030feba7d401935ea766c6"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -29,13 +29,13 @@
     "assessmentState": "SOURCE_BOUND",
     "partCensusCompleteness": "MODERN_ROOT_AND_SEPARATOR_BOUND_FRAGMENT_FLATTENING_REQUIRES_BROWSER_PROOF",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Space/index.ts",
-      "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Space/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/layout/Space/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/space.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      "packages/core/src/components/primitives/layout/space/index.ts",
+      "packages/core/src/components/primitives/layout/space/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/space/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/layout/space/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/space/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
     ],
     "stableParts": [
       "root",
@@ -241,8 +241,8 @@
         "separator"
       ],
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "DIFF_PALETTE_STOPS_AND_PROVE_ENGINE_ROOT_AND_WRAPPER_PAINT_INVARIANCE_SEPARATE_FROM_SPLIT_CONTENT",
@@ -264,14 +264,14 @@
       "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE: Space owns inline sequence geometry, not fonts; baseline alignment must survive each pairing.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts",
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_NO_ROOT_FONT_BINDING_AND_STRESS_BASELINE_AND_WRAP_WITH_EACH_PAIRING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -288,13 +288,13 @@
       "unknownReason": "DESCENDANT_AND_NEGATIVE_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE: family stacks inherit into child content but Space does not own text presentation.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_GAP_SEPARATOR_AND_MAX_INLINE_SIZE_WITH_LONG_CONTENT_ACROSS_FONT_STACKS",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -311,8 +311,8 @@
       "unknownReason": "LARGE_TEXT_STRESS_AND_NEGATIVE_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE_WITH_DESCENDANT_STRESS: scale changes child metrics; gap, separator count and source order must remain stable.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "stressCases": [
         "200-percent-text",
@@ -325,7 +325,7 @@
       "nextAction": "RUN_LARGE_TEXT_AND_LONG_TOKEN_GEOMETRY_PROBE_FOR_BOTH_DIRECTIONS_WRAP_AND_SPLIT",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -342,7 +342,7 @@
       "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Space root and separator wrapper own no radius or clipping surface.",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_ROOT_AND_SEPARATOR_RADIUS_REMAIN_UNOWNED_ACROSS_STOPS",
@@ -364,7 +364,7 @@
       "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Space owns no button anatomy or silhouette.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts"
       ],
       "evidenceIds": [],
       "nextAction": "NEGATIVE_CENSUS_BUTTON_CHANNELS_AND_IDENTICAL_SPACE_GEOMETRY",
@@ -382,7 +382,7 @@
     {
       "controlId": "density.mode",
       "disposition": "UNKNOWN",
-      "verificationState": "COMPUTED_VERIFIED",
+      "verificationState": "IMPLEMENTED",
       "unknownReason": "SIGHTED_ACCEPTANCE_PENDING. The computed evidence exists (see evidenceIds): both ingress doors on one scene, three verticals x two stops, both themes, all six harness-live with ingressEquivalence holding and restore exact. disposition stays UNKNOWN because SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_SIZE: six canonical and legacy preset spellings multiply the instance channel by --ds-density-effective-scale; numeric and tuple sizes stay exact.",
       "outputBindings": [
@@ -399,23 +399,16 @@
         "row-gap"
       ],
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts#SPACE_SIZE_MAP",
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts#SPACE_SIZE_MAP",
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "negativeControls": [
         "numeric and tuple size remain exact",
         "separator count direction wrap alignment and touch ownership remain unchanged"
       ],
-      "evidenceIds": [
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/rottay-compact.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/bithire-compact.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/evnto-compact.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/rottay-spacious.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/bithire-spacious.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/density-mode/computed-static-db/evnto-spacious.json.receipt.json"
-      ],
-      "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. The preset-size axis is proven at both stops on all three verticals through both doors; the legacy spellings and the separator part are inventoried, not proven (see unmeasuredScope on the control).",
+      "evidenceIds": [],
+      "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
       "targetBinding": {
         "uncoveredByDesign": {
           "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
@@ -435,13 +428,13 @@
         {
           "channelId": "--_ds-space-small-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/space.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/space/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/space"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -452,7 +445,7 @@
     {
       "controlId": "spacing.rhythm",
       "disposition": "UNKNOWN",
-      "verificationState": "COMPUTED_VERIFIED",
+      "verificationState": "IMPLEMENTED",
       "unknownReason": "DISPOSITION_SHAPE_AND_SIGHTED_ACCEPTANCE_PENDING. The computed evidence this row was waiting for now exists (see evidenceIds): both ingress doors measured on one scene, preset gap x0.85/x1.2 exact and monotonic, numeric gap unmoved, negative controls held, restore exact. disposition stays UNKNOWN for two reasons that are NOT missing measurement: the schema dispositionLaw for APPLICABLE requires separate staticSourceBindings/dbSourceBindings, which this cell shape does not carry (its sourceBindings is a flat array), and SIGHTED_ACCEPTED is not claimable from a computed run.",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_FOR_PRESET_SIZE: sm/md/lg and small/middle/large multiply by tight=0.85 normal=1 airy=1.2 after density. Numeric and [horizontal,vertical] tuple sizes are exact and unsafe values normalize independently to 0px.",
       "axisDispositions": [
@@ -492,9 +485,9 @@
         "row-gap"
       ],
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts#SPACE_SIZE_MAP",
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx#safeGap",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts#SPACE_SIZE_MAP",
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx#safeGap",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
         "packages/core/governance/manifest/controls/spacing/rhythm/index.json"
       ],
       "negativeControls": [
@@ -532,11 +525,8 @@
         "Switching preset to numeric, tuple or unset replaces --ds-space-instance-gap without stale preset scaling.",
         "Canonical and legacy aliases must restore to identical computed values and preserve caller-authored style precedence."
       ],
-      "evidenceIds": [
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/space-tight.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/space-airy.json.receipt.json"
-      ],
-      "nextAction": "RESHAPE_SOURCE_BINDINGS_TO_SATISFY_DISPOSITION_LAW_THEN_OBTAIN_SIGHTED_ACCEPTANCE. The 0.85/1/1.2 computed proof for the scalar preset axis is DONE and receipted; the responsive-preset axis is not covered by these fixtures and remains unmeasured.",
+      "evidenceIds": [],
+      "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "reasons": [
@@ -556,14 +546,14 @@
         {
           "channelId": "--ds-space-instance-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/layout/space"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -572,14 +562,14 @@
         {
           "channelId": "--ds-rhythm-effective-scale",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/space"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -605,9 +595,9 @@
         "transition-timing-function"
       ],
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
         "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
-        "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css"
+        "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css"
       ],
       "negativeControls": [
         "prefers-reduced-motion sets Space transition to none",
@@ -629,13 +619,13 @@
         {
           "channelId": "--_ds-space-motion-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/space"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -644,13 +634,13 @@
         {
           "channelId": "--_ds-space-motion-easing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/space"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -665,7 +655,7 @@
       "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Space is a transparent inline layout root without shadow ownership.",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_ROOT_AND_SEPARATOR_SHADOW_BACKGROUND_AND_BORDER_GEOMETRY_ARE_UNCHANGED",
@@ -687,14 +677,14 @@
       "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Space owns no blur, texture, gradient or glass effect.",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "NEGATIVE_CENSUS_EFFECT_CHANNELS_AND_COMPUTED_PAINT",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
         "reviewedFrom": "anatomy",
         "reasons": [
           {
@@ -711,14 +701,14 @@
       "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: generic Space has no sidebar semantic or sidebar color consumer.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_SIDEBAR_TONE_CANNOT_SELECT_OR_PAINT_GENERIC_SPACE",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -735,8 +725,8 @@
       "unknownReason": "COMPOSED_PROFILE_DIFFERENTIAL_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE_EXCEPT_THROUGH_GOVERNED_SPACING_OR_MOTION_AXES: Space reads no experience-profile output directly.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "DIFF_EACH_PROFILE_AND_ATTRIBUTE_ANY_DELTA_TO_SPACING_MOTION_OR_ANOTHER_GOVERNED_AXIS",
@@ -758,7 +748,7 @@
       "unknownReason": "NEGATIVE_COMPUTED_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: no button, table or modal chrome channel is consumed by generic Space.",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "NEGATIVE_CENSUS_CHROME_FAMILY_CHANNELS",
@@ -780,7 +770,7 @@
       "unknownReason": "ROOT_ATTRIBUTE_NEGATIVE_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: data-anatomy-layout targets shells and headers, not Space root or separator.",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_LAYOUT_ANATOMY_ATTRIBUTE_HAS_NO_SPACE_SELECTOR_OR_COMPUTED_DELTA",
@@ -802,8 +792,8 @@
       "unknownReason": "ALLOWLIST_MEMBERSHIP_AND_EXACT_RESTORE_PROOF_MISSING",
       "applicabilityHypothesis": "APPLICABLE_CANDIDATE_ONLY_FOR_ALLOWLISTED_LAYOUT_CHANNELS: preset-size and motion overrides may reach Space; numeric geometry and content remain instance-owned.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts#SPACE_SIZE_MAP",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts#SPACE_SIZE_MAP",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "negativeControls": [
         "cannot override direction wrap align split content order or numeric and tuple size",
@@ -819,7 +809,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -829,8 +819,8 @@
       "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE: Space exposes no recipe selection or recipe-profile consumer.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts",
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_RECIPE_PROFILE_PRESERVES_IDENTICAL_ROOT_SEPARATOR_AND_SEQUENCE",
@@ -852,7 +842,7 @@
       "unknownReason": "COMPOSED_AXIS_NEGATIVE_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE: expressive type, edge and material outputs are not directly consumed by Space.",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
       ],
       "evidenceIds": [],
       "nextAction": "DIFF_EXPRESSIVE_AXES_AND_PROVE_NO_DIRECT_SPACE_SELECTOR_OR_PAINT_BINDING",
@@ -885,7 +875,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -913,7 +903,7 @@
       "unknownReason": "NEGATIVE_BINDING_PROOF_MISSING",
       "applicabilityHypothesis": "NOT_APPLICABLE_CANDIDATE: Space renders no owned icon and does not choose descendant glyph policy.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_ICON_PROFILE_CHANGES_DESCENDANT_OR_SPLIT_CONTENT_ONLY",
@@ -935,8 +925,8 @@
       "unknownReason": "CONTROL_TO_FAMILY_NEGATIVE_PROOF_MISSING",
       "applicabilityHypothesis": "INVARIANT_CANDIDATE: Space has no ResponsiveValue API and does not consume WidgetBoard responsive posture.",
       "sourceBindings": [
-        "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
-        "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx"
+        "packages/core/src/components/primitives/layout/space/contracts/index.ts",
+        "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx"
       ],
       "evidenceIds": [],
       "nextAction": "PROVE_RESPONSIVE_POSTURE_CONTROL_DOES_NOT_CHANGE_SPACE_DIRECTION_WRAP_SIZE_OR_ALIGNMENT",
@@ -944,11 +934,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],
@@ -956,9 +946,9 @@
   "recipeAnatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      "packages/core/src/components/primitives/layout/space/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
     ],
     "groupBindings": [],
     "variants": [],
@@ -973,8 +963,8 @@
   "instanceApi": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Space/contracts/index.ts#SpaceProps",
-      "packages/core/src/ui/primitives/layout/Space/index.ts"
+      "packages/core/src/components/primitives/layout/space/contracts/index.ts#SpaceProps",
+      "packages/core/src/components/primitives/layout/space/index.ts"
     ],
     "contractSymbol": "SpaceProps",
     "props": [
@@ -1008,8 +998,8 @@
   "hostAdaptation": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
     ],
     "contexts": [
       "standalone-page",
@@ -1029,9 +1019,9 @@
       "A narrow host may wrap but cannot select a separate host-width size or direction posture through current API."
     ],
     "sourceTests": [
-      "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-contract.test.tsx",
-      "packages/core/src/ui/primitives/layout/Space/tests/Space.modern-fragment-children.test.tsx",
-      "packages/core/src/ui/primitives/layout/Space/tests/Space.test.tsx"
+      "packages/core/src/components/primitives/layout/space/tests/Space.modern-contract.test.tsx",
+      "packages/core/src/components/primitives/layout/space/tests/Space.modern-fragment-children.test.tsx",
+      "packages/core/src/components/primitives/layout/space/tests/Space.test.tsx"
     ],
     "evidenceIds": [],
     "nextAction": "BROWSER_PROVE_PAGE_EMBED_NARROW_HOST_RTL_WRAP_BASELINE_LARGE_TEXT_AND_STYLE_PRECEDENCE"
@@ -1039,8 +1029,8 @@
   "statesMotion": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
     ],
     "states": [
       "default",
@@ -1066,9 +1056,9 @@
   "invariants": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Space/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Space/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      "packages/core/src/components/primitives/layout/space/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/space/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
     ],
     "entries": [
       "One stable root owns inline sequence geometry; separators are decorative wrappers.",

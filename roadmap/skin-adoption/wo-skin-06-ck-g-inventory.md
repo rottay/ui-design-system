@@ -1,19 +1,19 @@
 # WO-SKIN-06 CK-G navigation-pattern paint inventory (read-only)
 
-All paths relative to `packages/core/src/ui/patterns/navigation/`. Same
+All paths relative to `packages/core/src/components/patterns/navigation/`. Same
 channel scope and classification legend as the WO-SKIN-04/wo-skin-06-triage
 precedents: a "site" is an object-literal style key named `background*`,
 `border*`, `outline*`, `color`, `boxShadow`, `textShadow`, `fill`, `stroke`,
 `accentColor`, `filter`, `backdropFilter`, `WebkitBackdropFilter`, or
 `transform`, or an imperative `.style.<paint> =` / `.style.setProperty(...)`
-write (`packages/core/scripts/tooling/libraries/inline-paint-counter.mjs`, the single source
+write (`packages/core/scripts/libraries/inline-paint-counter.mjs`, the single source
 of truth). **STATIC** (author-time constant), **STATE-SELECTED** (a
 ternary/switch over static leaves, keyed by React state or a prop — becomes a
 CSS rule on a pseudo-class or `data-*`), **RUNTIME** (computed at render time,
 must stay inline), **HATCH** (a runtime value that reaches the paint channel
 but can be handed to CSS via a `--ds-*` custom property, rule stays in the
 skin). Site counts below are machine-verified against
-`node scripts/infrastructure/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/navigation`,
+`node scripts/check/engine-token-audit.mjs | grep fleet.inlinePaint.runtime/patterns/navigation`,
 which reproduces the checkpoint's total exactly: **279 sites, 10 files** (the 5
 `classic.tsx` engines wrap Ant Design directly — `Modal`, `Dropdown`,
 `Popover`, `Avatar`/`Badge` — and carry 0 counted sites each; not detailed
@@ -199,7 +199,7 @@ a second object key named `color` on the same line. **This inflates
 `environment-toggle/engines/rustic/index.tsx`'s reported count by exactly 2** (line
 100 and line 115): the file reports 50, but only **48 are real paint keys**.
 Verified by direct line-level replay of the counter's exact algorithm
-(`scripts/tooling/libraries/inline-paint-counter.mjs`), not by inspection alone. This
+(`scripts/libraries/inline-paint-counter.mjs`), not by inspection alone. This
 specific shape — a local variable/parameter named exactly `color`,
 `background`, `border`, etc., used as a ternary's static-leaf VALUE — is a
 new blind-spot class distinct from the seven already catalogued in the

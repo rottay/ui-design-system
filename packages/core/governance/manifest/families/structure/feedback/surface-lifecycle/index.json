@@ -13,8 +13,8 @@
       "SurfaceOfflineBanner",
       "SurfaceErrorBoundary"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/feedback/surface-lifecycle",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/feedback/surface-lifecycle",
     "publicComponents": [
       "SurfaceLoadingSkeleton",
       "SurfaceEmptyState",
@@ -26,7 +26,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2012c91f5122608e5e164c8c94420a6e3ba38a73bacaecce185c8d6cae66d1bd"
+    "inventoryRowDigest": "ca629cf418b617383da56e7538533de6ffe6654129214d3771969bb8fd645cc4"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -38,8 +38,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/feedback/surface-lifecycle",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+      "packages/core/src/components/structures/feedback/surface-lifecycle",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
     ],
     "stableParts": [
       "root",
@@ -57,7 +57,7 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the family stamps role='alert' [at packages/core/src/ui/structures/feedback/surface-lifecycle/error-boundary/index.tsx:101]"
+      "the family stamps role='alert' [at packages/core/src/components/structures/feedback/surface-lifecycle/error-boundary/index.tsx:101]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -86,10 +86,10 @@
           "anchor": "root-class-stamp",
           "at": [],
           "citationsUnverified": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:167",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:93",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:95"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:167",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:95"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -99,11 +99,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:278",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:54",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:55",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:56"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:278",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:54",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:55",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:56"
           ]
         },
         {
@@ -111,7 +111,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:231"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:231"
           ]
         },
         {
@@ -119,9 +119,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:279",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:65",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:66"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:279",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:65",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:66"
           ]
         },
         {
@@ -129,7 +129,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:106"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:106"
           ]
         },
         {
@@ -137,8 +137,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:232",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:46"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:46"
           ]
         }
       ],
@@ -148,7 +148,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:236"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:236"
           ]
         },
         {
@@ -156,7 +156,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:230"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:230"
           ]
         },
         {
@@ -164,7 +164,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:242"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:242"
           ]
         },
         {
@@ -172,9 +172,9 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:108",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:35",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:36"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:108",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:35",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:36"
           ]
         },
         {
@@ -182,9 +182,9 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:115",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:40",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:41"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:115",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:41"
           ]
         },
         {
@@ -192,7 +192,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:124"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:124"
           ]
         },
         {
@@ -200,7 +200,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:281"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:281"
           ]
         }
       ],
@@ -209,7 +209,7 @@
           "token": "data-refreshing",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx:278"
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx:278"
           ],
           "state": "refreshing"
         }
@@ -219,20 +219,20 @@
           "token": "layout=centered",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:93",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css:95"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css:95"
           ]
         }
       ],
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css": {
             "rows": 13,
             "layer": "engine-agnostic skin"
           },
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css": {
             "rows": 3,
             "layer": "engine-agnostic skin"
           }
@@ -259,7 +259,7 @@
           {
             "variable": "--ds-loading-skeleton-header-height",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:36",
             "selector": ".ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-primary[data-part='root']",
             "states": [],
             "landsOn": "block-size",
@@ -277,7 +277,7 @@
           {
             "variable": "--ds-loading-skeleton-header-height",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:41",
             "selector": ".ds-surface.ds-loading-skeleton .ds-loading-skeleton__header-secondary[data-part='root']",
             "states": [],
             "landsOn": "block-size",
@@ -295,7 +295,7 @@
           {
             "variable": "--ds-font-weight-bold",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:46",
             "selector": ".ds-surface.ds-error-state [data-part='title'][data-part='title'][data-part='title']",
             "states": [],
             "landsOn": "font-weight",
@@ -308,14 +308,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:625"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:625"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-stale-banner-padding-block",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:52",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "padding",
@@ -333,7 +333,7 @@
           {
             "variable": "--ds-spacing-2",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:52",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "padding",
@@ -346,15 +346,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-stale-banner-padding-inline",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:52",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "padding",
@@ -372,7 +372,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:52",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "padding",
@@ -385,15 +385,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-radius-md",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:54",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:54",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "border-radius",
@@ -407,16 +407,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:236",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
-              "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json:150",
-              "packages/core/src/tooling/resolution-probe/public/drills/index.mjs:59"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:770",
+              "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json:150",
+              "packages/core/scripts/check/tokens/cascade/probe/public/drills/index.mjs:59"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-info-bg",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:55",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "background",
@@ -429,15 +429,15 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:251",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:251",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-info",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:55",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "background",
@@ -450,17 +450,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:108",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:29"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-info",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:56",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:56",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "color",
@@ -473,17 +473,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:108",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:29"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-font-size-sm",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:57",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner']",
             "states": [],
             "landsOn": "font-size",
@@ -496,15 +496,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:609",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:30"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:609",
+              "packages/core/tests/fixtures/tenants/default/index.css:30"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-info-border",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:61",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner'][data-part='banner']",
             "states": [],
             "landsOn": "border",
@@ -517,14 +517,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:252"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:252"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-info",
             "part": "banner",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:61",
             "selector": ".ds-surface.ds-stale-banner[data-part='banner'][data-part='banner']",
             "states": [],
             "landsOn": "border",
@@ -537,21 +537,21 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:108",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:29"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
             "declarationSiteCount": 4
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css": {
               "rows": 13,
               "layer": "engine-agnostic skin"
             },
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/auth-surface/index.css": {
               "rows": 3,
               "layer": "engine-agnostic skin"
             }
@@ -591,25 +591,25 @@
             "styleAttribute": 4
           },
           "perFile": {
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/error-boundary/index.tsx": {
+            "packages/core/src/components/structures/feedback/surface-lifecycle/error-boundary/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 4,
               "lines": 241
             },
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/index.ts": {
+            "packages/core/src/components/structures/feedback/surface-lifecycle/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 53
             },
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/states/index.tsx": {
+            "packages/core/src/components/structures/feedback/surface-lifecycle/states/index.tsx": {
               "classNameOccurrences": 12,
               "dataPartOccurrences": 6,
               "styleAttributeOccurrences": 0,
               "lines": 324
             },
-            "packages/core/src/ui/structures/feedback/surface-lifecycle/use-surface-state/index.ts": {
+            "packages/core/src/components/structures/feedback/surface-lifecycle/use-surface-state/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
@@ -695,7 +695,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -731,7 +731,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -756,7 +756,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -787,7 +787,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector real; nivel 2/3)": [
             "--ds-radius-md"
@@ -824,7 +824,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los CTA de retry/back son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -837,7 +837,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -857,7 +857,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -871,13 +871,13 @@
         {
           "channelId": "--_ds-loading-dots-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/surface-lifecycle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -896,7 +896,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el estado lo senalan scrim y motion, no sombra: elevar el loading seria doble señal",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -909,7 +909,7 @@
       "targetBinding": {
         "status": "MUST_REACH",
         "why": "backdrop de overlay: lugar sancionado para glass",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "bindings": [
           {
             "root": "surface.finish",
@@ -942,7 +942,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback estructural, no chrome",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -955,7 +955,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -968,7 +968,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el scrim del loading-overlay es un canal semantico global, no chrome de familia: una fuente unica (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -980,7 +980,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1017,7 +1017,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1030,7 +1030,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1069,7 +1069,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1114,7 +1114,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el spinner es un grafico de motion, no un icono de la libreria de postura",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1128,11 +1128,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -1,18 +1,18 @@
 # WO-SKIN-06 CK-A dashboard-widgets paint inventory (read-only)
 
-All paths relative to `packages/core/src/ui/structures/dashboard/`. Same
+All paths relative to `packages/core/src/components/structures/dashboard/`. Same
 channel scope and STATIC/STATE-SELECTED/RUNTIME discriminator as the triage
 (`wo-skin-06-triage.md` §2) and the WO-SKIN-04 precedent: a "site" is an
 object-literal style key named `background*`, `border*`, `outline*`, `color`,
 `boxShadow`, `textShadow`, `fill`, `stroke`, `accentColor`, `filter`,
 `backdropFilter`, `WebkitBackdropFilter`, or `transform`, or an imperative
 `.style.<paint> =` / `.style.setProperty(...)` write — i.e. exactly
-`ARC09_PAINT_KEY_RE` from `packages/core/scripts/tooling/libraries/inline-paint-counter.mjs`.
+`ARC09_PAINT_KEY_RE` from `packages/core/scripts/libraries/inline-paint-counter.mjs`.
 
 **Method note**: every site below was located by running an instrumented clone
 of the real lexer (`inline-paint-counter.mjs`, reproduced verbatim with a
 line-number reporter added) against each file, so the totals are byte-exact
-against `node scripts/infrastructure/engine-token-audit.mjs | grep fleet.inlinePaint.composition/structures/dashboard`
+against `node scripts/check/engine-token-audit.mjs | grep fleet.inlinePaint.composition/structures/dashboard`
 (37/36/34/34/33/29/28/28/149/31 = 439), not hand-counted. Every site was then
 read in source to classify STATIC / STATE-SELECTED / RUNTIME / C-hatch.
 

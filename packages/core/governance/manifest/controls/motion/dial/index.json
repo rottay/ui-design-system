@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Motion intensity and duration",
   "valueType": "scale",
@@ -35,7 +35,7 @@
   "dependsOn": [],
   "compatibility": "additive, unset-to-rollback; never authors keyframes",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
     "symbol": "var(--ds-motion-intensity"
   },
   "calibration": {
@@ -73,16 +73,11 @@
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-      "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
-      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+      "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
+      "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-intensity-low.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-intensity-high.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-duration-scale-low.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-duration-scale-high.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
@@ -91,7 +86,7 @@
       "border remains fixed"
     ],
     "negativeControlsScopeNote": "`motion remains fixed` is deliberately NOT declared -- this control's entire job is moving animation-duration/transition channels, so that negative control would assert against the very properties the dial legitimately moves. The other four are declared in full: motion.dial shares no channel with colour, geometry (radius/border) or typography, so nothing narrows them the way surfaces.elevation-posture narrows `border remains fixed` to its width/style-only variant. `control height remains fixed` bound to card-modern-md/root (same precedent target as surfaces.elevation-posture/navigation.sidebar-tone).",
-    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "dialBounds": {
       "intensity": {
         "min": 0,

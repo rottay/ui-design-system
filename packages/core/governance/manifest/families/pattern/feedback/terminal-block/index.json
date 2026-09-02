@@ -8,15 +8,15 @@
     "components": [
       "TerminalBlock"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/feedback/terminal-block",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/feedback/terminal-block",
     "publicComponents": [
       "TerminalBlock"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "990adcebb1df47db74023433e9007298486eb4ae38533923f233d9ac4f167bf4"
+    "inventoryRowDigest": "d9d215f807083fc37f3aa7f4e27589894b3d2e76a7aa9500cef090a1f750ce56"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
-      "packages/core/src/ui/patterns/feedback/terminal-block/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css"
+      "packages/core/src/components/patterns/feedback/terminal-block/index.tsx",
+      "packages/core/src/components/patterns/feedback/terminal-block/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css"
     ],
     "stableParts": [
       "body",
@@ -64,42 +64,42 @@
           "part": "body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:132"
+            "packages/core/src/components/patterns/feedback/terminal-block/index.tsx:132"
           ]
         },
         {
           "part": "line",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:142"
+            "packages/core/src/components/patterns/feedback/terminal-block/index.tsx:142"
           ]
         },
         {
           "part": "prompt",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:156"
+            "packages/core/src/components/patterns/feedback/terminal-block/index.tsx:156"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:125"
+            "packages/core/src/components/patterns/feedback/terminal-block/index.tsx:125"
           ]
         },
         {
           "part": "scanlines",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:126"
+            "packages/core/src/components/patterns/feedback/terminal-block/index.tsx:126"
           ]
         },
         {
           "part": "title-bar",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx:128"
+            "packages/core/src/components/patterns/feedback/terminal-block/index.tsx:128"
           ]
         }
       ],
@@ -108,7 +108,7 @@
         "variableCensus": [
           {
             "name": "--ds-color-mono-1000",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 17,
             "fallback": false,
             "fallbackValue": null,
@@ -120,7 +120,7 @@
           },
           {
             "name": "--ds-color-surface-ink",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 18,
             "fallback": false,
             "fallbackValue": null,
@@ -132,7 +132,7 @@
           },
           {
             "name": "--ds-color-hairline",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 19,
             "fallback": false,
             "fallbackValue": null,
@@ -144,7 +144,7 @@
           },
           {
             "name": "--_ds-terminal-block-radius",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 22,
             "fallback": true,
             "fallbackValue": "0",
@@ -156,7 +156,7 @@
           },
           {
             "name": "--ds-font-mono",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 23,
             "fallback": false,
             "fallbackValue": null,
@@ -168,7 +168,7 @@
           },
           {
             "name": "--ds-texture-backdrop-opacity",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 29,
             "fallback": true,
             "fallbackValue": "0.03",
@@ -180,7 +180,7 @@
           },
           {
             "name": "--ds-texture-backdrop-ink",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 32,
             "fallback": false,
             "fallbackValue": null,
@@ -192,7 +192,7 @@
           },
           {
             "name": "--ds-texture-backdrop-ink",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 33,
             "fallback": false,
             "fallbackValue": null,
@@ -204,7 +204,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 45,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -216,7 +216,7 @@
           },
           {
             "name": "--ds-color-mono-700",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 51,
             "fallback": false,
             "fallbackValue": null,
@@ -228,7 +228,7 @@
           },
           {
             "name": "--ds-color-hairline",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 52,
             "fallback": false,
             "fallbackValue": null,
@@ -240,7 +240,7 @@
           },
           {
             "name": "--_ds-terminal-block-body-padding",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 61,
             "fallback": true,
             "fallbackValue": "1rem 1.25rem",
@@ -252,7 +252,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 62,
             "fallback": true,
             "fallbackValue": "0.875rem",
@@ -264,7 +264,7 @@
           },
           {
             "name": "--ds-color-mono-600",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 96,
             "fallback": false,
             "fallbackValue": null,
@@ -276,7 +276,7 @@
           },
           {
             "name": "--_ds-terminal-block-char-cadence",
-            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "file": "packages/core/src/components/patterns/feedback/terminal-block/index.tsx",
             "line": 96,
             "fallback": true,
             "fallbackValue": "22ms (JS literal, index.tsx:14)",
@@ -288,7 +288,7 @@
           },
           {
             "name": "--_ds-terminal-block-line-gap",
-            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "file": "packages/core/src/components/patterns/feedback/terminal-block/index.tsx",
             "line": 97,
             "fallback": true,
             "fallbackValue": "220ms (JS literal, index.tsx:15)",
@@ -301,91 +301,91 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 19,
             "literal": "1px solid",
             "cssProperty": "border"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 22,
             "literal": "0",
             "cssProperty": "border-radius (fallback position)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 29,
             "literal": "0.03",
             "cssProperty": "opacity (fallback position)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 35,
             "literal": "3px",
             "cssProperty": "repeating-linear-gradient stop"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 42,
             "literal": "0.5rem",
             "cssProperty": "padding-block"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 43,
             "literal": "1rem",
             "cssProperty": "padding-inline"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 45,
             "literal": "0.75rem",
             "cssProperty": "font-size (fallback position)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 46,
             "literal": "0.08em",
             "cssProperty": "letter-spacing"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 52,
             "literal": "1px solid",
             "cssProperty": "border-block-end"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 59,
             "literal": "0.375rem",
             "cssProperty": "gap"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 61,
             "literal": "1rem 1.25rem",
             "cssProperty": "padding (fallback position)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 62,
             "literal": "0.875rem",
             "cssProperty": "font-size (fallback position)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
             "line": 63,
             "literal": "1.6",
             "cssProperty": "line-height"
           },
           {
-            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "file": "packages/core/src/components/patterns/feedback/terminal-block/index.tsx",
             "line": 14,
             "literal": "22",
             "cssProperty": "CHAR_INTERVAL_MS (JS motion fallback)"
           },
           {
-            "file": "packages/core/src/ui/patterns/feedback/terminal-block/index.tsx",
+            "file": "packages/core/src/components/patterns/feedback/terminal-block/index.tsx",
             "line": 15,
             "literal": "220",
             "cssProperty": "LINE_GAP_MS (JS motion fallback)"
@@ -434,7 +434,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -454,7 +454,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -501,13 +501,13 @@
         {
           "channelId": "--_ds-terminal-block-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/terminal-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -525,7 +525,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reviewedFrom": "anatomy",
         "reasons": [
           {
@@ -545,7 +545,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el CTA del empty-state es un Button primitivo: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -565,7 +565,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -585,7 +585,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -605,7 +605,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-terminal-block-char-cadence: la coreografia obedece al dial",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -625,7 +625,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "adaptive-overlay flota; empty-state y terminal-block componen en flujo, sin plano propio",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -645,7 +645,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "backdrop de overlay: de los pocos lugares sancionados para glass",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -671,7 +671,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -691,7 +691,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -711,7 +711,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia; precedente vivo --_ds-terminal-block-body-*",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -732,13 +732,13 @@
         {
           "channelId": "--_ds-terminal-block-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/feedback/terminal-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/terminal-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -762,7 +762,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -775,7 +775,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -821,7 +821,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -852,7 +852,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "empty-state sigue la postura; terminal-block son caracteres y queda fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -873,11 +873,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

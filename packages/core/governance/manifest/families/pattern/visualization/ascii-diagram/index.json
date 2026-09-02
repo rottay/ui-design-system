@@ -8,15 +8,15 @@
     "components": [
       "AsciiDiagram"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization/ascii-diagram",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/visualization/ascii-diagram",
     "publicComponents": [
       "AsciiDiagram"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "31b71c3b23b6cedd208657df989e0b666d242414e412e904aabd3541123d0bb0"
+    "inventoryRowDigest": "b6f9538df0d88a40e73ba28c17c816fbd3679d50802bcde70e6631196c87947c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/visualization/ascii-diagram/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css"
+      "packages/core/src/components/patterns/visualization/ascii-diagram/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css"
     ],
     "stableParts": [
       "grid",
@@ -47,8 +47,8 @@
     "propertyGroups": [],
     "invariants": [
       "zero colour literals anywhere in source or paint [at hex/rgb/hsl scan over 2 source files and 1 paint file: 0 hits]",
-      "the data-part surface is stamped but never painted: 0 of the 2 parts carry a CSS rule keyed on [data-part]; all paint is keyed on rt-ascii-diagram BEM classes [at packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css, packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:438, packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:451]",
-      "the family's one sizing axis is written imperatively from TS, not declared in CSS [at packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:411-414, packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:46]"
+      "the data-part surface is stamped but never painted: 0 of the 2 parts carry a CSS rule keyed on [data-part]; all paint is keyed on rt-ascii-diagram BEM classes [at packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css, packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:438, packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:451]",
+      "the family's one sizing axis is written imperatively from TS, not declared in CSS [at packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:411-414, packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:46]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -71,7 +71,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:451"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:451"
           ]
         },
         {
@@ -79,7 +79,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:438"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:438"
           ]
         }
       ],
@@ -89,8 +89,8 @@
           "scoutAnchorClaim": "ds-class-pair",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:446",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:21"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:446",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:21"
           ]
         }
       ],
@@ -99,14 +99,14 @@
           "token": "visible",
           "note": "reveal completion flag; paints the revealed end-state",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:440"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:440"
           ],
           "state": "visible"
         },
         {
           "token": "overflowing",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:441"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:441"
           ],
           "state": "overflowing"
         }
@@ -115,13 +115,13 @@
         {
           "token": "fitted",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:442"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:442"
           ]
         },
         {
           "token": "reveal",
           "at": [
-            "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:439"
+            "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:439"
           ]
         }
       ],
@@ -134,8 +134,8 @@
           "rootAnchor": {
             "kind": "bem-class",
             "class": "rt-ascii-diagram",
-            "at": "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:432",
-            "appliedAt": "packages/core/src/ui/patterns/visualization/ascii-diagram/index.tsx:437"
+            "at": "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:432",
+            "appliedAt": "packages/core/src/components/patterns/visualization/ascii-diagram/index.tsx:437"
           },
           "divergence": "NONE_BY_CONSTRUCTION: one implementation, no engines/ folder. It renders identically under classic, modern and rustic.",
           "classicDisposition": "INVARIANT_WITH_REASON",
@@ -182,7 +182,7 @@
         "dsVariableReads": [
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:18",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:18",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram",
@@ -203,7 +203,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:43",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:43",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid",
@@ -224,7 +224,7 @@
           },
           {
             "variable": "--_ds-ascii-diagram-grid-size",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:46",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:46",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid",
@@ -245,7 +245,7 @@
           },
           {
             "variable": "--ds-color-hairline-strong",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:52",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:52",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid",
@@ -266,7 +266,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:71",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -287,7 +287,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:73",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:73",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -308,7 +308,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:74",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:74",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -329,7 +329,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:75",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:75",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -350,7 +350,7 @@
           },
           {
             "variable": "--ds-surface-bg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:79",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:79",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -371,7 +371,7 @@
           },
           {
             "variable": "--ds-color-hairline-strong",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:87",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:87",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"] .rt-ascii-diagram__grid::-webkit-scrollbar-thumb",
@@ -392,7 +392,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:93",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid:focus-visible",
@@ -413,7 +413,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:93",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid:focus-visible",
@@ -434,7 +434,7 @@
           },
           {
             "variable": "--ds-duration-slow",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:122",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -455,7 +455,7 @@
           },
           {
             "variable": "--ds-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:122",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -476,7 +476,7 @@
           },
           {
             "variable": "--ds-duration-slow",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:123",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -497,7 +497,7 @@
           },
           {
             "variable": "--ds-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:123",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -544,7 +544,7 @@
         "variableCensus": [
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:18",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:18",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram",
@@ -565,7 +565,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:43",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:43",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid",
@@ -586,7 +586,7 @@
           },
           {
             "variable": "--_ds-ascii-diagram-grid-size",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:46",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:46",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid",
@@ -607,7 +607,7 @@
           },
           {
             "variable": "--ds-color-hairline-strong",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:52",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:52",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid",
@@ -628,7 +628,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:71",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -649,7 +649,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:73",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:73",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -670,7 +670,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:74",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:74",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -691,7 +691,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:75",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:75",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -712,7 +712,7 @@
           },
           {
             "variable": "--ds-surface-bg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:79",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:79",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"]::after",
@@ -733,7 +733,7 @@
           },
           {
             "variable": "--ds-color-hairline-strong",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:87",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:87",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-overflowing=\"true\"] .rt-ascii-diagram__grid::-webkit-scrollbar-thumb",
@@ -754,7 +754,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:93",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid:focus-visible",
@@ -775,7 +775,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:93",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:93",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram__grid:focus-visible",
@@ -796,7 +796,7 @@
           },
           {
             "variable": "--ds-duration-slow",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:122",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -817,7 +817,7 @@
           },
           {
             "variable": "--ds-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:122",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:122",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -838,7 +838,7 @@
           },
           {
             "variable": "--ds-duration-slow",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:123",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -859,7 +859,7 @@
           },
           {
             "variable": "--ds-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css:123",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css:123",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-ascii-diagram[data-reveal=\"draw\"] .rt-ascii-diagram__grid",
@@ -928,7 +928,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -959,7 +959,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1005,13 +1005,13 @@
         {
           "channelId": "--_ds-ascii-diagram-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/ascii-diagram"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1029,7 +1029,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1060,7 +1060,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1091,7 +1091,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1128,7 +1128,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -1162,13 +1162,13 @@
         {
           "channelId": "--_ds-kanban-line-cadence",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/ascii-diagram"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1178,13 +1178,13 @@
         {
           "channelId": "--_ds-duration-slow",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/visualization/ascii-diagram"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/ascii-diagram/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1202,7 +1202,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -1222,7 +1222,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de lectura/trabajo como charts: acabado cero",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1242,7 +1242,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1262,7 +1262,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -1282,7 +1282,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia dentro del plano de visualizacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -1301,7 +1301,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -1338,7 +1338,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1351,7 +1351,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -1397,7 +1397,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1422,7 +1422,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -1443,11 +1443,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

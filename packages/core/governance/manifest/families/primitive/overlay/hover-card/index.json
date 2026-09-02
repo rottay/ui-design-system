@@ -8,15 +8,15 @@
     "components": [
       "HoverCard"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/overlay/HoverCard",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/hover-card",
     "publicComponents": [
       "HoverCard"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2e2783d1698c0438bdb68b544500e7e8c93de1934e02068a10bd0874b36c9b61"
+    "inventoryRowDigest": "38d2188f975dec2d490838f1043f04fc0ef2d503903f2706dd031779a9f4051c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/overlay/HoverCard/contracts/index.ts",
-      "packages/core/src/ui/primitives/overlay/HoverCard/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/overlay/HoverCard/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/HoverCard/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+      "packages/core/src/components/primitives/overlay/hover-card/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/hover-card/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/hover-card/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/hover-card/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/hover-card/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
     ],
     "stableParts": [
       "trigger",
@@ -49,9 +49,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "escape-key-dismiss [at src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx:147]",
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:198]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:208]"
+      "escape-key-dismiss [at src/components/primitives/overlay/hover-card/engines/modern/index.tsx:147]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:198]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:208]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -73,51 +73,51 @@
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx:242",
-            "src/ui/primitives/overlay/HoverCard/engines/rustic/index.tsx:131",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:58",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:59"
+            "src/components/primitives/overlay/hover-card/engines/modern/index.tsx:242",
+            "src/components/primitives/overlay/hover-card/engines/rustic/index.tsx:131",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:58",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:59"
           ]
         },
         {
           "part": "surface",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx:258",
-            "src/ui/primitives/overlay/HoverCard/engines/rustic/index.tsx:102",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:97",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:99",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:100",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:104"
+            "src/components/primitives/overlay/hover-card/engines/modern/index.tsx:258",
+            "src/components/primitives/overlay/hover-card/engines/rustic/index.tsx:102",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:97",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:99",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:100",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:104"
           ],
           "atSiteCount": 8
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:69, src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:70, src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:73]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:69, src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:70, src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:73]"
         ]
       },
       "stateAnchors": [
         {
           "token": "data-open=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:129"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:129"
           ],
           "state": "open"
         },
         {
           "token": "data-open=false",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:133"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:133"
           ],
           "state": "open"
         },
         {
           "token": ":focus",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:184",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:185"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:184",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:185"
           ],
           "state": "focus"
         }
@@ -126,14 +126,14 @@
         {
           "token": "data-ds-position-strategy=anchor-css",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:175",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:176"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:175",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:176"
           ]
         },
         {
           "token": "data-placement",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:210"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:210"
           ]
         }
       ],
@@ -218,15 +218,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:92",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:143",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:152"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:92",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:143",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:152"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:70",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:70",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -234,7 +234,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:87",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:87",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -259,7 +259,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:94",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:94",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -267,7 +267,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:145",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:145",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -275,7 +275,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:153",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:153",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -283,7 +283,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:162",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:162",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -308,7 +308,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:97",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:97",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -316,7 +316,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:148",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:148",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -324,7 +324,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:157",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:157",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -332,7 +332,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:166",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:166",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-hover-card-closed-transform",
@@ -357,7 +357,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "inline-size",
@@ -379,16 +379,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687",
-              "src/foundation/tokens/css/foundation/base/density.css:81"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "src/foundation/tokens/css/foundation/base/density/index.css:81"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:100",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:100",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -396,7 +396,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:100",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:100",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -404,7 +404,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -429,7 +429,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:104",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:104",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-block-size",
@@ -454,7 +454,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:107",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:107",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "scrollbar-width",
@@ -479,7 +479,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -504,7 +504,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border-radius",
@@ -525,17 +525,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:45",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:352",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:475"
+              "tests/fixtures/tenants/default/index.css:45",
+              "tests/fixtures/tenants/quality-evidence/index.ts:352",
+              "tests/fixtures/tenants/quality-evidence/index.ts:475"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:772"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:772"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border-radius",
@@ -563,7 +563,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:116",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:116",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -584,15 +584,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:824"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:824"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:117",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:117",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -600,7 +600,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:117",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:117",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -622,15 +622,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:600",
-              "src/foundation/tokens/css/foundation/themes/default.css:427"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:427"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:118",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:118",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -651,17 +651,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+              "tests/fixtures/tenants/quality-evidence/index.ts:320",
+              "tests/fixtures/tenants/quality-evidence/index.ts:425",
+              "tests/fixtures/tenants/quality-evidence/index.ts:540"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:265"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:118",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:118",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -686,7 +686,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:119",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:119",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -711,7 +711,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:121",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:121",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -734,15 +734,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1082",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:351",
-              "src/foundation/tokens/css/foundation/themes/default.css:802"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:802"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:121",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:121",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -763,15 +763,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:926",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              "src/foundation/tokens/css/runtime/personality/index.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:128",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:128",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -779,7 +779,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:132",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:132",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -800,13 +800,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:129",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:129",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -814,7 +814,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:133",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:133",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -839,7 +839,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:136",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:136",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -864,7 +864,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:137",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:137",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -891,7 +891,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:137",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:137",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -912,18 +912,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
-              "src/ui/patterns/customization/brand-studio/index.tsx:147",
-              "src/ui/patterns/customization/brand-studio/index.tsx:165"
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
+              "src/components/patterns/customization/brand-studio/index.tsx:147",
+              "src/components/patterns/customization/brand-studio/index.tsx:165"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:229",
-              "src/foundation/tokens/css/foundation/themes/default.css:2111"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2111"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:137",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:137",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -945,17 +945,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:156"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:137",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:137",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -963,7 +963,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:184",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:184",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline",
@@ -984,15 +984,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:872"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:872"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:872"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:872"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:183",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:183",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline",
@@ -1018,13 +1018,13 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1543"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:879",
-              "src/foundation/tokens/css/foundation/themes/default.css:2140"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:879",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2140"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:184",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:184",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline",
@@ -1045,15 +1045,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:873"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:873"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:873"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:873"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:185",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:185",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline-offset",
@@ -1078,7 +1078,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-block-size",
@@ -1097,15 +1097,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:959"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:959"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/HoverCard/engines/modern/index.tsx:232",
+                "at": "src/components/primitives/overlay/hover-card/engines/modern/index.tsx:232",
                 "readIn": "modern",
                 "part": null,
                 "landsOn": "z-index",
@@ -1124,17 +1124,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/HoverCard/engines/rustic/index.tsx:114",
+                "at": "src/components/primitives/overlay/hover-card/engines/rustic/index.tsx:114",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "font-family",
@@ -1197,13 +1197,13 @@
         {
           "channelId": "--_ds-hover-card-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1220,7 +1220,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1245,7 +1245,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1272,13 +1272,13 @@
         {
           "channelId": "--_ds-hover-card-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1298,13 +1298,13 @@
         {
           "channelId": "--_ds-hover-card-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1357,13 +1357,13 @@
         {
           "channelId": "--_ds-hover-card-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1381,7 +1381,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1395,13 +1395,13 @@
         {
           "channelId": "--_ds-hover-card-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1411,13 +1411,13 @@
         {
           "channelId": "--_ds-hover-card-motion-scale",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1436,13 +1436,13 @@
         {
           "channelId": "--_ds-hover-card-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1462,13 +1462,13 @@
         {
           "channelId": "--_ds-hover-card-backdrop-filter",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1487,7 +1487,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1518,13 +1518,13 @@
         {
           "channelId": "--_ds-hover-card-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1544,13 +1544,13 @@
         {
           "channelId": "--_ds-hover-card-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1560,13 +1560,13 @@
         {
           "channelId": "--_ds-hover-card-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1575,13 +1575,13 @@
         {
           "channelId": "--_ds-hover-card-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/hover-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/hover-card/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1605,7 +1605,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1661,7 +1661,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1692,7 +1692,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1706,11 +1706,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

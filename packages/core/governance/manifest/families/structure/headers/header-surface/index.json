@@ -8,15 +8,15 @@
     "components": [
       "HeaderSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/headers/header-surface",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/headers/header-surface",
     "publicComponents": [
       "HeaderSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "f20d3b206700472ee6ada0c0c4981570ce5a67344d0ad6d8b742e837eb7e3c11"
+    "inventoryRowDigest": "32ee392267aa9758c1252ef4af9f166804be9ff4709e186c613638bd2c8ace8e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/headers/header-surface",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+      "packages/core/src/components/structures/headers/header-surface",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
     ],
     "stableParts": [
       "root"
@@ -67,7 +67,7 @@
         {
           "part": "root",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/headers/header-surface/index.tsx:80"
+          "anchor": "packages/core/src/components/structures/headers/header-surface/index.tsx:80"
         }
       ],
       "unanchoredPartClaims": [
@@ -76,8 +76,8 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/headers/header-surface/index.tsx:94",
-            "packages/core/src/ui/structures/headers/header-surface/index.tsx:116"
+            "packages/core/src/components/structures/headers/header-surface/index.tsx:94",
+            "packages/core/src/components/structures/headers/header-surface/index.tsx:116"
           ]
         }
       ],
@@ -86,7 +86,7 @@
           "token": "data-loading",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/headers/header-surface/index.tsx:81"
+            "packages/core/src/components/structures/headers/header-surface/index.tsx:81"
           ],
           "state": "loading"
         }
@@ -96,21 +96,21 @@
           "token": "mobile-compact=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css:35"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css:35"
           ]
         },
         {
           "token": "data-mobile-compact",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/headers/header-surface/index.tsx:82"
+            "packages/core/src/components/structures/headers/header-surface/index.tsx:82"
           ]
         }
       ],
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css": {
             "rows": 1,
             "layer": "engine-agnostic skin"
           }
@@ -143,7 +143,7 @@
         "hardcodedValues": [],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css": {
               "rows": 1,
               "layer": "engine-agnostic skin"
             }
@@ -173,7 +173,7 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/headers/header-surface/index.tsx": {
+            "packages/core/src/components/structures/headers/header-surface/index.tsx": {
               "classNameOccurrences": 3,
               "dataPartOccurrences": 1,
               "styleAttributeOccurrences": 0,
@@ -202,13 +202,13 @@
         {
           "channelId": "--_ds-header-surface-action-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -229,7 +229,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
@@ -244,7 +244,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
@@ -259,7 +259,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
@@ -274,7 +274,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
@@ -306,13 +306,13 @@
         {
           "channelId": "--_ds-header-surface-title-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -332,13 +332,13 @@
         {
           "channelId": "--_ds-header-surface-title-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -348,13 +348,13 @@
         {
           "channelId": "--_ds-header-surface-value-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -373,7 +373,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el header es una banda sin caja propia: sus chips y controles reciben radio por sus primitivas; darle radio a la banda crea una card falsa arriba de cada pagina",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [],
         "reviewedFrom": "anatomy"
       }
@@ -389,13 +389,13 @@
         {
           "channelId": "--_ds-header-surface-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -414,7 +414,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el header es chrome de una banda sin filas; sus controles densifican por sus primitivas y su aire es de rhythm (below-gap ya declarado)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -428,13 +428,13 @@
         {
           "channelId": "--_ds-header-surface-below-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -454,13 +454,13 @@
         {
           "channelId": "--_ds-header-surface-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -480,13 +480,13 @@
         {
           "channelId": "--_ds-header-surface-stuck-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -505,7 +505,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de contenido mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -518,7 +518,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los headers son chrome de contenido: leen los canales de superficie, no el tono de la sidebar",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -531,7 +531,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -545,13 +545,13 @@
         {
           "channelId": "--_ds-header-surface-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -571,13 +571,13 @@
         {
           "channelId": "--_ds-header-surface-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -587,13 +587,13 @@
         {
           "channelId": "--_ds-header-surface-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -617,7 +617,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -630,7 +630,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -669,7 +669,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -696,13 +696,13 @@
         {
           "channelId": "--_ds-header-surface-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/headers/header-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -722,11 +722,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

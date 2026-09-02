@@ -8,15 +8,15 @@
     "components": [
       "CommandCenterSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/workspace",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/workspace/command-center",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/workspace",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/workspace/command-center",
     "publicComponents": [
       "CommandCenterSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "6904c468ad930ed669f2f6ca58650921cf42c6e59ae9c9e351d897e218ac33ff"
+    "inventoryRowDigest": "709d28794ab50c3f38b78f4c7674b41e79bd8c5d641e151ad2a2fb63f1871957"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/command-center",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/command-center",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
     ],
     "stableParts": [
       "loading-label",
@@ -161,7 +161,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__greeting` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:30"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:30"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -170,7 +170,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__insight-body` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:47"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:47"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -179,7 +179,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__insight-description` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:53"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:53"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -188,7 +188,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__quick-action-body` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:48"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:48"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -197,7 +197,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__quick-action-description` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:54"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:54"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -206,7 +206,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__recent-activity-header` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:113"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:113"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -215,7 +215,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__recent-activity-title` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:117"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:117"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -224,8 +224,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__section-card` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:102",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:106"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:102",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:106"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -234,7 +234,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__section-heading` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:40"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:40"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -243,7 +243,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__section-title` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:41"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:41"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -252,7 +252,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__skeleton-body` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:152"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:152"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -261,7 +261,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__skeleton-greeting` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:140"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:140"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -270,7 +270,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__skeleton-grow` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:135"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:135"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -279,7 +279,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__skeleton-heading` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:144"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:144"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -288,7 +288,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__skeleton-line` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:148"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:148"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -297,7 +297,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-command-center__view-all` bound by the root pair `.ds-surface.ds-command-center`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css:126"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css:126"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -817,7 +817,7 @@
         }
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
         "rootAnchor": ".ds-surface.ds-command-center",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -886,7 +886,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
@@ -901,7 +901,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
@@ -916,7 +916,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
@@ -931,7 +931,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
@@ -963,13 +963,13 @@
         {
           "channelId": "--_ds-command-center-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -989,13 +989,13 @@
         {
           "channelId": "--_ds-command-center-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1023,13 +1023,13 @@
         {
           "channelId": "--_ds-command-center-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1049,13 +1049,13 @@
         {
           "channelId": "--_ds-command-center-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1075,13 +1075,13 @@
         {
           "channelId": "--_ds-command-center-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1101,13 +1101,13 @@
         {
           "channelId": "--_ds-command-center-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1126,7 +1126,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1139,7 +1139,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1152,7 +1152,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1165,7 +1165,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1178,7 +1178,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1191,7 +1191,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1205,13 +1205,13 @@
         {
           "channelId": "--_ds-command-center-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/command-center"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/command-center/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1235,7 +1235,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1248,7 +1248,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1287,7 +1287,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1318,7 +1318,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1332,11 +1332,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

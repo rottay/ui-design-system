@@ -3,6 +3,7 @@
   "rootId": "spacing.rhythm",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-rhythm-scale",
     "emission": [
       {
@@ -22,7 +23,7 @@
         "kind": "clamp",
         "formula": "clamp(0.8, .., 1.25)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "line": 682,
       "state": "LIVE",
       "note": "el canal que los gaps de seccion componen via calc(base * effective)"

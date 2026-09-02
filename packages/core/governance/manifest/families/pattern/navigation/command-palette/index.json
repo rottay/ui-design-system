@@ -8,15 +8,15 @@
     "components": [
       "PatternCommandPalette"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/navigation/command-palette",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/navigation/command-palette",
     "publicComponents": [
       "PatternCommandPalette"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "8181572a556f48c3c6cdf625cd92cb56fe2ae650dc17eed09e05b6444b359df7"
+    "inventoryRowDigest": "417cf0410d92732b61e11c13ea28ce755dbbabd589cd1698438b7f4ee564ed0f"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,16 +28,16 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/navigation/command-palette/index.ts",
-      "packages/core/src/ui/patterns/navigation/command-palette/contracts/index.ts",
-      "packages/core/src/ui/patterns/navigation/command-palette/runtime/application-commands/index.ts",
-      "packages/core/src/ui/patterns/navigation/command-palette/runtime/argument-mode/index.ts",
-      "packages/core/src/ui/patterns/navigation/command-palette/foundation/frecency/index.ts",
-      "packages/core/src/ui/patterns/navigation/command-palette/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css"
+      "packages/core/src/components/patterns/navigation/command-palette/index.ts",
+      "packages/core/src/components/patterns/navigation/command-palette/contracts/index.ts",
+      "packages/core/src/components/patterns/navigation/command-palette/runtime/application-commands/index.ts",
+      "packages/core/src/components/patterns/navigation/command-palette/runtime/argument-mode/index.ts",
+      "packages/core/src/components/patterns/navigation/command-palette/foundation/frecency/index.ts",
+      "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css"
     ],
     "stableParts": [
       "argument-chip",
@@ -102,268 +102,268 @@
           "part": "argument-chip",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:316",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:285",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:238",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:133"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:316",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:238",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:133"
           ]
         },
         {
           "part": "argument-error",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:365",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:322",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:246",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:310",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:141"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:365",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:322",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:310",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:141"
           ]
         },
         {
           "part": "argument-panel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:359",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:234"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:359",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:234"
           ]
         },
         {
           "part": "argument-prompt",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:360",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:317",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:242",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:138"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:360",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:317",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:242",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:138"
           ]
         },
         {
           "part": "backdrop",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:280",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:43"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:280",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:43"
           ]
         },
         {
           "part": "content",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:305"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:305"
           ]
         },
         {
           "part": "description",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:263",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:424",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:250",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:355",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:294"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:263",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:424",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:250",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:355",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:294"
           ]
         },
         {
           "part": "dialog",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:281",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:50"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:281",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:50"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:435",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:369",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:220",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:117"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:435",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:369",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:117"
           ]
         },
         {
           "part": "error",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/contracts/index.ts:105",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:419",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:349",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:226",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:309",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:146"
+            "packages/core/src/components/patterns/navigation/command-palette/contracts/index.ts:105",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:419",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:349",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:309",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:146"
           ]
         },
         {
           "part": "footer",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:445",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:383",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:35",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:253",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:259",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:299"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:445",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:383",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:259",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:299"
           ]
         },
         {
           "part": "group-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:410",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:334",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:343",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:132",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:142",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:305"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:410",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:334",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:343",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:142",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:305"
           ]
         },
         {
           "part": "input",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:300",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:66"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:300",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:66"
           ]
         },
         {
           "part": "item",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:254",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:231",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:157",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:170",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:173",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:177"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:254",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:157",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:177"
           ]
         },
         {
           "part": "item-main",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:258",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:188"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:258",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:188"
           ]
         },
         {
           "part": "item-text",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:260",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:194"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:194"
           ]
         },
         {
           "part": "label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:422",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:293"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:422",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:293"
           ]
         },
         {
           "part": "list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:377",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:118"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:377",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:118"
           ]
         },
         {
           "part": "loading-list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:382",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:57"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:382",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:57"
           ]
         },
         {
           "part": "recent",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:397",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:127",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:170"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:397",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:127",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:170"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:279"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:279"
           ]
         },
         {
           "part": "search",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:312",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:282",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:111",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:298",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:25"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:312",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:282",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:298",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:25"
           ]
         },
         {
           "part": "section-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:398",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:131",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:304"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:398",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:131",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:304"
           ]
         },
         {
           "part": "shortcut",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:270",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:258",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:214",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:106",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:112"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:270",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:258",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:214",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:106",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:112"
           ]
         },
         {
           "part": "skeleton-icon",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:385",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:68",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:80",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:328"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:385",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:80",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:328"
           ]
         },
         {
           "part": "skeleton-line",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:387",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:388",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:69",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:92",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:97",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:328"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:387",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:388",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:69",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:328"
           ]
         },
         {
           "part": "skeleton-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:384",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:60"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:60"
           ]
         },
         {
           "part": "skeleton-text",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:386",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:85"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:386",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:85"
           ]
         }
       ],
@@ -373,11 +373,11 @@
           "scoutAnchorClaim": null,
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:259",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:298",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:299"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:259",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:298",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:299"
           ]
         }
       ],
@@ -385,40 +385,40 @@
         {
           "token": "active=activeIndex === idx",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:255"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:255"
           ],
           "state": "active"
         },
         {
           "token": "active=isSelected",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:232"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:232"
           ],
           "state": "active"
         },
         {
           "token": "active=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:37",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:39",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:152",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:177",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:286"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:37",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:39",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:177",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:286"
           ],
           "state": "active"
         },
         {
           "token": "fullscreen=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:32"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:32"
           ],
           "state": "fullscreen"
         },
         {
           "token": "loading=loading",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:307"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:307"
           ],
           "state": "loading"
         }
@@ -427,27 +427,27 @@
         {
           "token": "mode=mode",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:306",
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx:279"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:306",
+            "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx:279"
           ]
         },
         {
           "token": "tenant",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:12"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:12"
           ]
         },
         {
           "token": "theme",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css:12"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css:12"
           ]
         },
         {
           "token": "width=short",
           "at": [
-            "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx:388",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css:97"
+            "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx:388",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css:97"
           ]
         }
       ],
@@ -455,17 +455,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
             "lines": 329
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/modern/index.tsx",
             "lines": 452
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
             "lines": 395
           }
         ]
@@ -480,7 +480,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 58,
             "fallback": true,
             "fallbackValue": "4px",
@@ -493,7 +493,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 63,
             "fallback": true,
             "fallbackValue": "8px",
@@ -506,7 +506,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 64,
             "fallback": true,
             "fallbackValue": "4px",
@@ -519,7 +519,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "8px",
@@ -532,7 +532,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "12px",
@@ -545,7 +545,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 70,
             "fallback": false,
             "fallbackValue": null,
@@ -558,7 +558,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 73,
             "fallback": false,
             "fallbackValue": null,
@@ -571,7 +571,7 @@
           },
           {
             "name": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "var(--ds-surface-panel)",
@@ -584,7 +584,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 74,
             "fallback": false,
             "fallbackValue": null,
@@ -597,7 +597,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -610,7 +610,7 @@
           },
           {
             "name": "--_ds-command-palette-shimmer-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 78,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 4)",
@@ -623,7 +623,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 78,
             "fallback": false,
             "fallbackValue": null,
@@ -636,7 +636,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 89,
             "fallback": true,
             "fallbackValue": "4px",
@@ -649,7 +649,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 107,
             "fallback": true,
             "fallbackValue": "8px",
@@ -662,7 +662,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 108,
             "fallback": true,
             "fallbackValue": "12px",
@@ -675,7 +675,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -688,7 +688,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 120,
             "fallback": true,
             "fallbackValue": "8px",
@@ -701,7 +701,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 121,
             "fallback": false,
             "fallbackValue": null,
@@ -714,7 +714,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 121,
             "fallback": false,
             "fallbackValue": null,
@@ -727,7 +727,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 128,
             "fallback": true,
             "fallbackValue": "12px",
@@ -740,7 +740,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 129,
             "fallback": true,
             "fallbackValue": "8px",
@@ -753,7 +753,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 134,
             "fallback": true,
             "fallbackValue": "12px",
@@ -766,7 +766,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 135,
             "fallback": true,
             "fallbackValue": "4px",
@@ -779,7 +779,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 136,
             "fallback": false,
             "fallbackValue": null,
@@ -792,7 +792,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 137,
             "fallback": true,
             "fallbackValue": "12px",
@@ -805,7 +805,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 143,
             "fallback": true,
             "fallbackValue": "12px",
@@ -818,7 +818,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 143,
             "fallback": true,
             "fallbackValue": "4px",
@@ -831,7 +831,7 @@
           },
           {
             "name": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 144,
             "fallback": true,
             "fallbackValue": "20px",
@@ -844,7 +844,7 @@
           },
           {
             "name": "--ds-search-category-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 147,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -857,7 +857,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -870,7 +870,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 162,
             "fallback": true,
             "fallbackValue": "8px",
@@ -883,7 +883,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 163,
             "fallback": true,
             "fallbackValue": "4px",
@@ -896,7 +896,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 164,
             "fallback": true,
             "fallbackValue": "8px",
@@ -909,7 +909,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 165,
             "fallback": true,
             "fallbackValue": "12px",
@@ -922,7 +922,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 166,
             "fallback": false,
             "fallbackValue": null,
@@ -935,7 +935,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 168,
             "fallback": false,
             "fallbackValue": null,
@@ -948,7 +948,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 168,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -961,7 +961,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "12px",
@@ -974,7 +974,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 178,
             "fallback": false,
             "fallbackValue": null,
@@ -987,7 +987,7 @@
           },
           {
             "name": "--ds-color-border-focus",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 179,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1000,7 +1000,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 179,
             "fallback": false,
             "fallbackValue": null,
@@ -1013,7 +1013,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 183,
             "fallback": false,
             "fallbackValue": null,
@@ -1026,7 +1026,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 191,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1039,7 +1039,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 199,
             "fallback": false,
             "fallbackValue": null,
@@ -1052,7 +1052,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 200,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1065,7 +1065,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 207,
             "fallback": false,
             "fallbackValue": null,
@@ -1078,7 +1078,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 208,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1091,7 +1091,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 216,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1104,7 +1104,7 @@
           },
           {
             "name": "--ds-spacing-8",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 221,
             "fallback": true,
             "fallbackValue": "32px",
@@ -1117,7 +1117,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 227,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1130,7 +1130,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 228,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1143,7 +1143,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 229,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-secondary)",
@@ -1156,7 +1156,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 229,
             "fallback": false,
             "fallbackValue": null,
@@ -1169,7 +1169,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 235,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1182,7 +1182,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 236,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1195,7 +1195,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 243,
             "fallback": false,
             "fallbackValue": null,
@@ -1208,7 +1208,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 244,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1221,7 +1221,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 247,
             "fallback": true,
             "fallbackValue": "4px",
@@ -1234,7 +1234,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 248,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -1247,7 +1247,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 248,
             "fallback": false,
             "fallbackValue": null,
@@ -1260,7 +1260,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 249,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1273,7 +1273,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 254,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1286,7 +1286,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 255,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1299,7 +1299,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 256,
             "fallback": false,
             "fallbackValue": null,
@@ -1312,7 +1312,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 257,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1325,7 +1325,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 260,
             "fallback": false,
             "fallbackValue": null,
@@ -1338,7 +1338,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 320,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1351,7 +1351,7 @@
           },
           {
             "name": "--ds-command-palette-backdrop",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 44,
             "fallback": true,
             "fallbackValue": "var(--ds-overlay-bg)",
@@ -1364,7 +1364,7 @@
           },
           {
             "name": "--ds-overlay-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 44,
             "fallback": false,
             "fallbackValue": null,
@@ -1377,7 +1377,7 @@
           },
           {
             "name": "--ds-command-palette-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-elevated)",
@@ -1390,7 +1390,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 51,
             "fallback": false,
             "fallbackValue": null,
@@ -1403,7 +1403,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 52,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1416,7 +1416,7 @@
           },
           {
             "name": "--ds-command-palette-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "var(--ds-shadow-dialog, var(--ds-shadow-xl))",
@@ -1429,7 +1429,7 @@
           },
           {
             "name": "--ds-shadow-dialog",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "var(--ds-shadow-xl)",
@@ -1442,7 +1442,7 @@
           },
           {
             "name": "--ds-shadow-xl",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 53,
             "fallback": false,
             "fallbackValue": null,
@@ -1455,7 +1455,7 @@
           },
           {
             "name": "--ds-command-palette-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 59,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1468,7 +1468,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 59,
             "fallback": false,
             "fallbackValue": null,
@@ -1481,7 +1481,7 @@
           },
           {
             "name": "--ds-command-palette-focus-line",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 62,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-200)",
@@ -1494,7 +1494,7 @@
           },
           {
             "name": "--ds-color-primary-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 62,
             "fallback": false,
             "fallbackValue": null,
@@ -1507,7 +1507,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 70,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -1520,7 +1520,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 70,
             "fallback": false,
             "fallbackValue": null,
@@ -1533,7 +1533,7 @@
           },
           {
             "name": "--ds-command-palette-group-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 75,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1546,7 +1546,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -1559,7 +1559,7 @@
           },
           {
             "name": "--ds-command-palette-item-active-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-50)",
@@ -1572,7 +1572,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 86,
             "fallback": false,
             "fallbackValue": null,
@@ -1585,7 +1585,7 @@
           },
           {
             "name": "--ds-command-palette-item-active-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 89,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-500)",
@@ -1598,7 +1598,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 89,
             "fallback": false,
             "fallbackValue": null,
@@ -1611,7 +1611,7 @@
           },
           {
             "name": "--ds-command-palette-item-hover-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 94,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-hover)",
@@ -1624,7 +1624,7 @@
           },
           {
             "name": "--ds-color-bg-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 94,
             "fallback": false,
             "fallbackValue": null,
@@ -1637,7 +1637,7 @@
           },
           {
             "name": "--ds-command-palette-item-hover-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 97,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary-300)",
@@ -1650,7 +1650,7 @@
           },
           {
             "name": "--ds-color-primary-300",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -1663,7 +1663,7 @@
           },
           {
             "name": "--ds-command-palette-group-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 102,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1676,7 +1676,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 102,
             "fallback": false,
             "fallbackValue": null,
@@ -1689,7 +1689,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 107,
             "fallback": true,
             "fallbackValue": "6px",
@@ -1702,7 +1702,7 @@
           },
           {
             "name": "--ds-command-palette-shortcut-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 108,
             "fallback": true,
             "fallbackValue": "var(--ds-color-surface-muted, var(--ds-color-neutral-50))",
@@ -1715,7 +1715,7 @@
           },
           {
             "name": "--ds-color-surface-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 108,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-50)",
@@ -1728,7 +1728,7 @@
           },
           {
             "name": "--ds-color-neutral-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 108,
             "fallback": false,
             "fallbackValue": null,
@@ -1741,7 +1741,7 @@
           },
           {
             "name": "--ds-command-palette-group-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 109,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1754,7 +1754,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -1767,7 +1767,7 @@
           },
           {
             "name": "--ds-command-palette-shortcut-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 110,
             "fallback": true,
             "fallbackValue": "var(--ds-shadow-sm)",
@@ -1780,7 +1780,7 @@
           },
           {
             "name": "--ds-shadow-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 110,
             "fallback": false,
             "fallbackValue": null,
@@ -1793,7 +1793,7 @@
           },
           {
             "name": "--ds-command-palette-shortcut-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 113,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1806,7 +1806,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 113,
             "fallback": false,
             "fallbackValue": null,
@@ -1819,7 +1819,7 @@
           },
           {
             "name": "--ds-command-palette-empty-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 118,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1832,7 +1832,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 118,
             "fallback": false,
             "fallbackValue": null,
@@ -1845,7 +1845,7 @@
           },
           {
             "name": "--ds-command-palette-group-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 123,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1858,7 +1858,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 123,
             "fallback": false,
             "fallbackValue": null,
@@ -1871,7 +1871,7 @@
           },
           {
             "name": "--ds-command-palette-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 126,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1884,7 +1884,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 126,
             "fallback": false,
             "fallbackValue": null,
@@ -1897,7 +1897,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 134,
             "fallback": true,
             "fallbackValue": "6px",
@@ -1910,7 +1910,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 135,
             "fallback": false,
             "fallbackValue": null,
@@ -1923,7 +1923,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 136,
             "fallback": false,
             "fallbackValue": null,
@@ -1936,7 +1936,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 139,
             "fallback": false,
             "fallbackValue": null,
@@ -1949,7 +1949,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 142,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -1962,7 +1962,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 142,
             "fallback": false,
             "fallbackValue": null,
@@ -1975,7 +1975,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 147,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-secondary)",
@@ -1988,7 +1988,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -2001,7 +2001,7 @@
           },
           {
             "name": "--ds-command-palette-border",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
             "line": 196,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -2014,7 +2014,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
             "line": 196,
             "fallback": false,
             "fallbackValue": null,
@@ -2027,7 +2027,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
             "line": 244,
             "fallback": false,
             "fallbackValue": null,
@@ -2040,7 +2040,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/classic/index.tsx",
             "line": 300,
             "fallback": false,
             "fallbackValue": null,
@@ -2053,7 +2053,7 @@
           },
           {
             "name": "--ds-personality-animation-entrance-duration",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
             "line": 173,
             "fallback": true,
             "fallbackValue": "300ms",
@@ -2066,7 +2066,7 @@
           },
           {
             "name": "--ds-typography-heading-letter-spacing",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
             "line": 217,
             "fallback": true,
             "fallbackValue": "0.08em",
@@ -2079,7 +2079,7 @@
           },
           {
             "name": "--ds-font-family-mono",
-            "file": "packages/core/src/ui/patterns/navigation/command-palette/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/command-palette/engines/rustic/index.tsx",
             "line": 263,
             "fallback": true,
             "fallbackValue": "ui-monospace, monospace",
@@ -2093,385 +2093,385 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 51,
             "literal": "32rem",
             "text": "max-inline-size: 32rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 58,
             "literal": "4px",
             "text": "padding-block: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 63,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 64,
             "literal": "4px",
             "text": "margin-inline: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 65,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 66,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 81,
             "literal": "1.25rem",
             "text": "inline-size: 1.25rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 82,
             "literal": "1.25rem",
             "text": "block-size: 1.25rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 89,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 95,
             "literal": "0.625rem",
             "text": "block-size: 0.625rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 99,
             "literal": "0.5rem",
             "text": "block-size: 0.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 107,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 108,
             "literal": "12px",
             "text": "padding: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 109,
             "literal": "1px",
             "text": "border-bottom: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 120,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 128,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 129,
             "literal": "8px",
             "text": "padding-block-end: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 133,
             "literal": "6px",
             "text": "padding-block: 6px 4px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 133,
             "literal": "4px",
             "text": "padding-block: 6px 4px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 134,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 135,
             "literal": "4px",
             "text": "margin-block-end: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 137,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 139,
             "literal": "0.05em",
             "text": "letter-spacing: 0.05em;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 143,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 143,
             "literal": "4px",
             "text": "padding-block: var(--ds-spacing-3, 12px) var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 144,
             "literal": "20px",
             "text": "padding-inline: var(--ds-spacing-5, 20px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 162,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 163,
             "literal": "4px",
             "text": "margin-inline: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 164,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 165,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 171,
             "literal": "12px",
             "text": "padding-inline: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 179,
             "literal": "1px",
             "text": "box-shadow: inset 0 0 0 1px var(--ds-color-border-focus, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 191,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 200,
             "literal": "14px",
             "text": "font-size: var(--ds-font-size-sm, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 208,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 216,
             "literal": "8px",
             "text": "margin-inline-start: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 221,
             "literal": "32px",
             "text": "padding-block: var(--ds-spacing-8, 32px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 227,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 228,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 235,
             "literal": "12px",
             "text": "padding-block: var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 236,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 244,
             "literal": "14px",
             "text": "font-size: var(--ds-font-size-sm, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 247,
             "literal": "4px",
             "text": "margin-block-start: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 249,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 254,
             "literal": "8px",
             "text": "padding-block: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 255,
             "literal": "16px",
             "text": "padding-inline: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 257,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 260,
             "literal": "1px",
             "text": "border-top: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 273,
             "literal": "44px",
             "text": "min-block-size: 44px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 320,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 329,
             "literal": "0.01ms",
             "text": "transition-duration: 0.01ms !important;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
             "line": 330,
             "literal": "0.01ms",
             "text": "animation-duration: 0.01ms !important;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 38,
             "literal": "10px",
             "text": "from { opacity: 0; transform: scale(0.96) translateY(-10px); }"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 45,
             "literal": "8px",
             "text": "backdrop-filter: blur(8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 46,
             "literal": "8px",
             "text": "-webkit-backdrop-filter: blur(8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 52,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 59,
             "literal": "1px",
             "text": "border-bottom: 1px solid var(--ds-command-palette-border, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 62,
             "literal": "1px",
             "text": "box-shadow: inset 0 -1px 0 0 var(--ds-command-palette-focus-line, var(--ds-color-primary-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 89,
             "literal": "1px",
             "text": "box-shadow: inset 0 0 0 1px var(--ds-command-palette-item-active-border, var(--ds-color-primary-500));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 97,
             "literal": "1px",
             "text": "box-shadow: inset 0 0 0 1px var(--ds-command-palette-item-hover-border, var(--ds-color-primary-300));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 107,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 113,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-command-palette-shortcut-border, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 126,
             "literal": "1px",
             "text": "border-top: 1px solid var(--ds-command-palette-border, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css",
             "line": 134,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
@@ -2510,13 +2510,13 @@
         {
           "channelId": "--_ds-search-category-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2533,7 +2533,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2558,7 +2558,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2583,7 +2583,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -2626,13 +2626,13 @@
         {
           "channelId": "--_ds-command-palette-control-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2652,13 +2652,13 @@
         {
           "channelId": "--_ds-command-palette-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2693,13 +2693,13 @@
         {
           "channelId": "--_ds-command-palette-control-item-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2718,7 +2718,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2742,13 +2742,13 @@
         {
           "channelId": "--_ds-command-palette-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2767,7 +2767,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2780,7 +2780,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-surface-highlight"
@@ -2804,13 +2804,13 @@
         {
           "channelId": "--_ds-command-palette-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2820,13 +2820,13 @@
         {
           "channelId": "--_ds-command-palette-sidebar-text",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2836,13 +2836,13 @@
         {
           "channelId": "--_ds-command-palette-sidebar-text-muted",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2852,13 +2852,13 @@
         {
           "channelId": "--_ds-command-palette-sidebar-item-bg-hover",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2868,13 +2868,13 @@
         {
           "channelId": "--_ds-command-palette-sidebar-item-bg-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2884,13 +2884,13 @@
         {
           "channelId": "--_ds-command-palette-sidebar-item-color-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2909,7 +2909,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2922,7 +2922,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2944,13 +2944,13 @@
         {
           "channelId": "--_ds-command-palette-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2974,7 +2974,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2987,7 +2987,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3026,7 +3026,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3069,13 +3069,13 @@
         {
           "channelId": "--_ds-command-palette-icon-fill-mode",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/command-palette/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3095,11 +3095,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -3,6 +3,7 @@
   "rootId": "palette.status-seeds",
   "tier": "standard",
   "rootChannel": {
+    "authority": "tenant-seed",
     "channel": "--ds-color-success",
     "emission": [
       {

@@ -3,6 +3,7 @@
   "rootId": "profiles.expressive",
   "tier": "pro",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-edge-emphasis-width",
     "emission": [
       {
@@ -22,7 +23,7 @@
       "rule": {
         "kind": "alias"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 746
     },
@@ -32,7 +33,7 @@
       "rule": {
         "kind": "alias"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/button.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/button/index.css",
       "state": "LIVE",
       "line": 325
     },
@@ -42,7 +43,7 @@
       "rule": {
         "kind": "color-mix"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/card.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/card/index.css",
       "state": "LIVE",
       "line": 409
     }
@@ -383,7 +384,7 @@
       "mechanismSite": "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts",
       "precedence": "authored-field-wins",
       "precedenceSite": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-      "precedenceNote": "Mismo orden ejecutable (brand-theme:758-772). RECIPROCIDAD PENDIENTE: roots/shape.button-style.json aun no existe (lo autora Fable); validateCascadeSet la exigira cuando aterrice (C4).",
+      "precedenceNote": "Mismo orden ejecutable (brand-theme:758-772). RECIPROCIDAD PENDIENTE: roots/shape.button-style.json aun no existe (lo autora independent audit); validateCascadeSet la exigira cuando aterrice (C4).",
       "line": 189,
       "mechanismLine": 189,
       "precedenceLine": 758

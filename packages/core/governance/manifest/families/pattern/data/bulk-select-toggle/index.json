@@ -8,15 +8,15 @@
     "components": [
       "BulkSelectToggle"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/bulk-select-toggle",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/bulk-select-toggle",
     "publicComponents": [
       "BulkSelectToggle"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "7ebf39a84a9ec7159db0a7f04a14e3a355d60d718f2e9bcee0c346cb220f6a8d"
+    "inventoryRowDigest": "4c3d03df691709c680d374c13c1545ff17d392fe94aaf257ca929482fd3d8813"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
-      "packages/core/src/ui/patterns/data/bulk-select-toggle",
-      "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx"
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
+      "packages/core/src/components/patterns/data/bulk-select-toggle",
+      "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx"
     ],
     "stableParts": [
       "count-live",
@@ -45,12 +45,12 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "a tenant control must not remove or override the status role contract on these nodes (aria-role: status) [at packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:89]",
-      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:81]",
-      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:65]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (5 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:54, packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:68, packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:70, packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:74]",
-      "The family assigns explicit ARIA roles in source (1 sites; roles observed: `status`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:89]",
-      "The family sets ARIA state/label attributes in source (2 sites; observed: `aria-pressed`, `aria-hidden`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:65, packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:81]"
+      "a tenant control must not remove or override the status role contract on these nodes (aria-role: status) [at packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:89]",
+      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:81]",
+      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:65]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (5 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:54, packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:68, packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:70, packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:74]",
+      "The family assigns explicit ARIA roles in source (1 sites; roles observed: `status`); a tenant control must not remove or replace them. [at packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:89]",
+      "The family sets ARIA state/label attributes in source (2 sites; observed: `aria-pressed`, `aria-hidden`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:65, packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:81]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -80,7 +80,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:89"
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:89"
           ]
         },
         {
@@ -88,14 +88,14 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:68",
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:70",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:40"
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:68",
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:40"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:30",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:31",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:55"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:30",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:31",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:55"
           ],
           "anchorStatus": "verified"
         },
@@ -104,7 +104,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:74"
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:74"
           ]
         },
         {
@@ -112,15 +112,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:52"
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:52"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:15",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:20",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:25",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:26",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:35"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:15",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:20",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:25",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:35"
           ],
           "anchorStatus": "verified"
         }
@@ -131,7 +131,7 @@
           "scoutAnchorClaim": "class:ds-bulk-select-toggle__trigger",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:22"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:22"
           ]
         },
         {
@@ -139,7 +139,7 @@
           "scoutAnchorClaim": "class:ds-bulk-select-toggle__count",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:33"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:33"
           ]
         }
       ],
@@ -149,9 +149,9 @@
           "at": [],
           "state": "active",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:35",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:40",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:55"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:35",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:55"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -161,8 +161,8 @@
           "at": [],
           "state": "has-selection",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:45",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:55"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:55"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -172,8 +172,8 @@
           "occurrences": 3,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:42",
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:55"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:42",
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:55"
           ],
           "state": "active"
         },
@@ -182,8 +182,8 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css:51",
-            "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:56"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css:51",
+            "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:56"
           ],
           "state": "has-selection"
         }
@@ -194,7 +194,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
               "paintKind": "own"
             }
           ]
@@ -287,7 +287,7 @@
         "variableCensus": [
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 15,
             "part": "root",
             "landsOn": "gap",
@@ -303,7 +303,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -319,7 +319,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -335,7 +335,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -351,7 +351,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -367,7 +367,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -383,7 +383,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -399,7 +399,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -415,7 +415,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 20,
             "part": "root",
             "landsOn": "transition",
@@ -431,7 +431,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 25,
             "part": "root",
             "landsOn": "font-size",
@@ -447,7 +447,7 @@
           },
           {
             "variable": "--ds-color-primary-200",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 35,
             "part": "root",
             "landsOn": "box-shadow",
@@ -463,7 +463,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 40,
             "part": "icon",
             "landsOn": "animation",
@@ -479,7 +479,7 @@
           },
           {
             "variable": "--ds-motion-ease-enter",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 40,
             "part": "icon",
             "landsOn": "animation",
@@ -495,7 +495,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 45,
             "part": "root",
             "landsOn": "animation",
@@ -511,7 +511,7 @@
           },
           {
             "variable": "--ds-motion-ease-enter",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
             "line": 45,
             "part": "root",
             "landsOn": "animation",
@@ -534,7 +534,7 @@
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
               "engine": "engine-agnostic",
               "lines": 66,
               "role": "skin-css",
@@ -549,7 +549,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/display/Badge",
               "importSites": [
-                "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:19"
+                "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:19"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -561,7 +561,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/inputs/Button",
               "importSites": [
-                "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:20"
+                "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:20"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -573,7 +573,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/layout/Flex",
               "importSites": [
-                "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:21"
+                "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:21"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -585,7 +585,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/display/Typography/compound/Text",
               "importSites": [
-                "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:22"
+                "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:22"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -597,7 +597,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/foundation/VisuallyHidden",
               "importSites": [
-                "packages/core/src/ui/patterns/data/bulk-select-toggle/index.tsx:23"
+                "packages/core/src/components/patterns/data/bulk-select-toggle/index.tsx:23"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -611,7 +611,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
               "paintKind": "own"
             }
           ]
@@ -658,13 +658,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -674,13 +674,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -690,13 +690,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -706,13 +706,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -722,13 +722,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -738,13 +738,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -765,7 +765,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
@@ -780,7 +780,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
@@ -795,7 +795,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
@@ -810,7 +810,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
@@ -842,13 +842,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -876,13 +876,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -902,13 +902,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -927,7 +927,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -941,13 +941,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -966,7 +966,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1004,13 +1004,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1098,13 +1098,13 @@
         {
           "channelId": "--_ds-bulk-select-toggle-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/bulk-select-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bulk-select-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1128,7 +1128,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1184,7 +1184,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1233,11 +1233,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

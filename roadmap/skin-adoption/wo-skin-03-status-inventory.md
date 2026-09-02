@@ -1,6 +1,6 @@
 # WO-SKIN-03 status-family paint inventory (read-only)
 
-All paths relative to `packages/core/src/ui/primitives/feedback/`. Same
+All paths relative to `packages/core/src/components/primitives/feedback/`. Same
 channel scope and class legend as the WO-SKIN-02 precedent (`skin02-fields-inventory.md`):
 STATIC / CONDITIONAL / IMPERATIVE / REACT-STATE-HOVER. No component in this batch
 carries `data-part` anywhere (grep-confirmed) and no skin CSS file exists yet for any

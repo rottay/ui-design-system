@@ -3,6 +3,7 @@
   "rootId": "typography.pairing",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-font-family-heading",
     "emission": [
       {

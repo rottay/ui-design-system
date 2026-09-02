@@ -8,15 +8,15 @@
     "components": [
       "FloatButton"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/navigation/FloatButton",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/navigation/float-button",
     "publicComponents": [
       "FloatButton"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2c39cc2b423c4ace56c3113f5982fa04326a2942f895ea1019dbaf2728d67116"
+    "inventoryRowDigest": "fd7a5290722a67195225f736376c7ff3ff041e9cb9756eb0e7d5778568cf115d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css",
-      "packages/core/src/ui/primitives/navigation/FloatButton/index.tsx",
-      "packages/core/src/ui/primitives/navigation/FloatButton/contracts/index.ts",
-      "packages/core/src/ui/primitives/navigation/FloatButton/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/navigation/FloatButton/compound/index.ts"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css",
+      "packages/core/src/components/primitives/navigation/float-button/index.tsx",
+      "packages/core/src/components/primitives/navigation/float-button/contracts/index.ts",
+      "packages/core/src/components/primitives/navigation/float-button/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/navigation/float-button/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/navigation/float-button/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/navigation/float-button/compound/index.ts"
     ],
     "stableParts": [
       "root",
@@ -55,8 +55,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The group panel is role=\"group\" and aria-hidden when closed - a disclosure, deliberately not a menu. [at src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:377]",
-      "Under forced-colors the trigger gets a 1px ButtonText border and a 2px Highlight focus outline with 2px offset, none of it token-driven. [at src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:276]"
+      "The group panel is role=\"group\" and aria-hidden when closed - a disclosure, deliberately not a menu. [at src/components/primitives/navigation/float-button/engines/modern/index.tsx:377]",
+      "Under forced-colors the trigger gets a 1px ButtonText border and a 2px Highlight focus outline with 2px offset, none of it token-driven. [at src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:276]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -78,40 +78,40 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:354",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:312"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:354",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:312"
           ]
         },
         {
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:197",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:212"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:197",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:212"
           ]
         },
         {
           "part": "panel",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:393",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:336"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:393",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:336"
           ]
         },
         {
           "part": "badge",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:156",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:185"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:156",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:185"
           ]
         },
         {
           "part": "description",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:153",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:182"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:153",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:182"
           ]
         }
       ],
@@ -120,8 +120,8 @@
           "token": "data-open",
           "meaning": "group expanded",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:355",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:313"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:355",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:313"
           ],
           "state": "open"
         },
@@ -129,7 +129,7 @@
           "token": "aria-expanded / aria-controls",
           "meaning": "disclosure state",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:376"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:376"
           ],
           "state": "aria-expanded"
         }
@@ -139,26 +139,26 @@
           "token": "data-variant='dot'|'count'",
           "meaning": "badge kind",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:156"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:156"
           ]
         },
         {
           "token": "data-shape",
           "meaning": "trigger shape",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:199",
-            "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:323"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:199",
+            "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:323"
           ]
         },
         {
           "token": "data-placement",
           "meaning": "group placement",
           "at": [
-            "src/ui/primitives/navigation/FloatButton/engines/modern/index.tsx:608"
+            "src/components/primitives/navigation/float-button/engines/modern/index.tsx:608"
           ]
         }
       ],
-      "engineDivergence": "classic = Ant FloatButton wrapper (src/ui/primitives/navigation/FloatButton/engines/classic/index.tsx:45); no data-part, no --ds-* reads. modern and rustic stamp the same five parts. rustic hardcodes transition 'all 0.2s' twice (src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:63 and :96); modern carries motion in the skin file.",
+      "engineDivergence": "classic = Ant FloatButton wrapper (src/components/primitives/navigation/float-button/engines/classic/index.tsx:45); no data-part, no --ds-* reads. modern and rustic stamp the same five parts. rustic hardcodes transition 'all 0.2s' twice (src/components/primitives/navigation/float-button/engines/rustic/index.tsx:63 and :96); modern carries motion in the skin file.",
       "variableReadCensus": {
         "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
         "variableCensus": {
@@ -253,20 +253,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:88",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:88",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:801",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:801",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:969",
                 "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:801"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:801"
               ]
             },
             {
@@ -277,20 +277,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "font-family",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:89",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:89",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:506",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:506",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:176",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:875"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:506"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:506"
               ]
             },
             {
@@ -301,20 +301,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "font-weight",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:90",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:90",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/presentation/components/button.css:318",
-                "src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:182",
-                "src/foundation/tokens/css/presentation/components/skin/guided-draft-form.css:200"
+                "src/foundation/tokens/css/presentation/components/button/index.css:318",
+                "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css:182",
+                "src/foundation/tokens/css/presentation/components/skin/guided-draft-form/index.css:200"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/presentation/components/button.css:318"
+                "src/foundation/tokens/css/presentation/components/button/index.css:318"
               ]
             },
             {
@@ -325,18 +325,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "font-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:91",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:91",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/presentation/components/button.css:43"
+                "src/foundation/tokens/css/presentation/components/button/index.css:43"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/presentation/components/button.css:43"
+                "src/foundation/tokens/css/presentation/components/button/index.css:43"
               ]
             },
             {
@@ -347,22 +347,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:94",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:94",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:111",
-                "src/foundation/tokens/css/foundation/responsive/button.css:24",
-                "src/foundation/tokens/css/presentation/components/button.css:311"
+                "src/foundation/tokens/css/runtime/personality/index.css:111",
+                "src/foundation/tokens/css/foundation/responsive/button/index.css:24",
+                "src/foundation/tokens/css/presentation/components/button/index.css:311"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:111",
-                "src/foundation/tokens/css/foundation/responsive/button.css:24",
-                "src/foundation/tokens/css/presentation/components/button.css:311"
+                "src/foundation/tokens/css/runtime/personality/index.css:111",
+                "src/foundation/tokens/css/foundation/responsive/button/index.css:24",
+                "src/foundation/tokens/css/presentation/components/button/index.css:311"
               ]
             },
             {
@@ -378,21 +378,21 @@
                 "@media (hover: hover)"
               ],
               "observableProperty": "transform",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:103",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:103",
               "hasFallback": true,
               "fallback": "translateY(0) scale(1)",
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:hover:not(:disabled)",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:115",
-                "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:171",
-                "src/foundation/tokens/css/presentation/components/button.css:326"
+                "src/foundation/tokens/css/runtime/personality/index.css:115",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:171",
+                "src/foundation/tokens/css/presentation/components/button/index.css:326"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:115",
-                "src/foundation/tokens/css/presentation/components/button.css:326"
+                "src/foundation/tokens/css/runtime/personality/index.css:115",
+                "src/foundation/tokens/css/presentation/components/button/index.css:326"
               ]
             },
             {
@@ -406,21 +406,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transform",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:107",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:107",
               "hasFallback": true,
               "fallback": "scale(0.98)",
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:active:not(:disabled)",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:119",
-                "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix.css:172",
-                "src/foundation/tokens/css/presentation/components/button.css:327"
+                "src/foundation/tokens/css/runtime/personality/index.css:119",
+                "src/foundation/tokens/css/runtime/engines/modern/skin/shift-matrix/index.css:172",
+                "src/foundation/tokens/css/presentation/components/button/index.css:327"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:119",
-                "src/foundation/tokens/css/presentation/components/button.css:327"
+                "src/foundation/tokens/css/runtime/personality/index.css:119",
+                "src/foundation/tokens/css/presentation/components/button/index.css:327"
               ]
             },
             {
@@ -433,20 +433,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:110",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:110",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:focus-visible",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/presentation/components/button.css:262",
-                "src/foundation/tokens/css/presentation/components/skin/field-filters-panel.css:189",
-                "src/foundation/tokens/css/presentation/components/skin/search-command-bar.css:606"
+                "src/foundation/tokens/css/presentation/components/button/index.css:262",
+                "src/foundation/tokens/css/presentation/components/skin/field-filters-panel/index.css:189",
+                "src/foundation/tokens/css/presentation/components/skin/search-command-bar/index.css:606"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/presentation/components/button.css:262"
+                "src/foundation/tokens/css/presentation/components/button/index.css:262"
               ]
             },
             {
@@ -459,7 +459,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inline-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:120",
               "hasFallback": true,
               "fallback": "40px",
               "layer": "modern-skin-css",
@@ -479,19 +479,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inline-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:120",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656",
-                "src/foundation/tokens/css/foundation/base/density.css:69"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656",
+                "src/foundation/tokens/css/foundation/base/density/index.css:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656"
               ]
             },
             {
@@ -504,7 +504,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:121",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:121",
               "hasFallback": true,
               "fallback": "40px",
               "layer": "modern-skin-css",
@@ -524,19 +524,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:121",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:121",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-shape='circle']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656",
-                "src/foundation/tokens/css/foundation/base/density.css:69"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656",
+                "src/foundation/tokens/css/foundation/base/density/index.css:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656"
               ]
             },
             {
@@ -550,21 +550,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-radius",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:124",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:124",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:44",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+                "tests/fixtures/tenants/default/index.css:44",
+                "tests/fixtures/tenants/quality-evidence/index.ts:351",
+                "tests/fixtures/tenants/quality-evidence/index.ts:474"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:44",
-                "src/foundation/tokens/css/foundation/themes/default.css:771"
+                "tests/fixtures/tenants/default/index.css:44",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:771"
               ]
             },
             {
@@ -578,7 +578,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125",
               "hasFallback": true,
               "fallback": "8px",
               "layer": "modern-skin-css",
@@ -599,19 +599,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656",
-                "src/foundation/tokens/css/foundation/base/density.css:69"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656",
+                "src/foundation/tokens/css/foundation/base/density/index.css:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656"
               ]
             },
             {
@@ -625,7 +625,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125",
               "hasFallback": true,
               "fallback": "12px",
               "layer": "modern-skin-css",
@@ -646,19 +646,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-shape='circle'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656",
-                "src/foundation/tokens/css/foundation/base/density.css:69"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656",
+                "src/foundation/tokens/css/foundation/base/density/index.css:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:656"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:656"
               ]
             },
             {
@@ -673,7 +673,7 @@
                 "@media (pointer: coarse)"
               ],
               "observableProperty": "inline-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:132",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:132",
               "hasFallback": true,
               "fallback": "44px",
               "layer": "modern-skin-css",
@@ -695,7 +695,7 @@
                 "@media (pointer: coarse)"
               ],
               "observableProperty": "block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:133",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:133",
               "hasFallback": true,
               "fallback": "44px",
               "layer": "modern-skin-css",
@@ -715,20 +715,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:139",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:139",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-variant='primary']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156"
               ]
             },
             {
@@ -741,21 +741,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:140",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:140",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-variant='primary']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
                 "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ]
             },
             {
@@ -769,20 +769,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:143",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:143",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-variant='primary'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+                "tests/fixtures/tenants/quality-evidence/index.ts:320",
+                "tests/fixtures/tenants/quality-evidence/index.ts:425",
+                "tests/fixtures/tenants/quality-evidence/index.ts:540"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:265"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:265"
               ]
             },
             {
@@ -796,21 +796,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:144",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:144",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']:not([data-variant='primary'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:143",
-                "src/ui/patterns/customization/brand-studio/index.tsx:161",
-                "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
+                "src/components/patterns/customization/brand-studio/index.tsx:143",
+                "src/components/patterns/customization/brand-studio/index.tsx:161",
+                "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:217",
-                "src/foundation/tokens/css/foundation/themes/default.css:2128"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
               ]
             },
             {
@@ -821,20 +821,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:152",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:152",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='badge']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:106",
-                "src/foundation/tokens/css/foundation/themes/default.css:177",
+                "src/components/patterns/customization/brand-studio/index.tsx:106",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:177",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:177"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:177"
               ]
             },
             {
@@ -847,7 +847,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-block-start",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:156",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:156",
               "hasFallback": true,
               "fallback": "-4px",
               "layer": "modern-skin-css",
@@ -867,7 +867,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-inline-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:157",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:157",
               "hasFallback": true,
               "fallback": "-4px",
               "layer": "modern-skin-css",
@@ -887,7 +887,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inline-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:158",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:158",
               "hasFallback": true,
               "fallback": "8px",
               "layer": "modern-skin-css",
@@ -907,7 +907,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:159",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:159",
               "hasFallback": true,
               "fallback": "8px",
               "layer": "modern-skin-css",
@@ -927,7 +927,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-block-start",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:164",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:164",
               "hasFallback": true,
               "fallback": "-8px",
               "layer": "modern-skin-css",
@@ -947,7 +947,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-inline-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:165",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:165",
               "hasFallback": true,
               "fallback": "-8px",
               "layer": "modern-skin-css",
@@ -967,7 +967,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:169",
               "hasFallback": true,
               "fallback": "1px",
               "layer": "modern-skin-css",
@@ -987,7 +987,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:169",
               "hasFallback": true,
               "fallback": "6px",
               "layer": "modern-skin-css",
@@ -1007,7 +1007,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "font-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:170",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:170",
               "hasFallback": true,
               "fallback": "11px",
               "layer": "modern-skin-css",
@@ -1027,7 +1027,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "line-height",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:171",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:171",
               "hasFallback": true,
               "fallback": "16px",
               "layer": "modern-skin-css",
@@ -1047,21 +1047,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:176",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:176",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='badge'][data-variant='count']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
                 "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ]
             },
             {
@@ -1072,18 +1072,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "font-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:181",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:181",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='description']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:608"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:608"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:608"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:608"
               ]
             },
             {
@@ -1094,7 +1094,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "inset-block-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:197",
               "hasFallback": true,
               "fallback": "var(--ds-spacing-6)",
               "layer": "modern-skin-css",
@@ -1112,19 +1112,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "inset-block-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:197",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689",
-                "src/foundation/tokens/css/foundation/base/density.css:83"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689",
+                "src/foundation/tokens/css/foundation/base/density/index.css:83"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689"
               ]
             },
             {
@@ -1135,19 +1135,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "inset-inline-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:198",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:198",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689",
-                "src/foundation/tokens/css/foundation/base/density.css:83"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689",
+                "src/foundation/tokens/css/foundation/base/density/index.css:83"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689"
               ]
             },
             {
@@ -1158,7 +1158,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "z-index",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:199",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:199",
               "hasFallback": true,
               "fallback": "1000",
               "layer": "modern-skin-css",
@@ -1176,19 +1176,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "gap",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:203",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:203",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:685",
-                "src/foundation/tokens/css/foundation/base/density.css:79"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+                "src/foundation/tokens/css/foundation/base/density/index.css:79"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:685"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:685"
               ]
             },
             {
@@ -1200,18 +1200,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "z-index",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:210",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:210",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern[data-part='root'] > [data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/base/z-index.css:56"
+                "src/foundation/tokens/css/foundation/base/z-index/index.css:56"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/base/z-index.css:56"
+                "src/foundation/tokens/css/foundation/base/z-index/index.css:56"
               ]
             },
             {
@@ -1224,7 +1224,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-block-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:219",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:219",
               "hasFallback": true,
               "fallback": "var(--ds-spacing-6)",
               "layer": "modern-skin-css",
@@ -1244,19 +1244,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-block-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:219",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:219",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689",
-                "src/foundation/tokens/css/foundation/base/density.css:83"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689",
+                "src/foundation/tokens/css/foundation/base/density/index.css:83"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689"
               ]
             },
             {
@@ -1269,19 +1269,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "inset-inline-end",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:220",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:220",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger'][data-placement='back-top']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689",
-                "src/foundation/tokens/css/foundation/base/density.css:83"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689",
+                "src/foundation/tokens/css/foundation/base/density/index.css:83"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:689"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:689"
               ]
             },
             {
@@ -1294,7 +1294,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "z-index",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:221",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:221",
               "hasFallback": true,
               "fallback": "1000",
               "layer": "modern-skin-css",
@@ -1312,19 +1312,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "gap",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:239",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:239",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:685",
-                "src/foundation/tokens/css/foundation/base/density.css:79"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+                "src/foundation/tokens/css/foundation/base/density/index.css:79"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:685"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:685"
               ]
             },
             {
@@ -1335,7 +1335,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -1353,22 +1353,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -1379,7 +1379,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -1397,18 +1397,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -1419,7 +1419,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -1437,22 +1437,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -1463,7 +1463,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -1481,18 +1481,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -1505,7 +1505,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transform",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:254",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:254",
               "hasFallback": true,
               "fallback": "1rem",
               "layer": "modern-skin-css",
@@ -1525,7 +1525,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -1545,22 +1545,22 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -1573,7 +1573,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -1593,18 +1593,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -1617,7 +1617,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -1637,22 +1637,22 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -1665,7 +1665,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -1685,18 +1685,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -1709,7 +1709,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -1729,22 +1729,22 @@
               ],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button--modern [data-part='panel'][data-open='false']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -1757,18 +1757,18 @@
                 "@media (hover: none), (pointer: coarse)"
               ],
               "observableProperty": "min-block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:297",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:297",
               "hasFallback": true,
               "fallback": "44px",
               "layer": "modern-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--modern[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:921"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:921"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:921"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:921"
               ]
             },
             {
@@ -1779,18 +1779,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:35",
               "hasFallback": true,
               "fallback": "var(--ds-shadow-dialog)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2001"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2001"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2001"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2001"
               ]
             },
             {
@@ -1801,18 +1801,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:35",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/base/shadows.css:95"
+                "src/foundation/tokens/css/foundation/base/shadows/index.css:95"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/base/shadows.css:95"
+                "src/foundation/tokens/css/foundation/base/shadows/index.css:95"
               ]
             },
             {
@@ -1826,7 +1826,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-radius",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:43",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:43",
               "hasFallback": true,
               "fallback": "8px",
               "layer": "rustic-skin-css",
@@ -1846,18 +1846,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:48",
               "hasFallback": true,
               "fallback": "var(--ds-color-primary)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2005"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2005"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2005"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2005"
               ]
             },
             {
@@ -1870,20 +1870,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:48",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156"
               ]
             },
             {
@@ -1896,18 +1896,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:49",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-on-primary)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2006"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2006"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2006"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2006"
               ]
             },
             {
@@ -1920,21 +1920,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:49",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger'][data-variant='primary']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
                 "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ]
             },
             {
@@ -1948,18 +1948,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:52",
               "hasFallback": true,
               "fallback": "var(--ds-color-bg-elevated)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2003"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2003"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2003"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2003"
               ]
             },
             {
@@ -1973,21 +1973,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:52",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:140",
-                "src/ui/patterns/customization/brand-studio/index.tsx:158",
-                "src/foundation/tokens/css/foundation/themes/default.css:209"
+                "src/components/patterns/customization/brand-studio/index.tsx:140",
+                "src/components/patterns/customization/brand-studio/index.tsx:158",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:209"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:209",
-                "src/foundation/tokens/css/foundation/themes/default.css:2123"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:209",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2123"
               ]
             },
             {
@@ -2001,18 +2001,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:53",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-secondary)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2004"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2004"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2004"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2004"
               ]
             },
             {
@@ -2026,21 +2026,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:53",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:not([data-variant='primary'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:144",
-                "src/ui/patterns/customization/brand-studio/index.tsx:162",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:307"
+                "src/components/patterns/customization/brand-studio/index.tsx:144",
+                "src/components/patterns/customization/brand-studio/index.tsx:162",
+                "tests/fixtures/tenants/quality-evidence/index.ts:307"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:218",
-                "src/foundation/tokens/css/foundation/themes/default.css:2129"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
               ]
             },
             {
@@ -2053,18 +2053,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:59",
               "hasFallback": true,
               "fallback": "var(--ds-shadow-lg)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:hover",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2002"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2002"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2002"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2002"
               ]
             },
             {
@@ -2077,20 +2077,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:59",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button.rottay-float-button--rustic[data-part='trigger']:hover",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:355",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:478",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:567"
+                "tests/fixtures/tenants/quality-evidence/index.ts:355",
+                "tests/fixtures/tenants/quality-evidence/index.ts:478",
+                "tests/fixtures/tenants/quality-evidence/index.ts:567"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:832"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:832"
               ]
             },
             {
@@ -2101,18 +2101,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "background-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:64",
               "hasFallback": true,
               "fallback": "var(--ds-color-error)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button--rustic [data-part='badge']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2007"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2007"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2007"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2007"
               ]
             },
             {
@@ -2123,20 +2123,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "background-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:64",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button--rustic [data-part='badge']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:106",
-                "src/foundation/tokens/css/foundation/themes/default.css:177",
+                "src/components/patterns/customization/brand-studio/index.tsx:106",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:177",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:177"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:177"
               ]
             },
             {
@@ -2147,18 +2147,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:65",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-on-primary)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button--rustic [data-part='badge']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2008"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2008"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2008"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2008"
               ]
             },
             {
@@ -2169,21 +2169,21 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:65",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button--rustic [data-part='badge']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132",
                 "src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:225",
-                "src/foundation/tokens/css/foundation/themes/default.css:2132"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
               ]
             },
             {
@@ -2194,18 +2194,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:70",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-secondary)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button--rustic [data-part='description']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2009"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2009"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2009"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2009"
               ]
             },
             {
@@ -2216,21 +2216,21 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:70",
               "hasFallback": false,
               "fallback": null,
               "layer": "rustic-skin-css",
               "selector": ".rottay-float-button--rustic [data-part='description']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:144",
-                "src/ui/patterns/customization/brand-studio/index.tsx:162",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:307"
+                "src/components/patterns/customization/brand-studio/index.tsx:144",
+                "src/components/patterns/customization/brand-studio/index.tsx:162",
+                "tests/fixtures/tenants/quality-evidence/index.ts:307"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:218",
-                "src/foundation/tokens/css/foundation/themes/default.css:2129"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
               ]
             },
             {
@@ -2241,7 +2241,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "width",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:70",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:70",
               "hasFallback": true,
               "fallback": "48px",
               "layer": "engine-inline:rustic",
@@ -2259,7 +2259,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "height",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:71",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:71",
               "hasFallback": true,
               "fallback": "48px",
               "layer": "engine-inline:rustic",
@@ -2277,7 +2277,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "bottom",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:77",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:77",
               "hasFallback": true,
               "fallback": "24px",
               "layer": "engine-inline:rustic",
@@ -2295,7 +2295,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "right",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:78",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:78",
               "hasFallback": true,
               "fallback": "24px",
               "layer": "engine-inline:rustic",
@@ -2313,7 +2313,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "zIndex",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:79",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:79",
               "hasFallback": true,
               "fallback": "1000",
               "layer": "engine-inline:rustic",
@@ -2331,7 +2331,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "gap",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:87",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:87",
               "hasFallback": true,
               "fallback": "8px",
               "layer": "engine-inline:rustic",
@@ -2349,7 +2349,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "gap",
-              "readAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:95",
+              "readAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:95",
               "hasFallback": true,
               "fallback": "8px",
               "layer": "engine-inline:rustic",
@@ -2364,330 +2364,330 @@
         "undeclaredReads": [
           {
             "variable": "--ds-floatbutton-size",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:120"
           },
           {
             "variable": "--ds-floatbutton-padding-block",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125"
           },
           {
             "variable": "--ds-floatbutton-padding-inline",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125"
           },
           {
             "variable": "--ds-floatbutton-size-coarse",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:132"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:132"
           },
           {
             "variable": "--ds-floatbutton-dot-offset-block",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:156"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:156"
           },
           {
             "variable": "--ds-floatbutton-dot-offset-inline",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:157"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:157"
           },
           {
             "variable": "--ds-floatbutton-dot-size",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:158"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:158"
           },
           {
             "variable": "--ds-floatbutton-badge-offset-block",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:164"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:164"
           },
           {
             "variable": "--ds-floatbutton-badge-offset-inline",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:165"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:165"
           },
           {
             "variable": "--ds-floatbutton-badge-padding-block",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:169"
           },
           {
             "variable": "--ds-floatbutton-badge-padding-inline",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:169"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:169"
           },
           {
             "variable": "--ds-floatbutton-badge-font-size",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:170"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:170"
           },
           {
             "variable": "--ds-floatbutton-badge-line-height",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:171"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:171"
           },
           {
             "variable": "--ds-floatbutton-offset-block-end",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:197"
           },
           {
             "variable": "--ds-z-floatbutton",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:199"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:199"
           },
           {
             "variable": "--ds-floatbutton-panel-duration",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248"
           },
           {
             "variable": "--ds-floatbutton-panel-timing",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248"
           },
           {
             "variable": "--_ds-float-button-panel-closed-offset",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:254"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:254"
           },
           {
             "variable": "--ds-floatbutton-square-radius",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:43"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:43"
           },
           {
             "variable": "--ds-floatbutton-bottom",
-            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:77"
+            "firstReadAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:77"
           },
           {
             "variable": "--ds-floatbutton-right",
-            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:78"
+            "firstReadAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:78"
           },
           {
             "variable": "--ds-floatbutton-z-index",
-            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:79"
+            "firstReadAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:79"
           },
           {
             "variable": "--ds-floatbutton-gap",
-            "firstReadAt": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:87"
+            "firstReadAt": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:87"
           }
         ],
         "readsWithoutFallback": [
           {
             "variable": "--ds-elevation-2",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:88",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:88",
             "observableProperty": "box-shadow"
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:89",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:89",
             "observableProperty": "font-family"
           },
           {
             "variable": "--ds-button-font-weight",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:90",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:90",
             "observableProperty": "font-weight"
           },
           {
             "variable": "--ds-button-md-font-size",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:91",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:91",
             "observableProperty": "font-size"
           },
           {
             "variable": "--ds-button-transition",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:94",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:94",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-button-focus-ring",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:110",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:110",
             "observableProperty": "box-shadow"
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:120",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:120",
             "observableProperty": "inline-size"
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:121",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:121",
             "observableProperty": "block-size"
           },
           {
             "variable": "--ds-radius-lg",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:124",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:124",
             "observableProperty": "border-radius"
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125",
             "observableProperty": "padding"
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:125",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:125",
             "observableProperty": "padding"
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:139",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:139",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:140",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:140",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:143",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:143",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:144",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:144",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:152",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:152",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:176",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:176",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:181",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:181",
             "observableProperty": "font-size"
           },
           {
             "variable": "--ds-spacing-6",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:197",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:197",
             "observableProperty": "inset-block-end"
           },
           {
             "variable": "--ds-spacing-6",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:198",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:198",
             "observableProperty": "inset-inline-end"
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:203",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:203",
             "observableProperty": "gap"
           },
           {
             "variable": "--ds-z-index-relative-top",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:210",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:210",
             "observableProperty": "z-index"
           },
           {
             "variable": "--ds-spacing-6",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:219",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:219",
             "observableProperty": "inset-block-end"
           },
           {
             "variable": "--ds-spacing-6",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:220",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:220",
             "observableProperty": "inset-inline-end"
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:239",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:239",
             "observableProperty": "gap"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:248",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:248",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:262",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:262",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-shadow-dialog",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:35",
             "observableProperty": "box-shadow"
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:48",
             "observableProperty": "background-color"
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:49",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:52",
             "observableProperty": "background-color"
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:53",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-shadow-lg",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:59",
             "observableProperty": "box-shadow"
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:64",
             "observableProperty": "background-color"
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:65",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+            "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:70",
             "observableProperty": "color"
           }
         ],
         "inertFallbackChains": {
-          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css:164-178.",
+          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css:164-178.",
           "blockingCount": 12,
           "testFixtureOnlyCount": 0,
           "entries": [
             {
               "variable": "--ds-button-hover-transform",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:103",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:103",
               "fallback": "translateY(0) scale(1)",
               "observableProperty": "transform",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:115",
-                "src/foundation/tokens/css/presentation/components/button.css:326"
+                "src/foundation/tokens/css/runtime/personality/index.css:115",
+                "src/foundation/tokens/css/presentation/components/button/index.css:326"
               ],
               "rootDefaultProvenance": [
                 "OTHER_SOURCE_CSS"
@@ -2697,15 +2697,15 @@
             },
             {
               "variable": "--ds-button-active-transform",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:107",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:107",
               "fallback": "scale(0.98)",
               "observableProperty": "transform",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:119",
-                "src/foundation/tokens/css/presentation/components/button.css:327"
+                "src/foundation/tokens/css/runtime/personality/index.css:119",
+                "src/foundation/tokens/css/presentation/components/button/index.css:327"
               ],
               "rootDefaultProvenance": [
                 "OTHER_SOURCE_CSS"
@@ -2715,14 +2715,14 @@
             },
             {
               "variable": "--ds-touch-target-min",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:297",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:297",
               "fallback": "44px",
               "observableProperty": "min-block-size",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:921"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:921"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2732,14 +2732,14 @@
             },
             {
               "variable": "--ds-floatbutton-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:35",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:35",
               "fallback": "var(--ds-shadow-dialog)",
               "observableProperty": "box-shadow",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2001"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2001"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2749,14 +2749,14 @@
             },
             {
               "variable": "--ds-floatbutton-primary-bg",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:48",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:48",
               "fallback": "var(--ds-color-primary)",
               "observableProperty": "background-color",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2005"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2005"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2766,14 +2766,14 @@
             },
             {
               "variable": "--ds-floatbutton-primary-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:49",
               "fallback": "var(--ds-color-text-on-primary)",
               "observableProperty": "color",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2006"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2006"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2783,14 +2783,14 @@
             },
             {
               "variable": "--ds-floatbutton-default-bg",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:52",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:52",
               "fallback": "var(--ds-color-bg-elevated)",
               "observableProperty": "background-color",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2003"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2003"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2800,14 +2800,14 @@
             },
             {
               "variable": "--ds-floatbutton-default-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:53",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:53",
               "fallback": "var(--ds-color-text-secondary)",
               "observableProperty": "color",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2004"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2004"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2817,14 +2817,14 @@
             },
             {
               "variable": "--ds-floatbutton-hover-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:59",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:59",
               "fallback": "var(--ds-shadow-lg)",
               "observableProperty": "box-shadow",
               "parts": [
                 "trigger"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2002"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2002"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2834,14 +2834,14 @@
             },
             {
               "variable": "--ds-floatbutton-badge-bg",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:64",
               "fallback": "var(--ds-color-error)",
               "observableProperty": "background-color",
               "parts": [
                 "badge"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2007"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2007"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2851,14 +2851,14 @@
             },
             {
               "variable": "--ds-floatbutton-badge-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:65",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:65",
               "fallback": "var(--ds-color-text-on-primary)",
               "observableProperty": "color",
               "parts": [
                 "badge"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2008"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2008"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2868,14 +2868,14 @@
             },
             {
               "variable": "--ds-floatbutton-description-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:70",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:70",
               "fallback": "var(--ds-color-text-secondary)",
               "observableProperty": "color",
               "parts": [
                 "description"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2009"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2009"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -2891,7 +2891,7 @@
         "testOrStoryOnlyDeclaredReads": [],
         "hardcodedValues": [
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:119",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:119",
             "property": "border-radius",
             "literals": [
               "50%"
@@ -2902,7 +2902,7 @@
             "classification": "RATIO_CONSTANT_NOT_A_LENGTH"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:160",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:160",
             "property": "border-radius",
             "literals": [
               "9999px"
@@ -2913,7 +2913,7 @@
             "classification": "UNGOVERNED_GEOMETRY"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:175",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:175",
             "property": "border-radius",
             "literals": [
               "9999px"
@@ -2924,7 +2924,7 @@
             "classification": "UNGOVERNED_GEOMETRY"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:276",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:276",
             "property": "border",
             "literals": [
               "1px"
@@ -2937,7 +2937,7 @@
             "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:281",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:281",
             "property": "outline",
             "literals": [
               "2px"
@@ -2950,7 +2950,7 @@
             "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css:282",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css:282",
             "property": "outline-offset",
             "literals": [
               "2px"
@@ -2963,7 +2963,7 @@
             "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:40",
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:40",
             "property": "border-radius",
             "literals": [
               "50%"
@@ -2974,7 +2974,7 @@
             "classification": "RATIO_CONSTANT_NOT_A_LENGTH"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:66",
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:66",
             "property": "border-radius",
             "literals": [
               "9px"
@@ -2985,7 +2985,7 @@
             "classification": "UNGOVERNED_GEOMETRY"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button.css:82",
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/float-button/index.css:82",
             "property": "transform",
             "literals": [
               "16px"
@@ -2996,7 +2996,7 @@
             "classification": "UNGOVERNED_GEOMETRY"
           },
           {
-            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:63",
+            "at": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:63",
             "property": "transition",
             "literals": [
               "0.2s"
@@ -3007,7 +3007,7 @@
             "classification": "RAW_MOTION_LITERAL"
           },
           {
-            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:96",
+            "at": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:96",
             "property": "transition",
             "literals": [
               "0.2s"
@@ -3018,7 +3018,7 @@
             "classification": "RAW_MOTION_LITERAL"
           },
           {
-            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:112",
+            "at": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:112",
             "property": "padding",
             "literals": [
               "4px"
@@ -3029,7 +3029,7 @@
             "classification": "UNGOVERNED_GEOMETRY"
           },
           {
-            "at": "src/ui/primitives/navigation/FloatButton/engines/rustic/index.tsx:114",
+            "at": "src/components/primitives/navigation/float-button/engines/rustic/index.tsx:114",
             "property": "lineHeight",
             "literals": [
               "18px"
@@ -3092,13 +3092,13 @@
         {
           "channelId": "--_ds-float-button-active-indicator",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3116,7 +3116,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -3141,7 +3141,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -3168,13 +3168,13 @@
         {
           "channelId": "--_ds-float-button-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3184,13 +3184,13 @@
         {
           "channelId": "--_ds-floatbutton-badge-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3199,13 +3199,13 @@
         {
           "channelId": "--_ds-floatbutton-badge-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3222,7 +3222,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -3255,13 +3255,13 @@
         {
           "channelId": "--_ds-float-button-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3281,13 +3281,13 @@
         {
           "channelId": "--_ds-float-button-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3297,13 +3297,13 @@
         {
           "channelId": "--_ds-floatbutton-badge-offset-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3312,13 +3312,13 @@
         {
           "channelId": "--_ds-floatbutton-badge-offset-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3327,13 +3327,13 @@
         {
           "channelId": "--_ds-floatbutton-badge-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3342,13 +3342,13 @@
         {
           "channelId": "--_ds-floatbutton-badge-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3357,13 +3357,13 @@
         {
           "channelId": "--_ds-floatbutton-dot-offset-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3372,13 +3372,13 @@
         {
           "channelId": "--_ds-floatbutton-dot-offset-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3387,13 +3387,13 @@
         {
           "channelId": "--_ds-floatbutton-dot-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3402,13 +3402,13 @@
         {
           "channelId": "--_ds-floatbutton-offset-block-end",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3417,13 +3417,13 @@
         {
           "channelId": "--_ds-floatbutton-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3432,13 +3432,13 @@
         {
           "channelId": "--_ds-floatbutton-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3447,13 +3447,13 @@
         {
           "channelId": "--_ds-floatbutton-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3462,13 +3462,13 @@
         {
           "channelId": "--_ds-floatbutton-size-coarse",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3486,7 +3486,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3500,13 +3500,13 @@
         {
           "channelId": "--_ds-float-button-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3516,13 +3516,13 @@
         {
           "channelId": "--_ds-floatbutton-panel-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3531,13 +3531,13 @@
         {
           "channelId": "--_ds-floatbutton-panel-timing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3572,7 +3572,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "nav chrome mate; el estado activo lo da sidebar-tone, no efectos",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3620,7 +3620,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el fondo del chrome de navegacion lo emite sidebar-tone (seis hojas); una segunda fuente viola L4",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3634,13 +3634,13 @@
         {
           "channelId": "--_ds-float-button-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3664,7 +3664,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3720,7 +3720,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3748,7 +3748,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
         ]
       }
     },
@@ -3763,13 +3763,13 @@
         {
           "channelId": "--_ds-float-button-icon-fill-mode",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/float-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/float-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3789,11 +3789,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

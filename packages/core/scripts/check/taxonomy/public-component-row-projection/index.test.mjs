@@ -79,7 +79,7 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { createRootPublicResolver } from '../../../libraries/taxonomy/roots/index.mjs';
-import { relocateSourceOwners } from '../../../libraries/taxonomy/relocation/index.mjs';
+import { relocateSourceOwners } from '../../../libraries/taxonomy/owner-resolution/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -90,7 +90,7 @@ const REPO_ROOT = findRepoRoot(HERE);
 const ENTRY_FILE = path.join(CORE_ROOT, 'src', 'index.ts');
 const INVENTORY_FILE = path.join(
   CORE_ROOT,
-  'scripts/quality-evidence/programs/modern-rescue/family-inventory.json',
+  'scripts/check/modern-rescue/family-inventory/index.json',
 );
 
 const PASCAL_CASE = /^[A-Z][A-Za-z0-9]*$/;
@@ -231,8 +231,7 @@ function describe(entries) {
 const realProjection = (() => {
   const inventory = JSON.parse(fs.readFileSync(INVENTORY_FILE, 'utf8'));
   const resolver = createRootPublicResolver({ entryFile: ENTRY_FILE });
-  // The inventory records owners under a physical prefix the tree no longer
-  // uses. Resolving them here, fail-closed, is what keeps containment honest:
+  // Resolving owners here, fail-closed, is what keeps containment honest:
   // an unresolvable row throws rather than quietly owning nothing.
   const ownerDirectories = relocateSourceOwners(inventory.rows, { repoRoot: REPO_ROOT });
   return {
@@ -266,13 +265,13 @@ test('the projection sees a real population (a silent zero would pass everything
 
 test('a row pointing at a directory that does not exist fails the run, not the row', () => {
   // Counterfactual for the wiring above: the projection must never see a
-  // silently shortened owner list. The adapter is the thing that refuses.
+  // silently shortened owner list. The resolver is the thing that refuses.
   assert.throws(
     () =>
       relocateSourceOwners(
         [
           ...realProjection.inventory.rows,
-          { id: 'primitive/display/not-a-real-owner', sourceOwner: 'packages/core/src/ui/primitives/display/NotAReal' },
+          { id: 'primitive/display/not-a-real-owner', sourceOwner: 'packages/core/src/components/primitives/display/NotAReal' },
         ],
         { repoRoot: REPO_ROOT },
       ),

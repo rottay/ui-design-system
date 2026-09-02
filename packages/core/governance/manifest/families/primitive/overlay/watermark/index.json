@@ -8,15 +8,15 @@
     "components": [
       "Watermark"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/overlay/Watermark",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/watermark",
     "publicComponents": [
       "Watermark"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fa19e35dfe79e0d92e14b00e61becf65dad461c4567be2391298831e9a059066"
+    "inventoryRowDigest": "e97639f2a55987b84641b430c5e84e50ecaae236b14cb38b5e4ee0035ca67e8c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/overlay/Watermark/contracts/index.ts",
-      "packages/core/src/ui/primitives/overlay/Watermark/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Watermark/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Watermark/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Watermark/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Watermark/runtime/canvas-pattern/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+      "packages/core/src/components/primitives/overlay/watermark/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/watermark/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/watermark/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/watermark/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/watermark/index.tsx",
+      "packages/core/src/components/primitives/overlay/watermark/runtime/canvas-pattern/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
     ],
     "stableParts": [
       "root",
@@ -44,9 +44,9 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "aria-hidden [at src/ui/primitives/overlay/Watermark/engines/modern/index.tsx:122, src/ui/primitives/overlay/Watermark/engines/rustic/index.tsx:115]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:72]",
-      "high-contrast-forced-color-adjust [at src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:21]"
+      "aria-hidden [at src/components/primitives/overlay/watermark/engines/modern/index.tsx:122, src/components/primitives/overlay/watermark/engines/rustic/index.tsx:115]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:72]",
+      "high-contrast-forced-color-adjust [at src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:21]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -68,21 +68,21 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Watermark/engines/modern/index.tsx:113",
-            "src/ui/primitives/overlay/Watermark/engines/rustic/index.tsx:102",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:53"
+            "src/components/primitives/overlay/watermark/engines/modern/index.tsx:113",
+            "src/components/primitives/overlay/watermark/engines/rustic/index.tsx:102",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:53"
           ]
         },
         {
           "part": "pattern",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Watermark/engines/modern/index.tsx:121",
-            "src/ui/primitives/overlay/Watermark/engines/rustic/index.tsx:114",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:57",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:58",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:60",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:63"
+            "src/components/primitives/overlay/watermark/engines/modern/index.tsx:121",
+            "src/components/primitives/overlay/watermark/engines/rustic/index.tsx:114",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:57",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:58",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:60",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:63"
           ],
           "atSiteCount": 8
         }
@@ -155,7 +155,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:63",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:63",
                 "readIn": "modern-skin-css",
                 "part": "pattern",
                 "landsOn": "opacity",
@@ -176,13 +176,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/Watermark/engines/rustic/index.tsx:126"
+              "src/components/primitives/overlay/watermark/engines/rustic/index.tsx:126"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css:69",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css:69",
                 "readIn": "modern-skin-css",
                 "part": "pattern",
                 "landsOn": "background-position",
@@ -203,16 +203,16 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1941",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2870",
-              "src/foundation/tokens/css/foundation/themes/default.css:2091"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2091"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:2091",
-              "src/foundation/tokens/css/foundation/themes/default.css:2203"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2091",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2203"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/Watermark/contracts/index.ts:118",
+                "at": "src/components/primitives/overlay/watermark/contracts/index.ts:118",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "color",
@@ -274,7 +274,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -299,7 +299,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -326,13 +326,13 @@
         {
           "channelId": "--_ds-watermark-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -352,13 +352,13 @@
         {
           "channelId": "--_ds-watermark-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -394,7 +394,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el overlay es marco y velo; lo que densifica es su CONTENIDO (tablas/listas/forms) por sus propios sockets",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -415,7 +415,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -429,13 +429,13 @@
         {
           "channelId": "--_ds-watermark-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -455,13 +455,13 @@
         {
           "channelId": "--_ds-watermark-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -481,13 +481,13 @@
         {
           "channelId": "--_ds-watermark-backdrop-filter",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -506,7 +506,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -537,13 +537,13 @@
         {
           "channelId": "--_ds-watermark-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -563,13 +563,13 @@
         {
           "channelId": "--_ds-watermark-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -579,13 +579,13 @@
         {
           "channelId": "--_ds-watermark-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/watermark"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/watermark/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -609,7 +609,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -665,7 +665,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -696,7 +696,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -710,11 +710,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "ResizeHandle"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/foundation/resize-handle",
     "publicComponents": [
       "ResizeHandle"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "4b22d44baa064024ab11b4111178a8701df22a3d4c6dfb2831a3fa8dfbaffe45"
+    "inventoryRowDigest": "3a79cbe1eb4ccb73f43d35a4cc9f917853b817ed285b7e0fc2c1bc1f727c7c1c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/foundation/ResizeHandle/index.tsx",
-      "packages/core/src/ui/primitives/foundation/ResizeHandle/contracts/index.ts"
+      "packages/core/src/components/primitives/foundation/resize-handle/index.tsx",
+      "packages/core/src/components/primitives/foundation/resize-handle/contracts/index.ts"
     ],
     "stableParts": [],
     "states": [
@@ -38,10 +38,10 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "role=\"separator\" with tabIndex={0} and the full aria set: aria-label, aria-orientation, aria-valuemin, aria-valuemax, aria-valuenow, aria-valuetext, aria-keyshortcuts. [at primitives/foundation/ResizeHandle/index.tsx:173-181]",
-      "An inoperable handle is removed from both the a11y tree and the tab order (aria-hidden, tabIndex -1, no role), so a decorative gutter never advertises a control. [at primitives/foundation/ResizeHandle/index.tsx:152-167]",
-      "Key handling ignores Alt/Ctrl/Meta chords, so browser and OS shortcuts are never swallowed. [at primitives/foundation/ResizeHandle/index.tsx:135]",
-      "Home maps to minimize and End to maximize, and inline arrow intent is RTL-mirrored. [at primitives/foundation/ResizeHandle/index.tsx:71-97]"
+      "role=\"separator\" with tabIndex={0} and the full aria set: aria-label, aria-orientation, aria-valuemin, aria-valuemax, aria-valuenow, aria-valuetext, aria-keyshortcuts. [at primitives/foundation/resize-handle/index.tsx:173-181]",
+      "An inoperable handle is removed from both the a11y tree and the tab order (aria-hidden, tabIndex -1, no role), so a decorative gutter never advertises a control. [at primitives/foundation/resize-handle/index.tsx:152-167]",
+      "Key handling ignores Alt/Ctrl/Meta chords, so browser and OS shortcuts are never swallowed. [at primitives/foundation/resize-handle/index.tsx:135]",
+      "Home maps to minimize and End to maximize, and inline arrow intent is RTL-mirrored. [at primitives/foundation/resize-handle/index.tsx:71-97]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -65,7 +65,7 @@
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [],
           "citationsUnverified": [
-            "primitives/foundation/ResizeHandle/index.tsx:173"
+            "primitives/foundation/resize-handle/index.tsx:173"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -78,7 +78,7 @@
         {
           "token": "dragging",
           "at": [
-            "primitives/foundation/ResizeHandle/contracts/index.ts:41"
+            "primitives/foundation/resize-handle/contracts/index.ts:41"
           ],
           "state": "dragging"
         }
@@ -88,7 +88,7 @@
           {
             "token": "operable / inoperable",
             "at": [
-              "primitives/foundation/ResizeHandle/index.tsx:152-167"
+              "primitives/foundation/resize-handle/index.tsx:152-167"
             ]
           }
         ],
@@ -133,13 +133,13 @@
         {
           "channelId": "--_ds-resize-handle-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -149,13 +149,13 @@
         {
           "channelId": "--_ds-resize-handle-color-dragging",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -165,13 +165,13 @@
         {
           "channelId": "--_ds-resize-handle-color-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -189,7 +189,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -208,7 +208,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -227,7 +227,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -284,13 +284,13 @@
         {
           "channelId": "--_ds-resize-handle-grip-length",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -300,13 +300,13 @@
         {
           "channelId": "--_ds-resize-handle-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -344,13 +344,13 @@
         {
           "channelId": "--_ds-resize-handle-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -386,8 +386,8 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -407,7 +407,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -464,13 +464,13 @@
         {
           "channelId": "--_ds-resize-handle-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -480,13 +480,13 @@
         {
           "channelId": "--_ds-resize-handle-focus-ring-offset",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/ui/primitives/foundation/ResizeHandle",
+          "producer": "packages/core/src/components/primitives/foundation/resize-handle",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/resize-handle"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/ResizeHandle"
+            "packages/core/src/components/primitives/foundation/resize-handle"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -510,7 +510,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -567,7 +567,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -617,11 +617,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

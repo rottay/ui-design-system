@@ -8,15 +8,15 @@
     "components": [
       "StatsHeader"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/dashboard/stats-header",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/dashboard/stats-header",
     "publicComponents": [
       "StatsHeader"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d6ac7f86a1add9fa8e55b516008f3a47a1f636b6a047a6021f53800d5e18c41c"
+    "inventoryRowDigest": "04c457db64bd8d2a7eb880dba3be42e9780924c5a578e6f9919cda9f5905ba04"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/dashboard/stats-header",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+      "packages/core/src/components/structures/dashboard/stats-header",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
     ],
     "stableParts": [
       "root",
@@ -66,10 +66,10 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:287, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:290]",
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:302, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:303, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:304]",
-      "keyboard focus is expressed through an outline on :focus-visible [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:107, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:108, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:307]",
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:267, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:272, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:276]"
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:287, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:290]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:302, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:303, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:304]",
+      "keyboard focus is expressed through an outline on :focus-visible [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:107, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:108, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:307]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:267, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:272, packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:276]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -97,7 +97,7 @@
           "anchorKind": "data-part",
           "anchor": "root-class-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:218"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:218"
           ]
         },
         {
@@ -105,11 +105,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:192",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:225",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:226",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:227",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:228"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:192",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:225",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:226",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:227",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:228"
           ]
         },
         {
@@ -117,11 +117,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:227",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:61",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:62",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:66",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:67"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:227",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:61",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:62",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:67"
           ]
         },
         {
@@ -129,8 +129,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:146"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:146"
           ]
         },
         {
@@ -138,11 +138,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:102",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:167",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:168",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:169",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:170"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:102",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:167",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:168",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:169",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:170"
           ]
         },
         {
@@ -150,10 +150,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:95",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:156",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:160",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:164"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:156",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:160",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:164"
           ]
         },
         {
@@ -161,11 +161,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:97",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:149",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:150",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:151",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:152"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:97",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:149",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:150",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:151",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:152"
           ]
         },
         {
@@ -173,11 +173,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:230",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:240",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:241",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:242",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:243"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:230",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:240",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:241",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:242",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:243"
           ]
         },
         {
@@ -185,11 +185,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:181",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:182",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:183",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:187"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:181",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:182",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:183",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:187"
           ]
         },
         {
@@ -197,9 +197,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:178",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:311"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:178",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:311"
           ]
         },
         {
@@ -207,11 +207,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:120",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:72",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:73",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:74",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:75"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:120",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:73",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:74",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:75"
           ]
         },
         {
@@ -219,11 +219,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:161",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:136",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:137",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:138",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:139"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:136",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:137",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:138",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:139"
           ]
         },
         {
@@ -231,11 +231,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:186",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:216",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:217",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:218",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:219"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:216",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:217",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:218",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:219"
           ]
         },
         {
@@ -243,8 +243,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:175",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:211"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:175",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:211"
           ]
         },
         {
@@ -252,11 +252,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:138",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:113",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:114",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:115",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:116"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:138",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:113",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:114",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:115",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:116"
           ]
         },
         {
@@ -264,9 +264,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:139",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:120",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:121"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:120",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:121"
           ]
         }
       ],
@@ -275,8 +275,8 @@
           "token": ":active",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:103",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:104"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:103",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:104"
           ],
           "state": "active"
         },
@@ -284,9 +284,9 @@
           "token": ":focus",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:107",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:108",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:307"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:107",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:108",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:307"
           ],
           "state": "focus"
         },
@@ -294,9 +294,9 @@
           "token": ":focus-visible",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:107",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:108",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:307"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:107",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:108",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:307"
           ],
           "state": "focus-visible"
         },
@@ -304,9 +304,9 @@
           "token": ":hover",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:98",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:99",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:194"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:98",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:99",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:194"
           ],
           "state": "hover"
         },
@@ -314,9 +314,9 @@
           "token": "loading=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:249",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:302",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:303"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:249",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:302",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:303"
           ],
           "state": "loading"
         },
@@ -324,7 +324,7 @@
           "token": "data-loading",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:221"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:221"
           ],
           "state": "loading"
         },
@@ -332,7 +332,7 @@
           "token": "aria-busy",
           "axis": "aria-attribute",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:222"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:222"
           ],
           "state": "aria-busy"
         }
@@ -342,118 +342,118 @@
           "token": "accent",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:87",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:136",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:137"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:87",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:136",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:137"
           ]
         },
         {
           "token": "accent=error",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:206",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:234"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:234"
           ]
         },
         {
           "token": "accent=info",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:207",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:235"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:207",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:235"
           ]
         },
         {
           "token": "accent=primary",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:231"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:231"
           ]
         },
         {
           "token": "accent=success",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:204",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:232"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:204",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:232"
           ]
         },
         {
           "token": "accent=warning",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:205",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:233"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:205",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:233"
           ]
         },
         {
           "token": "change=decrease",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:160"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:160"
           ]
         },
         {
           "token": "change=increase",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:156"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:156"
           ]
         },
         {
           "token": "change=neutral",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:164"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:164"
           ]
         },
         {
           "token": "clickable=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:90",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:98",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:99"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:90",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:98",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:99"
           ]
         },
         {
           "token": "columns=1",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:267",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:272"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:267",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:272"
           ]
         },
         {
           "token": "data-accent",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:53",
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:121",
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:175"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:53",
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:121",
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:175"
           ]
         },
         {
           "token": "data-change",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:95",
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:97"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:95",
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:97"
           ]
         },
         {
           "token": "data-clickable",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:122"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:122"
           ]
         },
         {
           "token": "data-columns",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:220"
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:220"
           ]
         }
       ],
@@ -463,55 +463,55 @@
             "token": "@container ds-stats-header (inline-size < 30rem) >> .ds-stats-header[data-part='root'] [data-part='stat-card'], .ds-stats-header[data-part='root'] [data-part='skeleton-card']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:276",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:277"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:276",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:277"
             ]
           },
           {
             "token": "@container ds-stats-header (inline-size < 30rem) >> .ds-stats-header[data-part='root'] [data-part='stat-card']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:280"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:280"
             ]
           },
           {
             "token": "@container ds-stats-header (inline-size < 30rem) >> .ds-stats-header[data-part='root']:not([data-columns='1'])",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:272"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:272"
             ]
           },
           {
             "token": "@container ds-stats-header (inline-size < 48rem) >> .ds-stats-header[data-part='root']:not([data-columns='1'])",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:267"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:267"
             ]
           },
           {
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:302",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:303",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:304"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:302",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:303",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:304"
             ]
           },
           {
             "token": "@media(hover: hover)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:98",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:99",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:194"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:98",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:99",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:194"
             ]
           },
           {
             "token": "@media(prefers-reduced-motion: reduce)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:287",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:290"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:287",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:290"
             ]
           }
         ],
@@ -523,9 +523,9 @@
             "token": "aria-hidden",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:44",
-              "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:161",
-              "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:192"
+              "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:44",
+              "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:161",
+              "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:192"
             ]
           }
         ],
@@ -537,49 +537,49 @@
             "token": "dot-index=1",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:196"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:196"
             ]
           },
           {
             "token": "dot-index=2",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:197"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:197"
             ]
           },
           {
             "token": "dot-index=3",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:198"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:198"
             ]
           },
           {
             "token": "dot-index=4",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:199"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:199"
             ]
           },
           {
             "token": "dot-index=5",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:200"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:200"
             ]
           },
           {
             "token": "dot-index=6",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:201"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:201"
             ]
           },
           {
             "token": "data-dot-index",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:54"
+              "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:54"
             ]
           }
         ],
@@ -588,7 +588,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": true,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css": {
             "rows": 107,
             "layer": "engine-agnostic skin"
           }
@@ -616,7 +616,7 @@
           {
             "variable": "--_ds-stats-header-track-count",
             "part": "card-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:62",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:62",
             "selector": ".ds-stats-header[data-part='root'] [data-part='card-grid']",
             "states": [],
             "landsOn": "grid-template-columns",
@@ -629,15 +629,15 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:267",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:272"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:267",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:272"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-stats-header-columns",
             "part": "card-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:62",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:62",
             "selector": ".ds-stats-header[data-part='root'] [data-part='card-grid']",
             "states": [],
             "landsOn": "grid-template-columns",
@@ -650,14 +650,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:224"
+              "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:224"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-spacing-3",
             "part": "card-grid",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:66",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:66",
             "selector": ".ds-stats-header[data-part='root'] [data-part='card-grid']",
             "states": [],
             "landsOn": "gap",
@@ -670,15 +670,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-stats-header-card-min-height",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:75",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:75",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "min-block-size",
@@ -696,7 +696,7 @@
           {
             "variable": "--ds-stats-header-card-padding",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:77",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "padding",
@@ -714,7 +714,7 @@
           {
             "variable": "--ds-radius-lg",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:80",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "border-radius",
@@ -728,16 +728,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:81",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:81",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "background",
@@ -750,8 +750,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -760,7 +760,7 @@
           {
             "variable": "--ds-motion-fast",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:82",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:82",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "transition",
@@ -773,16 +773,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:82",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:82",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "transition",
@@ -795,14 +795,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:82",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:82",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "transition",
@@ -815,16 +815,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:82",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:82",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card']",
             "states": [],
             "landsOn": "transition",
@@ -837,14 +837,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:87",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent]",
             "states": [
               "accent"
@@ -860,16 +860,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:99",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:hover",
             "states": [
               "clickable=true",
@@ -887,16 +887,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:104",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:active",
             "states": [
               "clickable=true",
@@ -913,16 +913,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-focus-ring-color",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:107",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible",
             "states": [
               "clickable=true",
@@ -939,15 +939,15 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:879",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2140"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:879",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2140"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:107",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-clickable='true']:focus-visible",
             "states": [
               "clickable=true",
@@ -964,17 +964,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-spacing-2",
             "part": "stat-top",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:116",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-top']",
             "states": [],
             "landsOn": "gap",
@@ -987,15 +987,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-stats-header-value-font-size",
             "part": "value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:130",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value']",
             "states": [],
             "landsOn": "font-size",
@@ -1008,14 +1008,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:280"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:280"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-stats-header-value-font-weight",
             "part": "value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:131",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'] [data-part='statistic'] [data-part='value']",
             "states": [],
             "landsOn": "font-weight",
@@ -1033,7 +1033,7 @@
           {
             "variable": "--ds-color-text-muted",
             "part": "stat-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:139",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:139",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-icon']",
             "states": [
               "accent"
@@ -1050,15 +1050,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-stats-header-label-font-size",
             "part": "change-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:149",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:149",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value']",
             "states": [
               "accent"
@@ -1078,7 +1078,7 @@
           {
             "variable": "--ds-font-size-sm",
             "part": "change-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:149",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:149",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value']",
             "states": [
               "accent"
@@ -1093,15 +1093,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:609",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:30"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:609",
+              "packages/core/tests/fixtures/tenants/default/index.css:30"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-font-weight-semibold",
             "part": "change-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:150",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:150",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value']",
             "states": [
               "accent"
@@ -1116,14 +1116,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:624"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-success",
             "part": "change-row",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:156",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:156",
             "selector": ".ds-stats-header[data-part='root'] [data-part='change-row'][data-change='increase'], .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'][data-change='increase']",
             "states": [
               "change=increase",
@@ -1139,17 +1139,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:175",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:175",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:127",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:102",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:102",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-error",
             "part": "change-row",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:160",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:160",
             "selector": ".ds-stats-header[data-part='root'] [data-part='change-row'][data-change='decrease'], .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'][data-change='decrease']",
             "states": [
               "change=decrease",
@@ -1165,17 +1165,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "change-row",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:164",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:164",
             "selector": ".ds-stats-header[data-part='root'] [data-part='change-row'][data-change='neutral'], .ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-value'][data-change='neutral']",
             "states": [
               "change=neutral",
@@ -1193,15 +1193,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "change-period",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:167",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-period']",
             "states": [
               "accent"
@@ -1218,15 +1218,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-stats-header-kicker-font-size",
             "part": "change-period",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:168",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-period']",
             "states": [
               "accent"
@@ -1246,7 +1246,7 @@
           {
             "variable": "--ds-font-size-2xs",
             "part": "change-period",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:168",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-period']",
             "states": [
               "accent"
@@ -1261,14 +1261,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-weight-medium",
             "part": "change-period",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:169",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:169",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='change-period']",
             "states": [
               "accent"
@@ -1283,14 +1283,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:623"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:623"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-stats-header-spark-dot-opacity",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:187",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:187",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot']",
             "states": [],
             "landsOn": "opacity",
@@ -1303,14 +1303,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx:57"
+              "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx:57"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:188",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot']",
             "states": [],
             "landsOn": "transition",
@@ -1323,16 +1323,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:188",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot']",
             "states": [],
             "landsOn": "transition",
@@ -1345,14 +1345,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:188",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot']",
             "states": [],
             "landsOn": "transition",
@@ -1365,16 +1365,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:188",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot']",
             "states": [],
             "landsOn": "transition",
@@ -1387,14 +1387,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:194",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:194",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot']",
             "states": [
               ":hover",
@@ -1415,7 +1415,7 @@
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:196",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:196",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='1']",
             "states": [
               "dot-index=1",
@@ -1437,7 +1437,7 @@
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:197",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:197",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='2']",
             "states": [
               "dot-index=2",
@@ -1459,7 +1459,7 @@
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:198",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:198",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='3']",
             "states": [
               "dot-index=3",
@@ -1481,7 +1481,7 @@
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:199",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:199",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='4']",
             "states": [
               "dot-index=4",
@@ -1503,7 +1503,7 @@
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:200",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:200",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='5']",
             "states": [
               "dot-index=5",
@@ -1525,7 +1525,7 @@
           {
             "variable": "--ds-stats-header-ping-duration",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:201",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:201",
             "selector": "@media (hover: hover) >> .ds-stats-header[data-part='root'] [data-part='stat-card']:hover [data-part='spark-dot'][data-dot-index='6']",
             "states": [
               "dot-index=6",
@@ -1547,7 +1547,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:203",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:203",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='primary']",
             "states": [
               "accent=primary"
@@ -1562,17 +1562,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-success",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:204",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:204",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='success']",
             "states": [
               "accent=success"
@@ -1587,17 +1587,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:175",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:175",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:127",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:102",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:102",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-warning",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:205",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:205",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='warning']",
             "states": [
               "accent=warning"
@@ -1612,17 +1612,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:176",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:176",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:128",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:104",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:31"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:104",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-error",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:206",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:206",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='error']",
             "states": [
               "accent=error"
@@ -1637,17 +1637,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-info",
             "part": "spark-dot",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:207",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:207",
             "selector": ".ds-stats-header[data-part='root'] [data-part='spark-dot'][data-accent='info']",
             "states": [
               "accent=info"
@@ -1662,17 +1662,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:108",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:29"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "stat-insight",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:217",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:217",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight']",
             "states": [
               "accent"
@@ -1689,15 +1689,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-stats-header-meta-font-size",
             "part": "stat-insight",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:218",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:218",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight']",
             "states": [
               "accent"
@@ -1717,7 +1717,7 @@
           {
             "variable": "--ds-font-size-2xs",
             "part": "stat-insight",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:218",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:218",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent] [data-part='stat-insight']",
             "states": [
               "accent"
@@ -1732,14 +1732,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-primary",
             "part": "card-glow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:231",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='primary'] [data-part='card-glow']",
             "states": [
               "accent=primary"
@@ -1754,17 +1754,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-success",
             "part": "card-glow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:232",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:232",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='success'] [data-part='card-glow']",
             "states": [
               "accent=success"
@@ -1779,17 +1779,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:175",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:175",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:127",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:102",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:102",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-warning",
             "part": "card-glow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:233",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:233",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='warning'] [data-part='card-glow']",
             "states": [
               "accent=warning"
@@ -1804,17 +1804,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:176",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:176",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:128",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:104",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:31"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:104",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-error",
             "part": "card-glow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:234",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:234",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='error'] [data-part='card-glow']",
             "states": [
               "accent=error"
@@ -1829,17 +1829,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-info",
             "part": "card-glow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:235",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:235",
             "selector": ".ds-stats-header[data-part='root'] [data-part='stat-card'][data-accent='info'] [data-part='card-glow']",
             "states": [
               "accent=info"
@@ -1854,17 +1854,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:179",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:179",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:130",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:108",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:29"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:108",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:29"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-stats-header-card-min-height",
             "part": "skeleton-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:242",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:242",
             "selector": ".ds-stats-header[data-part='root'] [data-part='skeleton-card']",
             "states": [],
             "landsOn": "min-block-size",
@@ -1882,7 +1882,7 @@
           {
             "variable": "--ds-stats-header-card-padding",
             "part": "skeleton-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:243",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:243",
             "selector": ".ds-stats-header[data-part='root'] [data-part='skeleton-card']",
             "states": [],
             "landsOn": "padding",
@@ -1900,7 +1900,7 @@
           {
             "variable": "--ds-radius-lg",
             "part": "skeleton-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:245",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:245",
             "selector": ".ds-stats-header[data-part='root'] [data-part='skeleton-card']",
             "states": [],
             "landsOn": "border-radius",
@@ -1914,16 +1914,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "skeleton-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:246",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:246",
             "selector": ".ds-stats-header[data-part='root'] [data-part='skeleton-card']",
             "states": [],
             "landsOn": "background",
@@ -1936,8 +1936,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -1946,7 +1946,7 @@
           {
             "variable": "--ds-color-text-primary",
             "part": "skeleton-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:249",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:249",
             "selector": ".ds-stats-header[data-part='root'][data-loading='true'] [data-part='skeleton-card']",
             "states": [
               "loading=true"
@@ -1962,16 +1962,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-stats-header-card-padding-compact",
             "part": "stat-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css:277",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css:277",
             "selector": "@container ds-stats-header (inline-size < 30rem) >> .ds-stats-header[data-part='root'] [data-part='stat-card'], .ds-stats-header[data-part='root'] [data-part='skeleton-card']",
             "states": [
               "@container ds-stats-header (inline-size < 30rem) >> .ds-stats-header[data-part='root'] [data-part='stat-card'], .ds-stats-header[data-part='root'] [data-part='skeleton-card']"
@@ -1991,7 +1991,7 @@
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css": {
               "rows": 107,
               "layer": "engine-agnostic skin"
             }
@@ -2018,37 +2018,37 @@
             "styleAttribute": 2
           },
           "perFile": {
-            "packages/core/src/ui/structures/dashboard/stats-header/contracts/index.ts": {
+            "packages/core/src/components/structures/dashboard/stats-header/contracts/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 107
             },
-            "packages/core/src/ui/structures/dashboard/stats-header/engines/classic/index.tsx": {
+            "packages/core/src/components/structures/dashboard/stats-header/engines/classic/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/dashboard/stats-header/engines/modern/index.tsx": {
+            "packages/core/src/components/structures/dashboard/stats-header/engines/modern/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/dashboard/stats-header/engines/rustic/index.tsx": {
+            "packages/core/src/components/structures/dashboard/stats-header/engines/rustic/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/dashboard/stats-header/index.ts": {
+            "packages/core/src/components/structures/dashboard/stats-header/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 35
             },
-            "packages/core/src/ui/structures/dashboard/stats-header/runtime/rendering/index.tsx": {
+            "packages/core/src/components/structures/dashboard/stats-header/runtime/rendering/index.tsx": {
               "classNameOccurrences": 1,
               "dataPartOccurrences": 16,
               "styleAttributeOccurrences": 2,
@@ -2095,13 +2095,13 @@
         {
           "channelId": "--_ds-stats-header-columns",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2132,13 +2132,13 @@
         {
           "channelId": "--_ds-stats-header-value-font-weight",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2157,14 +2157,14 @@
         {
           "channelId": "--_ds-stats-header-value-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2193,14 +2193,14 @@
         {
           "channelId": "--_ds-stats-header-title-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2210,14 +2210,14 @@
         {
           "channelId": "--_ds-stats-header-value-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2227,13 +2227,13 @@
         {
           "channelId": "--_ds-stats-header-kicker-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2242,13 +2242,13 @@
         {
           "channelId": "--_ds-stats-header-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2257,13 +2257,13 @@
         {
           "channelId": "--_ds-stats-header-meta-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2272,13 +2272,13 @@
         {
           "channelId": "--_ds-stats-header-value-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2305,14 +2305,14 @@
         {
           "channelId": "--_ds-stats-header-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2331,7 +2331,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las acciones de widget son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2345,7 +2345,7 @@
         {
           "channelId": "--_ds-stats-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header",
@@ -2353,8 +2353,8 @@
             "structure/dashboard/data-terminal-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2364,13 +2364,13 @@
         {
           "channelId": "--_ds-stats-header-card-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2379,13 +2379,13 @@
         {
           "channelId": "--_ds-stats-header-card-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2404,14 +2404,14 @@
         {
           "channelId": "--_ds-stats-header-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2439,13 +2439,13 @@
         {
           "channelId": "--_ds-stats-header-ping-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2464,14 +2464,14 @@
         {
           "channelId": "--_ds-stats-header-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2490,7 +2490,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo denso: mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2520,7 +2520,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2534,14 +2534,14 @@
         {
           "channelId": "--_ds-stats-cell-tint",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2569,7 +2569,7 @@
         {
           "channelId": "--_ds-stats-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header",
@@ -2577,8 +2577,8 @@
             "structure/dashboard/data-terminal-card"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2602,7 +2602,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2615,7 +2615,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2654,7 +2654,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2701,14 +2701,14 @@
         {
           "channelId": "--_ds-stats-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/dashboard/stats-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/stats-header-keyframes/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2728,11 +2728,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json",
+        "adjudicatedFrom": "controls/responsive/posture/index.json",
         "uncoveredByDesign": {
           "CONTROL CORRECTO = responsive.posture (taxonomia A: consulta de tamano)": [
             "--ds-stats-header-card-padding-compact"

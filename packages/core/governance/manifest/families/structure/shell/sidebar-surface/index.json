@@ -8,15 +8,15 @@
     "components": [
       "SidebarSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/shell/navigation/sidebar-surface",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/shell/navigation/sidebar-surface",
     "publicComponents": [
       "SidebarSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ca0e5a529b55731f42ea7fac5d7d0168cf986ed11165e5b9d7e294a499f8d34f"
+    "inventoryRowDigest": "deecd98131cc01f67193f646cea1e288ae23c39e29674317e85b08b17e2fe6c0"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/shell/navigation/sidebar-surface",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+      "packages/core/src/components/structures/shell/navigation/sidebar-surface",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css"
     ],
     "stableParts": [
       "root",
@@ -73,7 +73,7 @@
           "anchorKind": "data-part",
           "anchor": "root-class-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:67"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:67"
           ]
         },
         {
@@ -81,7 +81,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:115"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:115"
           ]
         },
         {
@@ -89,7 +89,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:104"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:104"
           ]
         }
       ],
@@ -99,7 +99,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:121"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:121"
           ]
         },
         {
@@ -107,9 +107,9 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:81",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:66",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:72"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:81",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:72"
           ]
         },
         {
@@ -117,7 +117,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:88"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:88"
           ]
         }
       ],
@@ -126,8 +126,8 @@
           "token": "data-collapsed",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:69",
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:89"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:69",
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:89"
           ],
           "state": "collapsed"
         },
@@ -135,7 +135,7 @@
           "token": "aria-expanded",
           "axis": "aria-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:94"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:94"
           ],
           "state": "aria-expanded"
         }
@@ -145,44 +145,44 @@
           "token": "aside=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:51"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:51"
           ]
         },
         {
           "token": "bordered=false",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:72"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:72"
           ]
         },
         {
           "token": "stacked=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:60",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:61",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:62"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:60",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:61",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:62"
           ]
         },
         {
           "token": "data-aside",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:71"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:71"
           ]
         },
         {
           "token": "data-bordered",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:72"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:72"
           ]
         },
         {
           "token": "data-stacked",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:70"
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:70"
           ]
         }
       ],
@@ -192,7 +192,7 @@
             "token": "aria-controls",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:95"
+              "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:95"
             ]
           }
         ],
@@ -201,7 +201,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css": {
             "rows": 10,
             "layer": "engine-agnostic skin"
           }
@@ -225,7 +225,7 @@
           {
             "variable": "--_ds-sidebar-inline-size",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:43",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:43",
             "selector": ".ds-surface.ds-sidebar[data-part='root']",
             "states": [],
             "landsOn": "grid-template-columns",
@@ -238,14 +238,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:75"
+              "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:75"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-spacing-6",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:46",
             "selector": ".ds-surface.ds-sidebar[data-part='root']",
             "states": [],
             "landsOn": "gap",
@@ -258,15 +258,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:689"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:83",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:689"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-rhythm-effective-scale",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:46",
             "selector": ".ds-surface.ds-sidebar[data-part='root']",
             "states": [],
             "landsOn": "gap",
@@ -279,15 +279,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:682",
-              "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json:152"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:682",
+              "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json:152"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--_ds-sidebar-inline-size",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:51",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:51",
             "selector": ".ds-surface.ds-sidebar[data-part='root'][data-aside='true']",
             "states": [
               "aside=true"
@@ -302,14 +302,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:75"
+              "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:75"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-sidebar-aside-inline-size",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css:51",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css:51",
             "selector": ".ds-surface.ds-sidebar[data-part='root'][data-aside='true']",
             "states": [
               "aside=true"
@@ -324,14 +324,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx:76"
+              "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx:76"
             ],
             "declarationSiteCount": 1
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css": {
               "rows": 10,
               "layer": "engine-agnostic skin"
             }
@@ -365,7 +365,7 @@
             "styleAttribute": 1
           },
           "perFile": {
-            "packages/core/src/ui/structures/shell/navigation/sidebar-surface/index.tsx": {
+            "packages/core/src/components/structures/shell/navigation/sidebar-surface/index.tsx": {
               "classNameOccurrences": 6,
               "dataPartOccurrences": 3,
               "styleAttributeOccurrences": 1,
@@ -422,7 +422,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -447,7 +447,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -472,7 +472,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -497,7 +497,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.corner",
@@ -522,13 +522,13 @@
         {
           "channelId": "--_ds-page-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -547,7 +547,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los controles del shell son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -603,13 +603,13 @@
         {
           "channelId": "--_ds-sidebar-surface-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -654,13 +654,13 @@
         {
           "channelId": "--_ds-sidebar-surface-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -704,13 +704,13 @@
         {
           "channelId": "--_ds-sidebar-surface-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -729,7 +729,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -737,21 +737,11 @@
       "disposition": "UNKNOWN",
       "verificationState": "SOURCE_BOUND",
       "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive: 18/18 (scenario x mode) lowerings show demonstrated life on both ingress arms, and the channel-level union is 52/54 moved (9 scenarios x 6 channels) -- the 2 non-movers are a named, benign value-coincidence with the vertical's own authored baseline (see the control's own calibration.measuredResult and unmeasuredScope; F4B-12, 2026-08-24). NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now (same program-wide propertyGroups-vocabulary blocker F4B-11 already documented on primitive/display/typography, `anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). `stableParts`/`propertyGroups`/`computedProperties` stay unset for that reason; `internalChannels` is populated below with the REAL producers (corrected from the prior REQUIRED_ADDITION placeholders, which cited `layout-sidebar.css` -- a real file that owns this family's LAYOUT GEOMETRY only, produces neither the tone's six channels nor the three removed phantom sockets, and was simply the wrong producer for a colour control). DT ruling (F4B-12 widen adjudication): declaredOutputs widened from 2 to the full closed six-channel `SIDEBAR_TONE_LEAF_FIELDS` table -- the control's authority IS that table, and declaring a subset under-declares the real governed surface.",
-      "evidenceIds": [
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/rottay-subtle.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/rottay-strong.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/rottay-inverse.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/bithire-subtle.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/bithire-strong.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/bithire-inverse.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/evnto-subtle.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/evnto-strong.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/navigation-sidebar-tone/computed-static-db/evnto-inverse.json.receipt.json"
-      ],
+      "evidenceIds": [],
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-        "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+        "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
         "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/governance/manifest/controls/navigation/sidebar-tone/index.json"
@@ -776,13 +766,13 @@
         {
           "channelId": "--ds-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -791,13 +781,13 @@
         {
           "channelId": "--ds-sidebar-text",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -806,13 +796,13 @@
         {
           "channelId": "--ds-sidebar-text-muted",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -821,13 +811,13 @@
         {
           "channelId": "--ds-sidebar-item-bg-hover",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -836,13 +826,13 @@
         {
           "channelId": "--ds-sidebar-item-bg-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -851,13 +841,13 @@
         {
           "channelId": "--ds-sidebar-item-color-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/menu/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -875,7 +865,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -914,13 +904,13 @@
         {
           "channelId": "--_ds-sidebar-surface-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -938,7 +928,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.edge",
@@ -963,13 +953,13 @@
         {
           "channelId": "--_ds-page-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -993,7 +983,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1006,7 +996,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1045,7 +1035,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1072,13 +1062,13 @@
         {
           "channelId": "--_ds-page-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/sidebar-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-sidebar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1098,11 +1088,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -3,11 +3,12 @@
   "rootId": "profiles.icon",
   "tier": "pro",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-icon-stroke-width",
     "emission": [
       {
         "kind": "runtime-table-select",
-        "site": "packages/core/src/graphics/icons/foundation/contracts/registry/policy/index.ts",
+        "site": "packages/core/src/graphics/icons/semantic/foundation/policy/index.ts",
         "note": "la postura selecciona tablas de peso por rol en TS (PROFILE_ROLE_WEIGHT :28-53: linear/strong-outline/duotone/solid-active x control/navigation/feature/status/illustration); STATE_WEIGHT queda supremo sobre cualquier postura. El canal css es la BASELINE pre-perfil: declarado en presentation/components/icon.css:38 (1.5) y leido como fallback por la factory (graphics/icons/runtime/factory/index.tsx:57, 'var(--ds-icon-stroke-width, 1.5)') solo cuando la postura no proveyó strokeWidth. La raiz NO escribe el canal: aterriza aguas arriba de el, en la prop."
       }
     ]

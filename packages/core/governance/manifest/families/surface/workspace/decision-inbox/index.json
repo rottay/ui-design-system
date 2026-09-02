@@ -8,15 +8,15 @@
     "components": [
       "DecisionInboxSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/workspace",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/workspace/decision-inbox",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/workspace",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/workspace/decision-inbox",
     "publicComponents": [
       "DecisionInboxSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "5bd9d24679b41ca206bbe5c6b370abed0490296ddf61c0a2990fd5dd0999b6ca"
+    "inventoryRowDigest": "b0b55bebac56d0402559ecde7aed5bfdfbb265dbdc8f55720ea9a493c05c967c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/decision-inbox",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/decision-inbox",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
     ],
     "stableParts": [
       "content",
@@ -166,7 +166,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__batch-reason` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:92"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:92"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -175,8 +175,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__decision-action` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:161"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:161"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -185,7 +185,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__muted-text` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:29"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:29"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -194,7 +194,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__reason-label` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:145"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:145"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -203,8 +203,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__review-card` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:127",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:131"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:127",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:131"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -213,7 +213,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__review-reason` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:150"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:150"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -222,8 +222,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__selection-bar` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:83",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:171"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:83",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:171"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -232,7 +232,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__selection-spacer` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:88"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:88"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -241,7 +241,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__skeleton-subtitle` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:64"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:64"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -250,7 +250,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-decision-inbox__subtitle` bound by the root pair `.ds-surface.ds-decision-inbox`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css:33"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css:33"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -846,7 +846,7 @@
         }
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
         "rootAnchor": ".ds-surface.ds-decision-inbox",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -910,7 +910,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
@@ -925,7 +925,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
@@ -940,7 +940,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
@@ -955,7 +955,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
@@ -987,13 +987,13 @@
         {
           "channelId": "--_ds-decision-inbox-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1013,13 +1013,13 @@
         {
           "channelId": "--_ds-decision-inbox-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1039,13 +1039,13 @@
         {
           "channelId": "--_ds-decision-inbox-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1065,13 +1065,13 @@
         {
           "channelId": "--_ds-decision-inbox-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1091,13 +1091,13 @@
         {
           "channelId": "--_ds-decision-inbox-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1117,13 +1117,13 @@
         {
           "channelId": "--_ds-decision-inbox-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1142,7 +1142,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1155,7 +1155,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1168,7 +1168,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1181,7 +1181,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1194,7 +1194,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1207,7 +1207,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1221,13 +1221,13 @@
         {
           "channelId": "--_ds-decision-inbox-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/decision-inbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-inbox/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1251,7 +1251,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1264,7 +1264,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1303,7 +1303,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1334,7 +1334,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1348,11 +1348,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

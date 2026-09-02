@@ -8,15 +8,15 @@
     "components": [
       "Popover"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/overlay/Popover",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/popover",
     "publicComponents": [
       "Popover"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "9dd9dd609dfe0133f0f4a547c912b0b54e6fea483255bfe6b0685c46108c0ba2"
+    "inventoryRowDigest": "7c8194a1ace499373e25e2cd72f9c83133e4e40fa5a5849ba4f862e0f5373259"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/overlay/Popover/contracts/index.ts",
-      "packages/core/src/ui/primitives/overlay/Popover/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Popover/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Popover/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Popover/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+      "packages/core/src/components/primitives/overlay/popover/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/popover/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/popover/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/popover/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/popover/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
     ],
     "stableParts": [
       "trigger",
@@ -59,18 +59,18 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "aria-modal [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:769]",
-      "role-attribute [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:95, src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:187]",
-      "aria-label-or-labelledby [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:770]",
-      "aria-hidden [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:772]",
-      "tabindex-management [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:774]",
-      "inert [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:773]",
-      "focus-without-scroll [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:110]",
-      "body-scroll-lock [at src/ui/primitives/overlay/Popover/engines/modern/index.tsx:510]",
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:794]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:24, src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:851]",
-      "focus-visible-outline [at src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:624]",
-      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:126, src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:127, src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:373]"
+      "aria-modal [at src/components/primitives/overlay/popover/engines/modern/index.tsx:769]",
+      "role-attribute [at src/components/primitives/overlay/popover/engines/modern/index.tsx:95, src/components/primitives/overlay/popover/engines/rustic/index.tsx:187]",
+      "aria-label-or-labelledby [at src/components/primitives/overlay/popover/engines/modern/index.tsx:770]",
+      "aria-hidden [at src/components/primitives/overlay/popover/engines/modern/index.tsx:772]",
+      "tabindex-management [at src/components/primitives/overlay/popover/engines/modern/index.tsx:774]",
+      "inert [at src/components/primitives/overlay/popover/engines/modern/index.tsx:773]",
+      "focus-without-scroll [at src/components/primitives/overlay/popover/engines/modern/index.tsx:110]",
+      "body-scroll-lock [at src/components/primitives/overlay/popover/engines/modern/index.tsx:510]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:794]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:24, src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:851]",
+      "focus-visible-outline [at src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:624]",
+      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:126, src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:127, src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:373]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -92,12 +92,12 @@
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:825",
-            "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:849",
-            "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:244",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:51",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:52",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:53"
+            "src/components/primitives/overlay/popover/engines/modern/index.tsx:825",
+            "src/components/primitives/overlay/popover/engines/modern/index.tsx:849",
+            "src/components/primitives/overlay/popover/engines/rustic/index.tsx:244",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:51",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:52",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:53"
           ],
           "atSiteCount": 7
         },
@@ -105,12 +105,12 @@
           "part": "surface",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:777",
-            "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:188",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:70",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:74",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:78",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:85"
+            "src/components/primitives/overlay/popover/engines/modern/index.tsx:777",
+            "src/components/primitives/overlay/popover/engines/rustic/index.tsx:188",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:70",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:74",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:78",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:85"
           ],
           "atSiteCount": 8
         },
@@ -118,12 +118,12 @@
           "part": "title",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:809",
-            "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:210",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:543",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:544",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:545",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:549"
+            "src/components/primitives/overlay/popover/engines/modern/index.tsx:809",
+            "src/components/primitives/overlay/popover/engines/rustic/index.tsx:210",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:543",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:544",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:545",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:549"
           ],
           "atSiteCount": 8
         },
@@ -131,12 +131,12 @@
           "part": "body",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:813",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:594",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:595",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:596",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:597",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:598"
+            "src/components/primitives/overlay/popover/engines/modern/index.tsx:813",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:594",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:595",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:596",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:597",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:598"
           ],
           "atSiteCount": 7
         },
@@ -144,60 +144,60 @@
           "part": "arrow",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:814",
-            "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:223",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:643",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:644",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:645",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:646"
+            "src/components/primitives/overlay/popover/engines/modern/index.tsx:814",
+            "src/components/primitives/overlay/popover/engines/rustic/index.tsx:223",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:643",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:644",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:645",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:646"
           ],
           "atSiteCount": 8
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:30, src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:31, src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:34]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:30, src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:31, src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:34]"
         ]
       },
       "stateAnchors": [
         {
           "token": "data-open=false",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:286",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:287",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:291",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:295"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:286",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:287",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:291",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:295"
           ],
           "state": "open"
         },
         {
           "token": "data-open=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:301",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:302"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:301",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:302"
           ],
           "state": "open"
         },
         {
           "token": "data-collision-adjusted=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:513"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:513"
           ],
           "state": "collision-adjusted"
         },
         {
           "token": ":focus-visible",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:628",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:629"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:628",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:629"
           ],
           "state": "focus-visible"
         },
         {
           "token": ":focus",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:628",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:629"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:628",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:629"
           ],
           "state": "focus"
         }
@@ -206,88 +206,88 @@
         {
           "token": "data-recipe=minimal",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:349",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:353",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:357",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:358"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:349",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:353",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:357",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:358"
           ]
         },
         {
           "token": "data-recipe=inverse",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:385",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:390",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:394",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:398"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:385",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:390",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:394",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:398"
           ]
         },
         {
           "token": "data-recipe=rich",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:415",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:419",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:423",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:427"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:415",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:419",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:423",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:427"
           ]
         },
         {
           "token": "data-density=compact",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:459",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:463",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:467",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:468"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:459",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:463",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:467",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:468"
           ]
         },
         {
           "token": "data-density=comfortable",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:476",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:480"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:476",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:480"
           ]
         },
         {
           "token": "data-density=spacious",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:488",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:492",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:496"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:488",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:492",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:496"
           ]
         },
         {
           "token": "data-ds-position-strategy=anchor-css",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:536",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:537"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:536",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:537"
           ]
         },
         {
           "token": "data-has-title=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:620"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:620"
           ]
         },
         {
           "token": "data-arrow-centered=false",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:712",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:721"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:712",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:721"
           ]
         },
         {
           "token": "data-arrow-tracked=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:751",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:762"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:751",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:762"
           ]
         },
         {
           "token": "data-ds-motion=reduced",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:813",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:814",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:815",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:816"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:813",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:814",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:815",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:816"
           ]
         }
       ],
@@ -296,7 +296,7 @@
           {
             "token": "data-portal-scope=true",
             "at": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:59"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:59"
             ]
           }
         ],
@@ -465,15 +465,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:138",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:309",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:321"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:138",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:309",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:321"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:31",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:31",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -481,7 +481,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:46",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:46",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -489,7 +489,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:302",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:302",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "transform",
@@ -514,7 +514,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -536,15 +536,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:600",
-              "src/foundation/tokens/css/foundation/themes/default.css:427"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:427"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:66",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:66",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -552,7 +552,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:348",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:348",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -575,15 +575,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1599",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2555",
-              "src/foundation/tokens/css/foundation/themes/default.css:1826"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1826"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1826"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1826"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:68",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:68",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -591,7 +591,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:847",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:847",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -612,17 +612,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:338",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:433",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:547"
+              "tests/fixtures/tenants/quality-evidence/index.ts:338",
+              "tests/fixtures/tenants/quality-evidence/index.ts:433",
+              "tests/fixtures/tenants/quality-evidence/index.ts:547"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:278"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:278"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:68",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:68",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -630,7 +630,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:348",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:348",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -651,17 +651,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+              "tests/fixtures/tenants/quality-evidence/index.ts:320",
+              "tests/fixtures/tenants/quality-evidence/index.ts:425",
+              "tests/fixtures/tenants/quality-evidence/index.ts:540"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:265"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:68",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:68",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -669,7 +669,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:847",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:847",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -694,7 +694,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:71",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:71",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -715,15 +715,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:339",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:449",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:548"
+              "tests/fixtures/tenants/quality-evidence/index.ts:339",
+              "tests/fixtures/tenants/quality-evidence/index.ts:449",
+              "tests/fixtures/tenants/quality-evidence/index.ts:548"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:73",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:73",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -745,18 +745,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
-              "src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:217",
-              "src/foundation/tokens/css/foundation/themes/default.css:2128"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:73",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:73",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -764,7 +764,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:352",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:352",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -772,7 +772,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:384",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:384",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -780,7 +780,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:418",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:418",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -805,7 +805,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:75",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:75",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -826,18 +826,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:218",
-              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:77",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:77",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -845,7 +845,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:356",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:356",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -853,7 +853,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:422",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:422",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -878,7 +878,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:79",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:79",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -905,7 +905,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:81",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:81",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -930,7 +930,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:83",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:83",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -951,18 +951,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:315",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:420"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
+              "tests/fixtures/tenants/quality-evidence/index.ts:315",
+              "tests/fixtures/tenants/quality-evidence/index.ts:420"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:230",
-              "src/foundation/tokens/css/foundation/themes/default.css:2135"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:230",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2135"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:83",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:83",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -987,7 +987,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:86",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:86",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge-width",
@@ -1008,15 +1008,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/Popover/Popover.stories.tsx:389",
-              "src/ui/primitives/overlay/Popover/Popover.stories.tsx:405",
-              "src/ui/primitives/overlay/Popover/tests/Popover.modern-engine-advanced.test.tsx:271"
+              "src/components/primitives/overlay/popover/Popover.stories.tsx:389",
+              "src/components/primitives/overlay/popover/Popover.stories.tsx:405",
+              "src/components/primitives/overlay/popover/tests/Popover.modern-engine-advanced.test.tsx:271"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:87",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:87",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -1037,15 +1037,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1829"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1829"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1829"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1829"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:89",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:89",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -1066,17 +1066,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:44",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+              "tests/fixtures/tenants/default/index.css:44",
+              "tests/fixtures/tenants/quality-evidence/index.ts:351",
+              "tests/fixtures/tenants/quality-evidence/index.ts:474"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:771"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:771"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:89",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:89",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -1084,7 +1084,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:401",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:401",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -1092,7 +1092,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:430",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:430",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -1113,14 +1113,14 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/Popover/Popover.stories.tsx:390",
-              "src/ui/primitives/overlay/Popover/Popover.stories.tsx:406"
+              "src/components/primitives/overlay/popover/Popover.stories.tsx:390",
+              "src/components/primitives/overlay/popover/Popover.stories.tsx:406"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:91",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:91",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -1145,7 +1145,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -1168,15 +1168,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1601",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2557",
-              "src/foundation/tokens/css/foundation/themes/default.css:1828"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1828"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1828"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1828"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:95",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:95",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -1197,13 +1197,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:527"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:527"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:97",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:97",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -1227,15 +1227,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1082",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:351",
-              "src/foundation/tokens/css/foundation/themes/default.css:802"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:802"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -1243,7 +1243,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:529",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:529",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-popover-layer-step-shadow",
@@ -1265,17 +1265,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:355",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:478",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:567"
+              "tests/fixtures/tenants/quality-evidence/index.ts:355",
+              "tests/fixtures/tenants/quality-evidence/index.ts:478",
+              "tests/fixtures/tenants/quality-evidence/index.ts:567"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:832"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:832"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -1283,7 +1283,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:529",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:529",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-popover-layer-step-shadow",
@@ -1308,7 +1308,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:104",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:104",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-texture-current",
@@ -1336,7 +1336,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:106",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:106",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-texture-current",
@@ -1361,7 +1361,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:122",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:122",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -1384,17 +1384,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:126",
-              "src/tooling/testing/fixtures/tenants/default.css:37",
-              "src/foundation/tokens/css/foundation/themes/default.css:704"
+              "tests/integration/theming-precedence/index.test.ts:126",
+              "tests/fixtures/tenants/default/index.css:37",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:704"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:704"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:704"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:124",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:124",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -1402,7 +1402,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:128",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:128",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -1410,7 +1410,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:475",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:475",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -1418,7 +1418,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:479",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:479",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -1426,7 +1426,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:495",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:495",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -1451,7 +1451,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:126",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:126",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -1476,7 +1476,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:130",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:130",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -1501,7 +1501,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:132",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:132",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -1509,7 +1509,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:466",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:466",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -1517,7 +1517,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:495",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:495",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -1542,17 +1542,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:125",
-              "src/tooling/testing/fixtures/tenants/default.css:36",
-              "src/foundation/tokens/css/foundation/themes/default.css:703"
+              "tests/integration/theming-precedence/index.test.ts:125",
+              "tests/fixtures/tenants/default/index.css:36",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:703"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:703"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:703"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:132",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:132",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -1560,7 +1560,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:371",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:371",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -1568,7 +1568,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:375",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:375",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -1576,7 +1576,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:462",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:462",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -1584,7 +1584,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:545",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:545",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "padding-block",
@@ -1609,7 +1609,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:134",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:134",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-max-width-current",
@@ -1635,7 +1635,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:136",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:136",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-max-width-current",
@@ -1643,7 +1643,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:197",
+                "at": "src/components/primitives/overlay/popover/engines/rustic/index.tsx:197",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "max-width",
@@ -1668,7 +1668,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:140",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:140",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1676,7 +1676,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:311",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:311",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1684,7 +1684,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:322",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:322",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1692,7 +1692,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:334",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:334",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1717,7 +1717,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:143",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:143",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1725,7 +1725,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:314",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:314",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1733,7 +1733,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:326",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:326",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1741,7 +1741,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:338",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:338",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-closed-transform",
@@ -1762,13 +1762,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:745"
+              "src/components/primitives/overlay/popover/engines/modern/index.tsx:745"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:147",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:147",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "z-index",
@@ -1789,15 +1789,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:959"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:959"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:149",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:149",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "z-index",
@@ -1818,15 +1818,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:938"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:938"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:938"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:938"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:149",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:149",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "z-index",
@@ -1852,7 +1852,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:155",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:155",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -1860,7 +1860,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:162",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:162",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -1868,7 +1868,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:196",
+                "at": "src/components/primitives/overlay/popover/engines/rustic/index.tsx:196",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "min-width",
@@ -1895,7 +1895,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:157",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:157",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -1903,7 +1903,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:158",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:158",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -1911,7 +1911,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:164",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:164",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -1919,7 +1919,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:165",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:165",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -1927,7 +1927,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:171",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:171",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1935,7 +1935,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:172",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:172",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1943,7 +1943,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:178",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:178",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1951,7 +1951,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:179",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:179",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1959,7 +1959,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:185",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:185",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-block-size",
@@ -1967,7 +1967,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:186",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:186",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-block-size",
@@ -1988,13 +1988,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:744"
+              "src/components/primitives/overlay/popover/engines/modern/index.tsx:744"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:169",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:169",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -2002,7 +2002,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:176",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:176",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -2023,15 +2023,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:134",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:377",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:448"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:134",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:377",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:448"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:169",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:169",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -2039,7 +2039,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:176",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:176",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -2064,7 +2064,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:183",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:183",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-block-size",
@@ -2086,14 +2086,14 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:86",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:359"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:86",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:359"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:190",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:190",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -2101,7 +2101,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:537",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:537",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -2109,7 +2109,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:647",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:647",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "border",
@@ -2133,15 +2133,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:79",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:358",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:395"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:79",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:358",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:395"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:190",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:190",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -2149,7 +2149,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:537",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:537",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -2157,7 +2157,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:553",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:553",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "border-block-end",
@@ -2165,7 +2165,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:647",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:647",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "border",
@@ -2186,15 +2186,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:87",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:360",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:399"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:87",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:360",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:399"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:191",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:191",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border-radius",
@@ -2216,15 +2216,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:824"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:824"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:201",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:201",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -2232,7 +2232,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:201",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:201",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -2240,7 +2240,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:649",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:649",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "background",
@@ -2248,7 +2248,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:649",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:649",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "background",
@@ -2270,15 +2270,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:64",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:346",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:382"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:64",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:346",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:382"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:202",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:202",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -2286,7 +2286,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:650",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:650",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "background",
@@ -2307,15 +2307,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:91",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:364",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:403"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:91",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:364",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:403"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:211",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:211",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -2323,7 +2323,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:512",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:512",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -2347,15 +2347,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:71",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:350",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:387"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:71",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:350",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:387"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:212",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:212",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "color",
@@ -2363,7 +2363,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:393",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:393",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -2371,7 +2371,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:397",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:397",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -2379,7 +2379,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:575",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:575",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "color",
@@ -2402,17 +2402,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:213",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:213",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "font-family",
@@ -2420,7 +2420,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:612",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:612",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "font",
@@ -2445,7 +2445,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:222",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:222",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -2466,15 +2466,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:404",
-              "src/ui/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:77",
-              "src/ui/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:296"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:404",
+              "src/components/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:77",
+              "src/components/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:296"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:222",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:222",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -2499,7 +2499,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:223",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:223",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -2528,7 +2528,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:223",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:223",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -2550,15 +2550,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:104",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:368",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:407"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:104",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:368",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:407"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:241",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:241",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background-image",
@@ -2566,7 +2566,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:664",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:664",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "background-image",
@@ -2589,15 +2589,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+              "tests/fixtures/tenants/quality-evidence/index.ts:358",
+              "tests/fixtures/tenants/quality-evidence/index.ts:481",
+              "tests/fixtures/tenants/quality-evidence/index.ts:570"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:243",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:243",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "opacity",
@@ -2605,7 +2605,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:279",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:279",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -2613,7 +2613,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:666",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:666",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "opacity",
@@ -2634,18 +2634,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "src/ui/patterns/customization/brand-studio/index.tsx:158",
+              "src/components/patterns/customization/brand-studio/index.tsx:140",
+              "src/components/patterns/customization/brand-studio/index.tsx:158",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:188"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:209",
-              "src/foundation/tokens/css/foundation/themes/default.css:2123"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2123"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:279",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:279",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -2670,7 +2670,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:288",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:288",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation-duration",
@@ -2693,7 +2693,7 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:929",
+              "src/foundation/tokens/css/runtime/personality/index.css:929",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:385",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:673"
             ],
@@ -2701,7 +2701,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:290",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:290",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation-duration",
@@ -2709,7 +2709,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:652",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:652",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -2717,7 +2717,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:654",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:654",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -2725,7 +2725,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:655",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:655",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -2733,7 +2733,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:656",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:656",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -2758,7 +2758,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:292",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:292",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation-timing-function",
@@ -2787,7 +2787,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:294",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:294",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation-timing-function",
@@ -2812,7 +2812,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:346",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:346",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -2837,7 +2837,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:350",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:350",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -2862,7 +2862,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:354",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:354",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -2887,7 +2887,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:358",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:358",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -2912,7 +2912,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:359",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:359",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge-width",
@@ -2937,7 +2937,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:360",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:360",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -2958,17 +2958,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:123",
-              "src/tooling/testing/fixtures/tenants/default.css:43",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:350"
+              "tests/integration/theming-precedence/index.test.ts:123",
+              "tests/fixtures/tenants/default/index.css:43",
+              "tests/fixtures/tenants/quality-evidence/index.ts:350"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:770"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:770"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:362",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:362",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -2993,7 +2993,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:364",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:364",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3014,17 +3014,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:354",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:477",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:566"
+              "tests/fixtures/tenants/quality-evidence/index.ts:354",
+              "tests/fixtures/tenants/quality-evidence/index.ts:477",
+              "tests/fixtures/tenants/quality-evidence/index.ts:566"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:831"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:831"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:366",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:366",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3049,7 +3049,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:368",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:368",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-texture-current",
@@ -3074,7 +3074,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:369",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:369",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -3099,7 +3099,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:373",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:373",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -3124,7 +3124,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:377",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:377",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-max-width-current",
@@ -3149,7 +3149,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:382",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:382",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -3174,7 +3174,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:387",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:387",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -3200,13 +3200,13 @@
               "src/foundation/tokens/css/foundation/monochrome/index.css:60"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:226",
-              "src/foundation/tokens/css/foundation/themes/default.css:2133"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:226",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2133"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:389",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:389",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -3231,7 +3231,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:391",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:391",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -3256,7 +3256,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:395",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:395",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -3281,7 +3281,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:399",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:399",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -3306,7 +3306,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:403",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:403",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3327,17 +3327,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:356",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:479",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:568"
+              "tests/fixtures/tenants/quality-evidence/index.ts:356",
+              "tests/fixtures/tenants/quality-evidence/index.ts:479",
+              "tests/fixtures/tenants/quality-evidence/index.ts:568"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:833"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:833"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:405",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:405",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3345,7 +3345,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:434",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:434",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3370,7 +3370,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:407",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:407",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-texture-current",
@@ -3395,7 +3395,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:412",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:412",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -3417,15 +3417,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:623",
-              "src/foundation/tokens/css/foundation/themes/default.css:425"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:425"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:425"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:425"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:414",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:414",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -3446,17 +3446,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:327",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:428",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:543"
+              "tests/fixtures/tenants/quality-evidence/index.ts:327",
+              "tests/fixtures/tenants/quality-evidence/index.ts:428",
+              "tests/fixtures/tenants/quality-evidence/index.ts:543"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:272"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:272"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:414",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:414",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -3481,7 +3481,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:416",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:416",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-ink",
@@ -3506,7 +3506,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:420",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:420",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-muted-ink",
@@ -3531,7 +3531,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:424",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:424",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -3560,7 +3560,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:426",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:426",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -3581,18 +3581,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/index.tsx:148",
-              "src/ui/patterns/customization/brand-studio/index.tsx:166",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+              "src/components/patterns/customization/brand-studio/index.tsx:148",
+              "src/components/patterns/customization/brand-studio/index.tsx:166",
+              "tests/fixtures/tenants/quality-evidence/index.ts:316"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:231",
-              "src/foundation/tokens/css/foundation/themes/default.css:2136"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2136"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:426",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:426",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-edge",
@@ -3617,7 +3617,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:428",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:428",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -3638,17 +3638,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:45",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:352",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:475"
+              "tests/fixtures/tenants/default/index.css:45",
+              "tests/fixtures/tenants/quality-evidence/index.ts:352",
+              "tests/fixtures/tenants/quality-evidence/index.ts:475"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:772"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:772"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:430",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:430",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-radius-current",
@@ -3673,7 +3673,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:432",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:432",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3701,7 +3701,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:434",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:434",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-shadow-current",
@@ -3726,7 +3726,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:436",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:436",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-texture-current",
@@ -3751,7 +3751,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:438",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:438",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-texture-current",
@@ -3776,7 +3776,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:440",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:440",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -3798,17 +3798,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:127",
-              "src/tooling/testing/fixtures/tenants/default.css:38",
-              "src/foundation/tokens/css/foundation/themes/default.css:705"
+              "tests/integration/theming-precedence/index.test.ts:127",
+              "tests/fixtures/tenants/default/index.css:38",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:705"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:705"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:705"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:442",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:442",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -3816,7 +3816,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:446",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:446",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -3824,7 +3824,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:487",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:487",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -3832,7 +3832,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:491",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:491",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -3857,7 +3857,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:444",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:444",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -3882,7 +3882,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:448",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:448",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-max-width-current",
@@ -3907,7 +3907,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:456",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:456",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -3929,17 +3929,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:124",
-              "src/tooling/testing/fixtures/tenants/default.css:35",
-              "src/foundation/tokens/css/foundation/themes/default.css:702"
+              "tests/integration/theming-precedence/index.test.ts:124",
+              "tests/fixtures/tenants/default/index.css:35",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:702"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:702"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:702"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:458",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:458",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -3947,7 +3947,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:466",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:466",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -3972,7 +3972,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:460",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:460",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -3997,7 +3997,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:464",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:464",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -4022,7 +4022,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:468",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:468",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-body-max-height",
@@ -4047,7 +4047,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:473",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:473",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -4072,7 +4072,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:477",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:477",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -4097,7 +4097,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:485",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:485",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-block-current",
@@ -4122,7 +4122,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:489",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:489",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-padding-inline-current",
@@ -4147,7 +4147,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:493",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:493",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-title-gap-current",
@@ -4172,7 +4172,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:510",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:510",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -4194,15 +4194,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1084",
-              "src/foundation/tokens/css/foundation/themes/default.css:804"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:804"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:804"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:804"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:527",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:527",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-popover-layer-step-shadow",
@@ -4224,15 +4224,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1083",
-              "src/foundation/tokens/css/foundation/themes/default.css:803"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:803"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:803"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:803"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:529",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:529",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--_ds-popover-layer-step-shadow",
@@ -4257,7 +4257,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:545",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:545",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "padding-block",
@@ -4282,7 +4282,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:546",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:546",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "padding-inline",
@@ -4304,15 +4304,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:126",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:373",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:444"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:126",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:373",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:444"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:548",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:548",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "padding-inline",
@@ -4320,7 +4320,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:599",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:599",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "padding-inline",
@@ -4345,7 +4345,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:550",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:550",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "border-block-end",
@@ -4370,7 +4370,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:551",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:551",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "border-block-end",
@@ -4395,7 +4395,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:574",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:574",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "background",
@@ -4418,15 +4418,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1602",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2558",
-              "src/foundation/tokens/css/foundation/themes/default.css:1831"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1831"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1831"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1831"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:575",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:575",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "color",
@@ -4451,7 +4451,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:576",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:576",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font",
@@ -4480,7 +4480,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:578",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:578",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font",
@@ -4501,15 +4501,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:580",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:580",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font",
@@ -4531,17 +4531,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:30",
-              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:609"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:580",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:580",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font",
@@ -4549,7 +4549,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:611",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:611",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "font",
@@ -4570,15 +4570,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:632"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:632"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:632"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:632"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:581",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:581",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font",
@@ -4599,17 +4599,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:458",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:464"
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
+              "src/components/primitives/display/Typography/Typography.stories.tsx:458",
+              "src/components/primitives/display/Typography/Typography.stories.tsx:464"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:507"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:507"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:581",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:581",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font",
@@ -4634,7 +4634,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:584",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:584",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "letter-spacing",
@@ -4663,7 +4663,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:586",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:586",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "letter-spacing",
@@ -4684,13 +4684,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:468"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:468"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:597",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:597",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "max-block-size",
@@ -4711,15 +4711,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:122",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:369",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:440"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:122",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:369",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:440"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:598",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:598",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "padding-block",
@@ -4744,7 +4744,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:605",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:605",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "scrollbar-width",
@@ -4767,15 +4767,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1604",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2560",
-              "src/foundation/tokens/css/foundation/themes/default.css:1832"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1832"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1832"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1832"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:606",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:606",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "color",
@@ -4796,15 +4796,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:75",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:354",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:391"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:75",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:354",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:391"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:606",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:606",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "color",
@@ -4829,7 +4829,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:607",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:607",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "font",
@@ -4854,7 +4854,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:609",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:609",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "font",
@@ -4875,15 +4875,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:622"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:622"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:622"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:622"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:611",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:611",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "font",
@@ -4909,12 +4909,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:207"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:634"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:634"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:612",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:612",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "font",
@@ -4935,15 +4935,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:872"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:872"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:872"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:872"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:627",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:627",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline",
@@ -4969,13 +4969,13 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1543"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:879",
-              "src/foundation/tokens/css/foundation/themes/default.css:2140"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:879",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2140"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:628",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:628",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline",
@@ -4996,17 +4996,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:156"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:628",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:628",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline",
@@ -5027,15 +5027,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:873"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:873"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:873"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:873"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:629",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:629",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "outline-offset",
@@ -5067,7 +5067,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:645",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:645",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inline-size",
@@ -5075,7 +5075,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:646",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:646",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "block-size",
@@ -5083,7 +5083,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:673",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:673",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-end",
@@ -5091,7 +5091,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:674",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:674",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5099,7 +5099,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:682",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:682",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5107,7 +5107,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:683",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:683",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5115,7 +5115,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:691",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:691",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5123,7 +5123,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:692",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:692",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-end",
@@ -5131,7 +5131,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:700",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:700",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5139,7 +5139,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:701",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:701",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5147,7 +5147,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:756",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:756",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5155,7 +5155,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:760",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:760",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5163,7 +5163,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:776",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:776",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5171,7 +5171,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:780",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:780",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5179,7 +5179,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:226",
+                "at": "src/components/primitives/overlay/popover/engines/rustic/index.tsx:226",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "width",
@@ -5187,7 +5187,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:227",
+                "at": "src/components/primitives/overlay/popover/engines/rustic/index.tsx:227",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "height",
@@ -5216,7 +5216,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:653",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:653",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -5224,7 +5224,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:654",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:654",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -5232,7 +5232,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:655",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:655",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -5240,7 +5240,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:656",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:656",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "transition",
@@ -5268,7 +5268,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:712",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:712",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5276,7 +5276,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:721",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:721",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline",
@@ -5284,7 +5284,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:730",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:730",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5292,7 +5292,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:739",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:739",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block",
@@ -5300,7 +5300,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:753",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:753",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5308,7 +5308,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:759",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:759",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5316,7 +5316,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:773",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:773",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5324,7 +5324,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:779",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:779",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5346,13 +5346,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/Popover/engines/modern/index.tsx:748"
+              "src/components/primitives/overlay/popover/engines/modern/index.tsx:748"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:755",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:755",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-inline-start",
@@ -5360,7 +5360,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:775",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:775",
                 "readIn": "modern-skin-css",
                 "part": "arrow",
                 "landsOn": "inset-block-start",
@@ -5385,7 +5385,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:790",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:790",
                 "readIn": "modern-skin-css",
                 "part": "body",
                 "landsOn": "min-block-size",
@@ -5406,15 +5406,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:431"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:431"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:431"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:431"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover.css:847",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css:847",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "--ds-popover-surface",
@@ -5433,15 +5433,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1830"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1830"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1830"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1830"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/Popover/engines/rustic/index.tsx:195",
+                "at": "src/components/primitives/overlay/popover/engines/rustic/index.tsx:195",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "padding",
@@ -5556,13 +5556,13 @@
         {
           "channelId": "--_ds-popover-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5571,13 +5571,13 @@
         {
           "channelId": "--_ds-popover-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5586,13 +5586,13 @@
         {
           "channelId": "--_ds-popover-content-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5601,13 +5601,13 @@
         {
           "channelId": "--_ds-popover-edge",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5616,13 +5616,13 @@
         {
           "channelId": "--_ds-popover-ink",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5631,13 +5631,13 @@
         {
           "channelId": "--_ds-popover-minimal-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5646,13 +5646,13 @@
         {
           "channelId": "--_ds-popover-muted-ink",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5661,13 +5661,13 @@
         {
           "channelId": "--_ds-popover-surface",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5676,13 +5676,13 @@
         {
           "channelId": "--_ds-popover-title-background",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5691,13 +5691,13 @@
         {
           "channelId": "--_ds-popover-title-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5714,7 +5714,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -5739,7 +5739,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -5766,13 +5766,13 @@
         {
           "channelId": "--_ds-popover-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5792,13 +5792,13 @@
         {
           "channelId": "--_ds-popover-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5862,13 +5862,13 @@
         {
           "channelId": "--_ds-popover-title-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5877,13 +5877,13 @@
         {
           "channelId": "--_ds-popover-title-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5901,7 +5901,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -5915,13 +5915,13 @@
         {
           "channelId": "--_ds-popover-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5931,13 +5931,13 @@
         {
           "channelId": "--_ds-popover-closed-transform",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5946,13 +5946,13 @@
         {
           "channelId": "--_ds-popover-enter-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5961,13 +5961,13 @@
         {
           "channelId": "--_ds-popover-enter-easing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5976,13 +5976,13 @@
         {
           "channelId": "--_ds-popover-motion-scale",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6001,13 +6001,13 @@
         {
           "channelId": "--_ds-popover-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -6027,13 +6027,13 @@
         {
           "channelId": "--_ds-popover-backdrop-filter",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -6052,7 +6052,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -6083,13 +6083,13 @@
         {
           "channelId": "--_ds-popover-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -6109,13 +6109,13 @@
         {
           "channelId": "--_ds-popover-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -6125,13 +6125,13 @@
         {
           "channelId": "--_ds-popover-bordered-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6140,13 +6140,13 @@
         {
           "channelId": "--_ds-popover-minimal-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6155,13 +6155,13 @@
         {
           "channelId": "--_ds-popover-title-divider-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6170,13 +6170,13 @@
         {
           "channelId": "--_ds-popover-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popover"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popover/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -6200,7 +6200,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -6256,7 +6256,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -6287,7 +6287,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -6301,11 +6301,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

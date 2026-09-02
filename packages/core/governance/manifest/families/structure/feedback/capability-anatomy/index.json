@@ -8,15 +8,15 @@
     "components": [
       "SurfaceCapabilityAnatomy"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/feedback/capability-anatomy",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/feedback/capability-anatomy",
     "publicComponents": [
       "SurfaceCapabilityAnatomy"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fc5e4c2ed6488b42a48a5bdc2ce6f6fec371db315a1f76c5f10e9f00748b603d"
+    "inventoryRowDigest": "58824c5280c35c409da9a9e9168b53f51c8476f4505f1f4c5e02a73ebeb3823d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/feedback/capability-anatomy",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+      "packages/core/src/components/structures/feedback/capability-anatomy",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
     ],
     "stableParts": [
       "capability",
@@ -46,8 +46,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the family stamps role='list' [at packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:68]",
-      "the family stamps role='listitem' [at packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:73]"
+      "the family stamps role='list' [at packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:68]",
+      "the family stamps role='listitem' [at packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:73]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -75,11 +75,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:75",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:89",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:90",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:91",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:92"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:75",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:89",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:90",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:91",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:92"
           ]
         },
         {
@@ -87,9 +87,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:56",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:72",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:73"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:56",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:73"
           ]
         },
         {
@@ -97,10 +97,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:61",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:77",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:78",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:79"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:61",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:77",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:78",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:79"
           ]
         },
         {
@@ -108,8 +108,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:80",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:101"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:80",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:101"
           ]
         },
         {
@@ -117,10 +117,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:69",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:83",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:84",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:85"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:69",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:83",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:85"
           ]
         }
       ],
@@ -130,7 +130,7 @@
           "scoutAnchorClaim": "root-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:55"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:55"
           ]
         }
       ],
@@ -139,7 +139,7 @@
           "token": "disabled=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:97"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:97"
           ],
           "state": "disabled"
         },
@@ -147,7 +147,7 @@
           "token": "data-disabled",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:78"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:78"
           ],
           "state": "disabled"
         }
@@ -157,7 +157,7 @@
           "token": "data-capability-kind",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:76"
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:76"
           ]
         }
       ],
@@ -167,7 +167,7 @@
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:58"
+              "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:58"
             ]
           }
         ],
@@ -179,7 +179,7 @@
             "token": "data-capability-count",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:57"
+              "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:57"
             ]
           }
         ],
@@ -191,7 +191,7 @@
             "token": "data-capability-id",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx:77"
+              "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx:77"
             ]
           }
         ],
@@ -200,7 +200,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css": {
             "rows": 15,
             "layer": "engine-agnostic skin"
           }
@@ -224,7 +224,7 @@
           {
             "variable": "--ds-spacing-2",
             "part": "capability-anatomy",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:73",
             "selector": ".ds-surface.ds-capability-anatomy[data-part='capability-anatomy']",
             "states": [],
             "landsOn": "gap",
@@ -237,15 +237,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-font-weight-bold",
             "part": "capability-anatomy-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:77",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability-anatomy-label'][data-part='capability-anatomy-label'][data-part='capability-anatomy-label']",
             "states": [],
             "landsOn": "font-weight",
@@ -258,14 +258,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:625"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:625"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-capability-anatomy-label-tracking",
             "part": "capability-anatomy-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:78",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:78",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability-anatomy-label'][data-part='capability-anatomy-label'][data-part='capability-anatomy-label']",
             "states": [],
             "landsOn": "letter-spacing",
@@ -283,7 +283,7 @@
           {
             "variable": "--ds-capability-cell-min-size",
             "part": "capability-list",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:84",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:84",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability-list']",
             "states": [],
             "landsOn": "grid-template-columns",
@@ -301,7 +301,7 @@
           {
             "variable": "--ds-spacing-2",
             "part": "capability-list",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:85",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability-list']",
             "states": [],
             "landsOn": "gap",
@@ -314,15 +314,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-spacing-2",
             "part": "capability",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:90",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability']",
             "states": [],
             "landsOn": "padding",
@@ -335,15 +335,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-spacing-3",
             "part": "capability",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:90",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability']",
             "states": [],
             "landsOn": "padding",
@@ -356,15 +356,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-border",
             "part": "capability",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:91",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:91",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability']",
             "states": [],
             "landsOn": "border",
@@ -378,16 +378,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:28"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-radius-md",
             "part": "capability",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:92",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability']",
             "states": [],
             "landsOn": "border-radius",
@@ -401,16 +401,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:236",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
-              "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json:150",
-              "packages/core/src/tooling/resolution-probe/public/drills/index.mjs:59"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:770",
+              "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json:150",
+              "packages/core/scripts/check/tokens/cascade/probe/public/drills/index.mjs:59"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-capability-opacity",
             "part": "capability",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:93",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability']",
             "states": [],
             "landsOn": "opacity",
@@ -428,7 +428,7 @@
           {
             "variable": "--ds-capability-disabled-opacity",
             "part": "capability",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:97",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:97",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability'][data-disabled='true']",
             "states": [
               "disabled=true"
@@ -448,7 +448,7 @@
           {
             "variable": "--ds-font-weight-semibold",
             "part": "capability-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css:101",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css:101",
             "selector": ".ds-surface.ds-capability-anatomy [data-part='capability-label'][data-part='capability-label'][data-part='capability-label']",
             "states": [],
             "landsOn": "font-weight",
@@ -461,14 +461,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:624"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "declarationSiteCount": 1
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css": {
               "rows": 15,
               "layer": "engine-agnostic skin"
             }
@@ -497,7 +497,7 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/feedback/capability-anatomy/index.tsx": {
+            "packages/core/src/components/structures/feedback/capability-anatomy/index.tsx": {
               "classNameOccurrences": 1,
               "dataPartOccurrences": 5,
               "styleAttributeOccurrences": 0,
@@ -589,14 +589,14 @@
         {
           "channelId": "--_ds-capability-anatomy-label-tracking",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/capability-anatomy",
             "structure/feedback/surface-lifecycle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -613,7 +613,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -638,7 +638,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -669,7 +669,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido fundacion (nivel 2/3; noSocketReason)": [
             "--ds-radius-md"
@@ -706,7 +706,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los CTA de retry/back son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -719,7 +719,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "son momentos de display sin filas que densificar; comprimirlos rompe composicion, no gana densidad",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [],
         "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
@@ -741,7 +741,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -755,13 +755,13 @@
         {
           "channelId": "--_ds-loading-dots-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/capability-anatomy"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -780,7 +780,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el estado lo senalan scrim y motion, no sombra: elevar el loading seria doble señal",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -794,14 +794,14 @@
         {
           "channelId": "--_ds-capability-disabled-opacity",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/capability-anatomy",
             "structure/feedback/surface-lifecycle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -810,14 +810,14 @@
         {
           "channelId": "--_ds-capability-opacity",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/feedback/capability-anatomy",
             "structure/feedback/surface-lifecycle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-states/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -835,7 +835,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback estructural, no chrome",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -848,7 +848,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -861,7 +861,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el scrim del loading-overlay es un canal semantico global, no chrome de familia: una fuente unica (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -873,7 +873,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -910,7 +910,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -923,7 +923,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -962,7 +962,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -989,7 +989,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el spinner es un grafico de motion, no un icono de la libreria de postura",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1003,11 +1003,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

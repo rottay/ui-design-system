@@ -3,6 +3,7 @@
   "rootId": "typography.families",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-font-family-base",
     "emission": [
       {

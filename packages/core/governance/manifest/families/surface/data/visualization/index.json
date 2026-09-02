@@ -8,15 +8,15 @@
     "components": [
       "VisualizationSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/data",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/data/visualization",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/data",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/data/visualization",
     "publicComponents": [
       "VisualizationSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ad8838eb9805c333aaf0f09c0844672f3445bd72c3521899097f49cac781badb"
+    "inventoryRowDigest": "d0131ef032605cd5efa0b367f311d1fe43f9b61c1bf97aaf8502d927bdb307ec"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/data/visualization",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization.css"
+      "packages/core/src/components/surfaces/presentation/pages/data/visualization",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization/index.css"
     ],
     "stableParts": [
       "visualization-skeleton-block",
@@ -113,9 +113,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-visualization__view` bound by the root pair `.ds-surface.ds-visualization`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization.css:32",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization.css:36",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization.css:43"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization/index.css:32",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization/index.css:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization/index.css:43"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -630,7 +630,7 @@
         }
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/visualization/index.css",
         "rootAnchor": ".ds-surface.ds-visualization",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -677,7 +677,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -696,7 +696,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -715,7 +715,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -739,7 +739,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.radius-scale",
@@ -763,7 +763,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -782,7 +782,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -801,7 +801,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -827,7 +827,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -853,7 +853,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -873,7 +873,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -893,7 +893,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -913,7 +913,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -933,7 +933,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -952,7 +952,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "chrome.anatomy",
@@ -977,7 +977,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -990,7 +990,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -1036,7 +1036,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1067,7 +1067,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -1088,11 +1088,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

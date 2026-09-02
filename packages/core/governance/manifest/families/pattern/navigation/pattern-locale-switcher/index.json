@@ -8,15 +8,15 @@
     "components": [
       "PatternLocaleSwitcher"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/navigation/locale-switcher",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/navigation/locale-switcher",
     "publicComponents": [
       "PatternLocaleSwitcher"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "c20ce9f75bb41513ae70f1033cc6a79326ae77c108796ab3a5e00df9176c7926"
+    "inventoryRowDigest": "b2a8168faa2c0557098c4cecb86c784b89a60538e9e22d981d847c6fa04e5132"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/navigation/locale-switcher/index.ts",
-      "packages/core/src/ui/patterns/navigation/locale-switcher/contracts/index.ts",
-      "packages/core/src/ui/patterns/navigation/locale-switcher/runtime/default-locales/index.ts",
-      "packages/core/src/ui/patterns/navigation/locale-switcher/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css"
+      "packages/core/src/components/patterns/navigation/locale-switcher/index.ts",
+      "packages/core/src/components/patterns/navigation/locale-switcher/contracts/index.ts",
+      "packages/core/src/components/patterns/navigation/locale-switcher/runtime/default-locales/index.ts",
+      "packages/core/src/components/patterns/navigation/locale-switcher/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css"
     ],
     "stableParts": [
       "check",
@@ -80,92 +80,92 @@
           "part": "check",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:335",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:296",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css:22"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:335",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css:22"
           ]
         },
         {
           "part": "flag",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:270",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:329",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:122"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:270",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:329",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:122"
           ]
         },
         {
           "part": "option",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:319",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:270",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:184",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:209"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:319",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:209"
           ]
         },
         {
           "part": "option-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:333",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:178"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:333",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:178"
           ]
         },
         {
           "part": "panel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:297",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:254",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:130",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:231"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:297",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:254",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:231"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:240",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:36",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:40",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:73",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:130"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:240",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:130"
           ]
         },
         {
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:251",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:212",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:48",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:68",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:73",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:76"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:251",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:212",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:48",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:76"
           ]
         },
         {
           "part": "trigger-code",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:285",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:109"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:109"
           ]
         },
         {
           "part": "trigger-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:278",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:102"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:278",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:102"
           ]
         }
       ],
@@ -173,61 +173,61 @@
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:29"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:29"
           ],
           "state": "active"
         },
         {
           "token": "active=isActive",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:320",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:271"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:320",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:271"
           ],
           "state": "active"
         },
         {
           "token": "active=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:184",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css:53"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css:53"
           ],
           "state": "active"
         },
         {
           "token": "focused",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:28"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:28"
           ],
           "state": "focus"
         },
         {
           "token": "focused=isFocused",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:321",
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx:272"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:321",
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx:272"
           ],
           "state": "focused"
         },
         {
           "token": "focused=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:209",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css:57"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:209",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css:57"
           ],
           "state": "focused"
         },
         {
           "token": "loading=loading ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:241"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:241"
           ],
           "state": "loading"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:40"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:40"
           ],
           "state": "loading"
         }
@@ -236,26 +236,26 @@
         {
           "token": "placement=end",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:154"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:154"
           ]
         },
         {
           "token": "placement=placement",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:298"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:298"
           ]
         },
         {
           "token": "size=size",
           "at": [
-            "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx:252"
+            "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx:252"
           ]
         },
         {
           "token": "size=sm",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:68",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css:122"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css:122"
           ]
         }
       ],
@@ -263,17 +263,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/classic/index.tsx",
             "lines": 106
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/modern/index.tsx",
             "lines": 346
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
             "lines": 314
           }
         ]
@@ -283,7 +283,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "8px",
@@ -296,7 +296,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "4px",
@@ -309,7 +309,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 55,
             "fallback": true,
             "fallbackValue": "4px",
@@ -322,7 +322,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "8px",
@@ -335,7 +335,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 57,
             "fallback": false,
             "fallbackValue": null,
@@ -348,7 +348,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 59,
             "fallback": false,
             "fallbackValue": null,
@@ -361,7 +361,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 61,
             "fallback": true,
             "fallbackValue": "14px",
@@ -374,7 +374,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 65,
             "fallback": false,
             "fallbackValue": null,
@@ -387,7 +387,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -400,7 +400,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 66,
             "fallback": false,
             "fallbackValue": null,
@@ -413,7 +413,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -426,7 +426,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 69,
             "fallback": true,
             "fallbackValue": "8px",
@@ -439,7 +439,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 71,
             "fallback": false,
             "fallbackValue": null,
@@ -452,7 +452,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -465,7 +465,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 74,
             "fallback": false,
             "fallbackValue": null,
@@ -478,7 +478,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 80,
             "fallback": false,
             "fallbackValue": null,
@@ -491,7 +491,7 @@
           },
           {
             "name": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 84,
             "fallback": false,
             "fallbackValue": null,
@@ -504,7 +504,7 @@
           },
           {
             "name": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -517,7 +517,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 94,
             "fallback": false,
             "fallbackValue": null,
@@ -530,7 +530,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 94,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -543,7 +543,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 110,
             "fallback": true,
             "fallbackValue": "600",
@@ -556,7 +556,7 @@
           },
           {
             "name": "--ds-letter-spacing-wide",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 111,
             "fallback": true,
             "fallbackValue": "0.025em",
@@ -569,7 +569,7 @@
           },
           {
             "name": "--ds-font-size-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 118,
             "fallback": false,
             "fallbackValue": null,
@@ -582,7 +582,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 123,
             "fallback": false,
             "fallbackValue": null,
@@ -595,7 +595,7 @@
           },
           {
             "name": "--ds-z-index-dropdown",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 134,
             "fallback": true,
             "fallbackValue": "1000",
@@ -608,7 +608,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 138,
             "fallback": true,
             "fallbackValue": "4px",
@@ -621,7 +621,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 139,
             "fallback": true,
             "fallbackValue": "4px",
@@ -634,7 +634,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 141,
             "fallback": false,
             "fallbackValue": null,
@@ -647,7 +647,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 142,
             "fallback": false,
             "fallbackValue": null,
@@ -660,7 +660,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 143,
             "fallback": false,
             "fallbackValue": null,
@@ -673,7 +673,7 @@
           },
           {
             "name": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 144,
             "fallback": false,
             "fallbackValue": null,
@@ -686,7 +686,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 145,
             "fallback": false,
             "fallbackValue": null,
@@ -699,7 +699,7 @@
           },
           {
             "name": "--ds-motion-ease-enter",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 145,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -712,7 +712,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 163,
             "fallback": true,
             "fallbackValue": "8px",
@@ -725,7 +725,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 165,
             "fallback": true,
             "fallbackValue": "8px",
@@ -738,7 +738,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 165,
             "fallback": true,
             "fallbackValue": "12px",
@@ -751,7 +751,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 167,
             "fallback": false,
             "fallbackValue": null,
@@ -764,7 +764,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 169,
             "fallback": false,
             "fallbackValue": null,
@@ -777,7 +777,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 173,
             "fallback": true,
             "fallbackValue": "14px",
@@ -790,7 +790,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 176,
             "fallback": false,
             "fallbackValue": null,
@@ -803,7 +803,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 176,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -816,7 +816,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 185,
             "fallback": false,
             "fallbackValue": null,
@@ -829,7 +829,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 186,
             "fallback": true,
             "fallbackValue": "600",
@@ -842,7 +842,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 189,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-100)",
@@ -855,7 +855,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 189,
             "fallback": false,
             "fallbackValue": null,
@@ -868,7 +868,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 197,
             "fallback": false,
             "fallbackValue": null,
@@ -881,7 +881,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 221,
             "fallback": true,
             "fallbackValue": "44px",
@@ -894,7 +894,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 23,
             "fallback": true,
             "fallbackValue": "#1677ff",
@@ -907,7 +907,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 28,
             "fallback": true,
             "fallbackValue": "#1a1a1a",
@@ -920,7 +920,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 29,
             "fallback": true,
             "fallbackValue": "8px",
@@ -933,7 +933,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 33,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border, #d9d9d9)",
@@ -946,7 +946,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 33,
             "fallback": true,
             "fallbackValue": "#d9d9d9",
@@ -959,7 +959,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 37,
             "fallback": true,
             "fallbackValue": "#fff",
@@ -972,7 +972,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 38,
             "fallback": true,
             "fallbackValue": "12px",
@@ -985,7 +985,7 @@
           },
           {
             "name": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 39,
             "fallback": true,
             "fallbackValue": "0 4px 12px rgba(0, 0, 0, 0.12)",
@@ -998,7 +998,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 43,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border, #d9d9d9)",
@@ -1011,7 +1011,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 43,
             "fallback": true,
             "fallbackValue": "#d9d9d9",
@@ -1024,7 +1024,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 48,
             "fallback": true,
             "fallbackValue": "#1a1a1a",
@@ -1037,7 +1037,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 50,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1050,7 +1050,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-100, #f5f5f5)",
@@ -1063,7 +1063,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "#f5f5f5",
@@ -1076,7 +1076,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 58,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-100, #f5f5f5)",
@@ -1089,7 +1089,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 58,
             "fallback": true,
             "fallbackValue": "#f5f5f5",
@@ -1102,7 +1102,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/classic/index.tsx",
             "line": 55,
             "fallback": false,
             "fallbackValue": null,
@@ -1115,7 +1115,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
             "line": 39,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1128,7 +1128,7 @@
           },
           {
             "name": "--ds-font-size-md",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
             "line": 46,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1141,7 +1141,7 @@
           },
           {
             "name": "--ds-font-size-md",
-            "file": "packages/core/src/ui/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/locale-switcher/engines/rustic/index.tsx",
             "line": 66,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1155,259 +1155,259 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 53,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 54,
             "literal": "4px",
             "text": "row-gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 55,
             "literal": "4px",
             "text": "padding-block: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 56,
             "literal": "8px",
             "text": "padding-inline: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 61,
             "literal": "14px",
             "text": "font-size: var(--ds-font-size-sm, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 63,
             "literal": "32px",
             "text": "min-block-size: 32px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 69,
             "literal": "8px",
             "text": "padding-inline: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 70,
             "literal": "28px",
             "text": "min-block-size: 28px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 74,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 80,
             "literal": "3px",
             "text": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 111,
             "literal": "0.025em",
             "text": "letter-spacing: var(--ds-letter-spacing-wide, 0.025em);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 135,
             "literal": "180px",
             "text": "min-inline-size: 180px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 136,
             "literal": "16rem",
             "text": "max-inline-size: min(16rem, calc(100vw - 2rem));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 136,
             "literal": "2rem",
             "text": "max-inline-size: min(16rem, calc(100vw - 2rem));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 137,
             "literal": "280px",
             "text": "max-block-size: 280px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 138,
             "literal": "4px",
             "text": "margin-block-start: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 139,
             "literal": "4px",
             "text": "padding: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 141,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 163,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 165,
             "literal": "8px",
             "text": "padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 165,
             "literal": "12px",
             "text": "padding: var(--ds-spacing-2, 8px) var(--ds-spacing-3, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 173,
             "literal": "14px",
             "text": "font-size: var(--ds-font-size-sm, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 210,
             "literal": "2px",
             "text": "outline: 2px solid Highlight;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 211,
             "literal": "2px",
             "text": "outline-offset: -2px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 221,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 232,
             "literal": "0.01ms",
             "text": "transition-duration: 0.01ms !important;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
             "line": 233,
             "literal": "0.01ms",
             "text": "animation-duration: 0.01ms !important;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 23,
             "literal": "#1677ff",
             "text": "color: var(--ds-color-primary, #1677ff);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 28,
             "literal": "#1a1a1a",
             "text": "color: var(--ds-color-text-primary, #1a1a1a);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 29,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 33,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 33,
             "literal": "#d9d9d9",
             "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 37,
             "literal": "#fff",
             "text": "background: var(--ds-surface-card, #fff);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 38,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 39,
             "literal": "4px",
             "text": "box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 39,
             "literal": "12px",
             "text": "box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 39,
             "literal": "rgba(0, 0, 0, 0.12)",
             "text": "box-shadow: var(--ds-elevation-2, 0 4px 12px rgba(0, 0, 0, 0.12));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 43,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 43,
             "literal": "#d9d9d9",
             "text": "border: 1px solid var(--ds-color-border-subtle, var(--ds-color-border, #d9d9d9));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 48,
             "literal": "#1a1a1a",
             "text": "color: var(--ds-color-text-primary, #1a1a1a);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 50,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 54,
             "literal": "#f5f5f5",
             "text": "background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/locale-switcher/index.css",
             "line": 58,
             "literal": "#f5f5f5",
             "text": "background: var(--ds-surface-inset, var(--ds-color-neutral-100, #f5f5f5));"
@@ -1464,7 +1464,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1496,7 +1496,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1521,7 +1521,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -1564,13 +1564,13 @@
         {
           "channelId": "--_ds-locale-switcher-control-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1590,13 +1590,13 @@
         {
           "channelId": "--_ds-locale-switcher-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1628,13 +1628,13 @@
         {
           "channelId": "--_ds-locale-switcher-control-item-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1653,7 +1653,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1677,13 +1677,13 @@
         {
           "channelId": "--_ds-locale-switcher-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1702,7 +1702,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-elevation-2"
@@ -1721,7 +1721,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-surface-highlight"
@@ -1745,13 +1745,13 @@
         {
           "channelId": "--_ds-locale-switcher-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1761,13 +1761,13 @@
         {
           "channelId": "--_ds-locale-switcher-sidebar-text",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1777,13 +1777,13 @@
         {
           "channelId": "--_ds-locale-switcher-sidebar-text-muted",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1793,13 +1793,13 @@
         {
           "channelId": "--_ds-locale-switcher-sidebar-item-bg-hover",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1809,13 +1809,13 @@
         {
           "channelId": "--_ds-locale-switcher-sidebar-item-bg-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1825,13 +1825,13 @@
         {
           "channelId": "--_ds-locale-switcher-sidebar-item-color-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1850,7 +1850,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1863,7 +1863,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-z-index-dropdown"
@@ -1883,13 +1883,13 @@
         {
           "channelId": "--_ds-locale-switcher-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1913,7 +1913,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1926,7 +1926,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1965,7 +1965,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1991,13 +1991,13 @@
         {
           "channelId": "--_ds-locale-switcher-icon-fill-mode",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/pattern-locale-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/locale-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2017,11 +2017,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -1,0 +1,1825 @@
+{
+  "_note": "Tabla autorada owner x hoja -> paso del eje tier. Clave ownerPath+property+leaf. El vocabulario de pasos es el de BrandPalette: ocho tintas y seis bordes. Hojas con estado pertenecen a state.delta; bordes semanticos de estado pertenecen al eje semantico; owners sin tier asignado no reciben filas. Null es legitimo y nunca genera presion de cobertura. Placeholder usa tertiary, disabled usa disabled, metadata y captions usan muted, supporting copy usa secondary, la tinta de lectura usa primary, headerColor usa secondary y el borde de panel usa border primary. Los gemelos CHROME/OVERLAY del mismo canal llevan el mismo paso y todos los contribuyentes deben concordar o el canal no refina. Lo que no cubre el vocabulario queda sin refinamiento hasta tener una decision visual autorada. @parent es legal solo cuando la cabeza de la raiz padre coincide con la cabeza natural del paso por defecto del eje; no puede encubrir un vocabulario faltante. La igualdad de valor es verificacion post-hoc, nunca una ruta.",
+  "rows": [
+    {
+      "ownerPath": "CHROME.breadcrumb",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.breadcrumb",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.calendar",
+      "property": "border",
+      "leaf": "border",
+      "step": "primary",
+      "reason": "separador neutral sobre superficie acotada (\"default neutral separator on cards, controls, rows\") — el paso primary del eje de borde."
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "borderColor",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "colorMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "imagePlaceholderColor",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.cardComponent",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.collapse",
+      "property": "border",
+      "leaf": "border",
+      "step": "primary",
+      "reason": "separador neutral sobre superficie acotada (\"default neutral separator on cards, controls, rows\") — el paso primary del eje de borde."
+    },
+    {
+      "ownerPath": "CHROME.collapse",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "titulo de seccion/contenido — convencion headerColor de cardComponent/table."
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.collectionCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.compactCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonDefault",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonDefault",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonGhost",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonGhost",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonLink",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonPrimary",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonSecondary",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonSecondary",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.buttonText",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.checkbox",
+      "property": "fg",
+      "leaf": "labelColorDisabled",
+      "step": "disabled",
+      "reason": "tinta/track del estado disabled — el paso homonimo del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.controls.disabled",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.controls.form",
+      "property": "fg",
+      "leaf": "extraColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.form",
+      "property": "fg",
+      "leaf": "helpColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.form",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "CHROME.controls.input",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.addon",
+      "property": "fg",
+      "leaf": "color",
+      "step": "secondary",
+      "reason": "tinta de apoyo legible / affordance accionable (\"supporting copy\") — el paso secundario del eje de tinta; convencion del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.controls.input.clear",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.input.readOnly",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "border",
+      "leaf": "addonBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "fg",
+      "leaf": "addonColor",
+      "step": "secondary",
+      "reason": "tinta de apoyo legible / affordance accionable (\"supporting copy\") — el paso secundario del eje de tinta; convencion del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "fg",
+      "leaf": "affixColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.inputNumber",
+      "property": "fg",
+      "leaf": "controlColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "fg",
+      "leaf": "descriptionColor",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.radio",
+      "property": "fg",
+      "leaf": "labelColorDisabled",
+      "step": "disabled",
+      "reason": "tinta/track del estado disabled — el paso homonimo del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.controls.segmented",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "arrowColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "optionColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.select",
+      "property": "fg",
+      "leaf": "optionColorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "CHROME.controls.slider",
+      "property": "fg",
+      "leaf": "markColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.slider",
+      "property": "fg",
+      "leaf": "trackColorDisabled",
+      "step": "disabled",
+      "reason": "tinta/track del estado disabled — el paso homonimo del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "CHROME.controls.textarea",
+      "property": "fg",
+      "leaf": "countColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.timePicker",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta de apoyo legible / affordance accionable (\"supporting copy\") — el paso secundario del eje de tinta; convencion del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.controls.timePicker",
+      "property": "fg",
+      "leaf": "iconColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.timePicker",
+      "property": "fg",
+      "leaf": "separatorColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "buttonBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "cardBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "border",
+      "leaf": "draggerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.controls.upload",
+      "property": "fg",
+      "leaf": "draggerIconColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette."
+    },
+    {
+      "ownerPath": "CHROME.dropdown",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.filterPill",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.filterPill",
+      "property": "border",
+      "leaf": "countBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.floatButton",
+      "property": "fg",
+      "leaf": "descriptionColor",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "border",
+      "leaf": "dividerColor",
+      "step": "subtle",
+      "reason": "separador tenue (hairline/divisor) — paso subtle"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "border",
+      "leaf": "siderBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.layout",
+      "property": "fg",
+      "leaf": "dividerTextColor",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.list",
+      "property": "fg",
+      "leaf": "textColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "property": "border",
+      "leaf": "iconBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.metricCard",
+      "property": "border",
+      "leaf": "meterTrackBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "closeColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.modal",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.pagination",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.premiumCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.search",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.search",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.shell",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.sidebar",
+      "property": "fg",
+      "leaf": "groupColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.sidebar",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "property": "border",
+      "leaf": "iconBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.signalCard",
+      "property": "border",
+      "leaf": "meterTrackBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.steps",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "border",
+      "leaf": "rowBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.table",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "border",
+      "leaf": "listBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "border",
+      "leaf": "panelBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.tabs",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.tallCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.toolbar",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.toolbar",
+      "property": "fg",
+      "leaf": "controlColor",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta."
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "border",
+      "leaf": "iconBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "CHROME.workspaceCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.breadcrumb",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.breadcrumb",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.calendar",
+      "property": "border",
+      "leaf": "border",
+      "step": "primary",
+      "reason": "separador neutral sobre superficie acotada (\"default neutral separator on cards, controls, rows\") — el paso primary del eje de borde. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "colorMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "imagePlaceholderColor",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.cardComponent",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collapse",
+      "property": "border",
+      "leaf": "border",
+      "step": "primary",
+      "reason": "separador neutral sobre superficie acotada (\"default neutral separator on cards, controls, rows\") — el paso primary del eje de borde. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collapse",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "titulo de seccion/contenido — convencion headerColor de cardComponent/table. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.collectionCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.compactCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonDefault",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonGhost",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonSecondary",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.buttonSecondary",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.checkbox",
+      "property": "fg",
+      "leaf": "labelColorDisabled",
+      "step": "disabled",
+      "reason": "tinta/track del estado disabled — el paso homonimo del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.form",
+      "property": "fg",
+      "leaf": "extraColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.form",
+      "property": "fg",
+      "leaf": "helpColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.addon",
+      "property": "fg",
+      "leaf": "color",
+      "step": "secondary",
+      "reason": "tinta de apoyo legible / affordance accionable (\"supporting copy\") — el paso secundario del eje de tinta; convencion del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.input.clear",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "border",
+      "leaf": "addonBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "fg",
+      "leaf": "addonColor",
+      "step": "secondary",
+      "reason": "tinta de apoyo legible / affordance accionable (\"supporting copy\") — el paso secundario del eje de tinta; convencion del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "fg",
+      "leaf": "affixColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.inputNumber",
+      "property": "fg",
+      "leaf": "controlColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.radio",
+      "property": "fg",
+      "leaf": "descriptionColor",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.radio",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.radio",
+      "property": "fg",
+      "leaf": "labelColorDisabled",
+      "step": "disabled",
+      "reason": "tinta/track del estado disabled — el paso homonimo del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "arrowColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "colorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "tinta de placeholder — mas tenue que muted, paso tertiary"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "optionColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.select",
+      "property": "fg",
+      "leaf": "optionColorDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.slider",
+      "property": "fg",
+      "leaf": "markColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.slider",
+      "property": "fg",
+      "leaf": "trackColorDisabled",
+      "step": "disabled",
+      "reason": "tinta/track del estado disabled — el paso homonimo del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "property": "border",
+      "leaf": "borderFocus",
+      "step": "focus",
+      "reason": "borde de foco — paso focus del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "property": "fg",
+      "leaf": "colorPlaceholder",
+      "step": "tertiary",
+      "reason": "texto placeholder (pista pre-input, deliberadamente tenue) — el tercer paso del eje de tinta; convencion del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.textarea",
+      "property": "fg",
+      "leaf": "countColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.timePicker",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta de apoyo legible / affordance accionable (\"supporting copy\") — el paso secundario del eje de tinta; convencion del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.timePicker",
+      "property": "fg",
+      "leaf": "iconColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.timePicker",
+      "property": "fg",
+      "leaf": "separatorColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "buttonBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "cardBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "border",
+      "leaf": "draggerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.controls.upload",
+      "property": "fg",
+      "leaf": "draggerIconColor",
+      "step": "muted",
+      "reason": "tinta de metadata/afordancia quieta (captions, contadores, marcas, separadores, iconos decorativos) — \"quiet metadata/captions\" del BrandPalette. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "border",
+      "leaf": "dividerColor",
+      "step": "subtle",
+      "reason": "separador tenue (hairline/divisor) — paso subtle"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "border",
+      "leaf": "siderBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.layout",
+      "property": "fg",
+      "leaf": "dividerTextColor",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.list",
+      "property": "fg",
+      "leaf": "textColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "border",
+      "leaf": "footerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "border",
+      "leaf": "headerBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "closeColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "subtitleColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.modal",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.search",
+      "property": "fg",
+      "leaf": "clearColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.search",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.shell",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.sidebar",
+      "property": "fg",
+      "leaf": "groupColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.sidebar",
+      "property": "fg",
+      "leaf": "itemColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "property": "border",
+      "leaf": "rowBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.table",
+      "property": "fg",
+      "leaf": "headerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "border",
+      "leaf": "border",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "border",
+      "leaf": "listBorder",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "border",
+      "leaf": "panelBorder",
+      "step": "default",
+      "reason": "borde estructural por defecto de la parte — paso default del eje de borde"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tabs",
+      "property": "fg",
+      "leaf": "color",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.tallCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.toolbar",
+      "property": "fg",
+      "leaf": "color",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.toolbar",
+      "property": "fg",
+      "leaf": "controlColor",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "bodyColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "footerColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "labelColor",
+      "step": "secondary",
+      "reason": "tinta suavizada de cabecera/etiqueta/pie — jerarquia secundaria por ley de jerarquia de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "titleColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.chrome.workspaceCard",
+      "property": "fg",
+      "leaf": "valueColor",
+      "step": "primary",
+      "reason": "tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.card",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje)"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.control",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje)"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje)"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foreground",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "OVERLAY.surfaces.surfaceRoles.shell",
+      "property": "fg",
+      "leaf": "foreground",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta. (fila espejo: la variante de capa OVERLAY/SURFACES de la familia es la MISMA superficie logica y lleva el MISMO paso — ley de espejo)"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.card",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.card",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje)"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.control",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.control",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje)"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "border",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje border ES la raiz padre (--ds-color-border); pedir 'default' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: borde estructural por defecto de la parte — paso default del eje de borde]"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "border",
+      "leaf": "borderStrong",
+      "step": "primary",
+      "reason": "borde fuerte — paso primary (el mas marcado del eje)"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foreground",
+      "step": "@parent",
+      "reason": "padre-por-disenio (ley @parent): el paso por defecto del eje fg ES la raiz padre (--ds-color-text-primary); pedir 'primary' por nombre seria la hija que duplica al padre — prohibido por la ley de alias. [origen: tinta principal de la familia (cuerpo/valor/titulo) — el paso fuerte del eje de tinta]"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundDisabled",
+      "step": "disabled",
+      "reason": "tinta deshabilitada — paso disabled del vocabulario autorado"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.panel",
+      "property": "fg",
+      "leaf": "foregroundMuted",
+      "step": "muted",
+      "reason": "tinta atenuada (muted) para texto auxiliar/vacio/descripcion"
+    },
+    {
+      "ownerPath": "SURFACES.surfaceRoles.shell",
+      "property": "fg",
+      "leaf": "foreground",
+      "step": "primary",
+      "reason": "tinta principal de lectura del cromo — el paso fuerte del eje de tinta."
+    }
+  ]
+}

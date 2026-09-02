@@ -40524,7 +40524,7 @@
   "paintAudit": {
     "output": "engine-token-audit --check OK (3326 counters; 3226 completed zeros locked exactly; 91 decrease-only ceilings; 2 positive exact invariants; 7 positive minimum floors)",
     "baseline": {
-      "path": "ui-design-system/packages/core/scripts/engine/token-audit/token-baseline/index.json",
+      "path": "ui-design-system/packages/core/scripts/engine/token-audit/token-audit.baseline.json",
       "sha256": "567c4e4ebc429e526b252b0c56b2427832709466d89ca76b684c0b78bd67d242",
       "ok": true,
       "errors": [],

@@ -45,8 +45,8 @@
  *            `AMBIGUOUS`, `CYCLE_ONLY` -- is a violation in its own right, one
  *            message per name. See `UNRESOLVABLE_EXPORT_KINDS` for why skipping
  *            them was the worst available default.
- *   manifest `family-inventory.json`, `manifest/index.json` and the per-family
- *            `manifest/families/{layer}/{category}/{slug}.json` files describe
+ *   manifest `family-inventory/index.json`, `manifest/index.json` and the per-family
+ *            `manifest/families/{layer}/{group}/{slug}/index.json` cells describe
  *            the same set of ids -- no ghost row, no orphan cell.
  *   showroom every registry entry resolves to a family and publishes that
  *            family's own name and category, and every family is reachable in
@@ -93,23 +93,21 @@ import { fileURLToPath } from 'node:url';
 
 import { createRootPublicResolver } from '../../../libraries/taxonomy/roots/index.mjs';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../libraries/repo-root/index.mjs';
-import { relocateSourceOwners, RelocationError } from '../../../libraries/taxonomy/relocation/index.mjs';
+import { relocateSourceOwners, RelocationError } from '../../../libraries/taxonomy/owner-resolution/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 const REPOSITORY_ROOT = findRepoRoot(HERE);
 
-/** The tracked carrier for the programme's own data; `scripts/check/modern-rescue/`
- *  is not committed. */
+/** Root of the programme's own data, including the family inventory this gate
+ *  reads. */
 const PROGRAM_ROOT = path.join(
   CORE_ROOT,
-  'scripts/quality-evidence/programs/modern-rescue',
+  'scripts/check/modern-rescue',
 );
-/** The manifest graduated out of the programme folder to the package root.
- *  The programme still owns it, so it is a binding of its own. The tracked
- *  carrier is `packages/core/manifest/`; `governance/manifest/` is not
- *  committed. */
-const MANIFEST_ROOT = path.join(CORE_ROOT, 'manifest');
+/** The manifest lives at the package root, outside the programme folder, but the
+ *  programme still owns it, so it is a binding of its own. */
+const MANIFEST_ROOT = path.join(CORE_ROOT, 'governance/manifest');
 const UI_ROOT_RELATIVE = 'packages/core/src/components';
 const SHOWROOM_REGISTRY_ROOT = path.join(
   REPOSITORY_ROOT,
@@ -533,13 +531,6 @@ export function auditTaxonomyParity({
   // dirents cannot share one relative path), so the only way to exercise the
   // collision guard honestly is to hand the audit a planted file list.
   listFamilyManifestFiles = collectFamilyManifestFiles,
-  // Left undefined so relocateSourceOwners falls through to its own default,
-  // the real 101-entry production table. A fixture models a handful of rows,
-  // and every override entry that names a row absent from that handful would
-  // reject as "unknown" -- so every fixture drill must inject `[]` here, the
-  // same way they inject their own registries and resolver instead of the
-  // real ones.
-  relocationOverrides,
 } = {}) {
   const violations = [];
   const add = (kind, detail) => violations.push({ kind, detail });
@@ -547,7 +538,7 @@ export function auditTaxonomyParity({
   if (!fs.existsSync(programRoot)) {
     throw new Error(`taxonomy-parity: program root does not exist: ${programRoot}`);
   }
-  const inventoryPath = path.join(programRoot, 'family-inventory.json');
+  const inventoryPath = path.join(programRoot, 'family-inventory/index.json');
   if (!fs.existsSync(inventoryPath)) {
     throw new Error(`taxonomy-parity: family inventory file does not exist: ${inventoryPath}`);
   }
@@ -555,21 +546,16 @@ export function auditTaxonomyParity({
   const rows = inventory?.rows ?? [];
 
   // Fail-closed by construction: relocateSourceOwners resolves every row's
-  // legacy `sourceOwner` (the `packages/core/src/ui/...` prefix the tracked
-  // inventory still carries) to its real directory under
-  // `packages/core/src/components/...`, or throws ONE RelocationError naming
-  // every row it could not place. Nothing below this line reads
-  // `row.sourceOwner` directly -- every binding uses the resolved directory.
+  // recorded `sourceOwner` to its real directory, or throws ONE
+  // RelocationError naming every row it could not place. Nothing below this
+  // line reads `row.sourceOwner` directly -- every binding uses the resolved
+  // directory.
   const relocated = relocateSourceOwners(rows, {
     repoRoot: repositoryRoot,
-    toPrefix: `${UI_ROOT_RELATIVE}/`,
-    // No `exists` override: the adapter's own default, `caseExactDirExists`,
+    // No `exists` override: the resolver's own default, `caseExactDirExists`,
     // reads the parent directory and compares names byte-for-byte. Plain
     // `fs.existsSync` would be fooled on a case-insensitive filesystem (macOS
-    // APFS) into treating a PascalCase legacy path as present merely because
-    // its kebab-case relocation target exists under a different-cased name --
-    // which reads every override this table carries as spuriously "unused".
-    ...(relocationOverrides === undefined ? {} : { overrides: relocationOverrides }),
+    // APFS) into treating a wrongly-cased owner path as present.
   });
   const relativeOwnerOf = (row) =>
     path
@@ -627,8 +613,8 @@ export function auditTaxonomyParity({
   // `relocateSourceOwners` above already proved every row's owner exists
   // under `UI_ROOT_RELATIVE` (or threw) -- the two per-row rejection checks
   // this block used to run against raw `row.sourceOwner` are now the
-  // relocation adapter's job, with strictly more precise reasons
-  // (`missing` / `ambiguous` / `colliding`) than the two this block reported.
+  // resolver's job, with strictly more precise reasons
+  // (`missing` / `colliding`) than the two this block reported.
   const claimedOwners = new Set();
   for (const row of rows) {
     claimedOwners.add(relativeOwnerOf(row));
@@ -706,11 +692,8 @@ export function auditTaxonomyParity({
     add('manifest-parity', `${manifestIndexPath} is missing`);
   }
 
-  // Each cell is a flat `<layer>/<group>/<slug>.json` file -- the family
-  // graduated out of a per-slug folder, so the id is the whole relative path
-  // with exactly one trailing `.json` removed, not a folder's `index.json`.
-  // Verified against all 255 real cells before this shape was fixed: zero
-  // exceptions.
+  // A family cell is `<layer>/<group>/<slug>/index.json`; its id is the owning
+  // directory, so the folder path and the family id are the same three segments.
   const familiesRoot = path.join(manifestRoot, 'families');
   const familyFiles = listFamilyManifestFiles(familiesRoot);
 
@@ -721,13 +704,14 @@ export function auditTaxonomyParity({
     if (stem.length === 0) return { ok: false, reason: 'derives to an empty id' };
     if (stem.endsWith('.json')) return { ok: false, reason: 'carries a double .json extension' };
     const segments = stem.split('/');
-    if (segments.length !== 3 || segments.some((segment) => segment.length === 0)) {
-      return {
-        ok: false,
-        reason: `does not match the flat <layer>/<group>/<slug> shape (derived "${stem}")`,
-      };
-    }
-    return { ok: true, id: stem };
+    const shapeFailure = {
+      ok: false,
+      reason: `does not match the <layer>/<group>/<slug>/index.json shape (derived "${stem}")`,
+    };
+    if (segments.length !== 4 || segments[3] !== 'index') return shapeFailure;
+    const idSegments = segments.slice(0, 3);
+    if (idSegments.some((segment) => segment.length === 0)) return shapeFailure;
+    return { ok: true, id: idSegments.join('/') };
   };
 
   const familyFileIds = new Set();

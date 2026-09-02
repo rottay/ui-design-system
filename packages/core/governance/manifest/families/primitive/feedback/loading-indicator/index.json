@@ -8,15 +8,15 @@
     "components": [
       "LoadingIndicator"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/foundation/loading-indicator",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/foundation/loading-indicator",
     "publicComponents": [
       "LoadingIndicator"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "f5bcd59bbe2a01985c952418aff229817212087f07dc67b3822da5aa5cbc2fe3"
+    "inventoryRowDigest": "e33ff437de1fa04e64e7e2421b1d432f9f644c8b416d3212ee46212c7b1839ec"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/foundation/loading-indicator/contracts/index.ts",
-      "packages/core/src/ui/primitives/foundation/loading-indicator/index.tsx"
+      "packages/core/src/components/primitives/foundation/loading-indicator/contracts/index.ts",
+      "packages/core/src/components/primitives/foundation/loading-indicator/index.tsx"
     ],
     "stableParts": [
       "indicator",
@@ -39,8 +39,8 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "aria-label-or-labelledby [at src/ui/primitives/foundation/loading-indicator/index.tsx:36]",
-      "aria-hidden [at src/ui/primitives/foundation/loading-indicator/index.tsx:37]"
+      "aria-label-or-labelledby [at src/components/primitives/foundation/loading-indicator/index.tsx:36]",
+      "aria-hidden [at src/components/primitives/foundation/loading-indicator/index.tsx:37]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -62,7 +62,7 @@
           "part": "indicator",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/foundation/loading-indicator/index.tsx:34"
+            "src/components/primitives/foundation/loading-indicator/index.tsx:34"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         },
@@ -70,7 +70,7 @@
           "part": "label",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/foundation/loading-indicator/index.tsx:40"
+            "src/components/primitives/foundation/loading-indicator/index.tsx:40"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         }
@@ -115,13 +115,13 @@
         {
           "channelId": "--_ds-loading-indicator-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -131,13 +131,13 @@
         {
           "channelId": "--_ds-loading-indicator-label-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -155,7 +155,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -174,7 +174,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -195,13 +195,13 @@
         {
           "channelId": "--_ds-loading-indicator-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -221,13 +221,13 @@
         {
           "channelId": "--_ds-loading-indicator-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -246,7 +246,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones dentro de alert/toast son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -267,13 +267,13 @@
         {
           "channelId": "--_ds-loading-indicator-label-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -283,13 +283,13 @@
         {
           "channelId": "--_ds-loading-indicator-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -308,7 +308,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -329,13 +329,13 @@
         {
           "channelId": "--_ds-loading-indicator-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -390,7 +390,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -469,7 +469,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -526,7 +526,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -558,13 +558,13 @@
         {
           "channelId": "--_ds-loading-indicator-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/ui/primitives/foundation/loading-indicator",
+          "producer": "packages/core/src/components/primitives/foundation/loading-indicator",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/loading-indicator"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/loading-indicator"
+            "packages/core/src/components/primitives/foundation/loading-indicator"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -584,11 +584,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

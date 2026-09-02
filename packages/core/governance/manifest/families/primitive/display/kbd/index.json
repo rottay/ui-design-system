@@ -8,15 +8,15 @@
     "components": [
       "Kbd"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Kbd",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/kbd",
     "publicComponents": [
       "Kbd"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "949be83a585d79b5c0a2b86262efe69f5a6e4959116297760545f2db04001469"
+    "inventoryRowDigest": "5338987b5445c015fc79d9a5757460c358dd8f039549d2a37ab7fcf39eb04523"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Kbd/index.tsx",
-      "packages/core/src/ui/primitives/display/Kbd/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/display/kbd/index.tsx",
+      "packages/core/src/components/primitives/display/kbd/contracts/index.ts",
+      "packages/core/src/components/primitives/display/kbd/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/kbd/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/kbd/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root"
@@ -44,9 +44,9 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "The root is a semantic <kbd> element, so assistive technology keeps the keyboard-input meaning. [at packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx:39]",
-      "The key-cap frame is re-asserted under forced-colors, where the token-driven border and shadow would otherwise vanish. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:20, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:120]",
-      "The press displacement is clamped under prefers-reduced-motion. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:113]"
+      "The root is a semantic <kbd> element, so assistive technology keeps the keyboard-input meaning. [at packages/core/src/components/primitives/display/kbd/engines/modern/index.tsx:39]",
+      "The key-cap frame is re-asserted under forced-colors, where the token-driven border and shadow would otherwise vanish. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:20, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:120]",
+      "The press displacement is clamped under prefers-reduced-motion. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:113]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -69,9 +69,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute on a <kbd> element + data-size axis",
           "at": [
-            "packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx:39",
-            "packages/core/src/ui/primitives/display/Kbd/engines/modern/index.tsx:40",
-            "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx:49"
+            "packages/core/src/components/primitives/display/kbd/engines/modern/index.tsx:39",
+            "packages/core/src/components/primitives/display/kbd/engines/modern/index.tsx:40",
+            "packages/core/src/components/primitives/display/kbd/engines/rustic/index.tsx:49"
           ],
           "note": "Kbd has no stable addressable part beyond its root; neither engine emits any child data-part"
         }
@@ -83,13 +83,13 @@
           {
             "token": "prefers-reduced-motion: reduce",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:113"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:113"
             ]
           },
           {
             "token": "forced-colors: active",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:120"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:120"
             ]
           }
         ],
@@ -101,7 +101,7 @@
             "token": "ancestor pressed",
             "note": ":where(a, button, [role='button'], summary, [data-part='trigger']):active - the key cap reacts to its interactive ANCESTOR being pressed, not to a press on itself",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:103"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:103"
             ]
           }
         ],
@@ -119,7 +119,7 @@
           "dataPartEmissions": 1,
           "note": "same single root part; inline literal styles instead of token reads",
           "anchors": [
-            "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx:49"
+            "packages/core/src/components/primitives/display/kbd/engines/rustic/index.tsx:49"
           ]
         }
       },
@@ -129,7 +129,7 @@
           {
             "variable": "--ds-font-family-mono",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:52",
+            "at": "packages/core/src/components/primitives/display/kbd/engines/classic/index.tsx:52",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -146,7 +146,7 @@
           {
             "variable": "--ds-color-neutral-100",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:58",
+            "at": "packages/core/src/components/primitives/display/kbd/engines/classic/index.tsx:58",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -163,7 +163,7 @@
           {
             "variable": "--ds-color-neutral-300",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:59",
+            "at": "packages/core/src/components/primitives/display/kbd/engines/classic/index.tsx:59",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -180,7 +180,7 @@
           {
             "variable": "--ds-color-neutral-400",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:60",
+            "at": "packages/core/src/components/primitives/display/kbd/engines/classic/index.tsx:60",
             "landsOn": "border-bottom",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -197,7 +197,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Kbd/engines/classic/index.tsx:62",
+            "at": "packages/core/src/components/primitives/display/kbd/engines/classic/index.tsx:62",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -214,7 +214,7 @@
           {
             "variable": "--ds-font-family-mono",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Kbd/engines/rustic/index.tsx:55",
+            "at": "packages/core/src/components/primitives/display/kbd/engines/rustic/index.tsx:55",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -231,7 +231,7 @@
           {
             "variable": "--ds-kbd-font-family",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:42",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -248,7 +248,7 @@
           {
             "variable": "--ds-font-family-mono",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:42",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -265,7 +265,7 @@
           {
             "variable": "--ds-kbd-font-weight",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:43",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:43",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -282,7 +282,7 @@
           {
             "variable": "--ds-kbd-vertical-align",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:46",
             "landsOn": "vertical-align",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -299,7 +299,7 @@
           {
             "variable": "--ds-kbd-frame",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:47",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -316,7 +316,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:47",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -333,7 +333,7 @@
           {
             "variable": "--ds-kbd-depth-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:48",
             "landsOn": "border-block-end-width",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -350,7 +350,7 @@
           {
             "variable": "--ds-kbd-frame",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:51",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:51",
             "landsOn": "border-block-end-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -367,7 +367,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:51",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:51",
             "landsOn": "border-block-end-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -384,7 +384,7 @@
           {
             "variable": "--ds-color-neutral-900",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:51",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:51",
             "landsOn": "border-block-end-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -401,7 +401,7 @@
           {
             "variable": "--ds-kbd-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:53",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -418,7 +418,7 @@
           {
             "variable": "--ds-radius-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:53",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -435,7 +435,7 @@
           {
             "variable": "--ds-kbd-surface",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:54",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -452,7 +452,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:54",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -469,7 +469,7 @@
           {
             "variable": "--ds-color-neutral-100",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:54",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -488,7 +488,7 @@
           {
             "variable": "--ds-kbd-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:55",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -505,7 +505,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:55",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -522,7 +522,7 @@
           {
             "variable": "--_ds-kbd-specular",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:62",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:62",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -539,7 +539,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:62",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:62",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -556,7 +556,7 @@
           {
             "variable": "--ds-color-neutral-900",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:63",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:63",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -573,7 +573,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:66",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -590,7 +590,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:66",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -607,7 +607,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:67",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -624,7 +624,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:67",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -641,7 +641,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:68",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:68",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -658,7 +658,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:68",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:68",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -675,7 +675,7 @@
           {
             "variable": "--ds-kbd-sm-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:72",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:72",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -692,7 +692,7 @@
           {
             "variable": "--ds-kbd-sm-min-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:73",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:73",
             "landsOn": "min-inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -709,7 +709,7 @@
           {
             "variable": "--ds-kbd-sm-padding-block",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:74",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:74",
             "landsOn": "padding-block",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -726,7 +726,7 @@
           {
             "variable": "--ds-kbd-sm-padding-inline",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:75",
             "landsOn": "padding-inline",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -743,7 +743,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:75",
             "landsOn": "padding-inline",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -760,7 +760,7 @@
           {
             "variable": "--ds-kbd-sm-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:76",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -777,7 +777,7 @@
           {
             "variable": "--ds-kbd-md-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:80",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:80",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -794,7 +794,7 @@
           {
             "variable": "--ds-kbd-md-min-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:81",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:81",
             "landsOn": "min-inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -811,7 +811,7 @@
           {
             "variable": "--ds-kbd-md-padding-block",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:82",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:82",
             "landsOn": "padding-block",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -828,7 +828,7 @@
           {
             "variable": "--ds-kbd-md-padding-inline",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:83",
             "landsOn": "padding-inline",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -845,7 +845,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:83",
             "landsOn": "padding-inline",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -862,7 +862,7 @@
           {
             "variable": "--ds-kbd-md-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:84",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:84",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -879,7 +879,7 @@
           {
             "variable": "--ds-kbd-lg-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:88",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:88",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -896,7 +896,7 @@
           {
             "variable": "--ds-kbd-lg-min-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:89",
             "landsOn": "min-inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -913,7 +913,7 @@
           {
             "variable": "--ds-kbd-lg-padding-block",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:90",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:90",
             "landsOn": "padding-block",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -930,7 +930,7 @@
           {
             "variable": "--ds-kbd-lg-padding-inline",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:91",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:91",
             "landsOn": "padding-inline",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -947,7 +947,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:91",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:91",
             "landsOn": "padding-inline",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -964,7 +964,7 @@
           {
             "variable": "--ds-kbd-lg-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:92",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:92",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -981,7 +981,7 @@
           {
             "variable": "--_ds-kbd-specular",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:109",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:109",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -998,7 +998,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css:109",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css:109",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1015,7 +1015,7 @@
           {
             "variable": "--ds-color-neutral-50",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css:23",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1032,7 +1032,7 @@
           {
             "variable": "--ds-color-neutral-300",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:24",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css:24",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1049,7 +1049,7 @@
           {
             "variable": "--ds-color-neutral-400",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:25",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css:25",
             "landsOn": "border-bottom",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1066,7 +1066,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd.css:27",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/kbd/index.css:27",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1142,13 +1142,13 @@
         {
           "channelId": "--_ds-kbd-ink",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1157,13 +1157,13 @@
         {
           "channelId": "--_ds-kbd-surface",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1223,13 +1223,13 @@
         {
           "channelId": "--_ds-kbd-lg-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1238,13 +1238,13 @@
         {
           "channelId": "--_ds-kbd-md-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1253,13 +1253,13 @@
         {
           "channelId": "--_ds-kbd-sm-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1286,13 +1286,13 @@
         {
           "channelId": "--_ds-kbd-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1329,13 +1329,13 @@
         {
           "channelId": "--_ds-kbd-lg-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1344,13 +1344,13 @@
         {
           "channelId": "--_ds-kbd-lg-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1359,13 +1359,13 @@
         {
           "channelId": "--_ds-kbd-lg-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1374,13 +1374,13 @@
         {
           "channelId": "--_ds-kbd-lg-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1389,13 +1389,13 @@
         {
           "channelId": "--_ds-kbd-md-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1404,13 +1404,13 @@
         {
           "channelId": "--_ds-kbd-md-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1419,13 +1419,13 @@
         {
           "channelId": "--_ds-kbd-md-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1434,13 +1434,13 @@
         {
           "channelId": "--_ds-kbd-md-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1449,13 +1449,13 @@
         {
           "channelId": "--_ds-kbd-sm-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1464,13 +1464,13 @@
         {
           "channelId": "--_ds-kbd-sm-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1479,13 +1479,13 @@
         {
           "channelId": "--_ds-kbd-sm-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1494,13 +1494,13 @@
         {
           "channelId": "--_ds-kbd-sm-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1518,7 +1518,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reviewedFrom": "anatomy"
       }
     },
@@ -1534,7 +1534,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ],
         "reviewedFrom": "anatomy",
@@ -1574,7 +1574,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1594,7 +1594,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1659,13 +1659,13 @@
         {
           "channelId": "--_ds-kbd-depth-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1674,13 +1674,13 @@
         {
           "channelId": "--_ds-kbd-frame",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/kbd"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/kbd/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1703,7 +1703,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1760,7 +1760,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1810,11 +1810,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

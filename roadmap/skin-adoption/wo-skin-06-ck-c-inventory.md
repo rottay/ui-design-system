@@ -1,6 +1,6 @@
 # WO-SKIN-06 checkpoint CK-C — workspace-chrome paint inventory (read-only)
 
-All paths relative to `packages/core/src/ui/`. Same channel scope as the
+All paths relative to `packages/core/src/components/`. Same channel scope as the
 WO-SKIN-02/03/04/05 precedents (`wo-skin-04-navigation-inventory.md`): a "site" is an
 object-literal style key named `background*`, `border*`, `outline*`, `color`,
 `boxShadow`, `textShadow`, `fill`, `stroke`, `accentColor`, `filter`, `backdropFilter`,
@@ -29,7 +29,7 @@ from `theme.css`/`personality.css`. CK-C is greenfield with respect to suppressi
 not because of P-76, but because these files predate any bridge-rule authoring for
 them at all.
 
-**Coverage checklist** (from `node scripts/infrastructure/engine-token-audit.mjs | grep -E
+**Coverage checklist** (from `node scripts/check/engine-token-audit.mjs | grep -E
 "fleet.inlinePaint.(structures/workspace|patterns/data)"`, 2026-07-13): 11 components
 (list-toolbar, saved-views, search-command-bar, column-menu, saved-views-menu,
 active-filters-bar, export-button, scope-switcher, view-mode-switcher,

@@ -8,15 +8,15 @@
     "components": [
       "QRCode"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/QRCode",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/qr-code",
     "publicComponents": [
       "QRCode"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "337d974fd85b76f730e50946b34fd9962069d86aabb1171dc042f0e1870e730b"
+    "inventoryRowDigest": "659048ec4bea34156e1244c920e38de915913969af85d11b1723298905aeddd1"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,19 +28,19 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/QRCode/QRCode.stories.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/index.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/tests/QRCode.runtime-engines.test.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/tests/QRCode.test.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/QRCode/compound/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css"
+      "packages/core/src/components/primitives/display/qr-code/QRCode.stories.tsx",
+      "packages/core/src/components/primitives/display/qr-code/index.tsx",
+      "packages/core/src/components/primitives/display/qr-code/contracts/index.ts",
+      "packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx",
+      "packages/core/src/components/primitives/display/qr-code/tests/QRCode.runtime-engines.test.tsx",
+      "packages/core/src/components/primitives/display/qr-code/tests/QRCode.test.tsx",
+      "packages/core/src/components/primitives/display/qr-code/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/qr-code/compound/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css"
     ],
     "stableParts": [
       "canvas",
@@ -69,10 +69,10 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "Status overlays are announced, not merely painted: role= with aria-label at packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:93, :115 and :119; the same pattern in rustic at packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:104, :127.",
-      "The spinner is aria-hidden so the status text is the single announcement: packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:94; rustic :128.",
-      "The encoded symbol carries its own accessible name: aria-label at packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx:136.",
-      "Symbol legibility is a correctness property, not a style one: the encoder writes explicit foreground/background at packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx:13-14, so a control that inverts or tints only one side can break scannability."
+      "Status overlays are announced, not merely painted: role= with aria-label at packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:93, :115 and :119; the same pattern in rustic at packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:104, :127.",
+      "The spinner is aria-hidden so the status text is the single announcement: packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:94; rustic :128.",
+      "The encoded symbol carries its own accessible name: aria-label at packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx:136.",
+      "Symbol legibility is a correctness property, not a style one: the encoder writes explicit foreground/background at packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx:13-14, so a control that inverts or tints only one side can break scannability."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -95,7 +95,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx:137"
+            "packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx:137"
           ]
         },
         {
@@ -103,12 +103,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:93",
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:99",
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:115",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:104",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:110",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:127"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:93",
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:99",
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:115",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:104",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:110",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:127"
           ]
         },
         {
@@ -116,8 +116,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:94",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:105"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:94",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:105"
           ]
         },
         {
@@ -125,8 +125,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:100",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:111"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:100",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:111"
           ]
         },
         {
@@ -134,8 +134,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:103",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:114"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:103",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:114"
           ]
         },
         {
@@ -143,8 +143,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:120",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:128"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:120",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:128"
           ]
         },
         {
@@ -152,8 +152,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:137",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:146"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:137",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:146"
           ]
         },
         {
@@ -161,8 +161,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:141",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:150"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:141",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:150"
           ]
         },
         {
@@ -170,8 +170,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:155",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:163"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:155",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:163"
           ]
         }
       ],
@@ -179,31 +179,31 @@
         {
           "token": "hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:173",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:174",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:175"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:174",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:175"
           ],
           "state": "hover"
         },
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:177",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:180"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:177",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:180"
           ],
           "state": "active"
         },
         {
           "token": "focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:185",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:187",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:248",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:249"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:185",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:248",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:249"
           ],
           "atSiteCount": 8,
           "state": "focus-visible"
@@ -211,12 +211,12 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:39",
-            "packages/core/src/ui/primitives/display/QRCode/engines/classic/index.tsx:23",
-            "packages/core/src/ui/primitives/display/QRCode/engines/classic/index.tsx:27",
-            "packages/core/src/ui/primitives/display/QRCode/engines/classic/index.tsx:28",
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:91",
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:93"
+            "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:39",
+            "packages/core/src/components/primitives/display/qr-code/engines/classic/index.tsx:23",
+            "packages/core/src/components/primitives/display/qr-code/engines/classic/index.tsx:27",
+            "packages/core/src/components/primitives/display/qr-code/engines/classic/index.tsx:28",
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:91",
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:93"
           ],
           "atSiteCount": 7,
           "state": "loading"
@@ -224,8 +224,8 @@
         {
           "token": "hidden",
           "at": [
-            "packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:94",
-            "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:128"
+            "packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:94",
+            "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:128"
           ],
           "state": "hidden"
         },
@@ -253,24 +253,24 @@
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:228",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:229",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:230",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:231",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:232",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:233"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:228",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:229",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:230",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:231",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:232",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:233"
             ],
             "atSiteCount": 10
           },
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:261",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:262",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:263",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:264",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:265",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:266"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:261",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:262",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:263",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:264",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:265",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:266"
             ],
             "atSiteCount": 10
           }
@@ -299,7 +299,7 @@
       },
       "scoutGaps": {
         "assessmentConfidenceGaps": [
-          "A tenant-gated second paint owner reads a no-fallback namespace at packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:392-409. Those reads are attributed to the root part by class (.rottay-qrcode at packages/core/src/ui/primitives/display/QRCode/engines/modern/index.tsx:135), not by a data-part selector. See unresolved TENANT-BRIDGE-IS-A-SECOND-PAINT-OWNER."
+          "A tenant-gated second paint owner reads a no-fallback namespace at packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:392-409. Those reads are attributed to the root part by class (.rottay-qrcode at packages/core/src/components/primitives/display/qr-code/engines/modern/index.tsx:135), not by a data-part selector. See unresolved TENANT-BRIDGE-IS-A-SECOND-PAINT-OWNER."
         ]
       },
       "propertyGroupCensusNote": {
@@ -361,7 +361,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:208",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:208",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -373,7 +373,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:210",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:210",
             "fallback": null,
             "landsOnProperty": "bg-color",
             "propertyGroup": "layout",
@@ -385,7 +385,7 @@
           },
           {
             "variable": "--ds-qrcode-xs-size",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:223",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:223",
             "fallback": null,
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -397,7 +397,7 @@
           },
           {
             "variable": "--ds-qrcode-sm-size",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:224",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:224",
             "fallback": null,
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -409,7 +409,7 @@
           },
           {
             "variable": "--ds-qrcode-md-size",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:225",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:225",
             "fallback": null,
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -421,7 +421,7 @@
           },
           {
             "variable": "--ds-qrcode-lg-size",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:226",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:226",
             "fallback": null,
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -433,7 +433,7 @@
           },
           {
             "variable": "--ds-qrcode-xl-size",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:227",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:227",
             "fallback": null,
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -445,7 +445,7 @@
           },
           {
             "variable": "--ds-qrcode-2xl-size",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/contracts/index.ts:228",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/contracts/index.ts:228",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -457,7 +457,7 @@
           },
           {
             "variable": "--ds-qrcode-padding",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:55",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:55",
             "fallback": "12px",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -469,7 +469,7 @@
           },
           {
             "variable": "--ds-qrcode-success-color",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:128",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:128",
             "fallback": "var(--ds-color-success-500, #52c41a)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -481,7 +481,7 @@
           },
           {
             "variable": "--ds-color-success-500",
-            "readAt": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:128",
+            "readAt": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:128",
             "fallback": "#52c41a",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -493,7 +493,7 @@
           },
           {
             "variable": "--ds-qrcode-root-padding",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:51",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:51",
             "fallback": "0.75rem",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -504,7 +504,7 @@
           },
           {
             "variable": "--ds-qrcode-border-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:52",
             "fallback": "var(--ds-color-border)",
             "landsOnProperty": "border-color",
             "propertyGroup": "color",
@@ -515,7 +515,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:52",
             "fallback": null,
             "landsOnProperty": "border-color",
             "propertyGroup": "color",
@@ -526,7 +526,7 @@
           },
           {
             "variable": "--ds-qrcode-border-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:53",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:53",
             "fallback": null,
             "landsOnProperty": "border-width",
             "propertyGroup": "border",
@@ -537,7 +537,7 @@
           },
           {
             "variable": "--ds-qrcode-border-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:54",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:54",
             "fallback": "var(--ds-radius-md)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -548,7 +548,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:54",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:54",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -559,7 +559,7 @@
           },
           {
             "variable": "--ds-qrcode-background-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:55",
             "fallback": "var(--ds-surface-card)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -570,7 +570,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:55",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -581,7 +581,7 @@
           },
           {
             "variable": "--ds-qrcode-status-expired-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:80",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -592,7 +592,7 @@
           },
           {
             "variable": "--ds-qrcode-loading-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:83",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:83",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -603,7 +603,7 @@
           },
           {
             "variable": "--ds-qrcode-status-scanned-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:86",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -614,7 +614,7 @@
           },
           {
             "variable": "--ds-qrcode-transition-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:95",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:95",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -625,7 +625,7 @@
           },
           {
             "variable": "--ds-qrcode-transition-timing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:95",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:95",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -636,7 +636,7 @@
           },
           {
             "variable": "--ds-qrcode-loading-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:99",
             "fallback": "color-mix(in srgb, var(--ds-surface-card) 80%, transparent)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -647,7 +647,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:99",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -658,7 +658,7 @@
           },
           {
             "variable": "--ds-qrcode-status-expired-overlay-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:102",
             "fallback": "color-mix(in srgb, var(--ds-surface-card) 90%, transparent)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -669,7 +669,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:102",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -680,7 +680,7 @@
           },
           {
             "variable": "--ds-qrcode-status-scanned-overlay-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:105",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:105",
             "fallback": "color-mix(in srgb, var(--ds-surface-card) 80%, transparent)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -691,7 +691,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:105",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:105",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -702,7 +702,7 @@
           },
           {
             "variable": "--ds-qrcode-spinner-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:113",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:113",
             "fallback": "24px",
             "landsOnProperty": "inline-size",
             "propertyGroup": "size",
@@ -713,7 +713,7 @@
           },
           {
             "variable": "--ds-qrcode-spinner-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:114",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:114",
             "fallback": "24px",
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -724,7 +724,7 @@
           },
           {
             "variable": "--ds-qrcode-border-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:115",
             "fallback": "var(--ds-color-border)",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -735,7 +735,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:115",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -746,7 +746,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:116",
             "fallback": null,
             "landsOnProperty": "border-top-color",
             "propertyGroup": "color",
@@ -757,7 +757,7 @@
           },
           {
             "variable": "--ds-motion-glacial",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:118",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:118",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -768,7 +768,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:131",
             "fallback": null,
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -779,7 +779,7 @@
           },
           {
             "variable": "--ds-qrcode-status-expired-text-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:134",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:134",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -790,7 +790,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:134",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:134",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -801,7 +801,7 @@
           },
           {
             "variable": "--ds-qrcode-status-text-font-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:135",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:135",
             "fallback": "var(--ds-font-size-sm)",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -812,7 +812,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:135",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:135",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -823,7 +823,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:145",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:145",
             "fallback": null,
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -834,7 +834,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:145",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:145",
             "fallback": null,
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -845,7 +845,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-padding-x",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:147",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:147",
             "fallback": "12px",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -856,7 +856,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-font-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:148",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:148",
             "fallback": "13px",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -867,7 +867,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:160",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:160",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -878,7 +878,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:161",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -889,7 +889,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:161",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -900,7 +900,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:162",
             "fallback": "var(--ds-radius-md)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -911,7 +911,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:162",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -922,7 +922,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:163",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:163",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -933,7 +933,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:165",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:165",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -944,7 +944,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:165",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:165",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -955,7 +955,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:166",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:166",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -966,7 +966,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:166",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:166",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -977,7 +977,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:167",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -988,7 +988,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:167",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -999,7 +999,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-bg-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:174",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:174",
             "fallback": "var(--ds-color-primary-hover)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1010,7 +1010,7 @@
           },
           {
             "variable": "--ds-color-primary-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:174",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:174",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1021,7 +1021,7 @@
           },
           {
             "variable": "--ds-state-press-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:178",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:178",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1032,7 +1032,7 @@
           },
           {
             "variable": "--ds-qrcode-refresh-button-bg-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:179",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:179",
             "fallback": "var(--ds-color-primary-hover)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1043,7 +1043,7 @@
           },
           {
             "variable": "--ds-color-primary-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:179",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:179",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1054,7 +1054,7 @@
           },
           {
             "variable": "--ds-focus-ring",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:187",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:187",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1065,7 +1065,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:195",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:195",
             "fallback": null,
             "landsOnProperty": "min-block-size",
             "propertyGroup": "size",
@@ -1076,7 +1076,7 @@
           },
           {
             "variable": "--ds-qrcode-status-icon-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:201",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:201",
             "fallback": "3rem",
             "landsOnProperty": "inline-size",
             "propertyGroup": "size",
@@ -1087,7 +1087,7 @@
           },
           {
             "variable": "--ds-qrcode-status-icon-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:202",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:202",
             "fallback": "3rem",
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -1098,7 +1098,7 @@
           },
           {
             "variable": "--ds-qrcode-status-scanned-icon-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:203",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:203",
             "fallback": "var(--ds-color-success)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1109,7 +1109,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:203",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:203",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1120,7 +1120,7 @@
           },
           {
             "variable": "--ds-qrcode-icon-padding",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:213",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:213",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -1131,7 +1131,7 @@
           },
           {
             "variable": "--ds-qrcode-icon-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:214",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:214",
             "fallback": "var(--ds-surface-card)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1142,7 +1142,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:214",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:214",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1153,7 +1153,7 @@
           },
           {
             "variable": "--ds-qrcode-icon-border-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:215",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:215",
             "fallback": "var(--ds-radius-sm)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1164,7 +1164,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css:215",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css:215",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1175,7 +1175,7 @@
           },
           {
             "variable": "--ds-qrcode-border-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:35",
             "fallback": "#d9d9d9",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1186,7 +1186,7 @@
           },
           {
             "variable": "--ds-qrcode-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:36",
             "fallback": "8px",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1197,7 +1197,7 @@
           },
           {
             "variable": "--ds-qrcode-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:37",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:37",
             "fallback": "#ffffff",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1208,7 +1208,7 @@
           },
           {
             "variable": "--ds-qrcode-overlay-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:42",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:42",
             "fallback": "rgba(255, 255, 255, 0.9)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1219,7 +1219,7 @@
           },
           {
             "variable": "--ds-qrcode-spinner-track",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:47",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:47",
             "fallback": "#f3f3f3",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1230,7 +1230,7 @@
           },
           {
             "variable": "--ds-qrcode-spinner-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:48",
             "fallback": "var(--ds-color-primary-500, #1890ff)",
             "landsOnProperty": "border-top",
             "propertyGroup": "border",
@@ -1241,7 +1241,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:48",
             "fallback": "#1890ff",
             "landsOnProperty": "border-top",
             "propertyGroup": "border",
@@ -1252,7 +1252,7 @@
           },
           {
             "variable": "--ds-qrcode-expired-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:54",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:54",
             "fallback": "#666",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1263,7 +1263,7 @@
           },
           {
             "variable": "--ds-qrcode-button-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:57",
             "fallback": "var(--ds-color-primary-500, #1890ff)",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1274,7 +1274,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:57",
             "fallback": "#1890ff",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1285,7 +1285,7 @@
           },
           {
             "variable": "--ds-qrcode-button-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:60",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:60",
             "fallback": "var(--ds-color-primary-500, #1890ff)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1296,7 +1296,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:60",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:60",
             "fallback": "#1890ff",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1307,7 +1307,7 @@
           },
           {
             "variable": "--ds-qrcode-icon-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:66",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:66",
             "fallback": "#fff",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1318,7 +1318,7 @@
           },
           {
             "variable": "--ds-qrcode-border-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:393",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:393",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1329,7 +1329,7 @@
           },
           {
             "variable": "--ds-qrcode-border-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:394",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:394",
             "fallback": null,
             "landsOnProperty": "border-color",
             "propertyGroup": "color",
@@ -1340,7 +1340,7 @@
           },
           {
             "variable": "--ds-qrcode-background-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:395",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:395",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1351,7 +1351,7 @@
           },
           {
             "variable": "--ds-qrcode-loading-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:399",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:399",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -1362,7 +1362,7 @@
           },
           {
             "variable": "--ds-qrcode-loading-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:400",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:400",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -1373,7 +1373,7 @@
           },
           {
             "variable": "--ds-qrcode-status-expired-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:404",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:404",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -1384,7 +1384,7 @@
           },
           {
             "variable": "--ds-qrcode-status-scanned-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme.css:408",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/theme/index.css:408",
             "fallback": null,
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -1400,109 +1400,109 @@
           {
             "kind": "color",
             "literal": "#000000",
-            "at": "packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx:13",
+            "at": "packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx:13",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "#ffffff",
-            "at": "packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx:14",
+            "at": "packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx:14",
             "declaration": null
           },
           {
             "kind": "spacing",
             "literal": "8px",
-            "at": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:71",
+            "at": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:71",
             "declaration": "gap"
           },
           {
             "kind": "spacing",
             "literal": "4px",
-            "at": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:86",
+            "at": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:86",
             "declaration": "padding"
           },
           {
             "kind": "spacing",
             "literal": "12px",
-            "at": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:86",
+            "at": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:86",
             "declaration": "padding"
           },
           {
             "kind": "duration",
             "literal": "1s",
-            "at": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:96",
+            "at": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:96",
             "declaration": "animation"
           },
           {
             "kind": "color",
             "literal": "#52c41a",
-            "at": "packages/core/src/ui/primitives/display/QRCode/engines/rustic/index.tsx:128",
+            "at": "packages/core/src/components/primitives/display/qr-code/engines/rustic/index.tsx:128",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "#d9d9d9",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:35",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:35",
             "declaration": "border"
           },
           {
             "kind": "color",
             "literal": "#ffffff",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:37",
             "declaration": "background-color"
           },
           {
             "kind": "color",
             "literal": "rgba(255, 255, 255, 0.9))",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:42",
             "declaration": "background-color"
           },
           {
             "kind": "color",
             "literal": "#f3f3f3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:47",
             "declaration": "border"
           },
           {
             "kind": "color",
             "literal": "#1890ff",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:48",
             "declaration": "border-top"
           },
           {
             "kind": "color",
             "literal": "#666",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:54",
             "declaration": "color"
           },
           {
             "kind": "color",
             "literal": "#1890ff",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:57",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:57",
             "declaration": "border"
           },
           {
             "kind": "radius",
             "literal": "4px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:58",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:58",
             "declaration": "border-radius"
           },
           {
             "kind": "color",
             "literal": "#1890ff",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:60",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:60",
             "declaration": "color"
           },
           {
             "kind": "color",
             "literal": "#fff",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:66",
             "declaration": "background-color"
           },
           {
             "kind": "radius",
             "literal": "4px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/qrcode/index.css:67",
             "declaration": "border-radius"
           }
         ],
@@ -1524,13 +1524,13 @@
         {
           "channelId": "--_ds-qrcode-background-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1539,13 +1539,13 @@
         {
           "channelId": "--_ds-qrcode-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1554,13 +1554,13 @@
         {
           "channelId": "--_ds-qrcode-icon-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1569,13 +1569,13 @@
         {
           "channelId": "--_ds-qrcode-loading-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1584,13 +1584,13 @@
         {
           "channelId": "--_ds-qrcode-refresh-button-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1599,13 +1599,13 @@
         {
           "channelId": "--_ds-qrcode-refresh-button-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1614,13 +1614,13 @@
         {
           "channelId": "--_ds-qrcode-refresh-button-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1629,13 +1629,13 @@
         {
           "channelId": "--_ds-qrcode-status-expired-overlay-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1644,13 +1644,13 @@
         {
           "channelId": "--_ds-qrcode-status-expired-text-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1659,13 +1659,13 @@
         {
           "channelId": "--_ds-qrcode-status-scanned-overlay-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1674,13 +1674,13 @@
         {
           "channelId": "--_ds-qrcode-status-scanned-icon-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1757,13 +1757,13 @@
         {
           "channelId": "--_ds-qrcode-refresh-button-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1772,13 +1772,13 @@
         {
           "channelId": "--_ds-qrcode-status-text-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1797,13 +1797,13 @@
         {
           "channelId": "--_ds-qrcode-border-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1812,13 +1812,13 @@
         {
           "channelId": "--_ds-qrcode-icon-border-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1855,13 +1855,13 @@
         {
           "channelId": "--_ds-qrcode-root-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1870,13 +1870,13 @@
         {
           "channelId": "--_ds-qrcode-icon-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1885,13 +1885,13 @@
         {
           "channelId": "--_ds-qrcode-refresh-button-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1900,13 +1900,13 @@
         {
           "channelId": "--_ds-qrcode-refresh-button-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1924,7 +1924,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1939,7 +1939,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Canales leidos y NO cubiertos por regla de grupo: --ds-qrcode-transition-duration, --ds-qrcode-transition-timing"
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Canales leidos y NO cubiertos por regla de grupo: --ds-qrcode-transition-duration, --ds-qrcode-transition-timing"
           }
         ],
         "reviewedFrom": "anatomy"
@@ -1986,13 +1986,13 @@
         {
           "channelId": "--_ds-qrcode-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2011,7 +2011,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2059,13 +2059,13 @@
         {
           "channelId": "--_ds-qrcode-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/qrcode/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2088,7 +2088,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2144,7 +2144,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2172,7 +2172,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
         ]
       }
     },
@@ -2187,13 +2187,13 @@
         {
           "channelId": "--_ds-qrcode-spinner-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2202,13 +2202,13 @@
         {
           "channelId": "--_ds-qrcode-status-icon-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/qr-code"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/qrcode/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2227,11 +2227,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

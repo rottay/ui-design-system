@@ -1,6 +1,6 @@
 # WO-SKIN-06 CK-F (communication family) paint inventory (read-only)
 
-All paths relative to `packages/core/src/ui/patterns/communication/`. Same
+All paths relative to `packages/core/src/components/patterns/communication/`. Same
 channel scope and classification legend as the WO-SKIN-02/03/04 precedents
 (`skin02-fields-inventory.md`, `wo-skin-03-status-inventory.md`,
 `wo-skin-04-navigation-inventory.md`): a "site" is an object-literal style key
@@ -8,7 +8,7 @@ named `background*`, `border*`, `outline*`, `color`, `boxShadow`, `textShadow`,
 `fill`, `stroke`, `accentColor`, `filter`, `backdropFilter`,
 `WebkitBackdropFilter`, or `transform`, or an imperative `.style.<paint> =` /
 `.style.setProperty('paint-prop', …)` write — reproduced exactly from
-`scripts/tooling/libraries/inline-paint-counter.mjs`'s lexer for this report (bracket-stack
+`scripts/libraries/inline-paint-counter.mjs`'s lexer for this report (bracket-stack
 scan, string/comment-safe, same `ARC09_PAINT_KEY_RE`). **STATIC** = author-time
 constant, moves to the skin verbatim. **STATE-SELECTED** = a ternary/map/switch
 over static values, keyed by React state or a prop (per the triage's §2
@@ -24,7 +24,7 @@ rule consistently; see the note under Menu's accent bar precedent in
 WO-SKIN-04 for the boundary case this diverges from, by design, for internal
 consistency).
 
-**Coverage checklist** (`node scripts/infrastructure/engine-token-audit.mjs | grep
+**Coverage checklist** (`node scripts/check/engine-token-audit.mjs | grep
 "fleet.inlinePaint.runtime/patterns/communication"`, 2026-07-13): 10 files, **272**
 sites by the counter's count. `EXAMPLES`/`.stories.tsx`/`tests/` files are
 excluded from the family total (docs/test files, not shipped components).
@@ -574,7 +574,7 @@ components:
   (`components/patterns.css:1438`) — the word "assistant" here is an OpenAI-
   style **chat-role modifier** (`assistant`/`user` message alignment), for a
   `command-home`/`ai-chat` message-bubble component. Grep-confirmed **zero**
-  files in `src/ui/` render `ds-command-home-message` or
+  files in `src/components/` render `ds-command-home-message` or
   `ds-ai-chat-message` — this selector is orphaned DS-wide, not just
   unrelated to our `patterns/communication/assistant`. No collision risk for
   a future `assistant` skin (the class names don't overlap: `ds-assistant-*`

@@ -8,15 +8,15 @@
     "components": [
       "IconFrame"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/foundation/IconFrame",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/foundation/icon-frame",
     "publicComponents": [
       "IconFrame"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d8bafd100c76316e0d217131c861725e03a1a4daa6800ee53b400f1e55ff35dc"
+    "inventoryRowDigest": "6c48545e63007ca4a4b606b1d6e2e0e850210065820210ee8d2c789ed859b69f"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx",
-      "packages/core/src/ui/primitives/foundation/IconFrame/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css"
+      "packages/core/src/components/primitives/foundation/icon-frame/index.tsx",
+      "packages/core/src/components/primitives/foundation/icon-frame/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css"
     ],
     "stableParts": [
       "root",
@@ -44,9 +44,9 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "The frame declares role='img' with an accessible name or an explicit aria-hidden, so it never becomes an unnamed graphic. [at packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:95, packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:96]",
-      "The disabled presentation re-asserts under forced-colors. [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:189]",
-      "Motion is clamped under prefers-reduced-motion. [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:198]"
+      "The frame declares role='img' with an accessible name or an explicit aria-hidden, so it never becomes an unnamed graphic. [at packages/core/src/components/primitives/foundation/icon-frame/index.tsx:95, packages/core/src/components/primitives/foundation/icon-frame/index.tsx:96]",
+      "The disabled presentation re-asserts under forced-colors. [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:189]",
+      "Motion is clamped under prefers-reduced-motion. [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:198]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -69,13 +69,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-size/data-shape/data-variant/data-tone/data-loading/data-disabled axes + role='img' + aria-*",
           "at": [
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:87",
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:88",
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:95",
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:96"
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:87",
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:88",
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:95",
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:96"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:170"
+            "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:170"
           ],
           "anchorStatus": "verified"
         },
@@ -84,8 +84,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:113",
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:122"
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:113",
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:122"
           ]
         },
         {
@@ -93,7 +93,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:125"
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:125"
           ]
         }
       ],
@@ -102,17 +102,17 @@
           "token": "disabled",
           "note": "data-disabled='true'",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:170",
-            "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:189",
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:93"
+            "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:170",
+            "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:189",
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:93"
           ],
           "state": "disabled"
         },
         {
           "token": "loading (stamped, unpainted)",
-          "note": "data-loading is stamped on the root but packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css contains no rule selecting it; the flag is declared and never painted",
+          "note": "data-loading is stamped on the root but packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css contains no rule selecting it; the flag is declared and never painted",
           "at": [
-            "packages/core/src/ui/primitives/foundation/IconFrame/index.tsx:92"
+            "packages/core/src/components/primitives/foundation/icon-frame/index.tsx:92"
           ],
           "state": "loading"
         }
@@ -122,13 +122,13 @@
           {
             "token": "forced-colors: active",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:177"
+              "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:177"
             ]
           },
           {
             "token": "prefers-reduced-motion: reduce",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:198"
+              "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:198"
             ]
           }
         ],
@@ -136,11 +136,11 @@
       },
       "engineDivergence": {
         "engineSiblings": "none",
-        "note": "IconFrame has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/ui/primitives/foundation/IconFrame/index.tsx (138 lines). Its physical owner is ui/primitives/foundation/, while its family segment classifies it under primitive/display; that mismatch is recorded, not resolved."
+        "note": "IconFrame has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/components/primitives/foundation/icon-frame/index.tsx (138 lines). Its physical owner is ui/primitives/foundation/, while its family segment classifies it under primitive/display; that mismatch is recorded, not resolved."
       },
       "scoutGaps": {
         "notes": [
-          "This family reads two custom properties whose names match NONE of the three CHANNEL_PREFIXES declared at scripts/foundation/tokens/manifest/rules.mjs:34 (--ds-, --_ds-, data-): --_icon-frame-ink and --_icon-frame-on-ink. See unresolved entry UNGOVERNED-CHANNEL-PREFIX."
+          "This family reads two custom properties whose names match NONE of the three CHANNEL_PREFIXES declared at scripts/libraries/manifest/rules/index.mjs:34 (--ds-, --_ds-, data-): --_icon-frame-ink and --_icon-frame-on-ink. See unresolved entry UNGOVERNED-CHANNEL-PREFIX."
         ]
       },
       "variableReadCensus": {
@@ -149,7 +149,7 @@
           {
             "variable": "--ds-spacing-10",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:43",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:43",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -166,7 +166,7 @@
           {
             "variable": "--ds-color-alpha-white-10",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:47",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:47",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -183,7 +183,7 @@
           {
             "variable": "--_ds-icon-frame-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:53",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:53",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -200,7 +200,7 @@
           {
             "variable": "--_ds-icon-frame-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:54",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:54",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -217,7 +217,7 @@
           {
             "variable": "--ds-radius-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:58",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:58",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -234,7 +234,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:60",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:60",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -251,7 +251,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:63",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:63",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -268,7 +268,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:63",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:63",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -285,7 +285,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:64",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:64",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -302,7 +302,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:64",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:64",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -319,7 +319,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:65",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:65",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -336,7 +336,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:65",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:65",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -353,7 +353,7 @@
           {
             "variable": "--ds-spacing-6",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:71",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -370,7 +370,7 @@
           {
             "variable": "--ds-spacing-8",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:74",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:74",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -387,7 +387,7 @@
           {
             "variable": "--ds-spacing-10",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:77",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:77",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -404,7 +404,7 @@
           {
             "variable": "--ds-spacing-12",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:80",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:80",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -421,7 +421,7 @@
           {
             "variable": "--ds-spacing-16",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:83",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:83",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -438,7 +438,7 @@
           {
             "variable": "--ds-radius-full",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:89",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:89",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -455,7 +455,7 @@
           {
             "variable": "--ds-radius-none",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:92",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:92",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -472,7 +472,7 @@
           {
             "variable": "--ds-radius-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:95",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:95",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -489,7 +489,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:101",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:101",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -506,7 +506,7 @@
           {
             "variable": "--ds-surface-canvas",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:104",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:104",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -523,7 +523,7 @@
           {
             "variable": "--ds-color-bg-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:104",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:104",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -542,7 +542,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:107",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:107",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -559,7 +559,7 @@
           {
             "variable": "--ds-color-on-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:108",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:108",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -576,7 +576,7 @@
           {
             "variable": "--ds-color-text-on-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:108",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:108",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -595,7 +595,7 @@
           {
             "variable": "--ds-color-success",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:111",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:111",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -612,7 +612,7 @@
           {
             "variable": "--ds-color-on-success",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:112",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:112",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -629,7 +629,7 @@
           {
             "variable": "--ds-color-warning",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:115",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:115",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -646,7 +646,7 @@
           {
             "variable": "--ds-color-on-warning",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:116",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:116",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -663,7 +663,7 @@
           {
             "variable": "--ds-color-error",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:119",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:119",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -680,7 +680,7 @@
           {
             "variable": "--ds-color-on-error",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:120",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:120",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -697,7 +697,7 @@
           {
             "variable": "--ds-color-info",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:123",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:123",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -714,7 +714,7 @@
           {
             "variable": "--ds-color-on-info",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:124",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:124",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -731,7 +731,7 @@
           {
             "variable": "--_icon-frame-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:132",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:132",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -748,7 +748,7 @@
           {
             "variable": "--_ds-icon-frame-subtle-strength",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:132",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:132",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -765,7 +765,7 @@
           {
             "variable": "--_icon-frame-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:135",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:135",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -782,7 +782,7 @@
           {
             "variable": "--_icon-frame-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:140",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:140",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -799,7 +799,7 @@
           {
             "variable": "--_icon-frame-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:141",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:141",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -816,7 +816,7 @@
           {
             "variable": "--_icon-frame-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:145",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:145",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -833,7 +833,7 @@
           {
             "variable": "--_icon-frame-on-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:146",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:146",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -850,7 +850,7 @@
           {
             "variable": "--_ds-icon-frame-glass-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:150",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:150",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -867,7 +867,7 @@
           {
             "variable": "--ds-color-alpha-white-20",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:151",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:151",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -884,7 +884,7 @@
           {
             "variable": "--_icon-frame-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:152",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:152",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -901,7 +901,7 @@
           {
             "variable": "--ds-glass-blur-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:153",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:153",
             "landsOn": "backdrop-filter",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -918,7 +918,7 @@
           {
             "variable": "--ds-effect-intensity",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:153",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:153",
             "landsOn": "backdrop-filter",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -935,7 +935,7 @@
           {
             "variable": "--ds-glass-blur-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:155",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:155",
             "landsOn": "-webkit-backdrop-filter",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -952,7 +952,7 @@
           {
             "variable": "--ds-effect-intensity",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:155",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:155",
             "landsOn": "-webkit-backdrop-filter",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -969,7 +969,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:163",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:163",
             "landsOn": "inset-block-start",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -986,7 +986,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:164",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:164",
             "landsOn": "inset-inline-end",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1003,7 +1003,7 @@
           {
             "variable": "--ds-state-disabled-opacity",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:171",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:171",
             "landsOn": "opacity",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1053,13 +1053,13 @@
         {
           "channelId": "--_ds-icon-frame-badge-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1069,13 +1069,13 @@
         {
           "channelId": "--_ds-icon-frame-badge-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1085,13 +1085,13 @@
         {
           "channelId": "--_ds-icon-frame-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1101,13 +1101,13 @@
         {
           "channelId": "--_ds-icon-frame-icon-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1181,13 +1181,13 @@
         {
           "channelId": "--_ds-icon-frame-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1225,13 +1225,13 @@
         {
           "channelId": "--_ds-icon-frame-badge-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1241,13 +1241,13 @@
         {
           "channelId": "--_ds-icon-frame-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1257,13 +1257,13 @@
         {
           "channelId": "--_ds-icon-frame-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1282,7 +1282,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -1303,13 +1303,13 @@
         {
           "channelId": "--_ds-icon-frame-loading-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1347,13 +1347,13 @@
         {
           "channelId": "--_ds-icon-frame-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1363,13 +1363,13 @@
         {
           "channelId": "--_ds-icon-frame-subtle-strength",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1388,7 +1388,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1445,13 +1445,13 @@
         {
           "channelId": "--_ds-icon-frame-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1475,7 +1475,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1532,7 +1532,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1561,7 +1561,7 @@
               "--ds-color-info",
               "--ds-color-on-info"
             ],
-            "noSocketReason": "sin socket propio; lee los canales compartidos de estado [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame.css:110-124]",
+            "noSocketReason": "sin socket propio; lee los canales compartidos de estado [at packages/core/src/foundation/tokens/css/presentation/components/icon-frame/index.css:110-124]",
             "socketsResolved": true,
             "carrier": "shared-channel"
           }
@@ -1580,13 +1580,13 @@
         {
           "channelId": "--_ds-icon-frame-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/ui/primitives/foundation/IconFrame",
+          "producer": "packages/core/src/components/primitives/foundation/icon-frame",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/icon-frame"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/IconFrame"
+            "packages/core/src/components/primitives/foundation/icon-frame"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1606,11 +1606,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

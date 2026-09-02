@@ -8,15 +8,15 @@
     "components": [
       "Slider"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/Slider",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/slider",
     "publicComponents": [
       "Slider"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "443c7f51897cb5ded212945aa259c5686986168fc5f1d884b6a35188cedf6ad9"
+    "inventoryRowDigest": "643d9867521e9ce9e7502594faf8c4c2165630a5599d804aacc65e4dba8df18b"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/inputs/Slider/index.tsx",
-      "packages/core/src/ui/primitives/inputs/Slider/contracts/index.ts",
-      "packages/core/src/ui/primitives/inputs/Slider/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+      "packages/core/src/components/primitives/inputs/slider/index.tsx",
+      "packages/core/src/components/primitives/inputs/slider/contracts/index.ts",
+      "packages/core/src/components/primitives/inputs/slider/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
     ],
     "stableParts": [
       "dot",
@@ -62,9 +62,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The handle exposes the full range ARIA contract (role=slider with aria-valuemin/max/now/text and aria-orientation); a visual override must not detach the painted handle from the focusable element that carries them. [at packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:487, packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:222]",
-      "Real native <input type=\"range\"> elements back the modern slider and carry the interaction: one in single mode and two (start/end) in range mode, all stamped data-part='native-input' and painted through the ::-webkit-slider-thumb / ::-moz-range-thumb pseudos. Pointer and keyboard semantics are not re-implemented in JavaScript alone, so a restyle must not set pointer-events:none on the native input. [at packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:530, packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:541, packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:569, packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:618 and more]",
-      "Coarse-pointer hit floors are declared on the handle. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:365, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:595]"
+      "The handle exposes the full range ARIA contract (role=slider with aria-valuemin/max/now/text and aria-orientation); a visual override must not detach the painted handle from the focusable element that carries them. [at packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:487, packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:222]",
+      "Real native <input type=\"range\"> elements back the modern slider and carry the interaction: one in single mode and two (start/end) in range mode, all stamped data-part='native-input' and painted through the ::-webkit-slider-thumb / ::-moz-range-thumb pseudos. Pointer and keyboard semantics are not re-implemented in JavaScript alone, so a restyle must not set pointer-events:none on the native input. [at packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:530, packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:541, packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:569, packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:618 and more]",
+      "Coarse-pointer hit floors are declared on the handle. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:365, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:595]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -87,10 +87,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:372",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:449",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:450",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:451"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:372",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:449",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:450",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:451"
           ]
         },
         {
@@ -98,12 +98,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:519",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:548",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:576",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:246",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:251",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:334"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:519",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:548",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:576",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:246",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:251",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:334"
           ],
           "atSiteCount": 12
         },
@@ -112,12 +112,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:405",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:266",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:349",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:180"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:405",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:266",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:349",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:180"
           ],
           "atSiteCount": 9
         },
@@ -126,12 +126,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:13",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:541",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:569",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:208",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:209"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:13",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:541",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:569",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:209"
           ]
         },
         {
@@ -139,12 +139,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:442",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:491",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:204",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:308",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:97",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:98"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:442",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:491",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:204",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:308",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:98"
           ],
           "atSiteCount": 10
         },
@@ -153,12 +153,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:477",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:601",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:198",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:302",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:83",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:89"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:477",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:601",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:198",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:89"
           ],
           "atSiteCount": 11
         },
@@ -167,10 +167,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:337",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:492",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:493",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:494"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:337",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:492",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:493",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:494"
           ]
         },
         {
@@ -178,12 +178,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:495",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:207",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:311",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:115",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:116",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:117"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:495",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:207",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:311",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:116",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:117"
           ],
           "atSiteCount": 9
         }
@@ -197,8 +197,8 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:373",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:407"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:373",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:407"
           ],
           "state": "active"
         },
@@ -207,10 +207,10 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:479",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:602",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:199",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:303"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:479",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:602",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:199",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:303"
           ],
           "state": "disabled"
         },
@@ -219,7 +219,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:339"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:339"
           ],
           "state": "open"
         },
@@ -228,8 +228,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:243",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:249"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:243",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:249"
           ],
           "state": "active"
         },
@@ -238,8 +238,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:218",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:218",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239"
           ],
           "state": "disabled"
         },
@@ -248,8 +248,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:354"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:354"
           ],
           "state": "focus"
         },
@@ -258,8 +258,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:354"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:354"
           ],
           "state": "focus-visible"
         },
@@ -268,9 +268,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:339",
-            "packages/core/src/foundation/tokens/css/runtime/personality.css:571"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:339",
+            "packages/core/src/foundation/tokens/css/runtime/personality/index.css:571"
           ],
           "state": "hover"
         },
@@ -279,8 +279,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:470",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:471"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:470",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:471"
           ],
           "state": "active"
         },
@@ -289,9 +289,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:168",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:39",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:59"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:39",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:59"
           ],
           "state": "disabled"
         },
@@ -300,8 +300,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:547",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:548"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:547",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:548"
           ],
           "state": "open"
         }
@@ -312,7 +312,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:406"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:406"
           ]
         },
         {
@@ -320,10 +320,10 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:480",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:603",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:200",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:304"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:480",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:603",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:200",
+            "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:304"
           ]
         },
         {
@@ -331,7 +331,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:338"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:338"
           ]
         },
         {
@@ -339,7 +339,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:478"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:478"
           ]
         },
         {
@@ -347,8 +347,8 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:542",
-            "packages/core/src/ui/primitives/inputs/Slider/engines/modern/index.tsx:570"
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:542",
+            "packages/core/src/components/primitives/inputs/slider/engines/modern/index.tsx:570"
           ]
         },
         {
@@ -356,8 +356,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:184",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:185"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:185"
           ]
         },
         {
@@ -365,8 +365,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:193",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:194"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:194"
           ]
         },
         {
@@ -374,10 +374,10 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:86",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:89",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:31",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:45"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:86",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:31",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:45"
           ]
         },
         {
@@ -385,10 +385,10 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:92",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:28",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:42"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:42"
           ]
         },
         {
@@ -396,8 +396,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:518",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:526"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:518",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:526"
           ]
         },
         {
@@ -405,7 +405,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:534"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:534"
           ]
         },
         {
@@ -413,7 +413,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:531"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:531"
           ]
         },
         {
@@ -421,8 +421,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:515",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:523"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:515",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:523"
           ]
         },
         {
@@ -430,8 +430,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:89",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:442"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:442"
           ]
         },
         {
@@ -439,8 +439,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:208"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:208"
           ]
         }
       ],
@@ -451,7 +451,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:400"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:400"
             ]
           },
           {
@@ -459,8 +459,8 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:339"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:339"
             ]
           },
           {
@@ -468,8 +468,8 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:365",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:368"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:365",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:368"
             ]
           },
           {
@@ -477,8 +477,8 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:388",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:605"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:388",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:605"
             ]
           }
         ],
@@ -522,141 +522,141 @@
             {
               "variable": "--_ds-slider-tooltip-gap",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:515",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:518",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:523",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:526",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:531",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:534"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:515",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:518",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:523",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:526",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:531",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:534"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-disabled-opacity",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:168",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:265",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:474",
-                "packages/core/src/ui/primitives/inputs/Slider/tests/Slider.skin-channel.test.ts:55"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:168",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:265",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:474",
+                "packages/core/src/components/primitives/inputs/slider/tests/Slider.skin-channel.test.ts:55"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-mark-gap",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:184",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:193"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:184",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:193"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-rail-bg",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:97",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:277",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:286",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:310",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:452",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:583",
-                "packages/core/src/ui/primitives/inputs/Slider/tests/Slider.skin-channel.test.ts:24"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:97",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:277",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:286",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:310",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:452",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:583",
+                "packages/core/src/components/primitives/inputs/slider/tests/Slider.skin-channel.test.ts:24"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-thumb-bg",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:296",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:324"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:296",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:324"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-thumb-bg-hover",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:243",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:339",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:342",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:346",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:350"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:243",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:339",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:342",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:346",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:350"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-thumb-shadow",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:138",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:297",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:325",
-                "packages/core/src/ui/primitives/inputs/Slider/tests/Slider.control-material.test.ts:26"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:138",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:297",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:325",
+                "packages/core/src/components/primitives/inputs/slider/tests/Slider.control-material.test.ts:26"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-thumb-shadow-focus",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:233",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:354",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:357"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:233",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:354",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:357"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-thumb-size",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:89",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:93",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:134",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:135",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:223",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:224",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:228",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:229",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:259",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:292",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:293",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:294",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:321",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:322",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:380",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:515",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:518",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:523",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:526",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:531",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:534",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:588"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:89",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:93",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:134",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:135",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:223",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:224",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:228",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:229",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:259",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:292",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:293",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:294",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:321",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:322",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:380",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:515",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:518",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:523",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:526",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:531",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:534",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:588"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-touch-target-min",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:365",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:368",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:374",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:375",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:380",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:595",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:598"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:365",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:368",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:374",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:375",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:380",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:595",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:598"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-slider-track-size",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:104",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:110",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:120",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:124",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:270",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:292",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:308",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:316",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:450",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:451",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:588",
-                "packages/core/src/ui/primitives/inputs/Slider/tests/Slider.skin-channel.test.ts:41"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:104",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:110",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:120",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:124",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:270",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:292",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:308",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:316",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:450",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:451",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:588",
+                "packages/core/src/components/primitives/inputs/slider/tests/Slider.skin-channel.test.ts:41"
               ],
               "scope": "family skin CSS + component directory"
             }
@@ -665,7 +665,7 @@
             {
               "variable": "--ds-material-overlay-foreground",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:498"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:498"
               ],
               "declaredOnlyAt": [
                 "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:601",
@@ -710,21 +710,21 @@
             },
             {
               "selector": "[data-engine] .ds-slider-rail",
-              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:539",
+              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:539",
               "proof": "the rustic engine stamps 'rottay-slider__rail'; the class token 'ds-slider-rail' is stamped nowhere",
               "readsStranded": [],
               "kind": "DEAD_SELECTOR_PAINT"
             },
             {
               "selector": "[data-engine] .ds-slider-track",
-              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:547",
+              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:547",
               "proof": "the rustic engine stamps 'rottay-slider__track'; the class token 'ds-slider-track' is stamped nowhere",
               "readsStranded": [],
               "kind": "DEAD_SELECTOR_PAINT"
             },
             {
               "selector": "[data-engine] .ds-slider-handle (and :hover at 570)",
-              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:558",
+              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:558",
               "proof": "the rustic engine stamps 'rottay-slider__handle'; the class token 'ds-slider-handle' is stamped nowhere",
               "readsStranded": [],
               "kind": "DEAD_SELECTOR_PAINT"
@@ -732,7 +732,7 @@
           ],
           "hardcodedValue": [
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:146",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:146",
               "engine": "modern",
               "selector": ".ds-slider.ds-slider--modern [data-part='handle'][data-part='handle']",
               "property": "border",
@@ -748,7 +748,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:304",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:304",
               "engine": "modern",
               "selector": ".ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-webkit-slider-thumb",
               "property": "border",
@@ -764,7 +764,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:332",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:332",
               "engine": "modern",
               "selector": ".ds-slider.ds-slider--modern [data-part='native-input']:not([data-variant='overlay'])::-moz-range-thumb",
               "property": "border",
@@ -780,7 +780,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:450",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:450",
               "engine": "modern",
               "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']",
               "property": "inline-size",
@@ -796,7 +796,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:451",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:451",
               "engine": "modern",
               "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']",
               "property": "block-size",
@@ -812,7 +812,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:452",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:452",
               "engine": "modern",
               "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']",
               "property": "border",
@@ -828,7 +828,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:53",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:53",
               "engine": "rustic",
               "selector": ".ds-slider.ds-slider--rustic [data-part='handle']",
               "property": "outline-offset",
@@ -844,7 +844,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:107",
+              "at": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:107",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -856,7 +856,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:108",
+              "at": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:108",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -868,7 +868,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:109",
+              "at": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:109",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -880,7 +880,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:135",
+              "at": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:135",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -892,7 +892,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:164",
+              "at": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:164",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -904,7 +904,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:168",
+              "at": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:168",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -918,7 +918,7 @@
           ],
           "hardcodedFallbackLiteralsInsideVar": [
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:89",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:89",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -930,7 +930,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:93",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:93",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -942,7 +942,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:104",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:104",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -954,7 +954,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:110",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:110",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -966,7 +966,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:120",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:120",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -978,7 +978,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:124",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:124",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -990,7 +990,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:134",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:134",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1002,7 +1002,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:135",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:135",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1014,7 +1014,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:184",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:184",
               "engine": "modern",
               "property": "margin-block-start",
               "fallbacks": [
@@ -1026,7 +1026,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:193",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:193",
               "engine": "modern",
               "property": "margin-inline-start",
               "fallbacks": [
@@ -1038,7 +1038,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:223",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:223",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1050,7 +1050,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:224",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:224",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1062,7 +1062,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:228",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:228",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1074,7 +1074,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:229",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:229",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1086,7 +1086,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:259",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:259",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1098,7 +1098,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:270",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:270",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1110,7 +1110,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:292",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:292",
               "engine": "modern",
               "property": "margin-block-start",
               "fallbacks": [
@@ -1127,7 +1127,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:293",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:293",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1139,7 +1139,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:294",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:294",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1151,7 +1151,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:308",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:308",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1163,7 +1163,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:316",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:316",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1175,7 +1175,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:321",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:321",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1187,7 +1187,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:322",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:322",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1199,7 +1199,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:365",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:365",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -1211,7 +1211,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:368",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:368",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1223,7 +1223,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:374",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:374",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1235,7 +1235,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:375",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:375",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1247,7 +1247,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:380",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:380",
               "engine": "modern",
               "property": "margin-inline-start",
               "fallbacks": [
@@ -1264,7 +1264,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:450",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:450",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1276,7 +1276,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:451",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:451",
               "engine": "modern",
               "property": "block-size",
               "fallbacks": [
@@ -1288,7 +1288,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:515",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:515",
               "engine": "modern",
               "property": "transform",
               "fallbacks": [
@@ -1305,7 +1305,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:518",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:518",
               "engine": "modern",
               "property": "transform",
               "fallbacks": [
@@ -1322,7 +1322,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:523",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:523",
               "engine": "modern",
               "property": "transform",
               "fallbacks": [
@@ -1339,7 +1339,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:526",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:526",
               "engine": "modern",
               "property": "transform",
               "fallbacks": [
@@ -1356,7 +1356,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:531",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:531",
               "engine": "modern",
               "property": "transform",
               "fallbacks": [
@@ -1373,7 +1373,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:534",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:534",
               "engine": "modern",
               "property": "transform",
               "fallbacks": [
@@ -1390,7 +1390,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:588",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:588",
               "engine": "modern",
               "property": "margin-inline-start",
               "fallbacks": [
@@ -1407,7 +1407,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:595",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:595",
               "engine": "modern",
               "property": "min-inline-size",
               "fallbacks": [
@@ -1419,7 +1419,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:598",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:598",
               "engine": "modern",
               "property": "inline-size",
               "fallbacks": [
@@ -1506,7 +1506,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "fontFamily",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:110",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:110",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1519,7 +1519,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:118",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:118",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1532,7 +1532,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:122",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:122",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1545,7 +1545,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:132",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:132",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1558,7 +1558,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:133",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:133",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1571,7 +1571,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "fontSize",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:159",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:159",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1584,7 +1584,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:181",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:181",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1597,7 +1597,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:186",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:186",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1610,7 +1610,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:285",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:285",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1623,7 +1623,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Slider/engines/rustic/index.tsx:290",
+                  "readAt": "packages/core/src/components/primitives/inputs/slider/engines/rustic/index.tsx:290",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1642,7 +1642,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:450",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:450",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1652,7 +1652,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:451",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:451",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1662,7 +1662,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)",
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:452",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:452",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1672,7 +1672,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:452",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:452",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1682,7 +1682,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:453",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:453",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1692,7 +1692,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:454",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:454",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1702,7 +1702,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:456",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:456",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1712,7 +1712,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:456",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:456",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1722,7 +1722,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:456",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:456",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1732,7 +1732,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:456",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:456",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern[data-part='root'] [data-part='dot']"
@@ -1742,7 +1742,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:470",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:470",
                   "engineLayer": "modern",
                   "states": [
                     "active=true"
@@ -1754,7 +1754,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:471",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:471",
                   "engineLayer": "modern",
                   "states": [
                     "active=true"
@@ -1766,7 +1766,7 @@
                   "readWithFallback": true,
                   "fallback": "0.5",
                   "landsOnCssProperty": "opacity",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:474",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:474",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true"
@@ -1784,7 +1784,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:134",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:134",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1794,7 +1794,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:135",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:135",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1804,7 +1804,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:136",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:136",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1814,7 +1814,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:137",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:137",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1824,7 +1824,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-material-control-shadow, var(--ds-elevation-1))",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:138",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:138",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1834,7 +1834,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-elevation-1)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:138",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:138",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1844,7 +1844,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:138",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:138",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1854,7 +1854,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:140",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:140",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1864,7 +1864,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:140",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:140",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1874,7 +1874,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:140",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:140",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1884,7 +1884,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:140",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:140",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1894,7 +1894,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:140",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:140",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1904,7 +1904,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:140",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:140",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle']"
@@ -1914,7 +1914,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:146",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:146",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='handle'][data-part='handle']"
@@ -1924,7 +1924,7 @@
                   "readWithFallback": true,
                   "fallback": "0.5",
                   "landsOnCssProperty": "opacity",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:168",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:168",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true"
@@ -1936,7 +1936,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-focus-ring)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:233",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:233",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -1950,7 +1950,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:233",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:233",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -1964,7 +1964,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -1979,7 +1979,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -1994,7 +1994,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:239",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:239",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2009,7 +2009,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:243",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:243",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2023,7 +2023,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:243",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:243",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2037,7 +2037,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:243",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:243",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2051,7 +2051,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:49",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:49",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='handle']"
@@ -2061,7 +2061,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:51",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:51",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='handle']"
@@ -2071,7 +2071,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:56",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:56",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='handle'][data-part='handle']"
@@ -2081,7 +2081,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:56",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:56",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='handle'][data-part='handle']"
@@ -2091,7 +2091,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:59",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:59",
                   "engineLayer": "rustic",
                   "states": [
                     "disabled=true"
@@ -2103,7 +2103,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:62",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:62",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic.rottay-slider--focused [data-part='handle']"
@@ -2119,7 +2119,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:179",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:179",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='mark-label']"
@@ -2129,7 +2129,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-font-size-xs)",
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:180",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:180",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='mark-label']"
@@ -2139,7 +2139,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:180",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:180",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='mark-label']"
@@ -2149,7 +2149,7 @@
                   "readWithFallback": true,
                   "fallback": "8px",
                   "landsOnCssProperty": "margin-block-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:184",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:184",
                   "engineLayer": "modern",
                   "states": [
                     "axis=x"
@@ -2161,7 +2161,7 @@
                   "readWithFallback": true,
                   "fallback": "8px",
                   "landsOnCssProperty": "margin-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:193",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:193",
                   "engineLayer": "modern",
                   "states": [
                     "axis=y"
@@ -2173,7 +2173,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:480",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:480",
                   "engineLayer": "modern",
                   "states": [
                     "active=true"
@@ -2185,7 +2185,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-weight",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:481",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:481",
                   "engineLayer": "modern",
                   "states": [
                     "active=true"
@@ -2197,7 +2197,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:72",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:72",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='mark-label']"
@@ -2213,7 +2213,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:223",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:223",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2226,7 +2226,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:224",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:224",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2239,7 +2239,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:228",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:228",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2251,7 +2251,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:229",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:229",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2263,7 +2263,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:259",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:259",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2275,7 +2275,7 @@
                   "readWithFallback": true,
                   "fallback": "0.5",
                   "landsOnCssProperty": "opacity",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:265",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:265",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2288,7 +2288,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:270",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:270",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2301,7 +2301,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:271",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:271",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2314,7 +2314,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:274",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:274",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2327,7 +2327,7 @@
                   "readWithFallback": true,
                   "fallback": "0%",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:274",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:274",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2340,7 +2340,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:274",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:274",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2353,7 +2353,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:274",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:274",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2366,7 +2366,7 @@
                   "readWithFallback": true,
                   "fallback": "0%",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:274",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:274",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2379,7 +2379,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:283",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:283",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2393,7 +2393,7 @@
                   "readWithFallback": true,
                   "fallback": "0%",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:283",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:283",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2407,7 +2407,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:283",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:283",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2421,7 +2421,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:283",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:283",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2435,7 +2435,7 @@
                   "readWithFallback": true,
                   "fallback": "0%",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:283",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:283",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2449,7 +2449,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "margin-block-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:292",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:292",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2462,7 +2462,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "margin-block-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:292",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:292",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2475,7 +2475,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:293",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:293",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2488,7 +2488,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:294",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:294",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2501,7 +2501,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:296",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:296",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2514,7 +2514,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:296",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:296",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2527,7 +2527,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-material-control-shadow, var(--ds-elevation-1))",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:297",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:297",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2540,7 +2540,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-elevation-1)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:297",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:297",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2553,7 +2553,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:297",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:297",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2566,7 +2566,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:298",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:298",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2579,7 +2579,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:298",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:298",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2592,7 +2592,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:298",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:298",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2605,7 +2605,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:298",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:298",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2618,7 +2618,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:298",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:298",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2631,7 +2631,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:298",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:298",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2644,7 +2644,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:304",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:304",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2657,7 +2657,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:308",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:308",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2669,7 +2669,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:309",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:309",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2681,7 +2681,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:310",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:310",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2693,7 +2693,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:310",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:310",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2705,7 +2705,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:316",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:316",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2717,7 +2717,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:317",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:317",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2729,7 +2729,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:318",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:318",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2741,7 +2741,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:321",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:321",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2753,7 +2753,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:322",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:322",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2765,7 +2765,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:324",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:324",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2777,7 +2777,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:324",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:324",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2789,7 +2789,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-material-control-shadow, var(--ds-elevation-1))",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:325",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:325",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2801,7 +2801,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-elevation-1)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:325",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:325",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2813,7 +2813,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:325",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:325",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2825,7 +2825,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:326",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:326",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2837,7 +2837,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:326",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:326",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2849,7 +2849,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:326",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:326",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2861,7 +2861,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:326",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:326",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2873,7 +2873,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:326",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:326",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2885,7 +2885,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:326",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:326",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2897,7 +2897,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:332",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:332",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay"
@@ -2909,7 +2909,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:339",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:339",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2925,7 +2925,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:339",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:339",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2941,7 +2941,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:339",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:339",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2957,7 +2957,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:342",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:342",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2972,7 +2972,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:342",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:342",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -2987,7 +2987,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:342",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:342",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3002,7 +3002,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:346",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:346",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3017,7 +3017,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:346",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:346",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3032,7 +3032,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:346",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:346",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3047,7 +3047,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-primary) 86%, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:350",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:350",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3061,7 +3061,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:350",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:350",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3075,7 +3075,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:350",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:350",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3089,7 +3089,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-focus-ring)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:354",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:354",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3104,7 +3104,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:354",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:354",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3119,7 +3119,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-focus-ring)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:357",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:357",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3133,7 +3133,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:357",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:357",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3147,7 +3147,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:368",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:368",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3160,7 +3160,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:368",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:368",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3173,7 +3173,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:374",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:374",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3187,7 +3187,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:374",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:374",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3201,7 +3201,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:375",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:375",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3215,7 +3215,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:375",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:375",
                   "engineLayer": "modern",
                   "states": [
                     "variant=overlay",
@@ -3229,7 +3229,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "margin-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:380",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:380",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3244,7 +3244,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "margin-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:380",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:380",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3259,7 +3259,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "margin-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:380",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:380",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3274,7 +3274,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:580",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:580",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3288,7 +3288,7 @@
                   "readWithFallback": true,
                   "fallback": "0%",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:580",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:580",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3302,7 +3302,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:580",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:580",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3316,7 +3316,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:580",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:580",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3330,7 +3330,7 @@
                   "readWithFallback": true,
                   "fallback": "0%",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:580",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:580",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3344,7 +3344,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "margin-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:588",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:588",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3358,7 +3358,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "margin-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:588",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:588",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3372,7 +3372,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:598",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:598",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3386,7 +3386,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:598",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:598",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3406,7 +3406,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 12%, transparent)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:97",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:97",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='rail']"
@@ -3416,7 +3416,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:97",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:97",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='rail']"
@@ -3426,7 +3426,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:99",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:99",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='rail']"
@@ -3436,7 +3436,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:104",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:104",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal"
@@ -3448,7 +3448,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:110",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:110",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical"
@@ -3460,7 +3460,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:24",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:24",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='rail']"
@@ -3470,7 +3470,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:25",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:25",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='rail']"
@@ -3486,7 +3486,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:89",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:89",
                   "engineLayer": "modern",
                   "states": [
                     "range=true",
@@ -3499,7 +3499,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:93",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:93",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical"
@@ -3511,7 +3511,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:365",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:365",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3524,7 +3524,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:365",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:365",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3537,7 +3537,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "min-inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:595",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:595",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3550,7 +3550,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:595",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:595",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -3563,7 +3563,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:540",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:540",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3575,7 +3575,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:540",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:540",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3587,7 +3587,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:548",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:548",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3599,31 +3599,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:548",
-                  "engineLayer": "engine-agnostic-or-shared",
-                  "states": [
-                    "engine"
-                  ],
-                  "selector": ".ant-slider .ant-slider-track, .rottay-slider__track, [data-engine] .ds-slider-track"
-                },
-                {
-                  "variable": "--ds-personality-animation-entrance-duration",
-                  "readWithFallback": true,
-                  "fallback": "200ms",
-                  "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:548",
-                  "engineLayer": "engine-agnostic-or-shared",
-                  "states": [
-                    "engine"
-                  ],
-                  "selector": ".ant-slider .ant-slider-track, .rottay-slider__track, [data-engine] .ds-slider-track"
-                },
-                {
-                  "variable": "--ds-input-transition-timing",
-                  "readWithFallback": true,
-                  "fallback": "ease-in-out",
-                  "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:548",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:548",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3635,7 +3611,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:548",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:548",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3647,7 +3623,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:548",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:548",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3659,7 +3635,31 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:559",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:548",
+                  "engineLayer": "engine-agnostic-or-shared",
+                  "states": [
+                    "engine"
+                  ],
+                  "selector": ".ant-slider .ant-slider-track, .rottay-slider__track, [data-engine] .ds-slider-track"
+                },
+                {
+                  "variable": "--ds-input-transition-timing",
+                  "readWithFallback": true,
+                  "fallback": "ease-in-out",
+                  "landsOnCssProperty": "transition",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:548",
+                  "engineLayer": "engine-agnostic-or-shared",
+                  "states": [
+                    "engine"
+                  ],
+                  "selector": ".ant-slider .ant-slider-track, .rottay-slider__track, [data-engine] .ds-slider-track"
+                },
+                {
+                  "variable": "--ds-personality-animation-entrance-duration",
+                  "readWithFallback": true,
+                  "fallback": "200ms",
+                  "landsOnCssProperty": "transition",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:559",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3671,7 +3671,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:559",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:559",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3683,7 +3683,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:559",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:559",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3695,7 +3695,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:559",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:559",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3707,7 +3707,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:559",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:559",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3719,7 +3719,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:559",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:559",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -3737,7 +3737,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "padding-block",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:494",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:494",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3747,7 +3747,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "padding-inline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:495",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:495",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3757,7 +3757,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:496",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:496",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3767,7 +3767,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-surface-overlay, var(--ds-color-bg-primary))",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:497",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:497",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3777,7 +3777,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-bg-primary)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:497",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:497",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3787,7 +3787,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:497",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:497",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3797,7 +3797,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-text-primary)",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:498",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:498",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3807,7 +3807,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:498",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:498",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3817,7 +3817,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-shadow-md)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:499",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:499",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3827,7 +3827,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:499",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:499",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3837,7 +3837,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:500",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:500",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3847,7 +3847,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "line-height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:502",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:502",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3857,7 +3857,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:507",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:507",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3867,7 +3867,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:507",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:507",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3877,7 +3877,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:507",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:507",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3887,7 +3887,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:507",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:507",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='tooltip']"
@@ -3897,7 +3897,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:515",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:515",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3910,7 +3910,7 @@
                   "readWithFallback": true,
                   "fallback": "6px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:515",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:515",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3923,7 +3923,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:518",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:518",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3936,7 +3936,7 @@
                   "readWithFallback": true,
                   "fallback": "6px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:518",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:518",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3949,7 +3949,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:523",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:523",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3963,7 +3963,7 @@
                   "readWithFallback": true,
                   "fallback": "6px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:523",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:523",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3977,7 +3977,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:526",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:526",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -3991,7 +3991,7 @@
                   "readWithFallback": true,
                   "fallback": "6px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:526",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:526",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal",
@@ -4005,7 +4005,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:531",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:531",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -4018,7 +4018,7 @@
                   "readWithFallback": true,
                   "fallback": "6px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:531",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:531",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -4031,7 +4031,7 @@
                   "readWithFallback": true,
                   "fallback": "16px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:534",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:534",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -4044,7 +4044,7 @@
                   "readWithFallback": true,
                   "fallback": "6px",
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:534",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:534",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical",
@@ -4063,7 +4063,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:115",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:115",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='track']"
@@ -4073,7 +4073,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:117",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:117",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--modern [data-part='track']"
@@ -4083,7 +4083,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:120",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:120",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=vertical"
@@ -4095,7 +4095,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css:124",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css:124",
                   "engineLayer": "modern",
                   "states": [
                     "orientation=horizontal"
@@ -4107,7 +4107,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:35",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:35",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='track']"
@@ -4117,7 +4117,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:36",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:36",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-slider.ds-slider--rustic [data-part='track']"
@@ -4127,7 +4127,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css:39",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css:39",
                   "engineLayer": "rustic",
                   "states": [
                     "disabled=true"
@@ -4141,8 +4141,8 @@
         },
         "paintOwners": {
           "engineSkinCss": {
-            "modern": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-            "rustic": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider.css"
+            "modern": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
+            "rustic": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/slider/index.css"
           },
           "additionalPaintOwners": [
             {
@@ -4211,13 +4211,13 @@
         {
           "channelId": "--_ds-slider-rail-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4226,13 +4226,13 @@
         {
           "channelId": "--_ds-slider-track-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4242,13 +4242,13 @@
         {
           "channelId": "--_ds-slider-thumb-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4257,13 +4257,13 @@
         {
           "channelId": "--_ds-slider-thumb-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4316,13 +4316,13 @@
         {
           "channelId": "--_ds-slider-mark-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4377,13 +4377,13 @@
         {
           "channelId": "--_ds-slider-track-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4392,13 +4392,13 @@
         {
           "channelId": "--_ds-slider-thumb-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4407,13 +4407,13 @@
         {
           "channelId": "--_ds-slider-mark-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4422,13 +4422,13 @@
         {
           "channelId": "--_ds-slider-tooltip-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4570,13 +4570,13 @@
         {
           "channelId": "--_ds-slider-thumb-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/slider"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/slider/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4599,7 +4599,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4655,7 +4655,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4705,11 +4705,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Anatomy variants",
   "valueType": "enum",
@@ -36,7 +36,7 @@
   ],
   "compatibility": "additive; envelope-gated (allowAnatomyVariants)",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
     "symbol": "[data-anatomy-card='framed']"
   },
   "calibration": {
@@ -86,7 +86,7 @@
     "staticDbParityEvidenceIds": [],
     "exactRestoreEvidenceIds": [],
     "negativeControls": [],
-    "nextAction": "SIGHTED n/a -- terminal DATA proyectado a atributos de root. Cierre por la puerta DB.",
+    "nextAction": "RERUN_DATA_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous measurements remain historical and do not support an active computed claim after the canonical-path refactor.",
     "catalog": {
       "cardComponent": [
         "default",
@@ -111,26 +111,22 @@
         "floating"
       ]
     },
-    "catalogLaw": "catalogo en calibration, NO en enumValues, por dos razones ejecutables: (a) domain se REGENERA entero desde TenantCapabilityDeclaration (scripts/foundation/tokens/manifest/generation/index.mjs:201-236); solo calibration y retiredAliases sobreviven, misma figura que recipe-profile; (b) el vocabulario es un MAPA por slot de chrome y TenantCapabilityDeclaration.enumValues es `readonly string[]` plano (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:47). Copia literal de TENANT_THEME_ANATOMY_VARIANTS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:321-326). Mapa, no union plana: `zebra` solo existe en table, `rail`/`panel` solo en sidebar, `framed`/`underline`/`ghost` solo en cardComponent. `default` esta en los cuatro slots y es lo que significa el campo ausente, es decir cero cambio visual (misma fuente, :303-319).",
+    "catalogLaw": "catalogo en calibration, NO en enumValues, por dos razones ejecutables: (a) domain se REGENERA entero desde TenantCapabilityDeclaration (scripts/generate/tokens/manifest/generation/index.mjs:201-236); solo calibration y retiredAliases sobreviven, misma figura que recipe-profile; (b) el vocabulario es un MAPA por slot de chrome y TenantCapabilityDeclaration.enumValues es `readonly string[]` plano (packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts:47). Copia literal de TENANT_THEME_ANATOMY_VARIANTS (packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts:321-326). Mapa, no union plana: `zebra` solo existe en table, `rail`/`panel` solo en sidebar, `framed`/`underline`/`ghost` solo en cardComponent. `default` esta en los cuatro slots y es lo que significa el campo ausente, es decir cero cambio visual (misma fuente, :303-319).",
     "defaultStopLaw": "`default` NO es stop, en ninguna de las 4 familias: el proyector `tenantThemeAnatomyAttributes` lo saltea por construccion (`variant === \"default\"` -> continue, porque 'default always maps to the current rendering'). Medido: un documento que declara anatomy='default' en una familia -- o en las cuatro -- proyecta {} . Son 4 de los 14 valores del vocabulario y son NO-TESTIGOS; declararlos como stops seria publicar como testigo algo que no puede discriminar. Misma clase que el `soft` inerte de D-1 y los presets vacios. Cercado por drill ejecutable (PACKET-3: `default` projects nothing, on every family).",
     "staticDoorDisposition": {
       "class": "STRUCTURALLY_UNREACHABLE",
       "reason": "Genuina, y medida en las dos mitades. (1) El compilador estatico NO la lee: cero ocurrencias de `anatomy` en compilers/kernel/runtime/brand-theme, y el compilado es byte-identico con y sin las cuatro anatomias (cssVariables y cssString); el artifact estatico ni siquiera tiene `normalizedAppearance`, asi que `tenantThemeAnatomyAttributes` tira sobre el. (2) NO hay consumidor del tema CRUDO: cero sitios de fuente (fuera de tests/contratos) leen chrome.<familia>.anatomy de un BrandTheme; el provider no menciona anatomy; los tres callers del proyector (src/index.ts, entrypoints/server, brand-studio/tenant-theme-preview) consumen el ARTIFACT. El `anatomy` de ResizeHandle es un prop local de ese primitivo, otro concepto. Por eso NO es RUNTIME_ONLY_NO_ARTIFACT (la clase que profiles.icon si necesito): alli el provider pasaba el tema crudo al resolver; aca no hay lector.",
       "registeredGap": "El campo existe y es INERTE en la puerta estatica: `BrandChrome` declara `anatomy` en las cuatro familias (themes/index.ts:880 sidebar, :932 layout, :2061 table, :2110 cardComponent) y ningun compilador ni consumidor lo lee por esa via. Un autor de vertical puede escribir chrome.sidebar.anatomy='rail' en su BrandTheme y no pasa nada, sin aviso: un tipo que promete una capacidad que su compilador no implementa. Gap REGISTRADO con su medicion, no arreglado por este packet."
     },
-    "assessmentStateNote": "La evidencia DATA de la puerta DB esta completa y receipteada. El techo es mecanico, no de evidencia: 'a control may not outrank its own evidence' y las celdas de familia de este control son 255 (medido: 251 UNKNOWN + 4 SOURCE_BOUND), fuera del write-set. Identico al techo que freno a profiles.icon. El ascenso a COMPUTED_VERIFIED es una linea cuando el DT despache el packet de celdas.",
+    "assessmentStateNote": "La medicion DATA previa queda como historia, pero sus receipts ya no estan activos despues de la refactorizacion de paths. El control permanece SOURCE_BOUND hasta repetir la prueba causal sobre un arbol congelado y luego adjudicar sus celdas de familia.",
     "sceneNote": "Siblings del documento, NO-COLOR y declarados: `tokenOverrides['--ds-radius-md']` y `profiles.edge`. El contenedor que este control escribe es `chrome`, y `chrome.cardComponent.bg` es un campo de COLOR real de ese mismo contenedor -- autorarlo dispararia la validacion APCA en modo oscuro y la corrida no podria compilar su propia linea base. Por eso el hermano constante vive FUERA de `chrome`.",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css"
     ],
-    "dataFieldDeltaEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/chrome-anatomy/computed-static-db/rottay.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/chrome-anatomy/computed-static-db/bithire.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/chrome-anatomy/computed-static-db/evnto.json"
-    ],
+    "dataFieldDeltaEvidenceIds": [],
     "channels": []
   },
   "retiredAliases": []

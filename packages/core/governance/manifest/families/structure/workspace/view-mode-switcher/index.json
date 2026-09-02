@@ -8,15 +8,15 @@
     "components": [
       "ViewModeSwitcher"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/view-mode-switcher",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/view-mode-switcher",
     "publicComponents": [
       "ViewModeSwitcher"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fced53e34d3ef4322492c6af8fa015c2051b39faf45201e2d3fd78b546e640cd"
+    "inventoryRowDigest": "0580bd1cb59ae9cc14ad547051f161f6efbd8ed84802250a0ea334ad1c4b9748"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/workspace/view-mode-switcher",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+      "packages/core/src/components/structures/workspace/view-mode-switcher",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
     ],
     "stableParts": [
       "root",
@@ -66,12 +66,12 @@
         {
           "part": "root",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/view-mode-switcher/index.tsx:116"
+          "anchor": "packages/core/src/components/structures/workspace/view-mode-switcher/index.tsx:116"
         },
         {
           "part": "switcher",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/view-mode-switcher/index.tsx:126"
+          "anchor": "packages/core/src/components/structures/workspace/view-mode-switcher/index.tsx:126"
         }
       ],
       "variantAxisAnchors": [
@@ -79,14 +79,14 @@
           "token": "data-structure",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/view-mode-switcher/index.tsx:117"
+            "packages/core/src/components/structures/workspace/view-mode-switcher/index.tsx:117"
           ]
         }
       ],
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css": {
             "rows": 3,
             "layer": "engine-agnostic skin"
           }
@@ -119,7 +119,7 @@
         "hardcodedValues": [],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css": {
               "rows": 3,
               "layer": "engine-agnostic skin"
             }
@@ -148,7 +148,7 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/workspace/view-mode-switcher/index.tsx": {
+            "packages/core/src/components/structures/workspace/view-mode-switcher/index.tsx": {
               "classNameOccurrences": 1,
               "dataPartOccurrences": 2,
               "styleAttributeOccurrences": 0,
@@ -185,13 +185,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -209,7 +209,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -234,7 +234,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -259,7 +259,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -286,13 +286,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -312,13 +312,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -338,13 +338,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -364,13 +364,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -390,13 +390,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -415,7 +415,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo plano; lo flotante usa sockets overlay",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -445,7 +445,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -476,13 +476,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-panel-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -502,13 +502,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -532,7 +532,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -588,7 +588,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -615,13 +615,13 @@
         {
           "channelId": "--_ds-view-mode-switcher-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/view-mode-switcher"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/view-mode-switcher/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -641,11 +641,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -5,11 +5,11 @@
   "implementationState": "OPERATIONAL_SOURCE_BOUND",
   "sourceBindings": [
     {
-      "path": "packages/core/src/ui/patterns/data/data-table/contracts/index.ts",
+      "path": "packages/core/src/components/patterns/data/data-table/contracts/index.ts",
       "symbol": "DataTableRecipe"
     },
     {
-      "path": "packages/core/src/ui/patterns/data/data-table/presentation/table/index.tsx",
+      "path": "packages/core/src/components/patterns/data/data-table/presentation/table/index.tsx",
       "symbol": "resolvedRecipe"
     }
   ],

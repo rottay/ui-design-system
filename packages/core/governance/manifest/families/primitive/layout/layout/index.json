@@ -8,15 +8,15 @@
     "components": [
       "Layout"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/layout/Layout",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/layout/system",
     "publicComponents": [
       "Layout"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "3621e0915e2abf93ddece4b1d56ae560b594fb03810fb869975d9eab7f52b522"
+    "inventoryRowDigest": "3141d5b1ee2932ba3bc48a453d7917ca8766c89f60a39d5ae5fd17fb9f4a7fc8"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Layout/index.ts",
-      "packages/core/src/ui/primitives/layout/Layout/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Layout/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/layout/Layout/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/layout/Layout/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/layout/system/index.ts",
+      "packages/core/src/components/primitives/layout/system/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/system/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/layout/system/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/layout/system/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root",
@@ -463,13 +463,13 @@
         {
           "channelId": "--_ds-layout-sider-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -478,13 +478,13 @@
         {
           "channelId": "--_ds-layout-sider-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -493,13 +493,13 @@
         {
           "channelId": "--_ds-layout-sider-trigger-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -516,7 +516,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -535,7 +535,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -564,13 +564,13 @@
         {
           "channelId": "--_ds-layout-sider-trigger-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -647,13 +647,13 @@
         {
           "channelId": "--_ds-layout-content-min-basis",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -662,13 +662,13 @@
         {
           "channelId": "--_ds-layout-content-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -677,13 +677,13 @@
         {
           "channelId": "--_ds-layout-footer-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -692,13 +692,13 @@
         {
           "channelId": "--_ds-layout-footer-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -707,13 +707,13 @@
         {
           "channelId": "--_ds-layout-header-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -722,13 +722,13 @@
         {
           "channelId": "--_ds-layout-root-min-block-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -737,13 +737,13 @@
         {
           "channelId": "--_ds-layout-sider-trigger-block-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -798,13 +798,13 @@
         {
           "channelId": "--_ds-layout-sider-collapse-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -813,13 +813,13 @@
         {
           "channelId": "--_ds-layout-sider-collapse-timing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/layout"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -859,8 +859,8 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Canales compartidos porque OTRA familia los lee de verdad (nivel 2; sus sockets viven en la familia duena)": [
             "--ds-material-card-background",
@@ -888,7 +888,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -973,7 +973,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1030,7 +1030,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1080,11 +1080,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

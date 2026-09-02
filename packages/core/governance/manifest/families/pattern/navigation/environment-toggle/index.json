@@ -8,15 +8,15 @@
     "components": [
       "PatternEnvironmentToggle"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/navigation/environment-toggle",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/navigation/environment-toggle",
     "publicComponents": [
       "PatternEnvironmentToggle"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "299e792297dbf7a6b621945af1dc5a3bad7f2a88e23c909dba8eaba3e6b19cc1"
+    "inventoryRowDigest": "bcaa2b88bad3bacb2c3d06a94249ef7d43b41d6574c82f33683a2d707b37a925"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/navigation/environment-toggle/index.ts",
-      "packages/core/src/ui/patterns/navigation/environment-toggle/contracts/index.ts",
-      "packages/core/src/ui/patterns/navigation/environment-toggle/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css"
+      "packages/core/src/components/patterns/navigation/environment-toggle/index.ts",
+      "packages/core/src/components/patterns/navigation/environment-toggle/contracts/index.ts",
+      "packages/core/src/components/patterns/navigation/environment-toggle/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css"
     ],
     "stableParts": [
       "badge",
@@ -85,184 +85,184 @@
           "part": "badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:267",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:303",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:346",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:385",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:182",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:216"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:267",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:303",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:346",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:385",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:182",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:216"
           ]
         },
         {
           "part": "banner",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:409",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:320",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:181",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:195",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:263",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:267"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:409",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:320",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:263",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:267"
           ]
         },
         {
           "part": "banner-dot",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:419",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:328",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:198",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:249",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:279",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:38"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:419",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:328",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:38"
           ]
         },
         {
           "part": "check",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:306",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:262",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:123",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:270",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:86"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:306",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:123",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:86"
           ]
         },
         {
           "part": "confirm-cancel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:355",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:166"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:355",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:166"
           ]
         },
         {
           "part": "confirm-dialog",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:342",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:150"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:342",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:150"
           ]
         },
         {
           "part": "confirm-message",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:346",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:156"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:156"
           ]
         },
         {
           "part": "confirm-overlay",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:340",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:146"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:340",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:146"
           ]
         },
         {
           "part": "confirm-submit",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:366",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:170"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:366",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:170"
           ]
         },
         {
           "part": "dot",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:300",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:213",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:249",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:54",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:248"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:300",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:213",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:54",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:248"
           ]
         },
         {
           "part": "option",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:289",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:333",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:370",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:233",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:279",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:300"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:289",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:333",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:370",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:233",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:279",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:300"
           ]
         },
         {
           "part": "option-content",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:381",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:142"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:381",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:142"
           ]
         },
         {
           "part": "option-name",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:301",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:113"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:113"
           ]
         },
         {
           "part": "panel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:148",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:278",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:229",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:83",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:102",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:258"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:148",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:278",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:229",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:258"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:398",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:316",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:102",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:195"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:398",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:316",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:195"
           ]
         },
         {
           "part": "toggle",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:246",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:321",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:358",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:199",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:275",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:296"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:246",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:321",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:358",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:199",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:275",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:296"
           ]
         },
         {
           "part": "toggle-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:427",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:36"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:427",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:36"
           ]
         },
         {
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:126",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:250",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:201",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:213",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:70"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:126",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:250",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:70"
           ]
         }
       ],
@@ -270,40 +270,40 @@
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:20",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:151",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:9"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:9"
           ],
           "state": "active"
         },
         {
           "token": "active=env.id === activeEnvironment",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:290",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:334",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:371",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:234",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:280",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:301"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:290",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:334",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:371",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:234",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:280",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:301"
           ],
           "state": "active"
         },
         {
           "token": "active=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:132",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:237"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:237"
           ],
           "state": "active"
         },
         {
           "token": "loading=loading ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:399"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:399"
           ],
           "state": "loading"
         }
@@ -312,42 +312,42 @@
         {
           "token": "variant",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:20",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:9",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css:30"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css:30"
           ]
         },
         {
           "token": "variant=dropdown",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:246",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:199",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:40",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:113",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:118"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:246",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:113",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:118"
           ]
         },
         {
           "token": "variant=pills",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:322",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:275",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:44",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:132",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:222"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:322",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:275",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:222"
           ]
         },
         {
           "token": "variant=toggle",
           "at": [
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:359",
-            "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx:296",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:48",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:151",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:158"
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:359",
+            "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx:296",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:48",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:158"
           ]
         }
       ],
@@ -356,25 +356,25 @@
           {
             "token": "position=first",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:161"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:161"
             ]
           },
           {
             "token": "position=idx === 0 ? 'first' : idx === environments.length - 1 ? 'last' : 'middle'",
             "at": [
-              "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx:372"
+              "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx:372"
             ]
           },
           {
             "token": "position=last",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:167"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:167"
             ]
           },
           {
             "token": "position=middle",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css:173"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css:173"
             ]
           }
         ],
@@ -384,17 +384,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/classic/index.tsx",
             "lines": 216
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx",
             "lines": 453
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "lines": 389
           }
         ]
@@ -409,7 +409,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 46,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -422,7 +422,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 59,
             "fallback": false,
             "fallbackValue": null,
@@ -436,7 +436,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 73,
             "fallback": false,
             "fallbackValue": null,
@@ -450,7 +450,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 74,
             "fallback": false,
             "fallbackValue": null,
@@ -463,7 +463,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 75,
             "fallback": true,
             "fallbackValue": "0.6875rem",
@@ -476,7 +476,7 @@
           },
           {
             "name": "--ds-font-weight-medium",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 76,
             "fallback": true,
             "fallbackValue": "500",
@@ -489,7 +489,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 85,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -502,7 +502,7 @@
           },
           {
             "name": "--ds-z-dropdown",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -515,7 +515,7 @@
           },
           {
             "name": "--ds-environment-toggle-panel-min-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 88,
             "fallback": true,
             "fallbackValue": "11.25rem",
@@ -528,7 +528,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 91,
             "fallback": true,
             "fallbackValue": "1rem",
@@ -541,7 +541,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 95,
             "fallback": true,
             "fallbackValue": "0.25rem",
@@ -554,7 +554,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 96,
             "fallback": false,
             "fallbackValue": null,
@@ -567,7 +567,7 @@
           },
           {
             "name": "--ds-elevation-surface-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -580,7 +580,7 @@
           },
           {
             "name": "--ds-elevation-surface-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -593,7 +593,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 98,
             "fallback": false,
             "fallbackValue": null,
@@ -606,7 +606,7 @@
           },
           {
             "name": "--ds-elevation-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 99,
             "fallback": false,
             "fallbackValue": null,
@@ -619,7 +619,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 100,
             "fallback": false,
             "fallbackValue": null,
@@ -632,7 +632,7 @@
           },
           {
             "name": "--ds-motion-ease-enter",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 100,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -645,7 +645,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 103,
             "fallback": false,
             "fallbackValue": null,
@@ -658,7 +658,7 @@
           },
           {
             "name": "--ds-surface-inset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 119,
             "fallback": false,
             "fallbackValue": null,
@@ -671,7 +671,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 120,
             "fallback": false,
             "fallbackValue": null,
@@ -684,7 +684,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 127,
             "fallback": false,
             "fallbackValue": null,
@@ -697,7 +697,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 133,
             "fallback": false,
             "fallbackValue": null,
@@ -711,7 +711,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 134,
             "fallback": false,
             "fallbackValue": null,
@@ -724,7 +724,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 137,
             "fallback": false,
             "fallbackValue": null,
@@ -738,7 +738,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -751,7 +751,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 155,
             "fallback": false,
             "fallbackValue": null,
@@ -765,7 +765,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 156,
             "fallback": false,
             "fallbackValue": null,
@@ -778,7 +778,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 159,
             "fallback": false,
             "fallbackValue": null,
@@ -792,7 +792,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 162,
             "fallback": false,
             "fallbackValue": null,
@@ -805,7 +805,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 163,
             "fallback": false,
             "fallbackValue": null,
@@ -818,7 +818,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 170,
             "fallback": false,
             "fallbackValue": null,
@@ -831,7 +831,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 171,
             "fallback": false,
             "fallbackValue": null,
@@ -844,7 +844,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 186,
             "fallback": false,
             "fallbackValue": null,
@@ -857,7 +857,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 187,
             "fallback": false,
             "fallbackValue": null,
@@ -870,7 +870,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 188,
             "fallback": false,
             "fallbackValue": null,
@@ -883,7 +883,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 189,
             "fallback": false,
             "fallbackValue": null,
@@ -897,7 +897,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 190,
             "fallback": false,
             "fallbackValue": null,
@@ -911,7 +911,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 191,
             "fallback": true,
             "fallbackValue": "0.75rem",
@@ -924,7 +924,7 @@
           },
           {
             "name": "--ds-font-weight-medium",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 192,
             "fallback": false,
             "fallbackValue": null,
@@ -937,7 +937,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 193,
             "fallback": false,
             "fallbackValue": null,
@@ -950,7 +950,7 @@
           },
           {
             "name": "--ds-motion-ease-enter",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 193,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -963,7 +963,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 196,
             "fallback": false,
             "fallbackValue": null,
@@ -977,7 +977,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 203,
             "fallback": false,
             "fallbackValue": null,
@@ -991,7 +991,7 @@
           },
           {
             "name": "--ds-motion-attention",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 207,
             "fallback": true,
             "fallbackValue": "2s",
@@ -1004,7 +1004,7 @@
           },
           {
             "name": "--ds-environment-toggle-touch-target",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 215,
             "fallback": true,
             "fallbackValue": "2.75rem",
@@ -1017,7 +1017,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 39,
             "fallback": false,
             "fallbackValue": null,
@@ -1031,7 +1031,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 46,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -1044,7 +1044,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 46,
             "fallback": false,
             "fallbackValue": null,
@@ -1057,7 +1057,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 47,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1070,7 +1070,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-primary)",
@@ -1083,7 +1083,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 53,
             "fallback": false,
             "fallbackValue": null,
@@ -1096,7 +1096,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1109,7 +1109,7 @@
           },
           {
             "name": "--ds-shadow-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 55,
             "fallback": false,
             "fallbackValue": null,
@@ -1122,7 +1122,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 59,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -1135,7 +1135,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 59,
             "fallback": false,
             "fallbackValue": null,
@@ -1148,7 +1148,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -1161,7 +1161,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 66,
             "fallback": false,
             "fallbackValue": null,
@@ -1174,7 +1174,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 67,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1187,7 +1187,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 71,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -1200,7 +1200,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 71,
             "fallback": false,
             "fallbackValue": null,
@@ -1213,7 +1213,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 78,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -1226,7 +1226,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 78,
             "fallback": false,
             "fallbackValue": null,
@@ -1239,7 +1239,7 @@
           },
           {
             "name": "--ds-color-bg-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 83,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-100)",
@@ -1252,7 +1252,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 83,
             "fallback": false,
             "fallbackValue": null,
@@ -1265,7 +1265,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -1278,7 +1278,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 94,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -1291,7 +1291,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 94,
             "fallback": false,
             "fallbackValue": null,
@@ -1304,7 +1304,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 95,
             "fallback": true,
             "fallbackValue": "var(--ds-color-neutral-200)",
@@ -1317,7 +1317,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 95,
             "fallback": false,
             "fallbackValue": null,
@@ -1330,7 +1330,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 96,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1343,7 +1343,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 100,
             "fallback": false,
             "fallbackValue": null,
@@ -1357,7 +1357,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 101,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -1370,7 +1370,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 101,
             "fallback": false,
             "fallbackValue": null,
@@ -1383,7 +1383,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 109,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -1396,7 +1396,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -1409,7 +1409,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 114,
             "fallback": false,
             "fallbackValue": null,
@@ -1423,7 +1423,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 115,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -1436,7 +1436,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 115,
             "fallback": false,
             "fallbackValue": null,
@@ -1449,7 +1449,7 @@
           },
           {
             "name": "--ds-color-alpha-white-20",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 122,
             "fallback": false,
             "fallbackValue": null,
@@ -1462,7 +1462,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 123,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -1475,7 +1475,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 123,
             "fallback": false,
             "fallbackValue": null,
@@ -1488,7 +1488,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 124,
             "fallback": true,
             "fallbackValue": "6px",
@@ -1501,7 +1501,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 128,
             "fallback": false,
             "fallbackValue": null,
@@ -1515,7 +1515,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 129,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -1528,7 +1528,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 129,
             "fallback": false,
             "fallbackValue": null,
@@ -1541,7 +1541,7 @@
           },
           {
             "name": "--ds-envtoggle-accent-soft",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 136,
             "fallback": false,
             "fallbackValue": null,
@@ -1555,7 +1555,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 137,
             "fallback": false,
             "fallbackValue": null,
@@ -1569,7 +1569,7 @@
           },
           {
             "name": "--ds-envtoggle-accent",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 141,
             "fallback": false,
             "fallbackValue": null,
@@ -1583,7 +1583,7 @@
           },
           {
             "name": "--ds-color-alpha-black-40",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -1596,7 +1596,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 151,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-primary)",
@@ -1609,7 +1609,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 151,
             "fallback": false,
             "fallbackValue": null,
@@ -1622,7 +1622,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 152,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1635,7 +1635,7 @@
           },
           {
             "name": "--ds-shadow-2xl",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -1648,7 +1648,7 @@
           },
           {
             "name": "--ds-color-text-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 157,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1661,7 +1661,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 157,
             "fallback": false,
             "fallbackValue": null,
@@ -1674,7 +1674,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 162,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text)",
@@ -1687,7 +1687,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 162,
             "fallback": false,
             "fallbackValue": null,
@@ -1700,7 +1700,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 163,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1713,7 +1713,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 167,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1726,7 +1726,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 167,
             "fallback": false,
             "fallbackValue": null,
@@ -1739,7 +1739,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 171,
             "fallback": false,
             "fallbackValue": null,
@@ -1752,7 +1752,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 172,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-inverse)",
@@ -1765,7 +1765,7 @@
           },
           {
             "name": "--ds-color-text-inverse",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 172,
             "fallback": false,
             "fallbackValue": null,
@@ -1778,7 +1778,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 174,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1791,7 +1791,7 @@
           },
           {
             "name": "--ds-color-neutral-400",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/modern/index.tsx",
             "line": 262,
             "fallback": false,
             "fallbackValue": null,
@@ -1804,7 +1804,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 29,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1817,7 +1817,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 90,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1830,7 +1830,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 103,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1843,7 +1843,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 208,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1856,7 +1856,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 213,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1869,7 +1869,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 213,
             "fallback": false,
             "fallbackValue": null,
@@ -1882,7 +1882,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 242,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1895,7 +1895,7 @@
           },
           {
             "name": "--ds-font-size-lg",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 343,
             "fallback": true,
             "fallbackValue": "16px",
@@ -1908,7 +1908,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 347,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1921,7 +1921,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 359,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1934,7 +1934,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/navigation/environment-toggle/engines/rustic/index.tsx",
             "line": 370,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1948,265 +1948,265 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 46,
             "literal": "0.25rem",
             "text": "gap: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 56,
             "literal": "0.5rem",
             "text": "inline-size: 0.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 57,
             "literal": "0.5rem",
             "text": "block-size: 0.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 71,
             "literal": "1px",
             "text": "padding: 1px 6px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 71,
             "literal": "6px",
             "text": "padding: 1px 6px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 72,
             "literal": "9999px",
             "text": "border-radius: 9999px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 75,
             "literal": "0.6875rem",
             "text": "font-size: var(--ds-font-size-2xs, 0.6875rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 85,
             "literal": "0.25rem",
             "text": "inset-block-start: calc(100% + var(--ds-spacing-1, 0.25rem));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 88,
             "literal": "11.25rem",
             "text": "min-inline-size: var(--ds-environment-toggle-panel-min-width, 11.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 91,
             "literal": "1rem",
             "text": "max-inline-size: calc(100vw - var(--ds-spacing-4, 1rem));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 95,
             "literal": "0.25rem",
             "text": "padding: var(--ds-spacing-1, 0.25rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 103,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 124,
             "literal": "1rem",
             "text": "inline-size: 1rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 125,
             "literal": "1rem",
             "text": "block-size: 1rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 137,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-envtoggle-accent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 145,
             "literal": "0.375rem",
             "text": "gap: 0.375rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 152,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 159,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-envtoggle-accent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 191,
             "literal": "0.75rem",
             "text": "font-size: var(--ds-font-size-xs, 0.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 196,
             "literal": "2px",
             "text": "border-block-end: 2px solid var(--ds-envtoggle-accent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 200,
             "literal": "0.5rem",
             "text": "inline-size: 0.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 201,
             "literal": "0.5rem",
             "text": "block-size: 0.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 207,
             "literal": "2s",
             "text": "animation: ds-foundation-pulse var(--ds-motion-attention, 2s) ease-in-out infinite;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 215,
             "literal": "2.75rem",
             "text": "min-block-size: var(--ds-environment-toggle-touch-target, 2.75rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 244,
             "literal": "1px",
             "text": "outline: 1px solid Highlight;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 245,
             "literal": "1px",
             "text": "outline-offset: -1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 254,
             "literal": "1px",
             "text": "outline: 1px solid ButtonText;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 281,
             "literal": "0.01ms",
             "text": "transition-duration: 0.01ms !important;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
             "line": 282,
             "literal": "0.01ms",
             "text": "animation-duration: 0.01ms !important;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 46,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 47,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 54,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 59,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 67,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 71,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 95,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-primary, var(--ds-color-neutral-200));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 96,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 124,
             "literal": "6px",
             "text": "border-radius: var(--ds-radius-sm, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 130,
             "literal": "3px",
             "text": "border-radius: 3px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 141,
             "literal": "2px",
             "text": "border-bottom: 2px solid var(--ds-envtoggle-accent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 152,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 163,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 167,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-secondary, var(--ds-color-border-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/environment-toggle/index.css",
             "line": 174,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
@@ -2246,13 +2246,13 @@
         {
           "channelId": "--_ds-envtoggle-accent",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2269,7 +2269,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2301,7 +2301,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2326,7 +2326,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -2369,13 +2369,13 @@
         {
           "channelId": "--_ds-environment-toggle-control-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2395,13 +2395,13 @@
         {
           "channelId": "--_ds-environment-toggle-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2433,13 +2433,13 @@
         {
           "channelId": "--_ds-environment-toggle-control-item-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2449,13 +2449,13 @@
         {
           "channelId": "--_ds-environment-toggle-panel-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2473,7 +2473,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de una banda sin secciones propias; su aire externo lo da el shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2497,13 +2497,13 @@
         {
           "channelId": "--_ds-environment-toggle-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2522,7 +2522,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los patrones de navegacion no flotan; sus flyouts heredan elevacion del socket overlay",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-elevation-3",
@@ -2542,7 +2542,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de navegacion mate; el estado lo da sidebar-tone",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2560,13 +2560,13 @@
         {
           "channelId": "--_ds-environment-toggle-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2576,13 +2576,13 @@
         {
           "channelId": "--_ds-environment-toggle-sidebar-text",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2592,13 +2592,13 @@
         {
           "channelId": "--_ds-environment-toggle-sidebar-text-muted",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2608,13 +2608,13 @@
         {
           "channelId": "--_ds-environment-toggle-sidebar-item-bg-hover",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2624,13 +2624,13 @@
         {
           "channelId": "--_ds-environment-toggle-sidebar-item-bg-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2640,13 +2640,13 @@
         {
           "channelId": "--_ds-environment-toggle-sidebar-item-color-active",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2665,7 +2665,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2678,7 +2678,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el chrome de navegacion lo gobierna navigation.sidebar-tone como unica fuente; dos controles pintando el mismo fondo viola L4",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-z-dropdown"
@@ -2698,13 +2698,13 @@
         {
           "channelId": "--_ds-environment-toggle-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2728,7 +2728,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2741,7 +2741,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2780,7 +2780,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2823,13 +2823,13 @@
         {
           "channelId": "--_ds-environment-toggle-icon-fill-mode",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/navigation/environment-toggle"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/environment-toggle/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2849,11 +2849,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "Empty"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Empty",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/empty",
     "publicComponents": [
       "Empty"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1bd77149cd9e87ce1e4cbfb5a66c98f5a5027ea931814281fc62d0c2b7405f9b"
+    "inventoryRowDigest": "f1350ecced2e65769e3cb95ab3e0bb0c0f785d0b8fb01bdbc60c9823c0e2c7a2"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,15 +28,15 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Empty/index.tsx",
-      "packages/core/src/ui/primitives/display/Empty/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Empty/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/empty.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/display/empty/index.tsx",
+      "packages/core/src/components/primitives/display/empty/contracts/index.ts",
+      "packages/core/src/components/primitives/display/empty/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root",
@@ -49,8 +49,8 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "The root carries an explicit role and aria-live, so an empty result is announced rather than silently rendered. [at packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:84, packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:85]",
-      "The illustration is re-asserted under forced-colors, where the token-driven fills would otherwise be dropped by the system palette. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:132, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:134]"
+      "The root carries an explicit role and aria-live, so an empty result is announced rather than silently rendered. [at packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:84, packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:85]",
+      "The illustration is re-asserted under forced-colors, where the token-driven fills would otherwise be dropped by the system palette. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:132, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:134]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -73,11 +73,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-image/data-has-description/data-has-footer axes + role + aria-live",
           "at": [
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:79",
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:80",
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:84",
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:85",
-            "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:139"
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:79",
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:80",
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:84",
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:85",
+            "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:139"
           ]
         },
         {
@@ -85,8 +85,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:88",
-            "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:145"
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:88",
+            "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:145"
           ]
         },
         {
@@ -94,8 +94,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute on the preset illustration",
           "at": [
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:22",
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:31"
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:22",
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:31"
           ]
         },
         {
@@ -103,8 +103,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:94",
-            "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:151"
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:94",
+            "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:151"
           ]
         },
         {
@@ -112,20 +112,20 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Empty/engines/modern/index.tsx:100",
-            "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:157"
+            "packages/core/src/components/primitives/display/empty/engines/modern/index.tsx:100",
+            "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:157"
           ]
         }
       ],
       "partCensus": {},
-      "stateCensus": "grep of :hover / :active / :focus-visible / :disabled / data-state over packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css returns no match; Empty distinguishes only the content axes data-image, data-has-description and data-has-footer",
+      "stateCensus": "grep of :hover / :active / :focus-visible / :disabled / data-state over packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css returns no match; Empty distinguishes only the content axes data-image, data-has-description and data-has-footer",
       "hostConditionAnchors": {
         "entries": [
           {
             "token": "forced-colors: active",
             "note": "the only conditional block in the modern paint layer; it re-asserts the illustration",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:134"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:134"
             ]
           }
         ],
@@ -134,7 +134,7 @@
       "engineDivergence": {
         "classic": {
           "dataPartEmissions": 0,
-          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1189-1197"
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1189-1197"
         },
         "modern": {
           "dataPartEmissions": 5,
@@ -144,8 +144,8 @@
           "dataPartEmissions": 4,
           "note": "root/image/description/footer; every dimension is an inline literal style object",
           "anchors": [
-            "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:139",
-            "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:145"
+            "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:139",
+            "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:145"
           ]
         }
       },
@@ -160,7 +160,7 @@
           {
             "variable": "--ds-color-bg-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:32",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:32",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -177,7 +177,7 @@
           {
             "variable": "--ds-color-border-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:33",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:33",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -194,7 +194,7 @@
           {
             "variable": "--ds-color-bg-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:36",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:36",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -211,7 +211,7 @@
           {
             "variable": "--ds-color-bg-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:40",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:40",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -228,7 +228,7 @@
           {
             "variable": "--ds-color-bg-tertiary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:58",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:58",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -245,7 +245,7 @@
           {
             "variable": "--ds-color-border-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:59",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:59",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -262,7 +262,7 @@
           {
             "variable": "--ds-empty-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:112",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:112",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -279,7 +279,7 @@
           {
             "variable": "--ds-empty-description-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Empty/engines/rustic/index.tsx:127",
+            "at": "packages/core/src/components/primitives/display/empty/engines/rustic/index.tsx:127",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -296,7 +296,7 @@
           {
             "variable": "--ds-empty-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:32",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -313,7 +313,7 @@
           {
             "variable": "--ds-empty-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:37",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -330,7 +330,7 @@
           {
             "variable": "--ds-spacing-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:37",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -347,7 +347,7 @@
           {
             "variable": "--ds-empty-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:38",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -364,7 +364,7 @@
           {
             "variable": "--ds-spacing-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:38",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -383,7 +383,7 @@
           {
             "variable": "--ds-spacing-2xl",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:38",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -402,7 +402,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:39",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -419,7 +419,7 @@
           {
             "variable": "--ds-empty-simple-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:48",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -436,7 +436,7 @@
           {
             "variable": "--ds-empty-simple-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:49",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:49",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -453,7 +453,7 @@
           {
             "variable": "--ds-spacing-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:49",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:49",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -470,7 +470,7 @@
           {
             "variable": "--ds-empty-simple-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:55",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -487,7 +487,7 @@
           {
             "variable": "--ds-empty-footer-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:59",
             "landsOn": "padding-block-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -504,7 +504,7 @@
           {
             "variable": "--ds-spacing-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:59",
             "landsOn": "padding-block-end",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -521,7 +521,7 @@
           {
             "variable": "--ds-empty-icon-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:67",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -538,7 +538,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:67",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -557,7 +557,7 @@
           {
             "variable": "--ds-empty-icon-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:74",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:74",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -574,7 +574,7 @@
           {
             "variable": "--ds-empty-icon-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:75",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -591,7 +591,7 @@
           {
             "variable": "--ds-empty-icon-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:76",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -608,7 +608,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:76",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -627,7 +627,7 @@
           {
             "variable": "--ds-icon-xl-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:82",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:82",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -644,7 +644,7 @@
           {
             "variable": "--ds-icon-xl-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:83",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -661,7 +661,7 @@
           {
             "variable": "--ds-empty-description-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:89",
             "landsOn": "max-inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -678,7 +678,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:91",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:91",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -695,7 +695,7 @@
           {
             "variable": "--ds-font-family-base",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:92",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:92",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -712,7 +712,7 @@
           {
             "variable": "--ds-empty-description-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:95",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -729,7 +729,7 @@
           {
             "variable": "--ds-empty-description-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:95",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -746,7 +746,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:95",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -765,7 +765,7 @@
           {
             "variable": "--ds-font-weight-medium",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:96",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:96",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -782,7 +782,7 @@
           {
             "variable": "--ds-line-height-relaxed",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:97",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:97",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -799,7 +799,7 @@
           {
             "variable": "--ds-empty-footer-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:110",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:110",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -816,7 +816,7 @@
           {
             "variable": "--ds-spacing-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:110",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:110",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -833,7 +833,7 @@
           {
             "variable": "--ds-button-md-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:111",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:111",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -850,7 +850,7 @@
           {
             "variable": "--ds-spacing-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:112",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:112",
             "landsOn": "margin-block-start",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -867,7 +867,7 @@
           {
             "variable": "--ds-empty-simple-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:121",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:121",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -884,7 +884,7 @@
           {
             "variable": "--ds-empty-simple-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:122",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:122",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -901,7 +901,7 @@
           {
             "variable": "--ds-spacing-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:122",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:122",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -918,7 +918,7 @@
           {
             "variable": "--ds-icon-xl-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:126",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:126",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -935,7 +935,7 @@
           {
             "variable": "--ds-icon-xl-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css:127",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css:127",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -952,7 +952,7 @@
           {
             "variable": "--ds-empty-description-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty/index.css:21",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -969,7 +969,7 @@
           {
             "variable": "--ds-color-text-tertiary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/empty/index.css:21",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -988,7 +988,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/empty.css:37",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css:37",
             "landsOn": "--ds-empty-description-font-size",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1005,7 +1005,7 @@
           {
             "variable": "--ds-empty-icon-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1189",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1189",
             "landsOn": "height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1022,7 +1022,7 @@
           {
             "variable": "--ds-empty-icon-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1193",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1193",
             "landsOn": "fill",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1039,7 +1039,7 @@
           {
             "variable": "--ds-empty-description-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1197",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1197",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1068,7 +1068,7 @@
         "channelRedeclarations": [
           {
             "channel": "--ds-empty-description-font-size",
-            "firstAnchor": "packages/core/src/foundation/tokens/css/presentation/components/empty.css:37"
+            "firstAnchor": "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css:37"
           }
         ],
         "cssCustomPropertyReadsRemovedAsCommentText": 0,
@@ -1099,13 +1099,13 @@
         {
           "channelId": "--_ds-empty-icon-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1179,13 +1179,13 @@
         {
           "channelId": "--_ds-empty-description-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1249,13 +1249,13 @@
         {
           "channelId": "--_ds-empty-description-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1264,13 +1264,13 @@
         {
           "channelId": "--_ds-empty-description-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1279,13 +1279,13 @@
         {
           "channelId": "--_ds-empty-footer-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1294,13 +1294,13 @@
         {
           "channelId": "--_ds-empty-footer-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1309,13 +1309,13 @@
         {
           "channelId": "--_ds-empty-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1324,13 +1324,13 @@
         {
           "channelId": "--_ds-empty-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/list/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1339,13 +1339,13 @@
         {
           "channelId": "--_ds-empty-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1354,13 +1354,13 @@
         {
           "channelId": "--_ds-empty-simple-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1369,13 +1369,13 @@
         {
           "channelId": "--_ds-empty-simple-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1393,7 +1393,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -1418,7 +1418,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ],
         "reviewedFrom": "anatomy"
@@ -1452,7 +1452,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1472,7 +1472,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1551,7 +1551,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1608,7 +1608,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1640,13 +1640,13 @@
         {
           "channelId": "--_ds-empty-icon-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/empty/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/empty"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/empty/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1665,11 +1665,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

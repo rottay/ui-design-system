@@ -8,15 +8,15 @@
     "components": [
       "PatternCommentThread"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/communication/comment-thread",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/communication/comment-thread",
     "publicComponents": [
       "PatternCommentThread"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "92ccd50bdc7a7c8d85750e4f4c0872e231c3deb7c86f6ede7cd49a76b4c6d195"
+    "inventoryRowDigest": "5198cbb65f100220582c7cd15d02fe651d1ee8ca2d71236e5f89f027544141d9"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/communication/comment-thread/index.ts",
-      "packages/core/src/ui/patterns/communication/comment-thread/contracts/index.ts",
-      "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css"
+      "packages/core/src/components/patterns/communication/comment-thread/index.ts",
+      "packages/core/src/components/patterns/communication/comment-thread/contracts/index.ts",
+      "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css"
     ],
     "stableParts": [
       "author",
@@ -106,348 +106,348 @@
           "part": "author",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:89"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:89"
           ]
         },
         {
           "part": "avatar",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:154",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:394",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:140",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:313",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:42"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:154",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:394",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:140",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:313",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:42"
           ]
         },
         {
           "part": "avatar-col",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:153",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:393",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:72"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:153",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:393",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:72"
           ]
         },
         {
           "part": "cancel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:185",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:171",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:63",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:69"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:185",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:63",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:69"
           ]
         },
         {
           "part": "comment",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:151",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:60"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:60"
           ]
         },
         {
           "part": "comment-actions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:222",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:146"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:146"
           ]
         },
         {
           "part": "comment-body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:195",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:117"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:117"
           ]
         },
         {
           "part": "comment-head",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:157",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:82"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:157",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:82"
           ]
         },
         {
           "part": "comment-list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:422"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:422"
           ]
         },
         {
           "part": "comment-main",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:156",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:75"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:75"
           ]
         },
         {
           "part": "comment-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:152",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:63"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:63"
           ]
         },
         {
           "part": "composer",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:322",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:58"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:322",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:58"
           ]
         },
         {
           "part": "composer-main",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:397",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:76"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:397",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:76"
           ]
         },
         {
           "part": "composer-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:392",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:69"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:392",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:69"
           ]
         },
         {
           "part": "delete",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:248",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:211",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:99"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:248",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:211",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:99"
           ]
         },
         {
           "part": "edit",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:238",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:208",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:193",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:92"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:238",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:92"
           ]
         },
         {
           "part": "edit-form",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:173",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:127"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:173",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:127"
           ]
         },
         {
           "part": "edit-textarea",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:49",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:56"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:49",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:56"
           ]
         },
         {
           "part": "edited-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:129"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:129"
           ]
         },
         {
           "part": "edited-mark",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:165",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:110"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:110"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:418",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:343",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:127"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:418",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:343",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:127"
           ]
         },
         {
           "part": "form-actions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:180",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:271",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:407",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:131"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:180",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:271",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:407",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:131"
           ]
         },
         {
           "part": "loading",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:302",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:126"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:302",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:126"
           ]
         },
         {
           "part": "nested-line",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:287",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:245",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:155",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:161",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:181",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:209"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:287",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:155",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:181",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:209"
           ]
         },
         {
           "part": "reaction",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:207",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:195",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:107",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:111"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:207",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:107",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:111"
           ]
         },
         {
           "part": "reactions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:201",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:139"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:139"
           ]
         },
         {
           "part": "replies-truncated",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:307",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:168",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:182"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:307",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:182"
           ]
         },
         {
           "part": "reply",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:226",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:192",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:91"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:226",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:91"
           ]
         },
         {
           "part": "reply-cancel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:275",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:235",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:199",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:70"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:275",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:235",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:70"
           ]
         },
         {
           "part": "reply-form",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:260",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:128"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:128"
           ]
         },
         {
           "part": "reply-submit",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:272",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:228",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:198",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:78",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:85"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:272",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:78",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:85"
           ]
         },
         {
           "part": "reply-textarea",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:219",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:57"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:219",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:57"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:361",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:388",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:301",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:308",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:37",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:50"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:361",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:388",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:301",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:308",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:37",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:50"
           ]
         },
         {
           "part": "save",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:181",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:170",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:196",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:77",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:84"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:181",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:77",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:84"
           ]
         },
         {
           "part": "skeleton",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:376"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:376"
           ]
         },
         {
           "part": "skeleton-list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:368",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:53"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:368",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:53"
           ]
         },
         {
           "part": "submit",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:408",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:330",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:200",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:79",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:86"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:408",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:86"
           ]
         },
         {
           "part": "timestamp",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:163",
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:103",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:128"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:163",
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:103",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:128"
           ]
         }
       ],
@@ -455,29 +455,29 @@
         {
           "token": "active=r.active",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx:187"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx:187"
           ],
           "state": "active"
         },
         {
           "token": "active=r.active ? \"true\" : \"false\"",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:208"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:208"
           ],
           "state": "active"
         },
         {
           "token": "active=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:114"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:114"
           ],
           "state": "active"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx:361",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:50"
+            "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx:361",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:50"
           ],
           "state": "loading"
         }
@@ -486,14 +486,14 @@
         {
           "token": "tenant",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css:32",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:12"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css:32",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:12"
           ]
         },
         {
           "token": "theme",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css:12"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css:12"
           ]
         }
       ],
@@ -501,17 +501,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
             "lines": 335
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/modern/index.tsx",
             "lines": 440
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "lines": 365
           }
         ]
@@ -521,7 +521,7 @@
         "variableCensus": [
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 42,
             "fallback": false,
             "fallbackValue": null,
@@ -534,7 +534,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "16px",
@@ -547,7 +547,7 @@
           },
           {
             "name": "--ds-comment-thread-comment-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-3, 12px)",
@@ -560,7 +560,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "12px",
@@ -573,7 +573,7 @@
           },
           {
             "name": "--ds-comment-thread-comment-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 61,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-3, 12px)",
@@ -586,7 +586,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 61,
             "fallback": true,
             "fallbackValue": "12px",
@@ -599,7 +599,7 @@
           },
           {
             "name": "--ds-comment-thread-row-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-3, 12px)",
@@ -612,7 +612,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "12px",
@@ -625,7 +625,7 @@
           },
           {
             "name": "--ds-comment-thread-composer-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 70,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-6, 24px)",
@@ -638,7 +638,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 70,
             "fallback": true,
             "fallbackValue": "24px",
@@ -651,7 +651,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "8px",
@@ -664,7 +664,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "4px",
@@ -677,7 +677,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 98,
             "fallback": true,
             "fallbackValue": "14px",
@@ -690,7 +690,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 99,
             "fallback": true,
             "fallbackValue": "600",
@@ -703,7 +703,7 @@
           },
           {
             "name": "--ds-line-height-snug",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 100,
             "fallback": true,
             "fallbackValue": "1.375",
@@ -716,7 +716,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 101,
             "fallback": false,
             "fallbackValue": null,
@@ -729,7 +729,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 104,
             "fallback": true,
             "fallbackValue": "12px",
@@ -742,7 +742,7 @@
           },
           {
             "name": "--ds-line-height-snug",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 105,
             "fallback": true,
             "fallbackValue": "1.375",
@@ -755,7 +755,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 106,
             "fallback": false,
             "fallbackValue": null,
@@ -768,7 +768,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 111,
             "fallback": true,
             "fallbackValue": "12px",
@@ -781,7 +781,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 113,
             "fallback": false,
             "fallbackValue": null,
@@ -794,7 +794,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 118,
             "fallback": true,
             "fallbackValue": "8px",
@@ -807,7 +807,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 119,
             "fallback": true,
             "fallbackValue": "14px",
@@ -820,7 +820,7 @@
           },
           {
             "name": "--ds-line-height-relaxed",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 120,
             "fallback": true,
             "fallbackValue": "1.625",
@@ -833,7 +833,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 121,
             "fallback": false,
             "fallbackValue": null,
@@ -846,7 +846,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 129,
             "fallback": true,
             "fallbackValue": "8px",
@@ -859,7 +859,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 134,
             "fallback": true,
             "fallbackValue": "8px",
@@ -872,7 +872,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 135,
             "fallback": true,
             "fallbackValue": "8px",
@@ -885,7 +885,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 143,
             "fallback": true,
             "fallbackValue": "4px",
@@ -898,7 +898,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 144,
             "fallback": true,
             "fallbackValue": "8px",
@@ -911,7 +911,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 150,
             "fallback": true,
             "fallbackValue": "8px",
@@ -924,7 +924,7 @@
           },
           {
             "name": "--ds-comment-thread-rail-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 156,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-2, 8px)",
@@ -937,7 +937,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 156,
             "fallback": true,
             "fallbackValue": "8px",
@@ -950,7 +950,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 157,
             "fallback": true,
             "fallbackValue": "8px",
@@ -963,7 +963,7 @@
           },
           {
             "name": "--ds-comment-thread-rail-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 158,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-3, 12px)",
@@ -976,7 +976,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 158,
             "fallback": true,
             "fallbackValue": "12px",
@@ -989,7 +989,7 @@
           },
           {
             "name": "--ds-comment-thread-rail-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 162,
             "fallback": true,
             "fallbackValue": "1px",
@@ -1002,7 +1002,7 @@
           },
           {
             "name": "--ds-comment-thread-rail-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 163,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1015,7 +1015,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 163,
             "fallback": false,
             "fallbackValue": null,
@@ -1028,7 +1028,7 @@
           },
           {
             "name": "--ds-comment-thread-rail-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 169,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-2, 8px)",
@@ -1041,7 +1041,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 169,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1054,7 +1054,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 170,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1067,7 +1067,7 @@
           },
           {
             "name": "--ds-comment-thread-rail-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "var(--ds-spacing-3, 12px)",
@@ -1080,7 +1080,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 171,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1093,7 +1093,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 172,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1106,7 +1106,7 @@
           },
           {
             "name": "--ds-line-height-snug",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 173,
             "fallback": true,
             "fallbackValue": "1.375",
@@ -1119,7 +1119,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 174,
             "fallback": false,
             "fallbackValue": null,
@@ -1132,7 +1132,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 184,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1145,7 +1145,7 @@
           },
           {
             "name": "--ds-comment-thread-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 201,
             "fallback": true,
             "fallbackValue": "44px",
@@ -1158,7 +1158,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 44,
             "fallback": true,
             "fallbackValue": "#e5e7eb",
@@ -1171,7 +1171,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 45,
             "fallback": false,
             "fallbackValue": null,
@@ -1184,7 +1184,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 52,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1197,7 +1197,7 @@
           },
           {
             "name": "--ds-color-background",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "#fff",
@@ -1210,7 +1210,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 54,
             "fallback": false,
             "fallbackValue": null,
@@ -1223,7 +1223,7 @@
           },
           {
             "name": "--ds-color-neutral-300",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 59,
             "fallback": true,
             "fallbackValue": "#d1d5db",
@@ -1236,7 +1236,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1249,7 +1249,7 @@
           },
           {
             "name": "--ds-color-background",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 66,
             "fallback": true,
             "fallbackValue": "#fff",
@@ -1262,7 +1262,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 67,
             "fallback": false,
             "fallbackValue": null,
@@ -1275,7 +1275,7 @@
           },
           {
             "name": "--ds-color-neutral-300",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 71,
             "fallback": true,
             "fallbackValue": "#d1d5db",
@@ -1288,7 +1288,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 80,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1301,7 +1301,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -1314,7 +1314,7 @@
           },
           {
             "name": "--ds-color-primary-foreground",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 82,
             "fallback": true,
             "fallbackValue": "#fff",
@@ -1327,7 +1327,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -1340,7 +1340,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 95,
             "fallback": false,
             "fallbackValue": null,
@@ -1353,7 +1353,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 102,
             "fallback": true,
             "fallbackValue": "#ef4444",
@@ -1366,7 +1366,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 108,
             "fallback": true,
             "fallbackValue": "8px",
@@ -1379,7 +1379,7 @@
           },
           {
             "name": "--ds-color-text",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -1392,7 +1392,7 @@
           },
           {
             "name": "--ds-color-neutral-300",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 112,
             "fallback": true,
             "fallbackValue": "#d1d5db",
@@ -1405,7 +1405,7 @@
           },
           {
             "name": "--ds-color-primary-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 115,
             "fallback": true,
             "fallbackValue": "#eff6ff",
@@ -1418,7 +1418,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 116,
             "fallback": false,
             "fallbackValue": null,
@@ -1431,7 +1431,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 121,
             "fallback": true,
             "fallbackValue": "#e5e7eb",
@@ -1444,7 +1444,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 130,
             "fallback": false,
             "fallbackValue": null,
@@ -1457,7 +1457,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
             "line": 136,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -1470,7 +1470,7 @@
           },
           {
             "name": "--ds-color-text-tertiary",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
             "line": 142,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.3)",
@@ -1483,7 +1483,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
             "line": 194,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -1496,7 +1496,7 @@
           },
           {
             "name": "--ds-color-border-secondary",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
             "line": 227,
             "fallback": true,
             "fallbackValue": "#f0f0f0",
@@ -1509,7 +1509,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/classic/index.tsx",
             "line": 282,
             "fallback": true,
             "fallbackValue": "rgba(0,0,0,0.45)",
@@ -1522,7 +1522,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 62,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1535,7 +1535,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 70,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1548,7 +1548,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 85,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1561,7 +1561,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 149,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1574,7 +1574,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 150,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1587,7 +1587,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 154,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1600,7 +1600,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 175,
             "fallback": true,
             "fallbackValue": "14px",
@@ -1613,7 +1613,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/comment-thread/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/comment-thread/engines/rustic/index.tsx",
             "line": 191,
             "fallback": true,
             "fallbackValue": "12px",
@@ -1627,289 +1627,289 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 51,
             "literal": "16px",
             "text": "padding-block: var(--ds-spacing-4, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 56,
             "literal": "12px",
             "text": "gap: var(--ds-comment-thread-comment-gap, var(--ds-spacing-3, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 61,
             "literal": "12px",
             "text": "margin-block-end: var(--ds-comment-thread-comment-gap, var(--ds-spacing-3, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 66,
             "literal": "12px",
             "text": "gap: var(--ds-comment-thread-row-gap, var(--ds-spacing-3, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 70,
             "literal": "24px",
             "text": "margin-block-end: var(--ds-comment-thread-composer-gap, var(--ds-spacing-6, 24px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 86,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 87,
             "literal": "4px",
             "text": "margin-block-end: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 98,
             "literal": "14px",
             "text": "font-size: var(--ds-font-size-sm, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 104,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 111,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 118,
             "literal": "8px",
             "text": "margin: 0 0 var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 119,
             "literal": "14px",
             "text": "font-size: var(--ds-font-size-sm, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 129,
             "literal": "8px",
             "text": "margin-block-end: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 134,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 135,
             "literal": "8px",
             "text": "margin-block-start: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 143,
             "literal": "4px",
             "text": "gap: var(--ds-spacing-1, 4px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 144,
             "literal": "8px",
             "text": "margin-block-end: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 150,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 156,
             "literal": "8px",
             "text": "margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 157,
             "literal": "8px",
             "text": "margin-block-start: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 158,
             "literal": "12px",
             "text": "padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 162,
             "literal": "1px",
             "text": "border-inline-start: var(--ds-comment-thread-rail-width, 1px) solid"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 169,
             "literal": "8px",
             "text": "margin-inline-start: var(--ds-comment-thread-rail-offset, var(--ds-spacing-2, 8px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 170,
             "literal": "8px",
             "text": "margin-block-start: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 171,
             "literal": "12px",
             "text": "padding-inline-start: var(--ds-comment-thread-rail-padding, var(--ds-spacing-3, 12px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 172,
             "literal": "12px",
             "text": "font-size: var(--ds-font-size-xs, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 180,
             "literal": "28rem",
             "text": "@container ds-comment-thread (inline-size < 28rem) {"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 184,
             "literal": "8px",
             "text": "padding-inline-start: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
             "line": 201,
             "literal": "44px",
             "text": "min-block-size: var(--ds-comment-thread-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 44,
             "literal": "#e5e7eb",
             "text": "background: var(--ds-color-neutral-200, #e5e7eb);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 52,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 53,
             "literal": "#fff",
             "text": "background: var(--ds-color-background, #fff);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 59,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 59,
             "literal": "#d1d5db",
             "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 65,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 66,
             "literal": "#fff",
             "text": "background: var(--ds-color-background, #fff);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 71,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 71,
             "literal": "#d1d5db",
             "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 80,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 82,
             "literal": "#fff",
             "text": "color: var(--ds-color-primary-foreground, #fff);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 87,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-primary);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 102,
             "literal": "#ef4444",
             "text": "color: var(--ds-color-error, #ef4444);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 108,
             "literal": "8px",
             "text": "border-radius: var(--ds-radius-md, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 112,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 112,
             "literal": "#d1d5db",
             "text": "border: 1px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 115,
             "literal": "#eff6ff",
             "text": "background: var(--ds-color-primary-50, #eff6ff);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 121,
             "literal": "2px",
             "text": "border-left: 2px solid var(--ds-color-neutral-200, #e5e7eb);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/comment-thread/index.css",
             "line": 121,
             "literal": "#e5e7eb",
             "text": "border-left: 2px solid var(--ds-color-neutral-200, #e5e7eb);"
@@ -1944,13 +1944,13 @@
         {
           "channelId": "--_ds-comment-thread-rail-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1967,7 +1967,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -1991,7 +1991,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -2025,13 +2025,13 @@
         {
           "channelId": "--_ds-comment-thread-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2049,7 +2049,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -2070,7 +2070,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -2099,13 +2099,13 @@
         {
           "channelId": "--_ds-comment-thread-comment-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2114,13 +2114,13 @@
         {
           "channelId": "--_ds-comment-thread-composer-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2129,13 +2129,13 @@
         {
           "channelId": "--_ds-comment-thread-rail-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2144,13 +2144,13 @@
         {
           "channelId": "--_ds-comment-thread-rail-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2159,13 +2159,13 @@
         {
           "channelId": "--_ds-comment-thread-row-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2196,13 +2196,13 @@
         {
           "channelId": "--_ds-comment-thread-rail-offset",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2221,13 +2221,13 @@
         {
           "channelId": "--_ds-comment-thread-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/comment-thread"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/comment-thread/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2246,7 +2246,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -2266,7 +2266,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "legibilidad del mensaje: mate; la tinta manda",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -2286,7 +2286,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de conversacion, no chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2306,7 +2306,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -2326,7 +2326,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -2345,7 +2345,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -2371,7 +2371,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2384,7 +2384,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -2430,7 +2430,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2466,7 +2466,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los ticks de estado del mensaje son iconos de la libreria",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -2487,11 +2487,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

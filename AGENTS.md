@@ -6,16 +6,16 @@ these files in order and obey the machine checks before editing.
 ## Read order
 
 1. `CLAUDE.md` — project-wide bootstrap and general rules.
-2. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/README.md` —
+2. `packages/core/scripts/check/modern-rescue/README.md` —
    **only human entry point** for WO-CRA-23: product promise, authority tree,
    fixed scope, lifecycle, resume algorithm, test-truth policy, fences.
-3. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/program/index.json` —
+3. `packages/core/scripts/check/modern-rescue/program/index.json` —
    programme identity, fences, denominators and invariants.
-4. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/customization-model/index.json` —
+4. `packages/core/scripts/check/modern-rescue/customization-model/index.json` —
    operational controls, namespace lifecycle, target/proposed distinction.
-5. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/orchestration/index.json` —
+5. `packages/core/scripts/check/modern-rescue/orchestration/index.json` —
    exact roles, commit policy and routing for this programme.
-6. `packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/check/index.mjs` —
+6. `packages/core/scripts/check/modern-rescue/check/index.mjs` —
    run this to verify the constitution is internally consistent.
 
 
@@ -46,9 +46,9 @@ these files in order and obey the machine checks before editing.
 DT succession: Codex → Kimi K3, by explicit owner order of 2026-08-20
 (decision 13 of the sequencing amendment); Kimi K3 → Codex, by explicit owner
 order of 2026-08-21, which activated the documented backup DT
-(`docs/prompt-codex-continue.md`) after Kimi K3 exhausted its quota; Codex →
+(`docs/history/prompts/architecture-refactor/2026-08/code-audit-continuation/index.md`) after Kimi K3 exhausted its quota; Codex →
 Kimi K3, by explicit owner order of 2026-08-23
-(`docs/prompt-dt-fresh-session-2026-08-23.md`), which consummated the present
+(`docs/history/prompts/architecture-refactor/2026-08/design-lead-session/index.md`), which consummated the present
 succession and left Codex outside the DT seat.
 Each seat was transferred, not removed; exactly one DT authority exists
 before, during and after every succession.
@@ -75,8 +75,8 @@ public API requirement.
 ## Verification command
 
 ```bash
-node packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/check/index.mjs
-node packages/core/scripts/tooling/quality/evidence/programs/modern-rescue/check/index.test.mjs
+node packages/core/scripts/check/modern-rescue/check/index.mjs
+node packages/core/scripts/check/modern-rescue/check/index.test.mjs
 ```
 
 Run these before and after any T-1 constitution edit. Fail-closed on drift.

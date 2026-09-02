@@ -8,15 +8,15 @@
     "components": [
       "Affix"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/navigation/Affix",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/navigation/affix",
     "publicComponents": [
       "Affix"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "741839fa354a0c381cdbf61ecd80990ce4bf68b1e8754b5bb8fdc9cd8a8e7353"
+    "inventoryRowDigest": "9dec20689f4dfa1854d0667601b0c0defc69d155067db17509e0f6801ad3790b"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/affix.css",
-      "packages/core/src/ui/primitives/navigation/Affix/index.ts",
-      "packages/core/src/ui/primitives/navigation/Affix/contracts/index.ts",
-      "packages/core/src/ui/primitives/navigation/Affix/runtime/rendering/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Affix/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Affix/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Affix/engines/rustic/index.tsx"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/affix/index.css",
+      "packages/core/src/components/primitives/navigation/affix/index.ts",
+      "packages/core/src/components/primitives/navigation/affix/contracts/index.ts",
+      "packages/core/src/components/primitives/navigation/affix/runtime/rendering/index.tsx",
+      "packages/core/src/components/primitives/navigation/affix/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/navigation/affix/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/navigation/affix/engines/rustic/index.tsx"
     ],
     "stableParts": [
       "root",
@@ -48,9 +48,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The affixed keyline is a paint-only ::after with pointer-events:none, so a tenant cannot make it capture pointer input. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:80-91]",
-      "The keyline is a pseudo-element rather than a composed box-shadow layer specifically so a tenant setting --ds-affix-affixed-shadow: none cannot delete the optical edge. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:31-35]",
-      "Under forced-colors the affixed bar is forced to system Canvas with box-shadow:none, backdrop-filter:none and a 1px ButtonText cut on the content-facing edge; no --ds-* channel participates, so no tenant value can reintroduce a transparent fixed bar there. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:113-124]"
+      "The affixed keyline is a paint-only ::after with pointer-events:none, so a tenant cannot make it capture pointer input. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:80-91]",
+      "The keyline is a pseudo-element rather than a composed box-shadow layer specifically so a tenant setting --ds-affix-affixed-shadow: none cannot delete the optical edge. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:31-35]",
+      "Under forced-colors the affixed bar is forced to system Canvas with box-shadow:none, backdrop-filter:none and a 1px ButtonText cut on the content-facing edge; no --ds-* channel participates, so no tenant value can reintroduce a transparent fixed bar there. [at src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:113-124]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -72,21 +72,21 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/Affix/runtime/rendering/index.tsx:33",
-            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:402",
-            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:442",
-            "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:318",
-            "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:357"
+            "src/components/primitives/navigation/affix/runtime/rendering/index.tsx:33",
+            "src/components/primitives/navigation/affix/engines/modern/index.tsx:402",
+            "src/components/primitives/navigation/affix/engines/modern/index.tsx:442",
+            "src/components/primitives/navigation/affix/engines/rustic/index.tsx:318",
+            "src/components/primitives/navigation/affix/engines/rustic/index.tsx:357"
           ]
         },
         {
           "part": "placeholder",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:425"
+            "src/components/primitives/navigation/affix/engines/modern/index.tsx:425"
           ],
           "citationsUnverified": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "anchorStatus": "verified"
         }
@@ -96,18 +96,18 @@
           "token": "data-sticky",
           "meaning": "affixed (advanced onChange mode only)",
           "at": [
-            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:443",
-            "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:358",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:60"
+            "src/components/primitives/navigation/affix/engines/modern/index.tsx:443",
+            "src/components/primitives/navigation/affix/engines/rustic/index.tsx:358",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:60"
           ]
         },
         {
           "token": "data-affix-edge='top'|'bottom'",
           "meaning": "content-facing edge selector",
           "at": [
-            "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:403",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:92",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:95"
+            "src/components/primitives/navigation/affix/engines/modern/index.tsx:403",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:92",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:95"
           ]
         }
       ],
@@ -117,20 +117,20 @@
             "token": "@media (prefers-reduced-motion: reduce)",
             "meaning": "reduced motion",
             "at": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:101"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:101"
             ]
           },
           {
             "token": "@media (forced-colors: active)",
             "meaning": "forced colors",
             "at": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:113"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:113"
             ]
           }
         ],
         "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
       },
-      "engineDivergence": "classic = Ant Affix wrapper (src/ui/primitives/navigation/Affix/engines/classic/index.tsx:47 imports `Affix as AntAffix` from 'antd'); it stamps no data-part and reads no --ds-* variable (0 matches in that file). modern stamps root + placeholder + data-affix-edge and carries all governed paint in the skin file. rustic stamps only root and DECLARES four family channels inline (--ds-affix-z-index :289, --ds-affix-offset-top :290, --ds-affix-offset-bottom :291, --ds-affix-transition :292) then reads --ds-affix-transition with NO fallback at src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:335 and :340.",
+      "engineDivergence": "classic = Ant Affix wrapper (src/components/primitives/navigation/affix/engines/classic/index.tsx:47 imports `Affix as AntAffix` from 'antd'); it stamps no data-part and reads no --ds-* variable (0 matches in that file). modern stamps root + placeholder + data-affix-edge and carries all governed paint in the skin file. rustic stamps only root and DECLARES four family channels inline (--ds-affix-z-index :289, --ds-affix-offset-top :290, --ds-affix-offset-bottom :291, --ds-affix-transition :292) then reads --ds-affix-transition with NO fallback at src/components/primitives/navigation/affix/engines/rustic/index.tsx:335 and :340.",
       "variableReadCensus": {
         "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
         "variableCensus": {
@@ -171,14 +171,14 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "z-index",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:44",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
               "declarationStatus": "COMPILER_OR_ENGINE_STAMPED",
               "declaredAt": [
-                "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:232"
+                "src/components/primitives/navigation/affix/engines/modern/index.tsx:232"
               ],
               "outerRungRootDefault": false,
               "rootDefaultAt": []
@@ -191,7 +191,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "z-index",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:44",
               "hasFallback": true,
               "fallback": "var(--ds-z-index-affix, 100)",
               "layer": "modern-skin-css",
@@ -209,7 +209,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "z-index",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:44",
               "hasFallback": true,
               "fallback": "100",
               "layer": "modern-skin-css",
@@ -227,7 +227,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -245,22 +245,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -271,7 +271,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -289,18 +289,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -311,7 +311,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": true,
               "fallback": "var(--ds-motion-normal)",
               "layer": "modern-skin-css",
@@ -329,22 +329,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:926",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+                "src/foundation/tokens/css/runtime/personality/index.css:926",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
               ]
             },
             {
@@ -355,7 +355,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -373,18 +373,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -397,7 +397,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
@@ -417,18 +417,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64",
               "hasFallback": true,
               "fallback": "var(--ds-surface-card)",
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:332"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:332"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:332"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:332"
               ]
             },
             {
@@ -441,20 +441,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+                "tests/fixtures/tenants/quality-evidence/index.ts:320",
+                "tests/fixtures/tenants/quality-evidence/index.ts:425",
+                "tests/fixtures/tenants/quality-evidence/index.ts:540"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:265"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:265"
               ]
             },
             {
@@ -467,7 +467,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:65",
               "hasFallback": true,
               "fallback": "var(--ds-elevation-1)",
               "layer": "modern-skin-css",
@@ -487,20 +487,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:65",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:800",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:800",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:968",
                 "src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:87"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:800"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:800"
               ]
             },
             {
@@ -513,7 +513,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-radius",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:66",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:66",
               "hasFallback": true,
               "fallback": "0",
               "layer": "modern-skin-css",
@@ -533,7 +533,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "backdrop-filter",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:67",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:67",
               "hasFallback": true,
               "fallback": "none",
               "layer": "modern-skin-css",
@@ -554,7 +554,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
@@ -575,21 +575,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:148",
-                "src/ui/patterns/customization/brand-studio/index.tsx:166",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+                "src/components/patterns/customization/brand-studio/index.tsx:148",
+                "src/components/patterns/customization/brand-studio/index.tsx:166",
+                "tests/fixtures/tenants/quality-evidence/index.ts:316"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:231",
-                "src/foundation/tokens/css/foundation/themes/default.css:2136"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:231",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2136"
               ]
             },
             {
@@ -603,20 +603,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-affix.rottay-affix--modern[data-part='root'][data-sticky]::after",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+                "tests/fixtures/tenants/quality-evidence/index.ts:358",
+                "tests/fixtures/tenants/quality-evidence/index.ts:481",
+                "tests/fixtures/tenants/quality-evidence/index.ts:570"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/premium.css:27"
+                "src/foundation/tokens/css/foundation/animations/premium/index.css:27"
               ]
             },
             {
@@ -629,18 +629,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/affix.css:17",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/affix/index.css:17",
               "hasFallback": true,
               "fallback": "0 2px 8px rgba(0, 0, 0, 0.15)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-affix.rottay-affix--rustic[data-part='root'][data-sticky]",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2079"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2079"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2079"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2079"
               ]
             },
             {
@@ -651,7 +651,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "(unresolved-property-in-ts)",
-              "readAt": "src/ui/primitives/navigation/Affix/engines/modern/index.tsx:229",
+              "readAt": "src/components/primitives/navigation/affix/engines/modern/index.tsx:229",
               "hasFallback": true,
               "fallback": "${AFFIX_DEFAULTS.zIndex}",
               "layer": "engine-inline:modern",
@@ -669,14 +669,14 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:335",
+              "readAt": "src/components/primitives/navigation/affix/engines/rustic/index.tsx:335",
               "hasFallback": false,
               "fallback": null,
               "layer": "engine-inline:rustic",
               "selector": null,
               "declarationStatus": "COMPILER_OR_ENGINE_STAMPED",
               "declaredAt": [
-                "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:292"
+                "src/components/primitives/navigation/affix/engines/rustic/index.tsx:292"
               ],
               "outerRungRootDefault": false,
               "rootDefaultAt": []
@@ -689,14 +689,14 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:340",
+              "readAt": "src/components/primitives/navigation/affix/engines/rustic/index.tsx:340",
               "hasFallback": false,
               "fallback": null,
               "layer": "engine-inline:rustic",
               "selector": null,
               "declarationStatus": "COMPILER_OR_ENGINE_STAMPED",
               "declaredAt": [
-                "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:292"
+                "src/components/primitives/navigation/affix/engines/rustic/index.tsx:292"
               ],
               "outerRungRootDefault": false,
               "rootDefaultAt": []
@@ -706,123 +706,123 @@
         "undeclaredReads": [
           {
             "variable": "--ds-z-affix",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:44"
           },
           {
             "variable": "--ds-z-index-affix",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:44"
           },
           {
             "variable": "--ds-affix-transition-duration",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49"
           },
           {
             "variable": "--ds-affix-transition-timing",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49"
           },
           {
             "variable": "--ds-affix-affixed-bg",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64"
           },
           {
             "variable": "--ds-affix-affixed-shadow",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:65"
           },
           {
             "variable": "--ds-affix-affixed-radius",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:66"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:66"
           },
           {
             "variable": "--ds-affix-affixed-backdrop",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:67"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:67"
           },
           {
             "variable": "--_ds-affix-affixed-keyline",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90"
           }
         ],
         "readsWithoutFallback": [
           {
             "variable": "--ds-affix-runtime-z-index",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:44",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:44",
             "observableProperty": "z-index"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:49",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:49",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-affix-affixed-bg",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-elevation-1",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:65",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:65",
             "observableProperty": "box-shadow"
           },
           {
             "variable": "--_ds-affix-affixed-keyline",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-effect-intensity",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:90",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:90",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-affix-transition",
-            "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:335",
+            "readAt": "src/components/primitives/navigation/affix/engines/rustic/index.tsx:335",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-affix-transition",
-            "readAt": "src/ui/primitives/navigation/Affix/engines/rustic/index.tsx:340",
+            "readAt": "src/components/primitives/navigation/affix/engines/rustic/index.tsx:340",
             "observableProperty": "transition"
           }
         ],
         "inertFallbackChains": {
-          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css:164-178.",
+          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css:164-178.",
           "blockingCount": 2,
           "testFixtureOnlyCount": 0,
           "entries": [
             {
               "variable": "--ds-material-card-background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:64",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:64",
               "fallback": "var(--ds-surface-card)",
               "observableProperty": "background",
               "parts": [
                 "root"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:332"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:332"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -832,14 +832,14 @@
             },
             {
               "variable": "--ds-affix-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/affix.css:17",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/affix/index.css:17",
               "fallback": "0 2px 8px rgba(0, 0, 0, 0.15)",
               "observableProperty": "box-shadow",
               "parts": [
                 "root"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2079"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2079"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -855,7 +855,7 @@
         "testOrStoryOnlyDeclaredReads": [],
         "hardcodedValues": [
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:84",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:84",
             "property": "block-size",
             "literals": [
               "1px"
@@ -866,7 +866,7 @@
             "classification": "STRUCTURAL_HAIRLINE"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:120",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:120",
             "property": "border-block-end",
             "literals": [
               "1px"
@@ -879,7 +879,7 @@
             "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix.css:123",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css:123",
             "property": "border-block-start",
             "literals": [
               "1px"
@@ -941,13 +941,13 @@
         {
           "channelId": "--_ds-affix-active-indicator",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -957,13 +957,13 @@
         {
           "channelId": "--_ds-affix-affixed-backdrop",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -980,7 +980,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1005,7 +1005,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1032,13 +1032,13 @@
         {
           "channelId": "--_ds-affix-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1058,13 +1058,13 @@
         {
           "channelId": "--_ds-affix-affixed-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1083,13 +1083,13 @@
         {
           "channelId": "--_ds-affix-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1109,13 +1109,13 @@
         {
           "channelId": "--_ds-affix-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1134,7 +1134,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1148,13 +1148,13 @@
         {
           "channelId": "--_ds-affix-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1163,13 +1163,13 @@
         {
           "channelId": "--_ds-affix-transition-timing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1205,7 +1205,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "nav chrome mate; el estado activo lo da sidebar-tone, no efectos",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1253,7 +1253,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el fondo del chrome de navegacion lo emite sidebar-tone (seis hojas); una segunda fuente viola L4",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1267,13 +1267,13 @@
         {
           "channelId": "--_ds-affix-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1297,7 +1297,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1353,7 +1353,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1385,13 +1385,13 @@
         {
           "channelId": "--_ds-affix-icon-fill-mode",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/affix"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/affix/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1411,11 +1411,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

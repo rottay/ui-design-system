@@ -8,15 +8,15 @@
     "components": [
       "FormField"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/FormField",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/form-field",
     "publicComponents": [
       "FormField"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "6ba3fa7d6ea7d4a9d62bfa65f315e43092934b9d2e32219913b09f81a6ac481a"
+    "inventoryRowDigest": "47dd67e6912fd55b9b7803f5b3790c9475fde04961fa94d3e57cc86c0a5dd27f"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css",
-      "packages/core/src/ui/primitives/inputs/FormField"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css",
+      "packages/core/src/components/primitives/inputs/form-field"
     ],
     "stableParts": [
       "label",
@@ -58,8 +58,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "FormField clones aria-describedby, aria-invalid and aria-required onto its control child; the control does not have to know it is inside a field. [at packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:137, packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:138, packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:139]",
-      "The error message is a role=\"alert\" with a stable id referenced by the cloned aria-describedby. [at packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:87]"
+      "FormField clones aria-describedby, aria-invalid and aria-required onto its control child; the control does not have to know it is inside a field. [at packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:137, packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:138, packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:139]",
+      "The error message is a role=\"alert\" with a stable id referenced by the cloned aria-describedby. [at packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:87]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -82,9 +82,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:119",
-            "packages/core/src/ui/primitives/inputs/FormField/engines/rustic/index.tsx:125",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:79"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:119",
+            "packages/core/src/components/primitives/inputs/form-field/engines/rustic/index.tsx:125",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:79"
           ]
         },
         {
@@ -92,9 +92,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:87",
-            "packages/core/src/ui/primitives/inputs/FormField/engines/rustic/index.tsx:152",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:122"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:87",
+            "packages/core/src/components/primitives/inputs/form-field/engines/rustic/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:122"
           ]
         },
         {
@@ -102,9 +102,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:107",
-            "packages/core/src/ui/primitives/inputs/FormField/engines/rustic/index.tsx:121",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:21"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:107",
+            "packages/core/src/components/primitives/inputs/form-field/engines/rustic/index.tsx:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:21"
           ]
         },
         {
@@ -112,8 +112,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:31"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:31"
           ]
         },
         {
@@ -121,8 +121,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:91",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:180"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:91",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:180"
           ]
         },
         {
@@ -130,9 +130,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:121",
-            "packages/core/src/ui/primitives/inputs/FormField/engines/rustic/index.tsx:129",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:97"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:121",
+            "packages/core/src/components/primitives/inputs/form-field/engines/rustic/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:97"
           ]
         },
         {
@@ -140,8 +140,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:54"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:54"
           ]
         },
         {
@@ -149,8 +149,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:125",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:103"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:125",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:103"
           ]
         },
         {
@@ -158,9 +158,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:97",
-            "packages/core/src/ui/primitives/inputs/FormField/engines/rustic/index.tsx:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:151"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:97",
+            "packages/core/src/components/primitives/inputs/form-field/engines/rustic/index.tsx:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:151"
           ]
         },
         {
@@ -168,8 +168,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:126",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:50"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:50"
           ]
         },
         {
@@ -177,8 +177,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:92",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:196"
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:196"
           ]
         },
         {
@@ -186,9 +186,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/FormField/contracts/index.ts:82",
-            "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx:146",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117"
+            "packages/core/src/components/primitives/inputs/form-field/contracts/index.ts:82",
+            "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117"
           ]
         }
       ],
@@ -198,7 +198,7 @@
           "scoutAnchorClaim": "element:from, element:to",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:168"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:168"
           ]
         }
       ],
@@ -207,7 +207,7 @@
           "token": "data-disabled='true'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:141"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:141"
           ],
           "state": "disabled"
         },
@@ -215,7 +215,7 @@
           "token": "data-invalid='true'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:130"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:130"
           ],
           "state": "invalid"
         },
@@ -223,7 +223,7 @@
           "token": "pseudo:focus-within",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:141"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:141"
           ],
           "state": "focus-within"
         }
@@ -233,35 +233,35 @@
           "token": "data-layout='horizontal'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:42"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:42"
           ]
         },
         {
           "token": "data-size='lg'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:223"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:223"
           ]
         },
         {
           "token": "data-size='sm'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:208"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:208"
           ]
         },
         {
           "token": "data-reserve-message='true'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117"
           ]
         },
         {
           "token": "data-size='md'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:219"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:219"
           ]
         }
       ],
@@ -270,84 +270,84 @@
           "token": "data-part='root'",
           "occurrences": 73,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:21"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:21"
           ]
         },
         {
           "token": "data-part='label'",
           "occurrences": 16,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:79"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:79"
           ]
         },
         {
           "token": "data-part='error-message'",
           "occurrences": 13,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:122"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:122"
           ]
         },
         {
           "token": "data-part='layout'",
           "occurrences": 9,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:31"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:31"
           ]
         },
         {
           "token": "data-part='help-text'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:122"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:122"
           ]
         },
         {
           "token": "data-part='error-icon'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:180"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:180"
           ]
         },
         {
           "token": "data-part='label-wrap'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:50"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:50"
           ]
         },
         {
           "token": "data-part='required-mark'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:97"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:97"
           ]
         },
         {
           "token": "data-part='body'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:50"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:50"
           ]
         },
         {
           "token": "data-part='control-slot'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:50"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:50"
           ]
         },
         {
           "token": "data-part='error-text'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:196"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:196"
           ]
         },
         {
           "token": "data-part='message-region'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117"
           ]
         }
       ],
@@ -355,22 +355,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/FormField/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/form-field/engines/classic/index.tsx",
             "lines": 87
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/FormField/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/form-field/engines/modern/index.tsx",
             "lines": 160
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/FormField/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/form-field/engines/rustic/index.tsx",
             "lines": 166
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "root",
           "layout",
@@ -488,7 +488,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:151",
                 "part": "help-text",
                 "property": "color",
                 "hasFallback": true,
@@ -516,7 +516,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:224",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:224",
                 "part": "root",
                 "property": "--ds-input-helper-font-size",
                 "hasFallback": true,
@@ -544,7 +544,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:223",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:223",
                 "part": "root",
                 "property": "--ds-input-label-font-size",
                 "hasFallback": true,
@@ -572,7 +572,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:99",
                 "part": "required-mark",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -600,7 +600,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:209",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:209",
                 "part": "root",
                 "property": "--ds-input-helper-font-size",
                 "hasFallback": true,
@@ -628,7 +628,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:208",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:208",
                 "part": "root",
                 "property": "--ds-input-label-font-size",
                 "hasFallback": true,
@@ -656,7 +656,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:81",
                 "part": "label",
                 "property": "font-family",
                 "hasFallback": true,
@@ -691,28 +691,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:98",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:98",
                 "part": "required-mark",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:130",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:158",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:158",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:192",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:192",
                 "part": "error-icon",
                 "property": "color",
                 "hasFallback": false,
@@ -744,7 +744,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:141",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
@@ -777,14 +777,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:80",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:151",
                 "part": "help-text",
                 "property": "color",
                 "hasFallback": false,
@@ -816,7 +816,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:151",
                 "part": "help-text",
                 "property": "color",
                 "hasFallback": false,
@@ -847,7 +847,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:75",
                 "part": "label-wrap",
                 "property": "padding-block-start",
                 "hasFallback": false,
@@ -878,7 +878,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:223",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:223",
                 "part": "root",
                 "property": "--ds-input-label-font-size",
                 "hasFallback": false,
@@ -911,14 +911,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:82",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:82",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:224",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:224",
                 "part": "root",
                 "property": "--ds-input-helper-font-size",
                 "hasFallback": false,
@@ -954,28 +954,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117",
                 "part": "message-region",
                 "property": "min-block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:123",
                 "part": "error-message",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:208",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:208",
                 "part": "root",
                 "property": "--ds-input-label-font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:209",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:209",
                 "part": "root",
                 "property": "--ds-input-helper-font-size",
                 "hasFallback": false,
@@ -1006,7 +1006,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:99",
                 "part": "required-mark",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -1038,14 +1038,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:83",
                 "part": "label",
                 "property": "font-weight",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:159",
                 "part": "error-message",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -1077,7 +1077,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:30",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:30",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
@@ -1108,7 +1108,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:200",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:200",
                 "part": "root",
                 "property": "opacity",
                 "hasFallback": true,
@@ -1142,14 +1142,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:38",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:38",
                 "part": "layout",
                 "property": "gap",
                 "hasFallback": true,
                 "fallback": "calc(var(--ds-input-label-margin-bottom) * var(--ds-rhythm-effective-scale, 1))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:232",
                 "part": "layout",
                 "property": "row-gap",
                 "hasFallback": true,
@@ -1180,7 +1180,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:44",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:44",
                 "part": "layout",
                 "property": "column-gap",
                 "hasFallback": true,
@@ -1211,14 +1211,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:55",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:55",
                 "part": "label-wrap",
                 "property": "padding-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:75",
                 "part": "label-wrap",
                 "property": "padding-block-start",
                 "hasFallback": true,
@@ -1248,7 +1248,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:42",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:42",
                 "part": "layout",
                 "property": "grid-template-columns",
                 "hasFallback": true,
@@ -1279,7 +1279,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:97",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:97",
                 "part": "required-mark",
                 "property": "margin-inline-start",
                 "hasFallback": false,
@@ -1311,7 +1311,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:34",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:34",
                 "part": "help-text",
                 "property": "color",
                 "hasFallback": true,
@@ -1343,7 +1343,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:22",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:22",
                 "part": "label",
                 "property": "color",
                 "hasFallback": true,
@@ -1375,7 +1375,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:26",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:26",
                 "part": "required-mark",
                 "property": "color",
                 "hasFallback": true,
@@ -1408,21 +1408,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:181",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:181",
                 "part": "error-icon",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "14px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:182",
                 "part": "error-icon",
                 "property": "block-size",
                 "hasFallback": true,
                 "fallback": "14px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:188",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:188",
                 "part": "error-icon",
                 "property": "margin-block-start",
                 "hasFallback": true,
@@ -1454,7 +1454,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:24",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:24",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -1486,7 +1486,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:204",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
@@ -1517,7 +1517,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:200",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:200",
                 "part": "root",
                 "property": "opacity",
                 "hasFallback": false,
@@ -1549,7 +1549,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:158",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:158",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
@@ -1582,21 +1582,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:130",
                 "part": "label",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:158",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:158",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-error-color, var(--ds-color-error))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:192",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:192",
                 "part": "error-icon",
                 "property": "color",
                 "hasFallback": true,
@@ -1627,7 +1627,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:159",
                 "part": "error-message",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -1658,7 +1658,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:81",
                 "part": "label",
                 "property": "font-family",
                 "hasFallback": false,
@@ -1690,7 +1690,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:151",
                 "part": "help-text",
                 "property": "color",
                 "hasFallback": true,
@@ -1724,14 +1724,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117",
                 "part": "message-region",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-font-size-xs)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:123",
                 "part": "error-message",
                 "property": "font-size",
                 "hasFallback": true,
@@ -1766,21 +1766,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117",
                 "part": "message-region",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-line-height-snug)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:124",
                 "part": "error-message",
                 "property": "line-height",
                 "hasFallback": true,
                 "fallback": "var(--ds-line-height-snug)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:188",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:188",
                 "part": "error-icon",
                 "property": "margin-block-start",
                 "hasFallback": true,
@@ -1812,7 +1812,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:80",
                 "part": "label",
                 "property": "color",
                 "hasFallback": true,
@@ -1843,7 +1843,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:204",
                 "part": "label",
                 "property": "color",
                 "hasFallback": true,
@@ -1875,7 +1875,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:82",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:82",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": true,
@@ -1906,7 +1906,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:83",
                 "part": "label",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -1938,7 +1938,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:84",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:84",
                 "part": "label",
                 "property": "letter-spacing",
                 "hasFallback": true,
@@ -1972,14 +1972,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:75",
                 "part": "label-wrap",
                 "property": "padding-block-start",
                 "hasFallback": true,
                 "fallback": "var(--ds-line-height-snug)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:85",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:85",
                 "part": "label",
                 "property": "line-height",
                 "hasFallback": true,
@@ -2013,14 +2013,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:38",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:38",
                 "part": "layout",
                 "property": "gap",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:232",
                 "part": "layout",
                 "property": "row-gap",
                 "hasFallback": false,
@@ -2051,7 +2051,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:98",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:98",
                 "part": "required-mark",
                 "property": "color",
                 "hasFallback": true,
@@ -2082,7 +2082,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:226",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:226",
                 "part": "root",
                 "property": "--_ds-form-field-control-height",
                 "hasFallback": false,
@@ -2115,14 +2115,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:75",
                 "part": "label-wrap",
                 "property": "padding-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:219",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:219",
                 "part": "root",
                 "property": "--_ds-form-field-control-height",
                 "hasFallback": false,
@@ -2153,7 +2153,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:104",
                 "part": "body",
                 "property": "gap",
                 "hasFallback": true,
@@ -2184,7 +2184,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:215",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:215",
                 "part": "root",
                 "property": "--_ds-form-field-control-height",
                 "hasFallback": false,
@@ -2215,7 +2215,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:93",
                 "part": "label",
                 "property": "transition",
                 "hasFallback": false,
@@ -2246,7 +2246,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:93",
                 "part": "label",
                 "property": "transition",
                 "hasFallback": false,
@@ -2284,28 +2284,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:75",
                 "part": "label-wrap",
                 "property": "padding-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:85",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:85",
                 "part": "label",
                 "property": "line-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:117",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:117",
                 "part": "message-region",
                 "property": "min-block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:124",
                 "part": "error-message",
                 "property": "line-height",
                 "hasFallback": false,
@@ -2336,7 +2336,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:163",
                 "part": "error-message",
                 "property": "animation",
                 "hasFallback": false,
@@ -2368,7 +2368,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:163",
                 "part": "error-message",
                 "property": "animation",
                 "hasFallback": false,
@@ -2402,14 +2402,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:38",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:38",
                 "part": "layout",
                 "property": "gap",
                 "hasFallback": true,
                 "fallback": "1"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:232",
                 "part": "layout",
                 "property": "row-gap",
                 "hasFallback": true,
@@ -2441,14 +2441,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:104",
                 "part": "body",
                 "property": "gap",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:157",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:157",
                 "part": "error-message",
                 "property": "gap",
                 "hasFallback": false,
@@ -2479,7 +2479,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:44",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:44",
                 "part": "layout",
                 "property": "column-gap",
                 "hasFallback": false,
@@ -2510,7 +2510,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:27",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:27",
                 "part": "root",
                 "property": "scroll-margin-block",
                 "hasFallback": true,
@@ -2541,7 +2541,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css:90",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css:90",
                 "part": "label",
                 "property": "text-transform",
                 "hasFallback": true,
@@ -2574,7 +2574,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:22",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:22",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -2582,7 +2582,7 @@
             "declaration": "color: var(--ds-form-label-color, #374151);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:26",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:26",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -2590,7 +2590,7 @@
             "declaration": "color: var(--ds-form-required-color, #ef4444);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:30",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:30",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -2598,7 +2598,7 @@
             "declaration": "color: var(--ds-form-error-color, #ef4444);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field.css:34",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-field/index.css:34",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -2666,13 +2666,13 @@
         {
           "channelId": "--_ds-form-field-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2682,13 +2682,13 @@
         {
           "channelId": "--_ds-form-field-helper-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2697,13 +2697,13 @@
         {
           "channelId": "--_ds-input-helper-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2712,13 +2712,13 @@
         {
           "channelId": "--_ds-input-label-color-disabled",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2727,13 +2727,13 @@
         {
           "channelId": "--_ds-input-label-required-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2742,13 +2742,13 @@
         {
           "channelId": "--_ds-form-field-error-icon-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2758,13 +2758,13 @@
         {
           "channelId": "--_ds-form-field-error-message-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2820,13 +2820,13 @@
         {
           "channelId": "--_ds-form-field-sm-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2835,13 +2835,13 @@
         {
           "channelId": "--_ds-form-field-lg-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2850,13 +2850,13 @@
         {
           "channelId": "--_ds-form-field-sm-helper-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2865,13 +2865,13 @@
         {
           "channelId": "--_ds-form-field-lg-helper-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2880,13 +2880,13 @@
         {
           "channelId": "--_ds-input-label-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2941,13 +2941,13 @@
         {
           "channelId": "--_ds-form-field-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2956,13 +2956,13 @@
         {
           "channelId": "--_ds-form-field-horizontal-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2971,13 +2971,13 @@
         {
           "channelId": "--_ds-form-field-label-offset-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2986,13 +2986,13 @@
         {
           "channelId": "--_ds-form-field-label-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3001,13 +3001,13 @@
         {
           "channelId": "--_ds-form-field-required-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/input/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3016,13 +3016,13 @@
         {
           "channelId": "--_ds-form-field-error-icon-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3178,13 +3178,13 @@
         {
           "channelId": "--_ds-form-field-label-color-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/form-field"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3208,7 +3208,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3264,7 +3264,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3292,7 +3292,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/form-field/index.css"
         ]
       }
     },
@@ -3338,11 +3338,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

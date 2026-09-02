@@ -20,7 +20,7 @@ Static fleet demand, counting real source imports and the Evnto icon barrel:
 | --- | ---: | ---: | --- |
 | BitHire | 37 specifiers in 3 files | 32 | legacy public landing |
 | Platform | 989 specifiers in 195 files | 224 | 95 files mix Lucide and DS icons |
-| Evnto | 768 specifiers through 113 barrel consumers | 183 | wildcard `src/ui/icons` re-export |
+| Evnto | 768 specifiers through 113 barrel consumers | 183 | wildcard `src/components/icons` re-export |
 | Fleet union | — | 312 | 17 concepts occur in every app |
 
 BitHire also has 95 files coupled to the `LucideIcon` type. The design system

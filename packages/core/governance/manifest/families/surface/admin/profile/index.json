@@ -8,15 +8,15 @@
     "components": [
       "ProfileSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/admin",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/admin/profile",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/admin",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/admin/profile",
     "publicComponents": [
       "ProfileSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "c31e885fceccc0b2bc3395a5e6618f0b39b447ccaeec27f477bd082ee28e0dfe"
+    "inventoryRowDigest": "497d58c569d7a87304df3e3347cd4da2bb594f3c3ba0d112fe0218d21d16579e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/admin/profile",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+      "packages/core/src/components/surfaces/presentation/pages/admin/profile",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
     ],
     "stableParts": [
       "root"
@@ -85,27 +85,27 @@
             "cssRuleBlocks": 0,
             "declarationSites": 0,
             "dsChannelReads": 0,
-            "skinFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+            "skinFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
             "skinFileLines": 27,
             "skinFileRuleLines": 0
           },
           "evidence": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css is 27 lines and every one of them is comment; the file contains zero selectors and zero declarations.",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css is 27 lines and every one of them is comment; the file contains zero selectors and zero declarations.",
             "Its own text: 'This file therefore intentionally carries NO paint rules today: the BEM hooks (ds-profile__section-card, ds-profile__muted-text, ds-profile__field-value) remain as pinned anatomy/landing hooks only.'",
             "Same file records two further deliberate omissions: the retired doubled-attribute selector [data-part='root'][data-part='root'] (repetition forbidden in Modern selectors, owner directive, 4th tanda) and 'FORCED COLORS: no block on purpose'.",
             "The TSX still emits the anatomy: className tokens ds-surface, ds-profile, ds-profile__section-card, ds-profile__muted-text, ds-profile__field-value."
           ],
           "interpretation": "The anatomy is real and pinned; the paint is absent by decision, not by oversight. No anatomy is manufactured for this family and no cell is claimed APPLICABLE on the strength of a class name.",
-          "cellConsequence": "All 20 control cells are unsupported by any paint rule in this family. Whether they read NOT_APPLICABLE_WITH_REASON or INVARIANT_WITH_REASON is an owner ruling (see unresolved U-2); this scout supplies the evidence, not the disposition."
+          "cellConsequence": "All 21 control cells are unsupported by any paint rule in this family. Whether they read NOT_APPLICABLE_WITH_REASON or INVARIANT_WITH_REASON is an owner ruling (see unresolved U-2); this scout supplies the evidence, not the disposition."
         }
       },
       "measuredAbsence": {
         "finding": "MEASURED ABSENCE, stated by the source itself. `profile.css` is 27 lines of comment and no rule: \"This file therefore intentionally carries NO paint rules today: the BEM hooks (`ds-profile__section-card`, `ds-profile__muted-text`, `ds-profile__field-value`) remain as pinned anatomy/landing hooks only\" (profile.css:14-17). The surface composes public primitives and kits, each of which owns its own chrome, states and forced-colors treatment. The absence is deliberate and documented, not an unmeasured gap.",
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
         "cellDisposition": "UNKNOWN — the 20 cells of this family await the owner disposition ruling. This pass records the absence and its source evidence; it does not dispose of a single cell."
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
         "rootAnchor": null,
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": []
@@ -142,7 +142,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -163,13 +163,13 @@
         {
           "channelId": "--_ds-profile-name-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/profile"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -189,13 +189,13 @@
         {
           "channelId": "--_ds-profile-name-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/profile"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -215,13 +215,13 @@
         {
           "channelId": "--_ds-profile-card-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/profile"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -239,7 +239,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -260,13 +260,13 @@
         {
           "channelId": "--_ds-profile-row-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/profile"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -286,13 +286,13 @@
         {
           "channelId": "--_ds-profile-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/profile"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -311,7 +311,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -331,7 +331,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -351,7 +351,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -371,7 +371,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -391,7 +391,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -411,7 +411,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -432,13 +432,13 @@
         {
           "channelId": "--_ds-profile-divider-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/profile"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/profile/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -462,7 +462,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -475,7 +475,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -521,7 +521,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -552,7 +552,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -573,11 +573,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

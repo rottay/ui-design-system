@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Radius scale dial",
   "valueType": "scale",
@@ -35,11 +35,11 @@
   "dependsOn": [],
   "compatibility": "additive, unset-to-rollback",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
     "symbol": "var(--ds-radius"
   },
   "calibration": {
-    "assessmentState": "COMPUTED_VERIFIED",
+    "assessmentState": "IMPLEMENTED",
     "normalizedStops": [
       {
         "id": "recto",
@@ -60,16 +60,8 @@
         "value": 1.15
       }
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/rottay-sutil.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/bithire-sutil.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/evnto-sutil.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/rottay-amplio.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/bithire-amplio.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-radius-scale/computed-static-db/evnto-amplio.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
       "font metrics remain fixed",
@@ -77,20 +69,20 @@
       "border width and style remain fixed",
       "motion remains fixed"
     ],
-    "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE. The computed half is done and receipted on three verticals through both doors at sutil and amplio; SIGHTED_ACCEPTED is not claimable from a computed run.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "axisSeparationLaw": "DECISION (b) ejecutada: el eje geometry del preset expresivo (sharp .85 / soft 1.15 / rounded 1.25 / pill-accented 1.1, expansion:193-196) co-suministra buttonStyle+radiusScale como POSTURA COMPUESTA y puede aterrizar entre stops (puntos nombrados, no rejilla); los dos juegos de nombres son DISJUNTOS (stops: recto/sutil/suave/amplio; posturas: sharp/soft/rounded/pill-accented) y la precedencia raiz-explicita > composite resuelve toda coexistencia en el tema espejo",
     "sourceBindings": {
       "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "semanticAuthority": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "staticField": "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts#BrandSurfaces",
-      "rampDefinition": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
-      "registeredProperty": "packages/core/src/foundation/tokens/css/foundation/base/properties.css",
-      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
-      "regressionFence": "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs"
+      "rampDefinition": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "registeredProperty": "packages/core/src/foundation/tokens/css/foundation/base/properties/index.css",
+      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+      "regressionFence": "packages/core/scripts/check/tokens/cascade/probe/runtime/ingress/tests/index.test.mjs"
     },
     "measuredResult": {
-      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1",
+      "instrument": "packages/core/scripts/check/tokens/cascade/probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1",
       "scenarios": "6 = {rottay,bithire,evnto} x {sutil,amplio}, both ingress doors on ONE scene, both themes. All six self-check harness-live; ingressEquivalence identical with 0 differing rows in all six; restore.exact true and negativeControls.held true on every arm of every scenario.",
       "directChannel": "--ds-radius-scale read directly on token-readout moved on BOTH arms in all six scenarios: rottay and evnto 1 -> 0.9 and 1 -> 1.15; bithire 1.25 -> 0.9 and 1.25 -> 1.15.",
       "paintedDelta": "card-modern-md/root border-top-left-radius and border-bottom-right-radius, identical on both arms and both themes: rottay 14px -> 12.6px (sutil) and 14px -> 16.1px (amplio); evnto 18px -> 16.2px and 18px -> 20.7px; bithire 10px -> 7.2px and 10px -> 9.2px.",

@@ -8,15 +8,15 @@
     "components": [
       "CropMarks"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/CropMarks",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/crop-marks",
     "publicComponents": [
       "CropMarks"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "3fc54c0f23774f61a1e25a93ec0daf1223cfbca6d3b01cd40a8ff5162a51a4ca"
+    "inventoryRowDigest": "7734e12c6b632ed2bb6f4ac81a59eca2ebd58bf996f1130966a72b6aa9d2d600"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/CropMarks/index.tsx",
-      "packages/core/src/ui/primitives/display/CropMarks/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css"
+      "packages/core/src/components/primitives/display/crop-marks/index.tsx",
+      "packages/core/src/components/primitives/display/crop-marks/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css"
     ],
     "stableParts": [
       "root",
@@ -44,8 +44,8 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "All four tick nodes are aria-hidden decoration and contribute no accessible content. [at packages/core/src/ui/primitives/display/CropMarks/index.tsx:21, packages/core/src/ui/primitives/display/CropMarks/index.tsx:26, packages/core/src/ui/primitives/display/CropMarks/index.tsx:31, packages/core/src/ui/primitives/display/CropMarks/index.tsx:36]",
-      "The tick rules survive forced-colors, so the frame does not disappear in a high-contrast palette. [at packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:78]"
+      "All four tick nodes are aria-hidden decoration and contribute no accessible content. [at packages/core/src/components/primitives/display/crop-marks/index.tsx:21, packages/core/src/components/primitives/display/crop-marks/index.tsx:26, packages/core/src/components/primitives/display/crop-marks/index.tsx:31, packages/core/src/components/primitives/display/crop-marks/index.tsx:36]",
+      "The tick rules survive forced-colors, so the frame does not disappear in a high-contrast palette. [at packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:78]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -68,7 +68,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CropMarks/index.tsx:18"
+            "packages/core/src/components/primitives/display/crop-marks/index.tsx:18"
           ]
         },
         {
@@ -76,7 +76,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute (aria-hidden)",
           "at": [
-            "packages/core/src/ui/primitives/display/CropMarks/index.tsx:21"
+            "packages/core/src/components/primitives/display/crop-marks/index.tsx:21"
           ]
         },
         {
@@ -84,7 +84,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute (aria-hidden)",
           "at": [
-            "packages/core/src/ui/primitives/display/CropMarks/index.tsx:26"
+            "packages/core/src/components/primitives/display/crop-marks/index.tsx:26"
           ]
         },
         {
@@ -92,7 +92,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute (aria-hidden)",
           "at": [
-            "packages/core/src/ui/primitives/display/CropMarks/index.tsx:31"
+            "packages/core/src/components/primitives/display/crop-marks/index.tsx:31"
           ]
         },
         {
@@ -100,7 +100,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute (aria-hidden)",
           "at": [
-            "packages/core/src/ui/primitives/display/CropMarks/index.tsx:36"
+            "packages/core/src/components/primitives/display/crop-marks/index.tsx:36"
           ]
         },
         {
@@ -108,7 +108,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CropMarks/index.tsx:39"
+            "packages/core/src/components/primitives/display/crop-marks/index.tsx:39"
           ]
         }
       ],
@@ -120,7 +120,7 @@
             "token": "forced-colors: active",
             "note": "the only conditional block in the family's paint layer",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:78"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:78"
             ]
           }
         ],
@@ -128,7 +128,7 @@
       },
       "engineDivergence": {
         "engineSiblings": "none",
-        "note": "CropMarks has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/ui/primitives/display/CropMarks/index.tsx (46 lines) with packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css as its only paint layer."
+        "note": "CropMarks has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/components/primitives/display/crop-marks/index.tsx (46 lines) with packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css as its only paint layer."
       },
       "variableReadCensus": {
         "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
@@ -136,7 +136,7 @@
           {
             "variable": "--ds-color-hairline-strong",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:33",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:33",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -153,7 +153,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:39",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:39",
             "landsOn": "inset-inline-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -170,7 +170,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:40",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:40",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -187,7 +187,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:46",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:46",
             "landsOn": "inset-block-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -204,7 +204,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:49",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:49",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -221,7 +221,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:53",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:53",
             "landsOn": "inset-block-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -238,7 +238,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:54",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:54",
             "landsOn": "inset-inline-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -255,7 +255,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:58",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:58",
             "landsOn": "inset-block-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -272,7 +272,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:59",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:59",
             "landsOn": "inset-inline-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -289,7 +289,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:63",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:63",
             "landsOn": "inset-block-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -306,7 +306,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:64",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:64",
             "landsOn": "inset-inline-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -323,7 +323,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:68",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:68",
             "landsOn": "inset-block-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -340,7 +340,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css:69",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css:69",
             "landsOn": "inset-inline-end",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -386,13 +386,13 @@
         {
           "channelId": "--_ds-crop-marks-tick-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/crop-marks"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -502,13 +502,13 @@
         {
           "channelId": "--_ds-crop-marks-body-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/crop-marks"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -518,13 +518,13 @@
         {
           "channelId": "--_ds-crop-marks-tick-length",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/crop-marks"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -534,13 +534,13 @@
         {
           "channelId": "--_ds-crop-marks-tick-offset",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/crop-marks"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -559,7 +559,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -620,7 +620,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -640,7 +640,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -697,13 +697,13 @@
         {
           "channelId": "--_ds-crop-marks-tick-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/crop-marks"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/crop-marks/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -727,7 +727,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -784,7 +784,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -834,11 +834,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

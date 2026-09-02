@@ -10,8 +10,8 @@
       "PresenceTypingIndicator",
       "LiveCursor"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/communication/presence",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/communication/presence",
     "publicComponents": [
       "PresenceBar",
       "PresenceTypingIndicator",
@@ -20,7 +20,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "9b90ba126cf9712e3db9933a3b64f5fa5fc937d5493f3140ed8379802e41e2bb"
+    "inventoryRowDigest": "6812c6f9062e4650b95bc6dd1454e5589940bcefdec7ce82244c5bdc5297b79a"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -32,8 +32,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/communication/presence/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css"
+      "packages/core/src/components/patterns/communication/presence/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css"
     ],
     "stableParts": [
       "avatar",
@@ -73,90 +73,90 @@
           "part": "avatar",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:177",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:70",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:87",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:91"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:177",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:87",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:91"
           ]
         },
         {
           "part": "cursor-badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:386",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:190",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:229"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:386",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:190",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:229"
           ]
         },
         {
           "part": "cursor-fill",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:372"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:372"
           ]
         },
         {
           "part": "cursor-outline",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:377",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:210"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:377",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:210"
           ]
         },
         {
           "part": "dots",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:297",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:134"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:297",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:134"
           ]
         },
         {
           "part": "label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:302",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:152"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:302",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:152"
           ]
         },
         {
           "part": "overflow-badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:206",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:104",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:116"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:104",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:116"
           ]
         },
         {
           "part": "overflow-badge-count",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:231",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:119",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:226"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:119",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:226"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:167",
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:287",
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:348",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:64",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:129",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:171"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:167",
+            "packages/core/src/components/patterns/communication/presence/index.tsx:287",
+            "packages/core/src/components/patterns/communication/presence/index.tsx:348",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:64",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:129",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:171"
           ]
         },
         {
           "part": "typing-dot",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/presence/index.tsx:299",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:138",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:146",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:149"
+            "packages/core/src/components/patterns/communication/presence/index.tsx:299",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:138",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:146",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:149"
           ]
         }
       ],
@@ -166,7 +166,7 @@
           "scoutAnchorClaim": null,
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:99"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:99"
           ]
         }
       ],
@@ -174,7 +174,7 @@
         {
           "token": "color=default",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css:40"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css:40"
           ]
         }
       ],
@@ -188,7 +188,7 @@
         "variableCensus": [
           {
             "name": "--ds-color-surface",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 80,
             "fallback": false,
             "fallbackValue": null,
@@ -201,7 +201,7 @@
           },
           {
             "name": "--ds-motion-feedback",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -214,7 +214,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -227,7 +227,7 @@
           },
           {
             "name": "--ds-motion-offset-in",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -240,7 +240,7 @@
           },
           {
             "name": "--ds-color-surface-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 114,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-secondary)",
@@ -253,7 +253,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 114,
             "fallback": false,
             "fallbackValue": null,
@@ -266,7 +266,7 @@
           },
           {
             "name": "--ds-presence-badge-ring",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 117,
             "fallback": false,
             "fallbackValue": null,
@@ -280,7 +280,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 117,
             "fallback": false,
             "fallbackValue": null,
@@ -293,7 +293,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 122,
             "fallback": false,
             "fallbackValue": null,
@@ -306,7 +306,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 132,
             "fallback": false,
             "fallbackValue": null,
@@ -319,7 +319,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 136,
             "fallback": false,
             "fallbackValue": null,
@@ -332,7 +332,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 139,
             "fallback": false,
             "fallbackValue": null,
@@ -345,7 +345,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 140,
             "fallback": false,
             "fallbackValue": null,
@@ -358,7 +358,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 142,
             "fallback": false,
             "fallbackValue": null,
@@ -371,7 +371,7 @@
           },
           {
             "name": "--_ds-presence-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 143,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.4)",
@@ -384,7 +384,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 143,
             "fallback": false,
             "fallbackValue": null,
@@ -397,7 +397,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 144,
             "fallback": false,
             "fallbackValue": null,
@@ -410,7 +410,7 @@
           },
           {
             "name": "--_ds-presence-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 147,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.4)",
@@ -423,7 +423,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -436,7 +436,7 @@
           },
           {
             "name": "--_ds-presence-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 150,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.4)",
@@ -449,7 +449,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 150,
             "fallback": false,
             "fallbackValue": null,
@@ -462,7 +462,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -475,7 +475,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 154,
             "fallback": false,
             "fallbackValue": null,
@@ -488,7 +488,7 @@
           },
           {
             "name": "--ds-z-tooltip",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -501,7 +501,7 @@
           },
           {
             "name": "--ds-presence-cursor-x",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 179,
             "fallback": true,
             "fallbackValue": "0",
@@ -515,7 +515,7 @@
           },
           {
             "name": "--ds-presence-cursor-y",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 180,
             "fallback": true,
             "fallbackValue": "0",
@@ -529,7 +529,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 182,
             "fallback": false,
             "fallbackValue": null,
@@ -542,7 +542,7 @@
           },
           {
             "name": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 183,
             "fallback": false,
             "fallbackValue": null,
@@ -555,7 +555,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 183,
             "fallback": false,
             "fallbackValue": null,
@@ -568,7 +568,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 199,
             "fallback": false,
             "fallbackValue": null,
@@ -581,7 +581,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 200,
             "fallback": false,
             "fallbackValue": null,
@@ -594,7 +594,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 201,
             "fallback": false,
             "fallbackValue": null,
@@ -607,7 +607,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 205,
             "fallback": false,
             "fallbackValue": null,
@@ -620,7 +620,7 @@
           },
           {
             "name": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 207,
             "fallback": false,
             "fallbackValue": null,
@@ -633,7 +633,7 @@
           },
           {
             "name": "--ds-color-surface",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 211,
             "fallback": false,
             "fallbackValue": null,
@@ -646,7 +646,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/communication/presence/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/presence/index.tsx",
             "line": 103,
             "fallback": false,
             "fallbackValue": null,
@@ -659,7 +659,7 @@
           },
           {
             "name": "--ds-avatar-",
-            "file": "packages/core/src/ui/patterns/communication/presence/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/presence/index.tsx",
             "line": 107,
             "fallback": false,
             "fallbackValue": null,
@@ -672,7 +672,7 @@
           },
           {
             "name": "--ds-avatar-",
-            "file": "packages/core/src/ui/patterns/communication/presence/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/presence/index.tsx",
             "line": 112,
             "fallback": false,
             "fallbackValue": null,
@@ -686,31 +686,31 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 55,
             "literal": "3px",
             "text": "transform: translateY(-3px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 192,
             "literal": "12px",
             "text": "inset-inline-start: 12px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 193,
             "literal": "16px",
             "text": "inset-block-start: 16px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 194,
             "literal": "3px",
             "text": "padding-block: 3px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
             "line": 195,
             "literal": "6px",
             "text": "padding-inline: 6px;"
@@ -760,7 +760,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -784,7 +784,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -814,13 +814,13 @@
         {
           "channelId": "--_ds-presence-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/presence"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -838,7 +838,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -876,7 +876,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -895,7 +895,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -915,7 +915,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -957,13 +957,13 @@
         {
           "channelId": "--_ds-presence-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/presence"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -982,7 +982,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -1007,7 +1007,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "legibilidad del mensaje: mate; la tinta manda",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1027,7 +1027,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de conversacion, no chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1047,7 +1047,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -1067,7 +1067,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -1102,13 +1102,13 @@
         {
           "channelId": "--_ds-presence-badge-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/presence"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/presence/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1131,7 +1131,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1144,7 +1144,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -1190,7 +1190,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1221,7 +1221,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los ticks de estado del mensaje son iconos de la libreria",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -1242,11 +1242,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

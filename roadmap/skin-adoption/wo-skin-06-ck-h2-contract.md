@@ -220,7 +220,7 @@ truth for H2) and `migration-kit.md` + `migration-kit-addendum.md` (the mechanic
 normative for *what* paint exists; this contract is normative for *how* it moves. Where they
 disagree, the inventory wins on facts and this contract wins on method.
 
-Scope: `packages/core/src/ui/patterns/misc/{file-manager,user-profile-card,pricing-table,
+Scope: `packages/core/src/components/patterns/misc/{file-manager,user-profile-card,pricing-table,
 empty-state,token-inspector}/` — **216 counted sites, 5 components, 9 files, confirmed exactly 100%
 category A** (0 B, 0 C, 0 N — the cleanest result of any checkpoint in this program to date). Every
 `{file-manager,user-profile-card,pricing-table,empty-state}/engines/classic.tsx` (AntD-wrapped, 0

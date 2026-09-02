@@ -8,15 +8,15 @@
     "components": [
       "Checkbox"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/Checkbox",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/checkbox",
     "publicComponents": [
       "Checkbox"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "194a1a9b51033e20986ce0c47a0393737e9b2deac3fb2466bd479f08cfb2e0ad"
+    "inventoryRowDigest": "ed47d8fca275416cc98e322bb9549029aeb7b6377afef34090b15e249612586d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,10 +28,10 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css",
-      "packages/core/src/ui/primitives/inputs/Checkbox",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/checkbox-group.css"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css",
+      "packages/core/src/components/primitives/inputs/checkbox",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/checkbox-group/index.css"
     ],
     "stableParts": [
       "box",
@@ -60,8 +60,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "Indeterminate is announced as aria-checked=\"mixed\"; it is a third checked value, not a paint-only state. [at packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:214]",
-      "Error posture is aria-invalid and the description wiring is preserved through aria-describedby. [at packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:215, packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:218]"
+      "Indeterminate is announced as aria-checked=\"mixed\"; it is a third checked value, not a paint-only state. [at packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:214]",
+      "Error posture is aria-invalid and the description wiring is preserved through aria-describedby. [at packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:215, packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:218]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -84,9 +84,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:222",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:265",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:75"
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:222",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:265",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:75"
           ]
         },
         {
@@ -94,11 +94,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:188",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:254",
-            "packages/core/src/ui/primitives/inputs/Checkbox/compound/Group/index.tsx:25",
-            "packages/core/src/ui/primitives/inputs/Checkbox/compound/Group/index.tsx:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:43"
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:188",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:254",
+            "packages/core/src/components/primitives/inputs/checkbox/compound/group/index.tsx:25",
+            "packages/core/src/components/primitives/inputs/checkbox/compound/group/index.tsx:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:43"
           ]
         },
         {
@@ -106,9 +106,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:233",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:291",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:271"
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:233",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:291",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:271"
           ]
         },
         {
@@ -116,12 +116,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:41",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:46",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:69",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:202",
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:226",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:243"
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:41",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:46",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:69",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:202",
+            "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:243"
           ]
         },
         {
@@ -129,8 +129,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:236",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:290"
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:236",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:290"
           ]
         },
         {
@@ -138,8 +138,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx:231",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:259"
+            "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:259"
           ]
         },
         {
@@ -147,7 +147,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Checkbox/compound/Group/index.tsx:158"
+            "packages/core/src/components/primitives/inputs/checkbox/compound/group/index.tsx:158"
           ]
         }
       ],
@@ -157,7 +157,7 @@
           "scoutAnchorClaim": "class:ds-checkbox--modern",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:304"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:304"
           ]
         },
         {
@@ -165,7 +165,7 @@
           "scoutAnchorClaim": "element:from, element:to",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:32"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:32"
           ]
         }
       ],
@@ -174,7 +174,7 @@
           "token": "data-active='true'",
           "occurrences": 39,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:141"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:141"
           ],
           "state": "active"
         },
@@ -182,7 +182,7 @@
           "token": "data-disabled='true'",
           "occurrences": 26,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:70"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:70"
           ],
           "state": "disabled"
         },
@@ -190,7 +190,7 @@
           "token": "pseudo:hover",
           "occurrences": 16,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:191"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:191"
           ],
           "state": "hover"
         },
@@ -198,7 +198,7 @@
           "token": "data-error='true'",
           "occurrences": 12,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:177"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:177"
           ],
           "state": "error"
         },
@@ -206,7 +206,7 @@
           "token": "pseudo:active",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:130"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:130"
           ],
           "state": "active"
         },
@@ -214,7 +214,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:232"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:232"
           ],
           "state": "focus-visible"
         },
@@ -222,7 +222,7 @@
           "token": "data-checked='true'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:62"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:62"
           ],
           "state": "checked"
         },
@@ -230,7 +230,7 @@
           "token": "pseudo:focus-within",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:45"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:45"
           ],
           "state": "focus-within"
         }
@@ -240,119 +240,119 @@
           "token": "data-standalone='true'",
           "occurrences": 15,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:60"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:60"
           ]
         },
         {
           "token": "data-color='default'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:151"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:151"
           ]
         },
         {
           "token": "data-color='error'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:167"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:167"
           ]
         },
         {
           "token": "data-color='secondary'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:155"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:155"
           ]
         },
         {
           "token": "data-color='success'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:159"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:159"
           ]
         },
         {
           "token": "data-color='warning'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:163"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:163"
           ]
         },
         {
           "token": "data-size='lg'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:108"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:108"
           ]
         },
         {
           "token": "data-size='md'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:103"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:103"
           ]
         },
         {
           "token": "data-size='sm'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:98"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:98"
           ]
         },
         {
           "token": "data-size='xl'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:113"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:113"
           ]
         },
         {
           "token": "data-size='xs'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:93"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:93"
           ]
         },
         {
           "token": "data-label-placement='start'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:66"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:66"
           ]
         },
         {
           "token": "data-radius='full'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:123"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:123"
           ]
         },
         {
           "token": "data-radius='lg'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:122"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:122"
           ]
         },
         {
           "token": "data-radius='md'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:121"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:121"
           ]
         },
         {
           "token": "data-radius='none'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:119"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:119"
           ]
         },
         {
           "token": "data-radius='sm'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:120"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:120"
           ]
         }
       ],
@@ -361,42 +361,42 @@
           "token": "data-part='box'",
           "occurrences": 92,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:75"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:75"
           ]
         },
         {
           "token": "data-part='root'",
           "occurrences": 45,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:43"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:43"
           ]
         },
         {
           "token": "data-part='label'",
           "occurrences": 13,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:271"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:271"
           ]
         },
         {
           "token": "data-part='checkmark'",
           "occurrences": 9,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:243"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:243"
           ]
         },
         {
           "token": "data-part='description'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:290"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:290"
           ]
         },
         {
           "token": "data-part='text'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:259"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:259"
           ]
         }
       ],
@@ -404,22 +404,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Checkbox/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/checkbox/engines/classic/index.tsx",
             "lines": 125
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Checkbox/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/checkbox/engines/modern/index.tsx",
             "lines": 246
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx",
             "lines": 302
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "root",
           "UNATTRIBUTED(ds-checkbox--modern)",
@@ -557,7 +557,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:138",
                 "part": "box",
                 "property": "border",
                 "hasFallback": true,
@@ -585,7 +585,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:80",
                 "part": "box",
                 "property": "color",
                 "hasFallback": true,
@@ -613,7 +613,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:290",
                 "part": "description",
                 "property": "color",
                 "hasFallback": true,
@@ -641,7 +641,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:291",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:291",
                 "part": "description",
                 "property": "font-size",
                 "hasFallback": true,
@@ -669,7 +669,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:292",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:292",
                 "part": "description",
                 "property": "line-height",
                 "hasFallback": true,
@@ -697,7 +697,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:70",
                 "part": "root",
                 "property": "cursor",
                 "hasFallback": true,
@@ -726,14 +726,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:177",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:177",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:178",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
@@ -761,28 +761,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:272",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:272",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-font-size-sm)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:280",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:280",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-checkbox-xs-font-size)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:281",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:281",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-checkbox-sm-font-size)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:282",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:282",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": true,
@@ -810,7 +810,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:273",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:273",
                 "part": "label",
                 "property": "line-height",
                 "hasFallback": true,
@@ -838,7 +838,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:48",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:48",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -866,7 +866,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:261",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:261",
                 "part": "text",
                 "property": "gap",
                 "hasFallback": true,
@@ -897,28 +897,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:52",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:52",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:320",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:320",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:326",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:326",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:327",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:327",
                 "part": "root",
                 "property": "min-inline-size",
                 "hasFallback": true,
@@ -950,7 +950,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:34",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:34",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -982,7 +982,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:39",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:39",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1016,21 +1016,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:138",
                 "part": "box",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:141",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-border)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:49",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:49",
                 "part": "box",
                 "property": "border",
                 "hasFallback": false,
@@ -1060,7 +1060,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:33",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:33",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1096,28 +1096,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:145",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:146",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:146",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:142",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:142",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:147",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:147",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -1152,14 +1152,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:65",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:65",
                 "part": "checkmark",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:214",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:214",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -1193,28 +1193,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:151",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-neutral-600)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:152",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:152",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-neutral-600)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:195",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-neutral-600)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:196",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
@@ -1245,7 +1245,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:238",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:238",
                 "part": "box",
                 "property": "opacity",
                 "hasFallback": false,
@@ -1279,28 +1279,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:167",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:167",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:168",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:211",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:211",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:212",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
@@ -1332,7 +1332,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:55",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:55",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1364,7 +1364,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:76",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:76",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
@@ -1395,14 +1395,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:42",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:42",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:52",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:52",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1434,7 +1434,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:232",
                 "part": "box",
                 "property": "outline",
                 "hasFallback": true,
@@ -1465,7 +1465,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:233",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:233",
                 "part": "box",
                 "property": "outline-offset",
                 "hasFallback": true,
@@ -1496,7 +1496,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:232",
                 "part": "box",
                 "property": "outline",
                 "hasFallback": true,
@@ -1529,14 +1529,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:271",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:271",
                 "part": "label",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:70",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
@@ -1568,7 +1568,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:73",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:73",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
@@ -1601,14 +1601,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:46",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:46",
                 "part": "root",
                 "property": "gap",
                 "hasFallback": true,
                 "fallback": "var(--ds-spacing-2)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:153",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:153",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "gap",
                 "hasFallback": false,
@@ -1639,7 +1639,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:283",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:283",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -1670,7 +1670,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:282",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:282",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -1706,28 +1706,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:103",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:103",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:104",
                 "part": "box",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:105",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:105",
                 "part": "box",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:303",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:303",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "md",
                 "hasFallback": false,
@@ -1758,7 +1758,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:135",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:135",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -1792,14 +1792,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:123",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-full)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:375",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:375",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "full",
                 "hasFallback": false,
@@ -1833,14 +1833,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:122",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:122",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-lg)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:374",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:374",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "lg",
                 "hasFallback": false,
@@ -1874,14 +1874,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:121",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:121",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:373",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:373",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "md",
                 "hasFallback": false,
@@ -1915,14 +1915,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:119",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:371",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:371",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "none",
                 "hasFallback": false,
@@ -1956,21 +1956,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:81",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-sm)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:120",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:120",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-sm)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:372",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:372",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "sm",
                 "hasFallback": false,
@@ -2004,28 +2004,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:155",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:155",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-secondary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:156",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:156",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-secondary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:199",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:199",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-secondary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:200",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:200",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
@@ -2062,28 +2062,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:108",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:108",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:109",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:109",
                 "part": "box",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:110",
                 "part": "box",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:304",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:304",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "lg",
                 "hasFallback": false,
@@ -2114,7 +2114,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:31",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:31",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "md",
                 "hasFallback": false,
@@ -2146,14 +2146,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:29",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:29",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "xs",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:30",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:30",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "sm",
                 "hasFallback": false,
@@ -2190,28 +2190,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:113",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:113",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:114",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:114",
                 "part": "box",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:115",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:115",
                 "part": "box",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:305",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:305",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "xl",
                 "hasFallback": false,
@@ -2242,7 +2242,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:281",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:281",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2278,28 +2278,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:98",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:98",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:99",
                 "part": "box",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:100",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:100",
                 "part": "box",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:302",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:302",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "sm",
                 "hasFallback": false,
@@ -2333,28 +2333,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:159",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-success)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:160",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-success)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:203",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:203",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-success)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:204",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
@@ -2385,28 +2385,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": true,
@@ -2440,28 +2440,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:163",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:164",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:207",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:207",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:208",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:208",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": true,
@@ -2492,7 +2492,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:284",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:284",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2523,7 +2523,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:280",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:280",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2559,28 +2559,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:93",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:94",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:94",
                 "part": "box",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:95",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:95",
                 "part": "box",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:301",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:301",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "xs",
                 "hasFallback": false,
@@ -2612,7 +2612,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:141",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2647,21 +2647,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:138",
                 "part": "box",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:219",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:219",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:226",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:226",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2696,28 +2696,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:167",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:167",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:168",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:177",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:177",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:178",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -2751,21 +2751,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:358",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:358",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "bg",
                 "hasFallback": true,
                 "fallback": "#ff4d4f"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:359",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:359",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#ff4d4f"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:145",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:145",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -2804,28 +2804,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:151",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:152",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:152",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:195",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:196",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -2860,28 +2860,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:195",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:196",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:196",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:199",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:199",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:200",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:200",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -2917,28 +2917,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:145",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:146",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:146",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:220",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:220",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:227",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:227",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -2970,7 +2970,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:45",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:45",
                 "part": "box",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -3003,14 +3003,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:338",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:338",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "bg",
                 "hasFallback": true,
                 "fallback": "#1890ff"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:339",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:339",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
@@ -3045,14 +3045,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:191",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:191",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:192",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:192",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -3087,28 +3087,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:155",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:155",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:156",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:156",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:199",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:199",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:200",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:200",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -3143,21 +3143,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:343",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:343",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "bg",
                 "hasFallback": true,
                 "fallback": "#6b7280"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:344",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:344",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#6b7280"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:146",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:146",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -3192,28 +3192,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:159",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:160",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:203",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:203",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:204",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -3248,21 +3248,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:348",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:348",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "bg",
                 "hasFallback": true,
                 "fallback": "#52c41a"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:349",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:349",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#52c41a"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:143",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:143",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -3295,14 +3295,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:286",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:286",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:297",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:297",
                 "part": "description",
                 "property": "color",
                 "hasFallback": false,
@@ -3334,7 +3334,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:290",
                 "part": "description",
                 "property": "color",
                 "hasFallback": false,
@@ -3366,7 +3366,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:80",
                 "part": "box",
                 "property": "color",
                 "hasFallback": false,
@@ -3402,21 +3402,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:142",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:142",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:216",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:271",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:271",
                 "part": "label",
                 "property": "color",
                 "hasFallback": false,
@@ -3450,21 +3450,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:215",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:215",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:219",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:219",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:226",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:226",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
@@ -3499,28 +3499,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:163",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:164",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:207",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:207",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:208",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:208",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -3554,21 +3554,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:353",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:353",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "bg",
                 "hasFallback": true,
                 "fallback": "#faad14"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:354",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:354",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#faad14"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:144",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:144",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -3601,28 +3601,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:93",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:94",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:94",
                 "part": "box",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:95",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:95",
                 "part": "box",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:98",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:98",
                 "part": "box",
                 "property": "inline-size",
                 "hasFallback": false,
@@ -3654,7 +3654,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:232",
                 "part": "box",
                 "property": "outline",
                 "hasFallback": true,
@@ -3685,7 +3685,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:233",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:233",
                 "part": "box",
                 "property": "outline-offset",
                 "hasFallback": false,
@@ -3716,7 +3716,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:232",
                 "part": "box",
                 "property": "outline",
                 "hasFallback": false,
@@ -3748,7 +3748,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:157",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:157",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -3779,7 +3779,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:272",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:272",
                 "part": "label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -3810,7 +3810,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:291",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:291",
                 "part": "description",
                 "property": "font-size",
                 "hasFallback": false,
@@ -3843,21 +3843,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:56",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:56",
                 "part": "root",
                 "property": "line-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:273",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:273",
                 "part": "label",
                 "property": "line-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:292",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:292",
                 "part": "description",
                 "property": "line-height",
                 "hasFallback": false,
@@ -3890,28 +3890,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
@@ -3943,28 +3943,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:88",
                 "part": "box",
                 "property": "transition",
                 "hasFallback": false,
@@ -3996,7 +3996,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:245",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:245",
                 "part": "checkmark",
                 "property": "animation",
                 "hasFallback": false,
@@ -4028,14 +4028,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:123",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:133",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -4069,14 +4069,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:122",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:122",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:134",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:134",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -4110,14 +4110,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:121",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:121",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:133",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:133",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -4151,21 +4151,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:81",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:120",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:120",
                 "part": "box",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:132",
+                "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:132",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -4196,7 +4196,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:48",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:48",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": false,
@@ -4227,7 +4227,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:46",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:46",
                 "part": "root",
                 "property": "gap",
                 "hasFallback": false,
@@ -4258,7 +4258,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:130",
                 "part": "box",
                 "property": "transform",
                 "hasFallback": false,
@@ -4292,21 +4292,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:141",
                 "part": "box",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:142",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:142",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:216",
                 "part": "box",
                 "property": "background-color",
                 "hasFallback": false,
@@ -4340,28 +4340,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:52",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:52",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:320",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:320",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:326",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:326",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css:327",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css:327",
                 "part": "root",
                 "property": "min-inline-size",
                 "hasFallback": true,
@@ -4399,7 +4399,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:45",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:45",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "box-shadow",
@@ -4407,7 +4407,7 @@
             "declaration": "box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:45",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:45",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "box-shadow",
@@ -4415,7 +4415,7 @@
             "declaration": "box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2)), 0 0 8px rgba(59, 130, 246, 0.1);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/checkbox/index.css:66",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_RADIUS_DIRECT",
             "property": "border-radius",
@@ -4423,7 +4423,7 @@
             "declaration": "border-radius: 1px;"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:333",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:333",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "bg",
@@ -4431,7 +4431,7 @@
             "declaration": "bg: 'var(--ds-color-neutral-600, #4b5563)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:334",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:334",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -4439,7 +4439,7 @@
             "declaration": "border: 'var(--ds-color-neutral-600, #4b5563)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:335",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:335",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "check",
@@ -4447,7 +4447,7 @@
             "declaration": "check: '#ffffff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:338",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:338",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "bg",
@@ -4455,7 +4455,7 @@
             "declaration": "bg: 'var(--ds-color-primary-500, #1890ff)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:339",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:339",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -4463,7 +4463,7 @@
             "declaration": "border: 'var(--ds-color-primary-500, #1890ff)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:340",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:340",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "check",
@@ -4471,7 +4471,7 @@
             "declaration": "check: '#ffffff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:343",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:343",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "bg",
@@ -4479,7 +4479,7 @@
             "declaration": "bg: 'var(--ds-color-secondary-500, #6b7280)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:344",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:344",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -4487,7 +4487,7 @@
             "declaration": "border: 'var(--ds-color-secondary-500, #6b7280)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:345",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:345",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "check",
@@ -4495,7 +4495,7 @@
             "declaration": "check: '#ffffff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:348",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:348",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "bg",
@@ -4503,7 +4503,7 @@
             "declaration": "bg: 'var(--ds-color-success-500, #52c41a)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:349",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:349",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -4511,7 +4511,7 @@
             "declaration": "border: 'var(--ds-color-success-500, #52c41a)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:350",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:350",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "check",
@@ -4519,7 +4519,7 @@
             "declaration": "check: '#ffffff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:353",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:353",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "bg",
@@ -4527,7 +4527,7 @@
             "declaration": "bg: 'var(--ds-color-warning-500, #faad14)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:354",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:354",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -4535,7 +4535,7 @@
             "declaration": "border: 'var(--ds-color-warning-500, #faad14)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:355",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:355",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "check",
@@ -4543,7 +4543,7 @@
             "declaration": "check: '#ffffff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:358",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:358",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "bg",
@@ -4551,7 +4551,7 @@
             "declaration": "bg: 'var(--ds-color-error-500, #ff4d4f)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:359",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:359",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -4559,7 +4559,7 @@
             "declaration": "border: 'var(--ds-color-error-500, #ff4d4f)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/contracts/index.ts:360",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/contracts/index.ts:360",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "check",
@@ -4567,7 +4567,7 @@
             "declaration": "check: '#ffffff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:175",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:175",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -4575,7 +4575,7 @@
             "declaration": "transition: 'border-color 0.15s, background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:175",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:175",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -4583,7 +4583,7 @@
             "declaration": "transition: 'border-color 0.15s, background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:175",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:175",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -4591,7 +4591,7 @@
             "declaration": "transition: 'border-color 0.15s, background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Checkbox/engines/rustic/index.tsx:209",
+            "at": "packages/core/src/components/primitives/inputs/checkbox/engines/rustic/index.tsx:209",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -4675,13 +4675,13 @@
         {
           "channelId": "--_ds-checkbox-checked-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4690,13 +4690,13 @@
         {
           "channelId": "--_ds-checkbox-default-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4705,13 +4705,13 @@
         {
           "channelId": "--_ds-checkbox-secondary-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4720,13 +4720,13 @@
         {
           "channelId": "--_ds-checkbox-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4735,13 +4735,13 @@
         {
           "channelId": "--_ds-checkbox-check-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4750,13 +4750,13 @@
         {
           "channelId": "--_ds-checkbox-label-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4765,13 +4765,13 @@
         {
           "channelId": "--_ds-checkbox-description-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4780,13 +4780,13 @@
         {
           "channelId": "--_ds-checkbox-error-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4795,13 +4795,13 @@
         {
           "channelId": "--_ds-checkbox-error-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4810,13 +4810,13 @@
         {
           "channelId": "--_ds-checkbox-success-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4825,13 +4825,13 @@
         {
           "channelId": "--_ds-checkbox-warning-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4884,13 +4884,13 @@
         {
           "channelId": "--_ds-checkbox-xs-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4899,13 +4899,13 @@
         {
           "channelId": "--_ds-checkbox-sm-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4914,13 +4914,13 @@
         {
           "channelId": "--_ds-checkbox-md-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4929,13 +4929,13 @@
         {
           "channelId": "--_ds-checkbox-lg-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4944,13 +4944,13 @@
         {
           "channelId": "--_ds-checkbox-xl-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4959,13 +4959,13 @@
         {
           "channelId": "--_ds-checkbox-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4974,13 +4974,13 @@
         {
           "channelId": "--_ds-checkbox-label-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4989,13 +4989,13 @@
         {
           "channelId": "--_ds-checkbox-description-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5004,13 +5004,13 @@
         {
           "channelId": "--_ds-checkbox-description-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5029,13 +5029,13 @@
         {
           "channelId": "--_ds-checkbox-radius-none",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5044,13 +5044,13 @@
         {
           "channelId": "--_ds-checkbox-radius-sm",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5059,13 +5059,13 @@
         {
           "channelId": "--_ds-checkbox-radius-md",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5074,13 +5074,13 @@
         {
           "channelId": "--_ds-checkbox-radius-lg",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5117,13 +5117,13 @@
         {
           "channelId": "--_ds-checkbox-xs-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5132,13 +5132,13 @@
         {
           "channelId": "--_ds-checkbox-sm-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5147,13 +5147,13 @@
         {
           "channelId": "--_ds-checkbox-md-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5162,13 +5162,13 @@
         {
           "channelId": "--_ds-checkbox-size-lg",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5177,13 +5177,13 @@
         {
           "channelId": "--_ds-checkbox-size-xl",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5192,13 +5192,13 @@
         {
           "channelId": "--_ds-checkbox-row-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5207,13 +5207,13 @@
         {
           "channelId": "--_ds-checkbox-label-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5222,13 +5222,13 @@
         {
           "channelId": "--_ds-checkbox-text-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5264,13 +5264,13 @@
         {
           "channelId": "--_ds-checkbox-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5375,13 +5375,13 @@
         {
           "channelId": "--_ds-checkbox-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5390,13 +5390,13 @@
         {
           "channelId": "--_ds-checkbox-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5405,13 +5405,13 @@
         {
           "channelId": "--_ds-checkbox-focus-ring-offset",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5420,13 +5420,13 @@
         {
           "channelId": "--_ds-checkbox-focus-ring-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/checkbox/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/checkbox"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5449,7 +5449,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -5505,7 +5505,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -5533,7 +5533,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/checkbox/index.css"
         ]
       }
     },
@@ -5566,11 +5566,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

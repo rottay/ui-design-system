@@ -8,15 +8,15 @@
     "components": [
       "ColorPicker"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/ColorPicker",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/color-picker",
     "publicComponents": [
       "ColorPicker"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2a5623ff09a92c03419fc6162b0f302fb2ece4c68b00b480a2fb5ac3e1c27d9b"
+    "inventoryRowDigest": "c0d2a550bff9120fc63c29ce77055c85c31ee5601b6592572b667f50d4082c3d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css",
-      "packages/core/src/ui/primitives/inputs/ColorPicker"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css",
+      "packages/core/src/components/primitives/inputs/color-picker"
     ],
     "stableParts": [
       "preset-swatch",
@@ -67,8 +67,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The popup is role=\"dialog\" and the trigger advertises aria-haspopup=\"dialog\" with aria-expanded and aria-controls; it is not a listbox. [at packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:376, packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:513, packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:514]",
-      "An invalid hex is announced through a role=\"alert\" on data-part=\"hex-error\" and wired with aria-invalid + aria-describedby on the hex input. [at packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:406, packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:410, packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:413]"
+      "The popup is role=\"dialog\" and the trigger advertises aria-haspopup=\"dialog\" with aria-expanded and aria-controls; it is not a listbox. [at packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:376, packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:513, packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:514]",
+      "An invalid hex is announced through a role=\"alert\" on data-part=\"hex-error\" and wired with aria-invalid + aria-describedby on the hex input. [at packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:406, packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:410, packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:413]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -91,9 +91,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:452",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:294",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:344"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:452",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:294",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:344"
           ]
         },
         {
@@ -101,9 +101,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:521",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:344",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:105"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:521",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:344",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:105"
           ]
         },
         {
@@ -111,9 +111,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:473",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:315",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:313"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:473",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:313"
           ]
         },
         {
@@ -121,9 +121,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:371",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:252",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:158"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:371",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:252",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:158"
           ]
         },
         {
@@ -131,9 +131,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:397",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:270",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:253"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:397",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:270",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:253"
           ]
         },
         {
@@ -141,8 +141,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:424",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:227"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:424",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:227"
           ]
         },
         {
@@ -150,8 +150,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:507",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:87"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:507",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:87"
           ]
         },
         {
@@ -159,9 +159,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:386",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:259",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:207"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:386",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:259",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:207"
           ]
         },
         {
@@ -169,8 +169,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:413",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:286"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:413",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:286"
           ]
         },
         {
@@ -178,9 +178,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:442",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:285",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:332"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:442",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:332"
           ]
         },
         {
@@ -188,9 +188,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:526",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:346",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:149"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:526",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:149"
           ]
         },
         {
@@ -198,8 +198,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:444",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:338"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:444",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:338"
           ]
         },
         {
@@ -207,8 +207,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:470",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:416"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:470",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:416"
           ]
         },
         {
@@ -216,8 +216,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:438",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:319"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:438",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:319"
           ]
         },
         {
@@ -225,9 +225,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:491",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:337",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:66"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:491",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:337",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:66"
           ]
         },
         {
@@ -235,8 +235,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:422",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:223"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:422",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:223"
           ]
         },
         {
@@ -244,8 +244,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:394",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:249"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:394",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:249"
           ]
         },
         {
@@ -253,9 +253,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:440",
-            "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:283",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:328"
+            "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:440",
+            "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:328"
           ]
         }
       ],
@@ -265,7 +265,7 @@
           "scoutAnchorClaim": "element:from, element:to",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:76"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:76"
           ]
         },
         {
@@ -273,7 +273,7 @@
           "scoutAnchorClaim": "class:rottay-colorpicker__dropdown",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:50"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:50"
           ]
         }
       ],
@@ -282,7 +282,7 @@
           "token": "data-selected='true'",
           "occurrences": 18,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:369"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:369"
           ],
           "state": "selected"
         },
@@ -290,7 +290,7 @@
           "token": "pseudo:disabled",
           "occurrences": 17,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:299"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:299"
           ],
           "state": "disabled"
         },
@@ -298,7 +298,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 15,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:96"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:96"
           ],
           "state": "focus-visible"
         },
@@ -306,7 +306,7 @@
           "token": "pseudo:active",
           "occurrences": 8,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:304"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:304"
           ],
           "state": "active"
         },
@@ -314,7 +314,7 @@
           "token": "pseudo:hover",
           "occurrences": 8,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:299"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:299"
           ],
           "state": "hover"
         },
@@ -322,7 +322,7 @@
           "token": "data-empty='true'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:117"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:117"
           ],
           "state": "empty"
         },
@@ -330,7 +330,7 @@
           "token": "data-disabled='true'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:100"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:100"
           ],
           "state": "disabled"
         },
@@ -338,7 +338,7 @@
           "token": "pseudo:focus",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:279"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:279"
           ],
           "state": "focus"
         },
@@ -346,7 +346,7 @@
           "token": "data-invalid='true'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:283"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:283"
           ],
           "state": "invalid"
         }
@@ -356,21 +356,21 @@
           "token": "data-size='large'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:139"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:139"
           ]
         },
         {
           "token": "data-size='middle'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:135"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:135"
           ]
         },
         {
           "token": "data-size='small'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:131"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:131"
           ]
         }
       ],
@@ -380,7 +380,7 @@
             "token": "data-edge='end'",
             "occurrences": 4,
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:189"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:189"
             ]
           }
         ],
@@ -391,126 +391,126 @@
           "token": "data-part='preset-swatch'",
           "occurrences": 47,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:313"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:313"
           ]
         },
         {
           "token": "data-part='swatch'",
           "occurrences": 32,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:105"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:105"
           ]
         },
         {
           "token": "data-part='format-select'",
           "occurrences": 31,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:227"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:227"
           ]
         },
         {
           "token": "data-part='hex-input'",
           "occurrences": 29,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:253"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:253"
           ]
         },
         {
           "token": "data-part='clear-button'",
           "occurrences": 28,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:313"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:313"
           ]
         },
         {
           "token": "data-part='dropdown'",
           "occurrences": 24,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:158"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:158"
           ]
         },
         {
           "token": "data-part='trigger'",
           "occurrences": 19,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:87"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:87"
           ]
         },
         {
           "token": "data-part='native-color-input'",
           "occurrences": 9,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:207"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:207"
           ]
         },
         {
           "token": "data-part='hex-error'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:286"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:286"
           ]
         },
         {
           "token": "data-part='preset-group'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:324"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:324"
           ]
         },
         {
           "token": "data-part='preset-label'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:332"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:332"
           ]
         },
         {
           "token": "data-part='display-text'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:149"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:149"
           ]
         },
         {
           "token": "data-part='preset-row'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:338"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:338"
           ]
         },
         {
           "token": "data-part='root'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:66"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:66"
           ]
         },
         {
           "token": "data-part='clear-field'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:416"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:416"
           ]
         },
         {
           "token": "data-part='presets'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:319"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:319"
           ]
         },
         {
           "token": "data-part='format-field'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:223"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:223"
           ]
         },
         {
           "token": "data-part='hex-field'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:249"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:249"
           ]
         }
       ],
@@ -518,22 +518,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/color-picker/engines/classic/index.tsx",
             "lines": 107
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx",
             "lines": 538
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx",
             "lines": 358
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "dropdown",
           "format-select",
@@ -673,7 +673,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:210",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:210",
                 "part": "native-color-input",
                 "property": "block-size",
                 "hasFallback": true,
@@ -701,7 +701,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:85",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:85",
                 "part": "clear-button",
                 "property": "background-color",
                 "hasFallback": false,
@@ -729,7 +729,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:89",
                 "part": "clear-button",
                 "property": "border",
                 "hasFallback": false,
@@ -757,7 +757,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:86",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:86",
                 "part": "clear-button",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -786,14 +786,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:101",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:101",
                 "part": "trigger",
                 "property": "opacity",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-disabled-opacity)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:314",
                 "part": "clear-button",
                 "property": "opacity",
                 "hasFallback": true,
@@ -821,7 +821,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:81",
                 "part": "clear-button",
                 "property": "border-top",
                 "hasFallback": false,
@@ -849,7 +849,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:50",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:50",
                 "part": "UNATTRIBUTED(rottay-colorpicker__dropdown)",
                 "property": "background-color",
                 "hasFallback": false,
@@ -880,14 +880,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:177",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:177",
                 "part": "dropdown",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "11rem"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:201",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:201",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "minWidth",
                 "hasFallback": false,
@@ -915,7 +915,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:199",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:199",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -943,7 +943,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:51",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:51",
                 "part": "UNATTRIBUTED(rottay-colorpicker__dropdown)",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -971,7 +971,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:52",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:52",
                 "part": "UNATTRIBUTED(rottay-colorpicker__dropdown)",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -999,7 +999,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:159",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": true,
@@ -1027,7 +1027,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:61",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:61",
                 "part": "hex-input",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1055,7 +1055,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:64",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:64",
                 "part": "hex-input",
                 "property": "border",
                 "hasFallback": false,
@@ -1083,7 +1083,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:60",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:60",
                 "part": "hex-input",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1111,7 +1111,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:68",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:68",
                 "part": "preset-label",
                 "property": "color",
                 "hasFallback": false,
@@ -1139,7 +1139,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:219",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:219",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -1167,7 +1167,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:206",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:206",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "height",
                 "hasFallback": false,
@@ -1195,7 +1195,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:76",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:76",
                 "part": "preset-swatch",
                 "property": "border",
                 "hasFallback": false,
@@ -1224,14 +1224,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:348",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:348",
                 "part": "preset-swatch",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:73",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:73",
                 "part": "preset-swatch",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1259,7 +1259,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:226",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:226",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "gap",
                 "hasFallback": false,
@@ -1287,7 +1287,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:72",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:72",
                 "part": "preset-swatch",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1316,14 +1316,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:230",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:230",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "width",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:231",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:231",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "height",
                 "hasFallback": false,
@@ -1353,21 +1353,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:345",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:345",
                 "part": "preset-swatch",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "1.25rem"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:346",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:346",
                 "part": "preset-swatch",
                 "property": "block-size",
                 "hasFallback": true,
                 "fallback": "1.25rem"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:380",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:380",
                 "part": "preset-swatch",
                 "property": "font-size",
                 "hasFallback": true,
@@ -1395,7 +1395,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:46",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:46",
                 "part": "swatch",
                 "property": "border",
                 "hasFallback": false,
@@ -1424,14 +1424,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:106",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:106",
                 "part": "swatch",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:43",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:43",
                 "part": "swatch",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1461,7 +1461,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:395",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:395",
                 "part": "preset-swatch",
                 "property": "transform",
                 "hasFallback": true,
@@ -1489,7 +1489,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:41",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:41",
                 "part": "swatch",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1517,7 +1517,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker.css:42",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/color-picker/index.css:42",
                 "part": "swatch",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1549,28 +1549,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:139",
                 "part": "swatch",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "2.5rem"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:140",
                 "part": "swatch",
                 "property": "block-size",
                 "hasFallback": true,
                 "fallback": "2.5rem"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:30",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:30",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "large",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:30",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:30",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "large",
                 "hasFallback": false,
@@ -1602,28 +1602,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:135",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:135",
                 "part": "swatch",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "2rem"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:136",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:136",
                 "part": "swatch",
                 "property": "block-size",
                 "hasFallback": true,
                 "fallback": "2rem"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:29",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:29",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "default",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:29",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:29",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "default",
                 "hasFallback": false,
@@ -1655,28 +1655,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:131",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:131",
                 "part": "swatch",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "1.5rem"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:132",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:132",
                 "part": "swatch",
                 "property": "block-size",
                 "hasFallback": true,
                 "fallback": "1.5rem"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:28",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:28",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "small",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:28",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:28",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "small",
                 "hasFallback": false,
@@ -1704,7 +1704,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:192",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:192",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -1732,7 +1732,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:195",
                 "part": "dropdown",
                 "property": "border",
                 "hasFallback": true,
@@ -1772,28 +1772,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:145",
                 "part": "swatch",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:240",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:240",
                 "part": "format-select",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:276",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:276",
                 "part": "hex-input",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:324",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:324",
                 "part": "clear-button",
                 "property": "border-top",
                 "hasFallback": false,
@@ -1825,7 +1825,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:195",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:195",
                 "part": "dropdown",
                 "property": "border",
                 "hasFallback": false,
@@ -1859,14 +1859,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:283",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:283",
                 "part": "hex-input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:288",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:288",
                 "part": "hex-error",
                 "property": "color",
                 "hasFallback": false,
@@ -1898,7 +1898,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:384",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:384",
                 "part": "preset-swatch",
                 "property": "filter",
                 "hasFallback": false,
@@ -1942,28 +1942,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:96",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:96",
                 "part": "trigger",
                 "property": "outline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:216",
                 "part": "native-color-input",
                 "property": "outline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:243",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:243",
                 "part": "format-select",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:279",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:279",
                 "part": "hex-input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1995,14 +1995,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:128",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:128",
                 "part": "swatch",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:128",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:128",
                 "part": "swatch",
                 "property": "background",
                 "hasFallback": false,
@@ -2037,28 +2037,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:150",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:150",
                 "part": "display-text",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:234",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:234",
                 "part": "format-select",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:260",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:260",
                 "part": "hex-input",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:426",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:426",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
@@ -2090,7 +2090,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:333",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:333",
                 "part": "preset-label",
                 "property": "color",
                 "hasFallback": false,
@@ -2127,28 +2127,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:371",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:371",
                 "part": "preset-swatch",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:381",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:381",
                 "part": "preset-swatch",
                 "property": "border-left",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:382",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:382",
                 "part": "preset-swatch",
                 "property": "border-bottom",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/modern/index.tsx:524",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/modern/index.tsx:524",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": false,
@@ -2179,7 +2179,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:164",
                 "part": "dropdown",
                 "property": "padding",
                 "hasFallback": false,
@@ -2213,14 +2213,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:107",
                 "part": "swatch",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:396",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:396",
                 "part": "preset-swatch",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -2254,14 +2254,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:172",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:392",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:392",
                 "part": "swatch",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -2292,14 +2292,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:171",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:171",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -2331,14 +2331,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:244",
                 "part": "format-select",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:280",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:280",
                 "part": "hex-input",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -2372,21 +2372,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:96",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:96",
                 "part": "trigger",
                 "property": "outline",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:216",
                 "part": "native-color-input",
                 "property": "outline",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:410",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:410",
                 "part": "clear-button",
                 "property": "outline",
                 "hasFallback": true,
@@ -2419,21 +2419,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:97",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:97",
                 "part": "trigger",
                 "property": "outline-offset",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:217",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:217",
                 "part": "native-color-input",
                 "property": "outline-offset",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:411",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:411",
                 "part": "clear-button",
                 "property": "outline-offset",
                 "hasFallback": false,
@@ -2466,21 +2466,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:96",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:96",
                 "part": "trigger",
                 "property": "outline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:216",
                 "part": "native-color-input",
                 "property": "outline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:410",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:410",
                 "part": "clear-button",
                 "property": "outline",
                 "hasFallback": false,
@@ -2512,7 +2512,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:182",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:182",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -2543,7 +2543,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:269",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:269",
                 "part": "hex-input",
                 "property": "font-family",
                 "hasFallback": false,
@@ -2577,21 +2577,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:149",
                 "part": "display-text",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:214",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:214",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/ColorPicker/engines/rustic/index.tsx:243",
+                "at": "packages/core/src/components/primitives/inputs/color-picker/engines/rustic/index.tsx:243",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -2623,14 +2623,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:289",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:289",
                 "part": "hex-error",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:334",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:334",
                 "part": "preset-label",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2663,14 +2663,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:233",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:233",
                 "part": "format-select",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:259",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:259",
                 "part": "hex-input",
                 "property": "background",
                 "hasFallback": true,
@@ -2703,14 +2703,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:243",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:243",
                 "part": "format-select",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:279",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:279",
                 "part": "hex-input",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2744,14 +2744,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:299",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:299",
                 "part": "format-select",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:304",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:304",
                 "part": "format-select",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2783,14 +2783,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:101",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:101",
                 "part": "trigger",
                 "property": "opacity",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:314",
                 "part": "clear-button",
                 "property": "opacity",
                 "hasFallback": false,
@@ -2822,7 +2822,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:289",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:289",
                 "part": "hex-error",
                 "property": "font-size",
                 "hasFallback": true,
@@ -2855,14 +2855,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:244",
                 "part": "format-select",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:280",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:280",
                 "part": "hex-input",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2895,21 +2895,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:231",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:231",
                 "part": "format-select",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:257",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:257",
                 "part": "hex-input",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:423",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:423",
                 "part": "clear-button",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2942,21 +2942,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:229",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:229",
                 "part": "format-select",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:255",
                 "part": "hex-input",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:421",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:421",
                 "part": "clear-button",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2990,21 +2990,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:230",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:230",
                 "part": "format-select",
                 "property": "padding-inline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:256",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:256",
                 "part": "hex-input",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:422",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:422",
                 "part": "clear-button",
                 "property": "padding",
                 "hasFallback": false,
@@ -3039,21 +3039,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:439",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:439",
                 "part": "trigger",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:442",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:442",
                 "part": "preset-swatch",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:443",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:443",
                 "part": "preset-swatch",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -3084,7 +3084,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:290",
                 "part": "hex-error",
                 "property": "line-height",
                 "hasFallback": false,
@@ -3115,7 +3115,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:171",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": true,
@@ -3146,7 +3146,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:172",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -3183,28 +3183,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:111",
                 "part": "swatch",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:111",
                 "part": "swatch",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:178",
                 "part": "dropdown",
                 "property": "animation",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:237",
                 "part": "format-select",
                 "property": "transition",
                 "hasFallback": false,
@@ -3242,28 +3242,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:111",
                 "part": "swatch",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:111",
                 "part": "swatch",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:178",
                 "part": "dropdown",
                 "property": "animation",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:237",
                 "part": "format-select",
                 "property": "transition",
                 "hasFallback": false,
@@ -3294,7 +3294,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:165",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:165",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3327,21 +3327,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:232",
                 "part": "format-select",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:258",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:258",
                 "part": "hex-input",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:427",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:427",
                 "part": "clear-button",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3375,28 +3375,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:91",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:91",
                 "part": "trigger",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:108",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:108",
                 "part": "swatch",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:213",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:213",
                 "part": "native-color-input",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:349",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:349",
                 "part": "preset-swatch",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3434,28 +3434,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:160",
                 "part": "dropdown",
                 "property": "inset-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:184",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:184",
                 "part": "dropdown",
                 "property": "inset-block-end",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:199",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:199",
                 "part": "dropdown",
                 "property": "inset-block-end",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:287",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:287",
                 "part": "hex-error",
                 "property": "margin-block-start",
                 "hasFallback": false,
@@ -3493,28 +3493,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:89",
                 "part": "trigger",
                 "property": "gap",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:223",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:223",
                 "part": "format-field",
                 "property": "margin-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:249",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:249",
                 "part": "hex-field",
                 "property": "margin-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:328",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:328",
                 "part": "preset-group",
                 "property": "margin-block-end",
                 "hasFallback": false,
@@ -3548,21 +3548,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:164",
                 "part": "dropdown",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:319",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:319",
                 "part": "presets",
                 "property": "margin-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:320",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:320",
                 "part": "presets",
                 "property": "padding-block-start",
                 "hasFallback": false,
@@ -3593,7 +3593,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:405",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:405",
                 "part": "clear-button",
                 "property": "transform",
                 "hasFallback": false,
@@ -3624,7 +3624,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:171",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -3656,14 +3656,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:233",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:233",
                 "part": "format-select",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:259",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:259",
                 "part": "hex-input",
                 "property": "background",
                 "hasFallback": false,
@@ -3696,7 +3696,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:399",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:399",
                 "part": "clear-button",
                 "property": "background",
                 "hasFallback": false,
@@ -3731,21 +3731,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:439",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:439",
                 "part": "trigger",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:442",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:442",
                 "part": "preset-swatch",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:443",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:443",
                 "part": "preset-swatch",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -3776,7 +3776,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css:159",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": false,
@@ -3902,13 +3902,13 @@
         {
           "channelId": "--_ds-color-picker-accent-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3918,13 +3918,13 @@
         {
           "channelId": "--_ds-color-picker-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3934,13 +3934,13 @@
         {
           "channelId": "--_ds-colorpicker-dropdown-z",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3949,13 +3949,13 @@
         {
           "channelId": "--_ds-colorpicker-preset-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3964,13 +3964,13 @@
         {
           "channelId": "--_ds-colorpicker-swatch-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3979,13 +3979,13 @@
         {
           "channelId": "--_ds-colorpicker-swatch-hover-scale",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3994,13 +3994,13 @@
         {
           "channelId": "--_ds-color-picker-error-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4010,13 +4010,13 @@
         {
           "channelId": "--_ds-color-picker-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4070,13 +4070,13 @@
         {
           "channelId": "--_ds-color-picker-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4096,13 +4096,13 @@
         {
           "channelId": "--_ds-color-picker-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4156,13 +4156,13 @@
         {
           "channelId": "--_ds-color-picker-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4172,13 +4172,13 @@
         {
           "channelId": "--_ds-color-picker-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4187,13 +4187,13 @@
         {
           "channelId": "--_ds-colorpicker-dropdown-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4202,13 +4202,13 @@
         {
           "channelId": "--_ds-colorpicker-preset-swatch-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4217,13 +4217,13 @@
         {
           "channelId": "--_ds-colorpicker-swatch-size-lg",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4232,13 +4232,13 @@
         {
           "channelId": "--_ds-colorpicker-swatch-size-md",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4247,13 +4247,13 @@
         {
           "channelId": "--_ds-colorpicker-swatch-size-sm",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4289,13 +4289,13 @@
         {
           "channelId": "--_ds-color-picker-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4401,13 +4401,13 @@
         {
           "channelId": "--_ds-color-picker-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4417,13 +4417,13 @@
         {
           "channelId": "--_ds-color-picker-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4433,13 +4433,13 @@
         {
           "channelId": "--_ds-color-picker-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4463,7 +4463,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4519,7 +4519,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4547,7 +4547,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
         ]
       }
     },
@@ -4562,13 +4562,13 @@
         {
           "channelId": "--_ds-color-picker-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/color-picker"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/color-picker/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4588,11 +4588,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

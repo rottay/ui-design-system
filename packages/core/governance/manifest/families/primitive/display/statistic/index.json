@@ -8,15 +8,15 @@
     "components": [
       "Statistic"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Statistic",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/statistic",
     "publicComponents": [
       "Statistic"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "e0317417661d1cf8ecfe7b721015b8175174e946106b18ac15daabb51867a3f8"
+    "inventoryRowDigest": "fcdcfc1bcb84af4129c71047cf818d06eefb7cbb26b067e22ce138e104b6b056"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,23 +28,23 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Statistic/Statistic.stories.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/index.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Statistic/tests/Countdown.integration.test.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/tests/Statistic.integration.test.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/tests/Statistic.modern-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/tests/Statistic.modern-paint-ownership.test.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/tests/Statistic.rustic-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/tests/Statistic.test.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/Statistic/compound/index.ts",
-      "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+      "packages/core/src/components/primitives/display/statistic/statistic.stories.tsx",
+      "packages/core/src/components/primitives/display/statistic/index.tsx",
+      "packages/core/src/components/primitives/display/statistic/contracts/index.ts",
+      "packages/core/src/components/primitives/display/statistic/tests/countdown.integration.test.tsx",
+      "packages/core/src/components/primitives/display/statistic/tests/statistic.integration.test.tsx",
+      "packages/core/src/components/primitives/display/statistic/tests/statistic.modern-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/statistic/tests/statistic.modern-paint-ownership.test.tsx",
+      "packages/core/src/components/primitives/display/statistic/tests/statistic.rustic-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/statistic/tests/statistic.test.tsx",
+      "packages/core/src/components/primitives/display/statistic/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/statistic/compound/index.ts",
+      "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css"
     ],
     "stableParts": [
       "root",
@@ -70,10 +70,10 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "A live-updating statistic announces politely and atomically: role=\"timer\" + aria-live=\"polite\" + aria-atomic=\"true\" at packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:348-350.",
-      "The skeleton root announces busy state: aria-busy at packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:234 and packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:193.",
-      "The value is bound to its title by id, not adjacency: aria-labelledby at packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:254 and :423.",
-      "A forced-colors path is handled in the engine itself, not only in the skin: packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:122-123."
+      "A live-updating statistic announces politely and atomically: role=\"timer\" + aria-live=\"polite\" + aria-atomic=\"true\" at packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:348-350.",
+      "The skeleton root announces busy state: aria-busy at packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:234 and packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:193.",
+      "The value is bound to its title by id, not adjacency: aria-labelledby at packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:254 and :423.",
+      "A forced-colors path is handled in the engine itself, not only in the skin: packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:122-123."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -96,12 +96,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:234",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:245",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:416",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:193",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:202",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:346"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:234",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:245",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:416",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:193",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:202",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:346"
           ],
           "atSiteCount": 8
         },
@@ -110,12 +110,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:235",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:236",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:194",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:195",
-            "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:262",
-            "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:263"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:235",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:236",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:194",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:195",
+            "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:262",
+            "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:263"
           ]
         },
         {
@@ -123,11 +123,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:258",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:427",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:204",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:353",
-            "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:271"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:258",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:427",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:204",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:353",
+            "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:271"
           ]
         },
         {
@@ -135,11 +135,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:263",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:435",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:209",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:357",
-            "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:275"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:263",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:435",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:209",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:357",
+            "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:275"
           ]
         },
         {
@@ -147,11 +147,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:274",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:446",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:216",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:358",
-            "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:276"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:274",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:446",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:216",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:358",
+            "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:276"
           ]
         },
         {
@@ -159,9 +159,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:279",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:289",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:450"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:279",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:289",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:450"
           ]
         },
         {
@@ -169,11 +169,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:292",
-            "packages/core/src/ui/primitives/display/Statistic/engines/modern/index.tsx:452",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:228",
-            "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:360",
-            "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:278"
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:292",
+            "packages/core/src/components/primitives/display/statistic/engines/modern/index.tsx:452",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:228",
+            "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:360",
+            "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:278"
           ]
         }
       ],
@@ -181,12 +181,12 @@
         {
           "token": "hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:52",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:53",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:243",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:244"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:243",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:244"
           ],
           "atSiteCount": 8,
           "state": "hover"
@@ -194,12 +194,12 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:52",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:53",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:84",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:85"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:84",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:85"
           ],
           "atSiteCount": 10,
           "state": "loading"
@@ -237,24 +237,24 @@
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:235",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:236",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:237",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:238",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:239",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:243"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:235",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:236",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:237",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:238",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:239",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:243"
             ],
             "atSiteCount": 10
           },
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:259",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:265",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:266",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:267",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:268",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:269"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:259",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:265",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:266",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:267",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:268",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:269"
             ],
             "atSiteCount": 10
           }
@@ -334,7 +334,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/engines/classic/index.tsx:70",
+            "readAt": "packages/core/src/components/primitives/display/statistic/engines/classic/index.tsx:70",
             "fallback": null,
             "landsOnProperty": "positive",
             "propertyGroup": "layout",
@@ -346,7 +346,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/engines/classic/index.tsx:71",
+            "readAt": "packages/core/src/components/primitives/display/statistic/engines/classic/index.tsx:71",
             "fallback": null,
             "landsOnProperty": "negative",
             "propertyGroup": "layout",
@@ -358,7 +358,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/engines/classic/index.tsx:72",
+            "readAt": "packages/core/src/components/primitives/display/statistic/engines/classic/index.tsx:72",
             "fallback": null,
             "landsOnProperty": "warning",
             "propertyGroup": "layout",
@@ -370,7 +370,7 @@
           },
           {
             "variable": "--ds-statistic-title-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:109",
+            "readAt": "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:109",
             "fallback": "14px",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -382,7 +382,7 @@
           },
           {
             "variable": "--ds-statistic-value-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/engines/rustic/index.tsx:114",
+            "readAt": "packages/core/src/components/primitives/display/statistic/engines/rustic/index.tsx:114",
             "fallback": "24px",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -394,7 +394,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:228",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:228",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -406,7 +406,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:229",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:229",
             "fallback": "14px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -418,7 +418,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:231",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:231",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -430,7 +430,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:233",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:233",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -442,7 +442,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:235",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:235",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -454,7 +454,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:236",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:236",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -466,7 +466,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:237",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:237",
             "fallback": "20px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -478,7 +478,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:238",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:238",
             "fallback": "600",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -490,7 +490,7 @@
           },
           {
             "variable": "--ds-statistic-title-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:247",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:247",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -502,7 +502,7 @@
           },
           {
             "variable": "--ds-statistic-value-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:252",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:252",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -514,7 +514,7 @@
           },
           {
             "variable": "--ds-statistic-value-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:253",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:253",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -526,7 +526,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/ui/primitives/display/Statistic/compound/Countdown/index.tsx:254",
+            "readAt": "packages/core/src/components/primitives/display/statistic/compound/countdown/index.tsx:254",
             "fallback": "monospace",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -538,7 +538,7 @@
           },
           {
             "variable": "--ds-statistic-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:41",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -549,7 +549,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:41",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -560,7 +560,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:43",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:43",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -571,7 +571,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:43",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:43",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -582,7 +582,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:44",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -593,7 +593,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:44",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -604,7 +604,7 @@
           },
           {
             "variable": "--ds-statistic-title-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:67",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -615,7 +615,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:67",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -626,7 +626,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:68",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:68",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -637,7 +637,7 @@
           },
           {
             "variable": "--ds-statistic-title-font-family",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:71",
             "fallback": "var(--ds-font-family-base)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -648,7 +648,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:71",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -659,7 +659,7 @@
           },
           {
             "variable": "--ds-statistic-title-font-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:72",
             "fallback": "var(--ds-font-size-xs)",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -670,7 +670,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:72",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -681,7 +681,7 @@
           },
           {
             "variable": "--ds-statistic-title-font-weight",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:73",
             "fallback": "var(--ds-font-weight-medium)",
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -692,7 +692,7 @@
           },
           {
             "variable": "--ds-font-weight-medium",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:73",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -703,7 +703,7 @@
           },
           {
             "variable": "--ds-statistic-title-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:74",
             "fallback": "0.045em",
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -714,7 +714,7 @@
           },
           {
             "variable": "--ds-statistic-title-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:75",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:75",
             "fallback": "uppercase",
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -725,7 +725,7 @@
           },
           {
             "variable": "--ds-line-height-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:77",
             "fallback": "1.25rem",
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -736,7 +736,7 @@
           },
           {
             "variable": "--ds-statistic-title-margin-bottom",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:78",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:78",
             "fallback": "var(--ds-spacing-1)",
             "landsOnProperty": "margin-bottom",
             "propertyGroup": "spacing",
@@ -747,7 +747,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:78",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:78",
             "fallback": null,
             "landsOnProperty": "margin-bottom",
             "propertyGroup": "spacing",
@@ -758,7 +758,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:85",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -769,7 +769,7 @@
           },
           {
             "variable": "--ds-skeleton-animation-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:86",
             "fallback": null,
             "landsOnProperty": "animation-duration",
             "propertyGroup": "motion",
@@ -780,7 +780,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:89",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:89",
             "fallback": null,
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -791,7 +791,7 @@
           },
           {
             "variable": "--ds-spacing-16",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:90",
             "fallback": null,
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -802,7 +802,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:91",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:91",
             "fallback": null,
             "landsOnProperty": "margin-bottom",
             "propertyGroup": "spacing",
@@ -813,7 +813,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:94",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:94",
             "fallback": null,
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -824,7 +824,7 @@
           },
           {
             "variable": "--ds-spacing-24",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:95",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:95",
             "fallback": null,
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -835,7 +835,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:114",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:114",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -846,7 +846,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:115",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -857,7 +857,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:115",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -868,7 +868,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:116",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -879,7 +879,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:120",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:120",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -890,7 +890,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:122",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:122",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -901,7 +901,7 @@
           },
           {
             "variable": "--ds-motion-glacial",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:124",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -912,7 +912,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:125",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:125",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -923,7 +923,7 @@
           },
           {
             "variable": "--ds-statistic-value-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:132",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -934,7 +934,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:132",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -945,7 +945,7 @@
           },
           {
             "variable": "--ds-statistic-value-font-family",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:137",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:137",
             "fallback": "var(--ds-font-family-heading)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -956,7 +956,7 @@
           },
           {
             "variable": "--ds-font-family-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:137",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:137",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -967,7 +967,7 @@
           },
           {
             "variable": "--ds-statistic-value-font-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:138",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:138",
             "fallback": "var(--ds-font-size-2xl)",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -978,7 +978,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:138",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:138",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -989,7 +989,7 @@
           },
           {
             "variable": "--ds-statistic-value-font-weight",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:139",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:139",
             "fallback": "var(--ds-font-weight-bold)",
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1000,7 +1000,7 @@
           },
           {
             "variable": "--ds-font-weight-bold",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:139",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:139",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1011,7 +1011,7 @@
           },
           {
             "variable": "--ds-statistic-value-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:140",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:140",
             "fallback": "-0.035em",
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1022,7 +1022,7 @@
           },
           {
             "variable": "--ds-line-height-2xl",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:142",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:142",
             "fallback": "2rem",
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1033,7 +1033,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:153",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1044,7 +1044,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:153",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1055,7 +1055,7 @@
           },
           {
             "variable": "--ds-statistic-negative-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:157",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:157",
             "fallback": "var(--ds-color-error)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1066,7 +1066,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:157",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:157",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1077,7 +1077,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:168",
             "fallback": null,
             "landsOnProperty": "margin-inline-end",
             "propertyGroup": "spacing",
@@ -1088,7 +1088,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:181",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:181",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1099,7 +1099,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:181",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:181",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1110,7 +1110,7 @@
           },
           {
             "variable": "--ds-statistic-prefix-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:190",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:190",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1121,7 +1121,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:191",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:191",
             "fallback": null,
             "landsOnProperty": "margin-inline-end",
             "propertyGroup": "spacing",
@@ -1132,7 +1132,7 @@
           },
           {
             "variable": "--ds-statistic-suffix-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:194",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:194",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1143,7 +1143,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:195",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:195",
             "fallback": null,
             "landsOnProperty": "margin-inline-start",
             "propertyGroup": "spacing",
@@ -1154,7 +1154,7 @@
           },
           {
             "variable": "--ds-statistic-affix-height",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:210",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:210",
             "fallback": "1.375rem",
             "landsOnProperty": "min-height",
             "propertyGroup": "size",
@@ -1165,7 +1165,7 @@
           },
           {
             "variable": "--ds-density-effective-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:210",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:210",
             "fallback": null,
             "landsOnProperty": "min-height",
             "propertyGroup": "size",
@@ -1176,7 +1176,7 @@
           },
           {
             "variable": "--ds-statistic-affix-padding-x",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:211",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:211",
             "fallback": "0.375rem",
             "landsOnProperty": "padding-inline",
             "propertyGroup": "spacing",
@@ -1187,7 +1187,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:215",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:215",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1198,7 +1198,7 @@
           },
           {
             "variable": "--ds-statistic-affix-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:217",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:217",
             "fallback": "9999px",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1209,7 +1209,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:223",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:223",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1220,7 +1220,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:224",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:224",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1231,7 +1231,7 @@
           },
           {
             "variable": "--ds-statistic-affix-font-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:225",
             "fallback": "var(--ds-font-size-xs)",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1242,7 +1242,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:225",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1253,7 +1253,7 @@
           },
           {
             "variable": "--ds-statistic-affix-font-weight",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:226",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:226",
             "fallback": "var(--ds-font-weight-medium)",
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1264,7 +1264,7 @@
           },
           {
             "variable": "--ds-font-weight-medium",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:226",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:226",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1275,7 +1275,7 @@
           },
           {
             "variable": "--ds-statistic-affix-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:227",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:227",
             "fallback": "0",
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1286,7 +1286,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:231",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1297,7 +1297,7 @@
           },
           {
             "variable": "--ds-statistic-countdown-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:232",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:232",
             "fallback": "-0.025em",
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1308,7 +1308,7 @@
           },
           {
             "variable": "--ds-statistic-skeleton-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:25",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:25",
             "fallback": "var(--ds-color-bg-secondary)",
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1319,7 +1319,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:25",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:25",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1330,7 +1330,7 @@
           },
           {
             "variable": "--ds-statistic-title-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:31",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:31",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1341,7 +1341,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:31",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:31",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1352,7 +1352,7 @@
           },
           {
             "variable": "--ds-statistic-value-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:38",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:38",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1363,7 +1363,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:38",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:38",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1374,7 +1374,7 @@
           },
           {
             "variable": "--ds-statistic-positive-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:41",
             "fallback": "var(--ds-color-success)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1385,7 +1385,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:41",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1396,7 +1396,7 @@
           },
           {
             "variable": "--ds-statistic-negative-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:44",
             "fallback": "var(--ds-color-error)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1407,7 +1407,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:44",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1418,7 +1418,7 @@
           },
           {
             "variable": "--ds-statistic-warning-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:47",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:47",
             "fallback": "var(--ds-color-warning)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1429,7 +1429,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:47",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:47",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1440,7 +1440,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css:29",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1451,7 +1451,7 @@
           },
           {
             "variable": "--ds-statistic-title-color",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css:35",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1462,7 +1462,7 @@
           },
           {
             "variable": "--ds-statistic-value-color",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css:38",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css:38",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1478,49 +1478,49 @@
           {
             "kind": "shadow",
             "literal": "inset 0 1px 0",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:121",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:121",
             "declaration": "box-shadow"
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 18%, var(--ds-color-border-subtle)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:215",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:215",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 7%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:220",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:220",
             "declaration": null
           },
           {
             "kind": "shadow",
             "literal": "inset 0 1px 0",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:222",
             "declaration": "box-shadow"
           },
           {
             "kind": "shadow",
             "literal": "none",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:273",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:273",
             "declaration": "box-shadow"
           },
           {
             "kind": "shadow",
             "literal": "none",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css:277",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css:277",
             "declaration": "box-shadow"
           },
           {
             "kind": "radius",
             "literal": "4px",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic.css:26",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/statistic/index.css:26",
             "declaration": "border-radius"
           },
           {
             "kind": "radius",
             "literal": "4px",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css:30",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css:30",
             "declaration": "border-radius"
           }
         ],
@@ -1542,13 +1542,13 @@
         {
           "channelId": "--_ds-statistic-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1557,14 +1557,14 @@
         {
           "channelId": "--_ds-statistic-title-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1573,13 +1573,13 @@
         {
           "channelId": "--_ds-statistic-prefix-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1588,13 +1588,13 @@
         {
           "channelId": "--_ds-statistic-suffix-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1603,14 +1603,14 @@
         {
           "channelId": "--_ds-statistic-value-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1619,13 +1619,13 @@
         {
           "channelId": "--_ds-statistic-negative-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1644,13 +1644,13 @@
         {
           "channelId": "--_ds-statistic-title-font-weight",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1659,13 +1659,13 @@
         {
           "channelId": "--_ds-statistic-value-font-weight",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1674,13 +1674,13 @@
         {
           "channelId": "--_ds-statistic-affix-font-weight",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1689,13 +1689,13 @@
         {
           "channelId": "--_ds-statistic-title-letter-spacing",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1704,13 +1704,13 @@
         {
           "channelId": "--_ds-statistic-value-letter-spacing",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1719,13 +1719,13 @@
         {
           "channelId": "--_ds-statistic-affix-letter-spacing",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1734,13 +1734,13 @@
         {
           "channelId": "--_ds-statistic-countdown-letter-spacing",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1749,13 +1749,13 @@
         {
           "channelId": "--_ds-statistic-title-transform",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1774,13 +1774,13 @@
         {
           "channelId": "--_ds-statistic-title-font-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1789,13 +1789,13 @@
         {
           "channelId": "--_ds-statistic-value-font-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1814,13 +1814,13 @@
         {
           "channelId": "--_ds-statistic-title-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1829,13 +1829,13 @@
         {
           "channelId": "--_ds-statistic-value-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/statistic/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1844,13 +1844,13 @@
         {
           "channelId": "--_ds-statistic-affix-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1869,13 +1869,13 @@
         {
           "channelId": "--_ds-statistic-affix-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1911,13 +1911,13 @@
         {
           "channelId": "--_ds-statistic-affix-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1926,13 +1926,13 @@
         {
           "channelId": "--_ds-statistic-affix-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1950,7 +1950,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "",
@@ -1972,7 +1972,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ]
       }
@@ -2015,14 +2015,14 @@
         {
           "channelId": "--_ds-statistic-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/statistic"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/statistic-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2041,7 +2041,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2121,7 +2121,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2177,7 +2177,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2206,7 +2206,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/statistic/index.css"
         ]
       }
     },
@@ -2249,11 +2249,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

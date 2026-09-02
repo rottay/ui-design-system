@@ -8,15 +8,15 @@
     "components": [
       "BrandingPreviewSandbox"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/customization/branding-preview-sandbox",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/customization/branding-preview-sandbox",
     "publicComponents": [
       "BrandingPreviewSandbox"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "24755635e75bf594477fddeac2f72f57ad3fbf8ad14a2073e14b8496689e3587"
+    "inventoryRowDigest": "c20aead8e13c5dfff313e003367a333e23b406f8239d42108c6604defd701421"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css"
+      "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css"
     ],
     "stableParts": [
       "header",
@@ -85,111 +85,111 @@
           "part": "header",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:122",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:135",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:155",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:193",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:210",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:258"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:122",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:135",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:155",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:193",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:210",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:258"
           ]
         },
         {
           "part": "input",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:141",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:146"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:141",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:146"
           ]
         },
         {
           "part": "preview-card-body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:172",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:183",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:78"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:172",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:183",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:78"
           ]
         },
         {
           "part": "preview-card-title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:169",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:180",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:73"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:169",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:180",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:73"
           ]
         },
         {
           "part": "preview-table-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:216",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:219",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:222",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:239",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:242",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:245"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:216",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:219",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:222",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:239",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:242",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:245"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:117",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:30",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:70",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:181"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:117",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:30",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:181"
           ]
         },
         {
           "part": "subtitle",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:266",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:272",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:280",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:156",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:162",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:171"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:266",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:272",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:280",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:156",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:162",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:171"
           ]
         },
         {
           "part": "surface",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:126",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:139",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:159",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:197",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:238",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:262"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:126",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:139",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:159",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:197",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:238",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:262"
           ]
         },
         {
           "part": "table",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:214",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:84",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:102",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:112"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:214",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:102",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:112"
           ]
         },
         {
           "part": "table-head",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:215",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:91",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:183"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:215",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:91",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:183"
           ]
         },
         {
           "part": "title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:263",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:152"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:263",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:152"
           ]
         }
       ],
@@ -197,94 +197,94 @@
         {
           "token": "state=badges",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:193",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:197",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:53"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:193",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:53"
           ],
           "state": "badges"
         },
         {
           "token": "state=buttons",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:122",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:126",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:50"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:122",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:50"
           ],
           "state": "buttons"
         },
         {
           "token": "state=cards",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:155",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:159",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:52"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:155",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:159",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:52"
           ],
           "state": "cards"
         },
         {
           "token": "state=compact",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:70"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:70"
           ],
           "state": "compact"
         },
         {
           "token": "state=compact ? 'compact' : 'full'",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:118"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:118"
           ],
           "state": "state"
         },
         {
           "token": "state=default",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:119"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:119"
           ],
           "state": "default"
         },
         {
           "token": "state=elevated",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:178"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:178"
           ],
           "state": "elevated"
         },
         {
           "token": "state=i % 2 === 1 ? 'striped' : 'default'",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:238"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:238"
           ],
           "state": "state"
         },
         {
           "token": "state=inputs",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:135",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:139",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:51"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:135",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:51"
           ],
           "state": "inputs"
         },
         {
           "token": "state=striped",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:125"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:125"
           ],
           "state": "striped"
         },
         {
           "token": "state=table",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:210"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:210"
           ],
           "state": "table"
         },
         {
           "token": "state=typography",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:258",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:262",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:60"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:258",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:60"
           ],
           "state": "typography"
         }
@@ -293,72 +293,72 @@
         {
           "token": "align=end",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:222",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:245",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:136"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:222",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:136"
           ]
         },
         {
           "token": "size=compact ? 'compact' : 'full'",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:165"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:165"
           ]
         },
         {
           "token": "span=wide",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:216",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:239",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:133"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:216",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:133"
           ]
         },
         {
           "token": "variant=body",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:266",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:156"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:266",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:156"
           ]
         },
         {
           "token": "variant=code",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:272",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:162"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:272",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:162"
           ]
         },
         {
           "token": "variant=date",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:245",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:145"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:245",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:145"
           ]
         },
         {
           "token": "variant=head",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:216",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:219",
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:222"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:216",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:219",
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:222"
           ]
         },
         {
           "token": "variant=name",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:239",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:140"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:140"
           ]
         },
         {
           "token": "variant=status",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:242"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:242"
           ]
         },
         {
           "token": "variant=variable-count",
           "at": [
-            "packages/core/src/ui/patterns/customization/branding-preview-sandbox/index.tsx:280",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css:171"
+            "packages/core/src/components/patterns/customization/branding-preview-sandbox/index.tsx:280",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css:171"
           ]
         }
       ],
@@ -367,7 +367,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 31,
             "fallback": false,
             "fallbackValue": null,
@@ -380,7 +380,7 @@
           },
           {
             "name": "--ds-font-family-base",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 32,
             "fallback": false,
             "fallbackValue": null,
@@ -393,7 +393,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 33,
             "fallback": false,
             "fallbackValue": null,
@@ -406,7 +406,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 34,
             "fallback": false,
             "fallbackValue": null,
@@ -419,7 +419,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 35,
             "fallback": false,
             "fallbackValue": null,
@@ -432,7 +432,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 36,
             "fallback": false,
             "fallbackValue": null,
@@ -445,7 +445,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 41,
             "fallback": false,
             "fallbackValue": null,
@@ -458,7 +458,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 42,
             "fallback": false,
             "fallbackValue": null,
@@ -471,7 +471,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 43,
             "fallback": false,
             "fallbackValue": null,
@@ -484,7 +484,7 @@
           },
           {
             "name": "--ds-letter-spacing-widest",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 44,
             "fallback": false,
             "fallbackValue": null,
@@ -497,7 +497,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 46,
             "fallback": false,
             "fallbackValue": null,
@@ -510,7 +510,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 57,
             "fallback": false,
             "fallbackValue": null,
@@ -523,7 +523,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 58,
             "fallback": false,
             "fallbackValue": null,
@@ -536,7 +536,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 61,
             "fallback": false,
             "fallbackValue": null,
@@ -549,7 +549,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -562,7 +562,7 @@
           },
           {
             "name": "--ds-card-title-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 76,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -575,7 +575,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 76,
             "fallback": false,
             "fallbackValue": null,
@@ -588,7 +588,7 @@
           },
           {
             "name": "--ds-card-body-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 80,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -601,7 +601,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 80,
             "fallback": false,
             "fallbackValue": null,
@@ -614,7 +614,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 86,
             "fallback": false,
             "fallbackValue": null,
@@ -627,7 +627,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -640,7 +640,7 @@
           },
           {
             "name": "--ds-table-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 88,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -653,7 +653,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -666,7 +666,7 @@
           },
           {
             "name": "--ds-table-cell-padding",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 93,
             "fallback": true,
             "fallbackValue": "10px 16px",
@@ -679,7 +679,7 @@
           },
           {
             "name": "--ds-table-header-font-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 94,
             "fallback": true,
             "fallbackValue": "13px",
@@ -692,7 +692,7 @@
           },
           {
             "name": "--ds-table-header-font-weight",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 95,
             "fallback": true,
             "fallbackValue": "500",
@@ -705,7 +705,7 @@
           },
           {
             "name": "--ds-table-header-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 96,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-secondary)",
@@ -718,7 +718,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 96,
             "fallback": false,
             "fallbackValue": null,
@@ -731,7 +731,7 @@
           },
           {
             "name": "--ds-table-header-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 97,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -744,7 +744,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -757,7 +757,7 @@
           },
           {
             "name": "--ds-table-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 98,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -770,7 +770,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 98,
             "fallback": false,
             "fallbackValue": null,
@@ -783,7 +783,7 @@
           },
           {
             "name": "--ds-table-cell-padding",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 106,
             "fallback": true,
             "fallbackValue": "10px 16px",
@@ -796,7 +796,7 @@
           },
           {
             "name": "--ds-table-cell-font-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 107,
             "fallback": true,
             "fallbackValue": "14px",
@@ -809,7 +809,7 @@
           },
           {
             "name": "--ds-table-cell-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 108,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-primary)",
@@ -822,7 +822,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 108,
             "fallback": false,
             "fallbackValue": null,
@@ -835,7 +835,7 @@
           },
           {
             "name": "--ds-table-row-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 109,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -848,7 +848,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -861,7 +861,7 @@
           },
           {
             "name": "--ds-table-row-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 120,
             "fallback": true,
             "fallbackValue": "transparent",
@@ -874,7 +874,7 @@
           },
           {
             "name": "--ds-table-row-bg-striped",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 126,
             "fallback": true,
             "fallbackValue": "transparent",
@@ -887,7 +887,7 @@
           },
           {
             "name": "--ds-font-weight-medium",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 141,
             "fallback": true,
             "fallbackValue": "500",
@@ -900,7 +900,7 @@
           },
           {
             "name": "--ds-font-family-mono",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 146,
             "fallback": false,
             "fallbackValue": null,
@@ -913,7 +913,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 147,
             "fallback": false,
             "fallbackValue": null,
@@ -926,7 +926,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 148,
             "fallback": false,
             "fallbackValue": null,
@@ -939,7 +939,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -952,7 +952,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 154,
             "fallback": false,
             "fallbackValue": null,
@@ -965,7 +965,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 158,
             "fallback": false,
             "fallbackValue": null,
@@ -978,7 +978,7 @@
           },
           {
             "name": "--ds-line-height-body",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 159,
             "fallback": false,
             "fallbackValue": null,
@@ -991,7 +991,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 160,
             "fallback": false,
             "fallbackValue": null,
@@ -1004,7 +1004,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 164,
             "fallback": false,
             "fallbackValue": null,
@@ -1017,7 +1017,7 @@
           },
           {
             "name": "--ds-font-family-mono",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 165,
             "fallback": false,
             "fallbackValue": null,
@@ -1030,7 +1030,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 166,
             "fallback": false,
             "fallbackValue": null,
@@ -1043,7 +1043,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 167,
             "fallback": false,
             "fallbackValue": null,
@@ -1056,7 +1056,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 172,
             "fallback": false,
             "fallbackValue": null,
@@ -1069,7 +1069,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 173,
             "fallback": false,
             "fallbackValue": null,
@@ -1082,7 +1082,7 @@
           },
           {
             "name": "--ds-color-text-disabled",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 175,
             "fallback": false,
             "fallbackValue": null,
@@ -1096,73 +1096,73 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 36,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 66,
             "literal": "16.25rem",
             "text": "inline-size: 16.25rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 71,
             "literal": "12.5rem",
             "text": "inline-size: 12.5rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 88,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-table-border, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 93,
             "literal": "10px",
             "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 93,
             "literal": "16px",
             "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 94,
             "literal": "13px",
             "text": "font-size: var(--ds-table-header-font-size, 13px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 98,
             "literal": "1px",
             "text": "border-bottom: 1px solid var(--ds-table-border, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 106,
             "literal": "10px",
             "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 106,
             "literal": "16px",
             "text": "padding: var(--ds-table-cell-padding, 10px 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 107,
             "literal": "14px",
             "text": "font-size: var(--ds-table-cell-font-size, 14px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/branding-preview-sandbox/index.css",
             "line": 109,
             "literal": "1px",
             "text": "border-bottom: 1px solid var(--ds-table-row-border, var(--ds-color-border));"
@@ -1232,7 +1232,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -1262,7 +1262,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -1288,7 +1288,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -1319,7 +1319,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.radius-scale",
@@ -1345,7 +1345,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -1365,7 +1365,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -1390,7 +1390,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -1418,7 +1418,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -1438,7 +1438,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -1458,7 +1458,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1478,7 +1478,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1498,7 +1498,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -1518,7 +1518,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -1538,7 +1538,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "Ley del editor: el chrome de brand-studio/token-inspector/tenant-preview/branding-preview-sandbox vive en el tema del ADMIN, jamas en el candidato - editar un tema roto no puede romper la UI que lo corrige. El area de PREVIEW renderiza el candidato SCOPEADO a su boundary (relacion mustRender, no cascada admin). Y brand-studio debe EXPONER el control de esta raiz: si el manifiesto es correcto, su lista de controles ES el conjunto de las 19 raices",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "chrome.anatomy",
@@ -1563,7 +1563,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1576,7 +1576,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -1622,7 +1622,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1653,7 +1653,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "este grupo no consume el tema: es la UI donde se ELIGE. Su relacion es mustRender: brand-studio expone el control de esta raiz, token-inspector rinde el valor vivo, las previews aplican la variante. Si el manifiesto es correcto, la lista de controles de brand-studio ES el conjunto de las raices",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -1674,11 +1674,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

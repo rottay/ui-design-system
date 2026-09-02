@@ -8,15 +8,15 @@
     "components": [
       "PatternGalleryView"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/gallery-view",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/gallery-view",
     "publicComponents": [
       "PatternGalleryView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "f41908428e54a8d0c7bd135aaed6efe21cbd1292ad38d6cd627cb3df8851e85f"
+    "inventoryRowDigest": "29f1b7bcf2eb7897b9910254f78a9763b1c11524fa04e6a34ee52faea15f65c3"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
-      "packages/core/src/ui/patterns/data/gallery-view",
-      "packages/core/src/ui/patterns/data/gallery-view/contracts/index.ts",
-      "packages/core/src/ui/patterns/data/gallery-view/index.ts",
-      "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx",
-      "packages/core/src/ui/patterns/data/gallery-view/runtime/item-identity/index.ts",
-      "packages/core/src/ui/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts"
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
+      "packages/core/src/components/patterns/data/gallery-view",
+      "packages/core/src/components/patterns/data/gallery-view/contracts/index.ts",
+      "packages/core/src/components/patterns/data/gallery-view/index.ts",
+      "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx",
+      "packages/core/src/components/patterns/data/gallery-view/runtime/item-identity/index.ts",
+      "packages/core/src/components/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts"
     ],
     "stableParts": [
       "caption",
@@ -62,14 +62,14 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:270]",
-      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:559]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (14 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:87, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:95, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:130, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:137]",
-      "The family assigns explicit ARIA roles in source (1 sites; roles observed: `on`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:236]",
-      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-label`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:270]",
-      "The family implements keyboard interaction handlers (1 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:559]",
-      "The family manages `tabIndex` explicitly (5 sites); focus order is owned by the component, not by theming. [at packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:180, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:198, packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:238]",
-      "The family generates stable ids with React `useId` (1 sites) to bind labels and controls; those bindings must not be broken by a recipe. [at packages/core/src/ui/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts:58]"
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:270]",
+      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:559]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (14 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:87, packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:95, packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:130, packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:137]",
+      "The family assigns explicit ARIA roles in source (1 sites; roles observed: `on`); a tenant control must not remove or replace them. [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:236]",
+      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-label`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:270]",
+      "The family implements keyboard interaction handlers (1 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:559]",
+      "The family manages `tabIndex` explicitly (5 sites); focus order is owned by the component, not by theming. [at packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:180, packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:198, packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:238]",
+      "The family generates stable ids with React `useId` (1 sites) to bind labels and controls; those bindings must not be broken by a recipe. [at packages/core/src/components/patterns/data/gallery-view/runtime/keyboard-navigation/index.ts:58]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -99,12 +99,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:147"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:147"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:33",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:34",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:35"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:34",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:35"
           ],
           "anchorStatus": "verified"
         },
@@ -113,14 +113,14 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:148"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:148"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:41",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:42",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:43",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:45"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:42",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:43",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:45"
           ],
           "anchorStatus": "verified"
         },
@@ -129,15 +129,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:231",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:51",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:53",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:57"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:51",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:53",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:57"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:54"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:54"
           ],
           "anchorStatus": "verified"
         },
@@ -146,15 +146,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:259"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:259"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:93",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:95",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:96",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:97"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:96",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:97"
           ],
           "anchorStatus": "verified"
         },
@@ -163,10 +163,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:541"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:541"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:166"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:166"
           ],
           "anchorStatus": "verified"
         },
@@ -175,15 +175,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:136"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:136"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:11",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:12",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:13",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:14",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:15"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:11",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:12",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:13",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:14",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:15"
           ],
           "anchorStatus": "verified"
         },
@@ -192,9 +192,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:129",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:6",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:7"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:6",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:7"
           ]
         },
         {
@@ -202,12 +202,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:86"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:86"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:19",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:20",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:21"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:19",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:20",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:21"
           ],
           "anchorStatus": "verified"
         },
@@ -216,12 +216,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:95"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:95"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:25",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:26",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:27"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:25",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:27"
           ],
           "anchorStatus": "verified"
         },
@@ -230,15 +230,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:310",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:533",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:552"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:310",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:533",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:552"
           ],
           "atSiteCount": 9,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:140",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:141",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:150"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:140",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:141",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:150"
           ],
           "anchorStatus": "verified"
         },
@@ -247,11 +247,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:330"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:330"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:145",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:146"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:145",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:146"
           ],
           "anchorStatus": "verified"
         },
@@ -260,13 +260,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:318"
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:318"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:133",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:134",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:135",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:136"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:133",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:134",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:135",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:136"
           ],
           "anchorStatus": "verified"
         }
@@ -277,7 +277,7 @@
           "scoutAnchorClaim": "class:ds-gallery-view__skeleton-image",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:161"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:161"
           ]
         }
       ],
@@ -287,7 +287,7 @@
           "at": [],
           "state": "checked",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:116"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:116"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -297,11 +297,11 @@
           "at": [],
           "state": "empty",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:158",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:159",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:160",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:161",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:162"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:158",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:159",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:160",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:162"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -311,8 +311,8 @@
           "at": [],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:70",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:197"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:197"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -320,15 +320,15 @@
         {
           "token": "data-selected=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:86"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:86"
           ],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:65",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:66",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:191",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:192",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:193"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:65",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:191",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:192",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:193"
           ],
           "anchorStatus": "verified"
         },
@@ -337,10 +337,10 @@
           "at": [],
           "state": "focus-visible",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:126",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:127",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:201",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:202"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:127",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:201",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:202"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -348,15 +348,15 @@
         {
           "token": "hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:110"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:110"
           ],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:75",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:76",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:80",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:86",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:179"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:75",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:76",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:80",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:179"
           ],
           "anchorStatus": "verified"
         },
@@ -365,7 +365,7 @@
           "occurrences": 7,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:94"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:94"
           ],
           "state": "hover"
         },
@@ -374,9 +374,9 @@
           "occurrences": 6,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:84",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:233",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:262"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:84",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:233",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:262"
           ],
           "state": "selected"
         },
@@ -385,10 +385,10 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:178",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:314",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:537",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:556"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:178",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:314",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:537",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:556"
           ],
           "state": "empty"
         },
@@ -397,7 +397,7 @@
           "occurrences": 4,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:146"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:146"
           ],
           "state": "focus-visible"
         },
@@ -406,9 +406,9 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:89",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:233",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:262"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:89",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:233",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:262"
           ],
           "state": "selected"
         },
@@ -417,7 +417,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:136"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:136"
           ],
           "state": "checked"
         }
@@ -426,7 +426,7 @@
         {
           "token": "data-clickable=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:61"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:61"
           ]
         },
         {
@@ -434,8 +434,8 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css:80",
-            "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:235"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css:80",
+            "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:235"
           ]
         }
       ],
@@ -445,7 +445,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
               "paintKind": "own"
             }
           ]
@@ -603,7 +603,7 @@
         "variableCensus": [
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 15,
             "part": "image",
             "landsOn": "transition",
@@ -619,7 +619,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 15,
             "part": "image",
             "landsOn": "transition",
@@ -635,7 +635,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 20,
             "part": "image-placeholder",
             "landsOn": "background",
@@ -651,7 +651,7 @@
           },
           {
             "variable": "--ds-color-text-disabled",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 21,
             "part": "image-placeholder",
             "landsOn": "color",
@@ -667,7 +667,7 @@
           },
           {
             "variable": "--ds-icon-xl-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 25,
             "part": "image-placeholder-icon",
             "landsOn": "inline-size",
@@ -683,7 +683,7 @@
           },
           {
             "variable": "--ds-icon-xl-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 26,
             "part": "image-placeholder-icon",
             "landsOn": "block-size",
@@ -699,7 +699,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 33,
             "part": "caption",
             "landsOn": "padding-block",
@@ -715,7 +715,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 35,
             "part": "caption",
             "landsOn": "background",
@@ -731,7 +731,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 45,
             "part": "caption-text",
             "landsOn": "color",
@@ -747,7 +747,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 53,
             "part": "card",
             "landsOn": "border-radius",
@@ -763,7 +763,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 54,
             "part": "card",
             "landsOn": "background",
@@ -779,7 +779,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 57,
             "part": "card",
             "landsOn": "transition",
@@ -795,7 +795,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 57,
             "part": "card",
             "landsOn": "transition",
@@ -811,7 +811,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 57,
             "part": "card",
             "landsOn": "transition",
@@ -827,7 +827,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 57,
             "part": "card",
             "landsOn": "transition",
@@ -843,7 +843,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 57,
             "part": "card",
             "landsOn": "transition",
@@ -859,7 +859,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 57,
             "part": "card",
             "landsOn": "transition",
@@ -875,7 +875,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 65,
             "part": "card",
             "landsOn": "border",
@@ -891,7 +891,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 65,
             "part": "card",
             "landsOn": "border",
@@ -907,7 +907,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 66,
             "part": "card",
             "landsOn": "box-shadow",
@@ -923,7 +923,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 66,
             "part": "card",
             "landsOn": "box-shadow",
@@ -939,7 +939,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 70,
             "part": "card",
             "landsOn": "border",
@@ -955,7 +955,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 70,
             "part": "card",
             "landsOn": "border",
@@ -971,7 +971,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 75,
             "part": "card",
             "landsOn": "box-shadow",
@@ -989,7 +989,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 86,
             "part": "card",
             "landsOn": "box-shadow",
@@ -1007,7 +1007,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 86,
             "part": "card",
             "landsOn": "box-shadow",
@@ -1025,7 +1025,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 86,
             "part": "card",
             "landsOn": "box-shadow",
@@ -1043,7 +1043,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 94,
             "part": "checkbox",
             "landsOn": "inset-block-start",
@@ -1059,7 +1059,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 95,
             "part": "checkbox",
             "landsOn": "inset-inline-start",
@@ -1075,7 +1075,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 100,
             "part": "checkbox",
             "landsOn": "background",
@@ -1091,7 +1091,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 101,
             "part": "checkbox",
             "landsOn": "border-radius",
@@ -1107,7 +1107,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 102,
             "part": "checkbox",
             "landsOn": "box-shadow",
@@ -1123,7 +1123,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 104,
             "part": "checkbox",
             "landsOn": "transition",
@@ -1139,7 +1139,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 104,
             "part": "checkbox",
             "landsOn": "transition",
@@ -1155,7 +1155,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 104,
             "part": "checkbox",
             "landsOn": "transition",
@@ -1171,7 +1171,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 104,
             "part": "checkbox",
             "landsOn": "transition",
@@ -1187,7 +1187,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 126,
             "part": "card",
             "landsOn": "outline",
@@ -1203,7 +1203,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 126,
             "part": "card",
             "landsOn": "outline",
@@ -1220,7 +1220,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 126,
             "part": "card",
             "landsOn": "outline",
@@ -1236,7 +1236,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 127,
             "part": "card",
             "landsOn": "outline-offset",
@@ -1252,7 +1252,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 134,
             "part": "skeleton-card",
             "landsOn": "border-radius",
@@ -1268,7 +1268,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 135,
             "part": "skeleton-card",
             "landsOn": "border",
@@ -1284,7 +1284,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 135,
             "part": "skeleton-card",
             "landsOn": "border",
@@ -1300,7 +1300,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 136,
             "part": "skeleton-card",
             "landsOn": "background",
@@ -1316,7 +1316,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 145,
             "part": "skeleton-caption",
             "landsOn": "padding-block",
@@ -1332,7 +1332,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 152,
             "part": "root",
             "landsOn": "block-size",
@@ -1348,7 +1348,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 158,
             "part": "root",
             "landsOn": "padding",
@@ -1364,7 +1364,7 @@
           },
           {
             "variable": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 158,
             "part": "root",
             "landsOn": "padding",
@@ -1380,7 +1380,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 160,
             "part": "root",
             "landsOn": "border-radius",
@@ -1396,7 +1396,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 161,
             "part": "root",
             "landsOn": "border",
@@ -1412,7 +1412,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 161,
             "part": "root",
             "landsOn": "border",
@@ -1428,7 +1428,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 162,
             "part": "root",
             "landsOn": "background",
@@ -1444,7 +1444,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 166,
             "part": "empty-state",
             "landsOn": "color",
@@ -1460,7 +1460,7 @@
           },
           {
             "variable": "--ds-border-width-thin",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 193,
             "part": "card",
             "landsOn": "outline",
@@ -1478,7 +1478,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 201,
             "part": "card",
             "landsOn": "outline",
@@ -1496,7 +1496,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
             "line": 202,
             "part": "card",
             "landsOn": "outline-offset",
@@ -1521,7 +1521,7 @@
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
               "engine": "engine-agnostic",
               "lines": 235,
               "role": "skin-css",
@@ -1538,7 +1538,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/layout/Box",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:21"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:21"
               ],
               "renderSiteCount": 9,
               "engines": [
@@ -1550,7 +1550,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Checkbox",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:26"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:26"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1562,7 +1562,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/layout/Flex",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:22"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:22"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -1574,7 +1574,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/navigation/Pagination",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:27"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:27"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1586,7 +1586,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/feedback/Skeleton",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:23"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:23"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -1598,7 +1598,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/layout/Stack",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:24"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:24"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1610,7 +1610,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/display/Typography/compound/Text",
               "importSites": [
-                "packages/core/src/ui/patterns/data/gallery-view/presentation/gallery/index.tsx:25"
+                "packages/core/src/components/patterns/data/gallery-view/presentation/gallery/index.tsx:25"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -1624,7 +1624,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
               "paintKind": "own"
             }
           ]
@@ -1685,13 +1685,13 @@
         {
           "channelId": "--_ds-gallery-view-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1701,13 +1701,13 @@
         {
           "channelId": "--_ds-gallery-view-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1717,13 +1717,13 @@
         {
           "channelId": "--_ds-gallery-view-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1733,13 +1733,13 @@
         {
           "channelId": "--_ds-gallery-view-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1749,13 +1749,13 @@
         {
           "channelId": "--_ds-gallery-view-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1765,13 +1765,13 @@
         {
           "channelId": "--_ds-gallery-view-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1792,7 +1792,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
@@ -1807,7 +1807,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
@@ -1822,7 +1822,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
@@ -1837,7 +1837,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
@@ -1869,13 +1869,13 @@
         {
           "channelId": "--_ds-gallery-view-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1903,13 +1903,13 @@
         {
           "channelId": "--_ds-gallery-view-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1939,13 +1939,13 @@
         {
           "channelId": "--_ds-gallery-view-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1964,7 +1964,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1986,13 +1986,13 @@
         {
           "channelId": "--_ds-gallery-view-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2011,7 +2011,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2048,13 +2048,13 @@
         {
           "channelId": "--_ds-gallery-view-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2152,13 +2152,13 @@
         {
           "channelId": "--_ds-gallery-view-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2168,13 +2168,13 @@
         {
           "channelId": "--_ds-border-width-thin",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/borders.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/borders/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-gallery-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/gallery-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2197,7 +2197,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2253,7 +2253,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2302,11 +2302,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

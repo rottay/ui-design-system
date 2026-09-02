@@ -17,7 +17,7 @@
   - [`skin-adoption.md`](./skin-adoption.md) — Stage-1 extraction and retroactive conformance evidence.
 
   > The commercial-surfaces program (the showroom Monochrome Signature relaunch of `showroom.rottay.com`
-  > + the shared `@rottay/design-system/commercial` kit, WO-SHW-01..05) lives in `roadmap-commercial/` —
+  > + the shared `@rottay/design-system/commercial` kit, WO-SHW-01..05) lives in `roadmap/commercial/` —
   > isolated by owner decision 2026-07-07, own machinery `pnpm roadmap:commercial`.
 - **Proposals inbox**: [`proposals.md`](./proposals.md) — ALL rounds approved by the owner
   2026-07-07 and converted to WO blocks, except P-07 (withdrawn). The inbox is EMPTY pending new
@@ -210,7 +210,7 @@ be fixed or deliberately respecified in its own work order.
   `architecture.md`, `showroom.md`). **State** lives
   in [`registry.json`](./registry.json) — the ONLY place a WO status exists. **[`STATUS.md`](./STATUS.md)
   is generated** (`pnpm roadmap:status`); never hand-edit either.
-- Statuses change ONLY through `scripts/roadmap/status/index.mjs` (`claim` / `progress` / `done` / `reopen`), which
+- Statuses change ONLY through `scripts/maintain/roadmap/status/index.mjs` (`claim` / `progress` / `done` / `reopen`), which
   mechanically enforces the dependency graph, the `mustLandWith` sequencing hazards, and mandatory
   evidence on `done`. Do not fight refusals — they encode the sequencing law.
 - `pnpm roadmap:check` (registry and lane file must agree: every WO heading registered, titles/lanes/
@@ -260,10 +260,10 @@ be fixed or deliberately respecified in its own work order.
 > is `ui-design-system/roadmap/` — start with `pnpm roadmap:status`, then read `roadmap/README.md`
 > (this file) and `roadmap/engine-modern.md` in full.
 >
-> HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/roadmap/status/index.mjs` (claim/progress/done/reopen;
-> deps, mustLandWith hazards, and evidence are enforced). `node scripts/roadmap/status/index.mjs delegate
+> HOW TO PERFORM: (1) WO statuses change ONLY via `node scripts/maintain/roadmap/status/index.mjs` (claim/progress/done/reopen;
+> deps, mustLandWith hazards, and evidence are enforced). `node scripts/maintain/roadmap/status/index.mjs delegate
 > WO-ENG-NN` prints the ready-to-paste executor prompt. (2) Gates are truth: a WO is done only when its
-> acceptance gate is green — the lane's mechanical gate is `node scripts/infrastructure/engine-token-audit.mjs --check`
+> acceptance gate is green — the lane's mechanical gate is `node scripts/check/engine-token-audit.mjs --check`
 > (created by WO-ENG-01, extended by every later token WO) plus `pnpm --filter @rottay/design-system run
 > build` and `pnpm test`. (3) For EVERY visual WO the SIGHTED CHECK is mandatory: run the showroom
 > (`pnpm --filter @rottay/design-system-showroom run dev`, http://localhost:7001), capture the affected
@@ -294,12 +294,12 @@ be fixed or deliberately respecified in its own work order.
   Because both programs certify with `pnpm test`/`build` in `packages/core`, orchestrators must
   not run a WO-ENG executor and the evnto WO-IDN-06 executor concurrently in the same working
   tree; coordinate windows before claiming.
-- **Commercial `roadmap-commercial/` WO-SHW-03 ↔ engine-lane WO-ENG-02 (cross-roadmap Files-overlap
-  ordering law).** The commercial-surfaces program is isolated in `roadmap-commercial/` (owner decision
+- **Commercial `roadmap/commercial/` WO-SHW-03 ↔ engine-lane WO-ENG-02 (cross-roadmap Files-overlap
+  ordering law).** The commercial-surfaces program is isolated in `roadmap/commercial/` (owner decision
   2026-07-07); its WO-SHW-03 and this roadmap's WO-ENG-02 both edit `packages/showroom` (the browse/preview
   surfaces and the component registries), and the commercial kit lives in `packages/core`. Because the two
   roadmaps are now separate graphs, WO-SHW-03's dependency on WO-ENG-02 is external prose (BLOCKED-ON-EXTERNAL
-  in `roadmap-commercial/showroom.md`; `coordinatesWith: ["WO-ENG-02"]` in its registry), not a registry
+  in `roadmap/commercial/showroom.md`; `coordinatesWith: ["WO-ENG-02"]` in its registry), not a registry
   edge — the two must **never execute concurrently in the same working tree**, and whichever lands second
   re-verifies the other's galleries still render. Do not run a WO-SHW-03 executor and a WO-ENG-02 executor
   at the same time.
@@ -312,18 +312,18 @@ be fixed or deliberately respecified in its own work order.
   app orchestrators so they can mark the external dependency released.
 - app-platform WO-COM-01 (commercial-kit adoption) is BLOCKED-ON-EXTERNAL on **WO-SHW-01's release** —
   the `@rottay/design-system/commercial` kit — but WO-SHW-01 now lives in the isolated
-  `roadmap-commercial/` program (owner decision 2026-07-07), which owns that cross-repo unblock and its
-  release note; see `roadmap-commercial/README.md`. (The showroom consumes the kit via `workspace:*` and
+  `roadmap/commercial/` program (owner decision 2026-07-07), which owns that cross-repo unblock and its
+  release note; see `roadmap/commercial/README.md`. (The showroom consumes the kit via `workspace:*` and
   needs no release.)
 
 ## Handoff protocol (any fresh agent session starts here)
 
 1. `pnpm roadmap:status` — regenerates STATUS.md: burn-down, what is in progress (and by whom), what is
    actionable NOW, what is blocked and on what, the sequencing hazards, and the north-star metrics.
-2. Pick from **Next up** (respect the start order below on the first pass). `node scripts/roadmap/status/index.mjs
+2. Pick from **Next up** (respect the start order below on the first pass). `node scripts/maintain/roadmap/status/index.mjs
    show WO-ENG-NN` prints the full spec; `delegate WO-ENG-NN` prints the ready-to-paste executor prompt.
-3. `node scripts/roadmap/status/index.mjs claim WO-ENG-NN --by <session/agent name>`.
-4. Execute the Steps exactly; respect the Do-NOT fences. After EVERY completed step (and on any blocker) log it: `node scripts/roadmap/status/index.mjs progress
+3. `node scripts/maintain/roadmap/status/index.mjs claim WO-ENG-NN --by <session/agent name>`.
+4. Execute the Steps exactly; respect the Do-NOT fences. After EVERY completed step (and on any blocker) log it: `node scripts/maintain/roadmap/status/index.mjs progress
    WO-ENG-NN --note "<what landed / what is next / blockers>"` — the trail lets a successor resume mid-WO.
 5. Run the WO's **Acceptance gate** — a WO is done when its gate is green, never on code landing. Every
    visual WO additionally REQUIRES a sighted before/after gallery scored against the spec (sections 1 +
@@ -336,15 +336,15 @@ be fixed or deliberately respecified in its own work order.
    > the sighted gallery is still captured, still reviewed by eye, and the verdict is still recorded in
    > `done --evidence`. Delegated approval means no waiting, not no review — and every WO closed under this
    > delegation must say so in its evidence, so the trail explains itself without this README.
-6. `node scripts/roadmap/status/index.mjs done WO-ENG-NN --evidence "<gate command + result>"` — refused if
+6. `node scripts/maintain/roadmap/status/index.mjs done WO-ENG-NN --evidence "<gate command + result>"` — refused if
    deps/hazards/evidence are not satisfied.
-7. If interrupted mid-WO: leave it `in-progress` — the successor runs `node scripts/roadmap/status/index.mjs
+7. If interrupted mid-WO: leave it `in-progress` — the successor runs `node scripts/maintain/roadmap/status/index.mjs
    show WO-ENG-NN`, reads the `[progress]` trail, and resumes from the last logged step without redoing
    completed ones. Use `reopen --note "<context>"` only when abandoning.
 
 Everything needed to resume from ANY machine or session lives in-repo: this README (protocol + start
 order), `registry.json` (who claimed what, evidence on done), generated `STATUS.md`, the lane spec, the
-normative spec in docs-engineering, and the gate (`scripts/infrastructure/engine-token-audit.mjs`). A fresh session's
+normative spec in docs-engineering, and the gate (`scripts/check/engine-token-audit.mjs`). A fresh session's
 first command is always `pnpm roadmap:status`.
 
 ## Start order (first working window)
@@ -416,9 +416,9 @@ windows. **WO-ARC-03** only after WO-ARC-02 AND WO-ENG-11 are done. **WO-ARC-04*
 ```bash
 pnpm roadmap:status                              # regenerate STATUS.md + summary
 pnpm roadmap:check                               # registry <-> lane consistency gate (exit 1 on drift)
-node scripts/roadmap/status/index.mjs next             # actionable WOs (deps satisfied)
-node scripts/roadmap/status/index.mjs show WO-ENG-01   # full spec block
-node scripts/roadmap/status/index.mjs delegate WO-ENG-01   # ready-to-paste executor prompt
-node scripts/roadmap/status/index.mjs claim WO-ENG-01 --by <name>
-node scripts/roadmap/status/index.mjs done WO-ENG-01 --evidence "<gate + result>"
+node scripts/maintain/roadmap/status/index.mjs next             # actionable WOs (deps satisfied)
+node scripts/maintain/roadmap/status/index.mjs show WO-ENG-01   # full spec block
+node scripts/maintain/roadmap/status/index.mjs delegate WO-ENG-01   # ready-to-paste executor prompt
+node scripts/maintain/roadmap/status/index.mjs claim WO-ENG-01 --by <name>
+node scripts/maintain/roadmap/status/index.mjs done WO-ENG-01 --evidence "<gate + result>"
 ```

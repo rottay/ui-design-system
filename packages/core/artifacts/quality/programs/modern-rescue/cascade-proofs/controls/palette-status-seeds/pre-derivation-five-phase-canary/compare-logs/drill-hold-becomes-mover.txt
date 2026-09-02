@@ -1,2 +1,0 @@
-drill "hold-becomes-mover" (inyecta un delta de color en el PRIMER carrier HOLD; el veredicto debe fallar): comparacion limpia verde; con la perturbacion el comparador FALLO como debe
-  FAIL(inducido): alert|bithire|390 :: [alert-error] se esperaba NO MOVER (tone=error) y cambio: m0/n0:div[root].color

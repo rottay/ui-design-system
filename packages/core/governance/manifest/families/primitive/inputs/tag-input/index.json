@@ -8,15 +8,15 @@
     "components": [
       "TagInput"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/TagInput",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/tag-input",
     "publicComponents": [
       "TagInput"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "455be44ae81eb81135171a8c49955223dcfb9d8acbffa4f3fd8e45a1b789b60e"
+    "inventoryRowDigest": "572892a56dc7e58833c8472dcbd6ca8b3191b283358d4a04debd54703bbf8e4e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/inputs/TagInput/contracts/index.ts",
-      "packages/core/src/ui/primitives/inputs/TagInput/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/inputs/TagInput/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+      "packages/core/src/components/primitives/inputs/tag-input/contracts/index.ts",
+      "packages/core/src/components/primitives/inputs/tag-input/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/inputs/tag-input/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
     ],
     "stableParts": [
       "error-message",
@@ -59,9 +59,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The rejected-input feedback is announced through a live region (role + aria-live on data-part='feedback'), so a purely visual restyle cannot remove the announcement. [at packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:246]",
-      "The text input keeps aria-invalid and aria-describedby wiring to the error message. [at packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:238, packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:239]",
-      "The root's focus affordance is driven by :focus-within on the container, so the visible ring tracks the real inner input. [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:44]"
+      "The rejected-input feedback is announced through a live region (role + aria-live on data-part='feedback'), so a purely visual restyle cannot remove the announcement. [at packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:246]",
+      "The text input keeps aria-invalid and aria-describedby wiring to the error message. [at packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:238, packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:239]",
+      "The root's focus affordance is driven by :focus-within on the container, so the visible ring tracks the real inner input. [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:44]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -84,12 +84,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:251",
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:189",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:190",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:76"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:251",
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:189",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:190",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:76"
           ]
         },
         {
@@ -97,8 +97,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:250",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:179"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:250",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:179"
           ]
         },
         {
@@ -106,7 +106,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:246"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:246"
           ]
         },
         {
@@ -114,7 +114,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:196"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:196"
           ]
         },
         {
@@ -122,12 +122,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:230",
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:171",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:143",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:144",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:145",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:44"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:230",
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:143",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:144",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:44"
           ],
           "atSiteCount": 8
         },
@@ -136,12 +136,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:200",
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:137",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:55",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:56",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:57",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:36"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:200",
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:137",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:57",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:36"
           ],
           "atSiteCount": 8
         },
@@ -150,11 +150,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:212",
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:144",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:58",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:59",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:60"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:212",
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:144",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:58",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:60"
           ]
         },
         {
@@ -162,10 +162,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:149",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:65",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:66"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:149",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:66"
           ]
         }
       ],
@@ -178,8 +178,8 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:203",
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:139"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:203",
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:139"
           ],
           "state": "disabled"
         },
@@ -188,8 +188,8 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:202",
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:138"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:202",
+            "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:138"
           ],
           "state": "error"
         },
@@ -198,7 +198,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:204"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:204"
           ],
           "state": "rejected"
         },
@@ -207,8 +207,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:237"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:237"
           ],
           "state": "active"
         },
@@ -217,7 +217,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:175"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:175"
           ],
           "state": "disabled"
         },
@@ -226,10 +226,10 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:115",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:120",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:44",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:51"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:120",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:51"
           ],
           "state": "focus"
         },
@@ -238,8 +238,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:115",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:120"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:120"
           ],
           "state": "focus-within"
         },
@@ -248,7 +248,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104"
           ],
           "state": "hover"
         },
@@ -257,9 +257,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:41"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:41"
           ],
           "state": "disabled"
         },
@@ -268,10 +268,10 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:54"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:54"
           ],
           "state": "error"
         }
@@ -282,7 +282,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/TagInput/engines/modern/index.tsx:201"
+            "packages/core/src/components/primitives/inputs/tag-input/engines/modern/index.tsx:201"
           ]
         },
         {
@@ -290,8 +290,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:96",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:165"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:96",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:165"
           ]
         },
         {
@@ -299,8 +299,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:162"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:162"
           ]
         },
         {
@@ -308,8 +308,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:90",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:159"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:159"
           ]
         }
       ],
@@ -320,7 +320,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:214"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:214"
             ]
           },
           {
@@ -328,7 +328,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104"
             ]
           },
           {
@@ -336,7 +336,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:198"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:198"
             ]
           },
           {
@@ -344,7 +344,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:204"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:204"
             ]
           }
         ],
@@ -395,100 +395,100 @@
             {
               "variable": "--ds-color-",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:32"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:32"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-disabled-opacity",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:138"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:138"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-border-focus",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:115"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:115"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-border-hover",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:109"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:109"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-error-gap",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:179"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:179"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-gap",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:58"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:58"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-input-min-width",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:144"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:144"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-lg-height",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:96"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:96"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-md-height",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:93"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:93"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-padding-x",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:60"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:60"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-padding-y",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:59"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:59"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-shadow-focus",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:120",
-                "packages/core/src/ui/primitives/inputs/TagInput/tests/TagInput.focus-ring-authority.test.ts:29"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:120",
+                "packages/core/src/components/primitives/inputs/tag-input/tests/TagInput.focus-ring-authority.test.ts:29"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-sm-height",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:90"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:90"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-tag-input-touch-target-min",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:198"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:198"
               ],
               "scope": "family skin CSS + component directory"
             }
@@ -497,7 +497,7 @@
           "unreadEmission": [],
           "hardcodedValue": [
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:100",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:100",
               "engine": "modern",
               "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root'][data-size]",
               "property": "border",
@@ -513,7 +513,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:112",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:112",
               "engine": "modern",
               "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root'][data-error='true']",
               "property": "border",
@@ -529,7 +529,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:135",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:135",
               "engine": "modern",
               "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root'][data-rejected]",
               "property": "box-shadow",
@@ -545,7 +545,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:36",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:36",
               "engine": "rustic",
               "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root']",
               "property": "border-radius",
@@ -561,7 +561,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:44",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:44",
               "engine": "rustic",
               "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root']:has([data-part='input']:focus)",
               "property": "box-shadow",
@@ -577,7 +577,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:48",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:48",
               "engine": "rustic",
               "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root']",
               "property": "border",
@@ -593,7 +593,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:51",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:51",
               "engine": "rustic",
               "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root']:has([data-part='input']:focus):not([data-error='true'])",
               "property": "border",
@@ -609,7 +609,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:54",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:54",
               "engine": "rustic",
               "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root'][data-error='true']",
               "property": "border",
@@ -625,7 +625,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:60",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:60",
               "engine": "rustic",
               "selector": ".ds-tag-input.ds-tag-input--rustic [data-part='tag-chip']",
               "property": "border-radius",
@@ -641,7 +641,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/classic/index.tsx:95",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/classic/index.tsx:95",
               "engine": "classic",
               "literalsOutsideAnyVar": [
                 {
@@ -657,7 +657,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:25",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:25",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -681,7 +681,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:26",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:26",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -705,7 +705,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:27",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:27",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -729,7 +729,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:112",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:112",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -741,7 +741,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:114",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:114",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -757,7 +757,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:117",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:117",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -773,7 +773,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:126",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:126",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -785,7 +785,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:129",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:129",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -797,7 +797,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:156",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:156",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -809,7 +809,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:180",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:180",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -821,7 +821,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:189",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:189",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -833,7 +833,7 @@
               "layer": "engine TSX / contracts"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:190",
+              "at": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:190",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -847,7 +847,7 @@
           ],
           "hardcodedFallbackLiteralsInsideVar": [
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:58",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:58",
               "engine": "modern",
               "property": "gap",
               "fallbacks": [
@@ -859,7 +859,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:59",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:59",
               "engine": "modern",
               "property": "padding-block",
               "fallbacks": [
@@ -871,7 +871,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:60",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:60",
               "engine": "modern",
               "property": "padding-inline",
               "fallbacks": [
@@ -883,7 +883,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:90",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:90",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -895,7 +895,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:93",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:93",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -907,7 +907,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:96",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:96",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -919,7 +919,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:144",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:144",
               "engine": "modern",
               "property": "min-inline-size",
               "fallbacks": [
@@ -931,7 +931,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:179",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:179",
               "engine": "modern",
               "property": "margin-block-start",
               "fallbacks": [
@@ -943,7 +943,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:198",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:198",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -955,7 +955,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:37",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:37",
               "engine": "rustic",
               "property": "background-color",
               "fallbacks": [
@@ -967,7 +967,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:41",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:41",
               "engine": "rustic",
               "property": "background-color",
               "fallbacks": [
@@ -979,7 +979,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:44",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:44",
               "engine": "rustic",
               "property": "box-shadow",
               "fallbacks": [
@@ -991,7 +991,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:48",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:48",
               "engine": "rustic",
               "property": "border",
               "fallbacks": [
@@ -1003,7 +1003,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:51",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:51",
               "engine": "rustic",
               "property": "border",
               "fallbacks": [
@@ -1015,7 +1015,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:54",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:54",
               "engine": "rustic",
               "property": "border",
               "fallbacks": [
@@ -1027,7 +1027,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:58",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:58",
               "engine": "rustic",
               "property": "background-color",
               "fallbacks": [
@@ -1039,7 +1039,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:59",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:59",
               "engine": "rustic",
               "property": "color",
               "fallbacks": [
@@ -1051,7 +1051,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:76",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:76",
               "engine": "rustic",
               "property": "color",
               "fallbacks": [
@@ -1139,7 +1139,7 @@
                   "readWithFallback": true,
                   "fallback": "#ff4d4f",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/ui/primitives/inputs/TagInput/engines/classic/index.tsx:95",
+                  "readAt": "packages/core/src/components/primitives/inputs/tag-input/engines/classic/index.tsx:95",
                   "engineLayer": "classic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1152,7 +1152,7 @@
                   "readWithFallback": true,
                   "fallback": "inherit",
                   "landsOnCssProperty": "fontFamily",
-                  "readAt": "packages/core/src/ui/primitives/inputs/TagInput/engines/rustic/index.tsx:118",
+                  "readAt": "packages/core/src/components/primitives/inputs/tag-input/engines/rustic/index.tsx:118",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1171,7 +1171,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:182",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:182",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1181,7 +1181,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-line-height-snug)",
                   "landsOnCssProperty": "line-height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:189",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:189",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1191,7 +1191,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "line-height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:189",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:189",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1201,7 +1201,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-error)",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:190",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:190",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1211,7 +1211,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:190",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:190",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1221,7 +1221,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-font-weight-medium)",
                   "landsOnCssProperty": "font-weight",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:191",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:191",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1231,7 +1231,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-weight",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:191",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:191",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ * [data-part='error-message']"
@@ -1241,7 +1241,7 @@
                   "readWithFallback": true,
                   "fallback": "#ef4444",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:76",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:76",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--rustic ~ [data-part='error-message']"
@@ -1257,7 +1257,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "margin-block-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:179",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:179",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern ~ [data-part='error-wrapper']"
@@ -1273,7 +1273,7 @@
                   "readWithFallback": true,
                   "fallback": "60px",
                   "landsOnCssProperty": "min-inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:144",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:144",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern [data-part='input']"
@@ -1283,7 +1283,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:149",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:149",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern [data-part='input']"
@@ -1293,7 +1293,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary)",
                   "landsOnCssProperty": "caret-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:150",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:150",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern [data-part='input']"
@@ -1303,7 +1303,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "caret-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:150",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:150",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern [data-part='input']"
@@ -1313,7 +1313,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "line-height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:156",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:156",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern [data-part='input']"
@@ -1323,7 +1323,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:159",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:159",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -1335,7 +1335,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:162",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:162",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -1347,7 +1347,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:165",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:165",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -1359,7 +1359,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-text-muted)",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:171",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:171",
                   "engineLayer": "modern",
                   "states": [
                     "::placeholder"
@@ -1371,7 +1371,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:171",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:171",
                   "engineLayer": "modern",
                   "states": [
                     "::placeholder"
@@ -1383,7 +1383,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "opacity",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:172",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:172",
                   "engineLayer": "modern",
                   "states": [
                     "::placeholder"
@@ -1395,7 +1395,7 @@
                   "readWithFallback": true,
                   "fallback": "rgba(59, 130, 246, 0.2)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:44",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:44",
                   "engineLayer": "rustic",
                   "states": [
                     ":focus"
@@ -1407,7 +1407,7 @@
                   "readWithFallback": true,
                   "fallback": "#3b82f6",
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:51",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:51",
                   "engineLayer": "rustic",
                   "states": [
                     "error=true",
@@ -1426,7 +1426,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "gap",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1436,7 +1436,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "gap",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1446,7 +1446,7 @@
                   "readWithFallback": true,
                   "fallback": "4px",
                   "landsOnCssProperty": "padding-block",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:59",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:59",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1456,7 +1456,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "padding-block",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:59",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:59",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1466,7 +1466,7 @@
                   "readWithFallback": true,
                   "fallback": "8px",
                   "landsOnCssProperty": "padding-inline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:60",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:60",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1476,7 +1476,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "padding-inline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:60",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:60",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1486,7 +1486,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:61",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1496,7 +1496,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-surface-control)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:66",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:66",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1506,7 +1506,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:66",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:66",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1516,7 +1516,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:70",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:70",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1526,7 +1526,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:70",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:70",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1536,7 +1536,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:70",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:70",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1546,7 +1546,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:70",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:70",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1556,7 +1556,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-tag-primary-ink)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:85",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:85",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--modern[data-part='root']"
@@ -1566,7 +1566,7 @@
                   "readWithFallback": true,
                   "fallback": "32px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:90",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:90",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -1578,7 +1578,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:90",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:90",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -1590,7 +1590,7 @@
                   "readWithFallback": true,
                   "fallback": "40px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:93",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:93",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -1602,7 +1602,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:93",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:93",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -1614,7 +1614,7 @@
                   "readWithFallback": true,
                   "fallback": "48px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:96",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:96",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -1626,7 +1626,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:96",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:96",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -1638,7 +1638,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:100",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:100",
                   "engineLayer": "modern",
                   "states": [
                     "size"
@@ -1650,7 +1650,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-material-control-border-hover)",
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1666,7 +1666,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:104",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:104",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1682,7 +1682,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-material-control-border-hover)",
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:109",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:109",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1697,7 +1697,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:109",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:109",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1712,7 +1712,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:112",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:112",
                   "engineLayer": "modern",
                   "states": [
                     "error=true"
@@ -1724,7 +1724,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary)",
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:115",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:115",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-within",
@@ -1737,7 +1737,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:115",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:115",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-within",
@@ -1750,7 +1750,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-shadow-focus-ring)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:120",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:120",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-within",
@@ -1763,7 +1763,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:120",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:120",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-within",
@@ -1776,7 +1776,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-warning) 55%, var(--ds-color-neutral-900) 45%)",
                   "landsOnCssProperty": "(defines --_ds-tag-input-rejected-ink)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:133",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:133",
                   "engineLayer": "modern",
                   "states": [
                     "rejected"
@@ -1788,7 +1788,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --_ds-tag-input-rejected-ink)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:133",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:133",
                   "engineLayer": "modern",
                   "states": [
                     "rejected"
@@ -1800,7 +1800,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --_ds-tag-input-rejected-ink)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:133",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:133",
                   "engineLayer": "modern",
                   "states": [
                     "rejected"
@@ -1812,7 +1812,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:134",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:134",
                   "engineLayer": "modern",
                   "states": [
                     "rejected"
@@ -1824,7 +1824,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:135",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:135",
                   "engineLayer": "modern",
                   "states": [
                     "rejected"
@@ -1836,7 +1836,7 @@
                   "readWithFallback": true,
                   "fallback": "0.5",
                   "landsOnCssProperty": "opacity",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:138",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:138",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true"
@@ -1848,7 +1848,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:198",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:198",
                   "engineLayer": "modern",
                   "states": [
                     "@media(pointer: coarse)"
@@ -1860,7 +1860,7 @@
                   "readWithFallback": true,
                   "fallback": "#fff",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:37",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:37",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root']"
@@ -1870,7 +1870,7 @@
                   "readWithFallback": true,
                   "fallback": "#f3f4f6",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:41",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:41",
                   "engineLayer": "rustic",
                   "states": [
                     "disabled=true"
@@ -1882,7 +1882,7 @@
                   "readWithFallback": true,
                   "fallback": "#d1d5db",
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:48",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:48",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--rustic[data-part='root'][data-part='root']"
@@ -1892,7 +1892,7 @@
                   "readWithFallback": true,
                   "fallback": "#ef4444",
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:54",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:54",
                   "engineLayer": "rustic",
                   "states": [
                     "error=true"
@@ -1910,7 +1910,7 @@
                   "readWithFallback": true,
                   "fallback": "#dbeafe",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:58",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--rustic [data-part='tag-chip']"
@@ -1920,7 +1920,7 @@
                   "readWithFallback": true,
                   "fallback": "#1d4ed8",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css:59",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css:59",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-tag-input.ds-tag-input--rustic [data-part='tag-chip']"
@@ -1931,7 +1931,7 @@
           "privateOrLocalRelayDefinitions": [
             {
               "definesPrivateOrLocal": "--ds-tag-primary-ink",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:85",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:85",
               "part": "root",
               "states": [],
               "value": "var(--ds-color-white)",
@@ -1940,7 +1940,7 @@
             },
             {
               "definesPrivateOrLocal": "--_ds-tag-input-rejected-ink",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css:133",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css:133",
               "part": "root",
               "states": [
                 "rejected"
@@ -1953,8 +1953,8 @@
         },
         "paintOwners": {
           "engineSkinCss": {
-            "modern": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
-            "rustic": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input.css"
+            "modern": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
+            "rustic": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tag-input/index.css"
           },
           "additionalPaintOwners": [],
           "classicEngineSkinCss": "none - packages/core/src/foundation/tokens/css/runtime/engines/classic/skin/ contains zero files; classic paint is antd-token-driven"
@@ -2012,13 +2012,13 @@
         {
           "channelId": "--_ds-tag-input-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2028,13 +2028,13 @@
         {
           "channelId": "--_ds-tag-input-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2044,13 +2044,13 @@
         {
           "channelId": "--_ds-tag-input-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2060,13 +2060,13 @@
         {
           "channelId": "--_ds-tag-input-chip-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2076,13 +2076,13 @@
         {
           "channelId": "--_ds-tag-input-chip-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2092,13 +2092,13 @@
         {
           "channelId": "--_ds-tag-input-chip-remove-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2108,13 +2108,13 @@
         {
           "channelId": "--_ds-tag-input-chip-remove-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2124,13 +2124,13 @@
         {
           "channelId": "--_ds-tag-input-border-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2139,13 +2139,13 @@
         {
           "channelId": "--_ds-tag-input-error-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2155,13 +2155,13 @@
         {
           "channelId": "--_ds-tag-input-error-message-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2216,13 +2216,13 @@
         {
           "channelId": "--_ds-tag-input-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2232,13 +2232,13 @@
         {
           "channelId": "--_ds-tag-input-chip-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2258,13 +2258,13 @@
         {
           "channelId": "--_ds-tag-input-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2274,13 +2274,13 @@
         {
           "channelId": "--_ds-tag-input-chip-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2318,13 +2318,13 @@
         {
           "channelId": "--_ds-tag-input-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2333,13 +2333,13 @@
         {
           "channelId": "--_ds-tag-input-chip-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2349,13 +2349,13 @@
         {
           "channelId": "--_ds-tag-input-chip-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2365,13 +2365,13 @@
         {
           "channelId": "--_ds-tag-input-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2380,13 +2380,13 @@
         {
           "channelId": "--_ds-tag-input-error-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2395,13 +2395,13 @@
         {
           "channelId": "--_ds-tag-input-input-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2410,13 +2410,13 @@
         {
           "channelId": "--_ds-tag-input-lg-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2425,13 +2425,13 @@
         {
           "channelId": "--_ds-tag-input-md-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2440,13 +2440,13 @@
         {
           "channelId": "--_ds-tag-input-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2455,13 +2455,13 @@
         {
           "channelId": "--_ds-tag-input-sm-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2601,13 +2601,13 @@
         {
           "channelId": "--_ds-tag-input-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2617,13 +2617,13 @@
         {
           "channelId": "--_ds-tag-input-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2633,13 +2633,13 @@
         {
           "channelId": "--_ds-tag-input-focus-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2649,13 +2649,13 @@
         {
           "channelId": "--_ds-tag-input-border-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2664,13 +2664,13 @@
         {
           "channelId": "--_ds-tag-input-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/tag-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2693,7 +2693,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2749,7 +2749,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2777,7 +2777,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tag-input/index.css"
         ]
       }
     },
@@ -2810,11 +2810,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

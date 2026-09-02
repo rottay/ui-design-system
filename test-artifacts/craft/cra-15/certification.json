@@ -4,7 +4,7 @@
   "sourceId": "DS-IMP-106",
   "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
   "package": "@rottay/design-system@2.19.36",
-  "sourceFingerprint": "cd292c5fa620a88017af53a4f1f9c52960a954a40f330e706fc5e90b28fee607",
+  "sourceFingerprint": "1f9937cd1737707cb38834e3a70628a39d8033cdc8d32e5c4202124b4f2e270c",
   "structurallyPassed": true,
   "completionEligible": false,
   "checks": {

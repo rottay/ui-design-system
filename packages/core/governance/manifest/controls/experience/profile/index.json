@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Experience profile",
   "valueType": "profile-id",
@@ -39,7 +39,7 @@
     "symbol": "resolveExpressiveAxes"
   },
   "calibration": {
-    "assessmentState": "COMPUTED_VERIFIED",
+    "assessmentState": "IMPLEMENTED",
     "normalizedStops": [
       {
         "id": "rottay/bithire-technical@1",
@@ -52,25 +52,12 @@
         "law": "profile-id: written verbatim, as above. Axes: geometry soft, edge ruled, material paper, elevation soft-depth, motif contour, density spacious, motion {intensity 0.7, durationScale 1.1, ambient subtle} — the motion field default is why `motion remains fixed` is NOT declared control-wide (see negativeControlsScopeNote)."
       }
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/rottay-technical.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/evnto-technical.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/rottay-technical.R7-light.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/bithire-technical.R7-light.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/evnto-technical.R7-light.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/bithire-editorial.R7-dark-closed.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/rottay-editorial.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/evnto-editorial.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/rottay-editorial.R7-light.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/bithire-editorial.R7-light.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/evnto-editorial.R7-light.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "color remains fixed"
     ],
-    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. OPEN_ARM_ASYMMETRY closes with the new law rather than with an exception: the asymmetry it named was real and is now removed in the decidable scopes, measured rather than argued. The dark residual is OPEN_VERTICAL_CASCADE_DEFECT's, and the owner's simplification question is unrelated to it.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "catalog": [
       "rottay/bithire-technical@1",
       "rottay/management-editorial@1"
@@ -81,13 +68,13 @@
       "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "semanticAuthority": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
       "productiveConsumer": "packages/core/src/infrastructure/runtime/bootstrap/facade/react/provider/index.tsx",
-      "ingressShapeFence": "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs"
+      "ingressShapeFence": "packages/core/scripts/check/tokens/cascade/probe/runtime/ingress/tests/index.test.mjs"
     },
     "negativeControlsScopeNote": "Only `color remains fixed` is declared, and that is a deliberate floor rather than an omission. `font metrics remain fixed` must NEVER be declared here: --ds-letter-spacing-heading is one of this control's own five declared channels and is the packet's primary painted witness, so that entry would report the control's intended effect as a violation. `border remains fixed` and `border width and style remain fixed` are excluded for the same class of reason: the edge axis owns --ds-edge-standard-width and the geometry axis moves radiusScale as a FIELD DEFAULT, so both entries would fence the control against itself. `motion remains fixed` is excluded because it is TRUE PER STOP, not control-wide: management-editorial sets {intensity 0.7, durationScale 1.1, ambient subtle} as a field default, so a control-wide declaration would be a false claim about the control even though no motion channel is carried in the declared five-channel payload. `control height remains fixed` is bound to control-bearing targets and the only bindable target here is a Card root, which is not one.",
     "measuredResult": {
-      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1, Node 22.17.0",
+      "instrument": "packages/core/scripts/check/tokens/cascade/probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1, Node 22.17.0",
       "scenarios": "4 receipted positives = {rottay,evnto} x {technical,editorial}, both ingress doors on ONE scene, both themes. All four self-check harness-live; ingressEquivalence identical with 0 differing rows; restore.exact true and negativeControls.held true on every arm of every scenario. Two further scenarios were measured and deliberately NOT receipted: bithire/technical (DESIGNED_NULL) and bithire/editorial (DIVERGENCE) - see knownDefects.",
       "directChannel": "token-readout reads all five declared channels directly and is therefore the direct-read control fixture (directControlFixtureIds requires ONE target to read EVERY declared channel). --ds-letter-spacing-heading moved on both arms in all four scenarios: rottay -0.015em -> 0.01em (technical) and -> 0 (editorial); evnto likewise from its own baseline.",
       "paintedDelta": "card-modern-md/title letter-spacing, identical on both arms, in BOTH themes, in all four receipted scenarios: rottay -0.196875px -> 0.13125px (technical) and -> normal (editorial); evnto -0.3px -> 0.15px (technical) and -> normal (editorial). That is 8 painted cells. card-modern-md/root background-image also moves via --ds-elevation-lift-strength, but ASYMMETRICALLY BY THEME: the editorial stop (lift 2) moves it in both themes, while the technical stop (lift 0) moves it in DARK ONLY, because light themes already resolve the lift to 0 and the stop is then a true no-op for that axis.",
@@ -111,8 +98,7 @@
         "remediation": "CLOSED for every scope this instrument can decide, by B-1 (owner option B). The product question this defect was waiting on -- may a profile selection move a channel the vertical authors -- was answered by the owner: the tenant prevails over the vertical baseline on exposed channels, technical and accessibility invariants protected. Cause (a) rottay/evnto is resolved: the static transport now has the two-floor ingestion, so the profile no longer loses to the vertical's authored field when the selection comes from the tenant. Cause (b) bithire dark is NOT this control's and is tracked as OPEN_VERTICAL_CASCADE_DEFECT. The pre-H-1 receipts are still not withdrawn and their numbers still not rewritten; the six R7 artifacts are additional evidence beside them, under new file names, never overwriting the historical record.",
         "disposition": "CLOSED",
         "resolvedBy": "M-1 (the static arm learns the mode scopes) + H-3 phase (a) (the DB arm serves modeDeltas)",
-        "resolutionMeasured": "RE-MEASURED under the fixed instrument, bithire, light AND dark, full roster: 0 divergent rows, pass=true, restore exact on both arms, negative controls held, both arms harness-live. The R7 dark residue is closed. The cause was never the vertical artifact: its two declarations are the correct output of compileModeBlocks, and what was wrong was that neither arm spoke in the mode scope -- the static arm because it wrote only the base block, the DB arm because it discarded compiled modeDeltas and wrote inline above every block.",
-        "resolutionEvidence": "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/experience-profile/computed-static-db/bithire-editorial.R7-dark-closed.json.receipt.json"
+        "resolutionMeasured": "RE-MEASURED under the fixed instrument, bithire, light AND dark, full roster: 0 divergent rows, pass=true, restore exact on both arms, negative controls held, both arms harness-live. The R7 dark residue is closed. The cause was never the vertical artifact: its two declarations are the correct output of compileModeBlocks, and what was wrong was that neither arm spoke in the mode scope -- the static arm because it wrote only the base block, the DB arm because it discarded compiled modeDeltas and wrote inline above every block."
       },
       {
         "familyId": "VERTICAL_CASCADE/bithire",
@@ -133,7 +119,7 @@
       }
     ],
     "armEquivalenceCriterion": "THE OPERATIONALISATION OF THE OWNER'S \"static and DB must produce exactly the same result\", written before it was measured (Z-2). Equality is of COMPUTED VALUES over the real cascade, never of emitted-map size: the static arm emits a COMPLETE compiled theme while the DB arm emits a tenant-scoped DELTA that overlays the vertical's base CSS, so the two are different KINDS of output and a map-size or key-set comparison is a category error. Measured: 52 variables on the DB arm against 1231 on the static arm for the same tenant and profile, with --ds-color-primary absent from the DB map entirely. The comparison is therefore: for every declared channel the DB arm emits, the value it emits must equal the value the static arm emits; a channel the DB arm does not emit is resolved by the cascade to the vertical base, which the static arm already carries, so it cannot disagree. Reading the DB delta as if it were a whole theme is the false-red this criterion exists to prevent, and comparing only the intersection without saying so is the false-green.",
-    "armEquivalenceResult": "6/6 painted cases equivalent at --theme light, ZERO differing rows, selfCheck harness-live, per-vertical source digests declared (a single digest reused across verticals trips the stale-source guard, because each vertical's compiled artifact is in its own freshness surface). The static arm MOVES --ds-letter-spacing-heading on 3/3 verticals where H-1 measured it inert on 6/6, and both arms land on the pairing vocabulary. At the variable level, 22/22 channel readings agree. The two surviving rows are BOTH dark-scope letter-spacing on bithire, and they are ledgered against OPEN_VERTICAL_CASCADE_DEFECT -- a packet of the vertical generator/cascade, not of this control. Its cause is written and measured: bithire's artifact declares the channel TWICE (src/foundation/tokens/css/facade/artifacts/bithire/index.css:644 '-0.025em' and :1496 '-0.01em' inside the higher-specificity dark block). Compounding it, the probe never applies compiled MODE BLOCKS -- the string 'modeBlocks' appears nowhere in src/tooling/resolution-probe -- so a dark-scope reading measures the shipped artifact CSS rather than the compile. The compile is correct there and was measured: with a tenant floor bithire's base emits --ds-letter-spacing-heading '0' and the dark block emits NOTHING, so dark inherits the tenant value; without one, base emits '-0.025em' and dark restates '-0.01em'. Dark is therefore measured-and-NOT-receipted (bithire-editorial.RESIDUAL-DARK-SCOPE.json), never claimed as parity.",
+    "armEquivalenceResult": "6/6 painted cases equivalent at --theme light, ZERO differing rows, selfCheck harness-live, per-vertical source digests declared (a single digest reused across verticals trips the stale-source guard, because each vertical's compiled artifact is in its own freshness surface). The static arm MOVES --ds-letter-spacing-heading on 3/3 verticals where H-1 measured it inert on 6/6, and both arms land on the pairing vocabulary. At the variable level, 22/22 channel readings agree. The two surviving rows are BOTH dark-scope letter-spacing on bithire, and they are ledgered against OPEN_VERTICAL_CASCADE_DEFECT -- a packet of the vertical generator/cascade, not of this control. Its cause is written and measured: bithire's artifact declares the channel TWICE (src/foundation/tokens/css/facade/artifacts/bithire/index.css:644 '-0.025em' and :1496 '-0.01em' inside the higher-specificity dark block). Compounding it, the probe never applies compiled MODE BLOCKS -- the string 'modeBlocks' appears nowhere in scripts/check/tokens/cascade/probe -- so a dark-scope reading measures the shipped artifact CSS rather than the compile. The compile is correct there and was measured: with a tenant floor bithire's base emits --ds-letter-spacing-heading '0' and the dark block emits NOTHING, so dark inherits the tenant value; without one, base emits '-0.025em' and dark restates '-0.01em'. Dark is therefore measured-and-NOT-receipted (bithire-editorial.RESIDUAL-DARK-SCOPE.json), never claimed as parity.",
     "channels": [
       "--ds-experience-profile",
       "--ds-letter-spacing-heading",

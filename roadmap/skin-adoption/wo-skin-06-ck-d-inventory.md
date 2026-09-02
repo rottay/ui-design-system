@@ -1,7 +1,7 @@
 # WO-SKIN-06 checkpoint CK-D inventory (read-only) — forms + record + workflow
 
 Scope: the 17 files named in the CK-D row of `wo-skin-06-triage.md` §6, verified
-against `node scripts/infrastructure/engine-token-audit.mjs | grep fleet.inlinePaint` (counts match
+against `node scripts/check/engine-token-audit.mjs | grep fleet.inlinePaint` (counts match
 exactly, 591 total):
 
 | file | sites |

@@ -65,7 +65,7 @@ overrides header/record chrome that way. Do not assume your skin is the last wor
    They use the `(e.currentTarget as HTMLDivElement).style.background =` shape.
 
    **CORRECTION (2026-07-13, and it matters because two contracts inherited the error): the counter
-   is NOT blind to these.** `scripts/tooling/libraries/inline-paint-counter.mjs:227-240` has an explicit `.style.`
+   is NOT blind to these.** `scripts/libraries/inline-paint-counter.mjs:227-240` has an explicit `.style.`
    branch that counts both the assignment form and `.style.setProperty('paint-prop', …)`, and its own
    doc comment says it exists precisely so a migration cannot reach 0 while still mutating paint
    imperatively. The arithmetic reconciles to the byte: filter-builder modern = 76 object-literal keys

@@ -8,15 +8,15 @@
     "components": [
       "ConnectedCommandPalette"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/connected-command-palette",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/connected-command-palette",
     "publicComponents": [
       "ConnectedCommandPalette"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "92210fe2b769193c98473acc17fc15733810e09e66cfacc7748e0a9a1cc31dc2"
+    "inventoryRowDigest": "9d1698d1ca0c34b61c3b22d1ef4785d80815b150e3339e5d6056341acce99cf1"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {
@@ -28,7 +28,7 @@
   "anatomy": {
     "assessmentState": "UNKNOWN",
     "sourceBindings": [
-      "packages/core/src/ui/structures/workspace/connected-command-palette"
+      "packages/core/src/components/structures/workspace/connected-command-palette"
     ],
     "stableParts": [],
     "states": [],
@@ -113,7 +113,7 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/workspace/connected-command-palette/index.tsx": {
+            "packages/core/src/components/structures/workspace/connected-command-palette/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
@@ -151,13 +151,13 @@
         {
           "channelId": "--_ds-connected-command-palette-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -175,7 +175,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -200,7 +200,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -225,7 +225,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -252,13 +252,13 @@
         {
           "channelId": "--_ds-connected-command-palette-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -278,13 +278,13 @@
         {
           "channelId": "--_ds-connected-command-palette-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -304,13 +304,13 @@
         {
           "channelId": "--_ds-connected-command-palette-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -330,13 +330,13 @@
         {
           "channelId": "--_ds-connected-command-palette-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -356,13 +356,13 @@
         {
           "channelId": "--_ds-connected-command-palette-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -381,7 +381,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo plano; lo flotante usa sockets overlay",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -411,7 +411,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -442,13 +442,13 @@
         {
           "channelId": "--_ds-connected-command-palette-panel-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -468,13 +468,13 @@
         {
           "channelId": "--_ds-connected-command-palette-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -498,7 +498,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -554,7 +554,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -581,13 +581,13 @@
         {
           "channelId": "--_ds-connected-command-palette-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/ui/structures/workspace/connected-command-palette",
+          "producer": "packages/core/src/components/structures/workspace/connected-command-palette",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/connected-command-palette"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/workspace/connected-command-palette"
+            "packages/core/src/components/structures/workspace/connected-command-palette"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -607,11 +607,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -5,7 +5,7 @@ Reads on top of `wo-skin-06-ck-f-inventory.md` (the site-by-site truth) and
 exists; this contract is normative for *how* it moves. Where they disagree, the
 inventory's site table wins on facts and this contract wins on method.
 
-Scope: `packages/core/src/ui/patterns/communication/` — **271 counted
+Scope: `packages/core/src/components/patterns/communication/` — **271 counted
 sites** (was 272; the counter's return-type-annotation blind spot at assistant:157
 was fixed in `inline-paint-counter.mjs` between the inventory and the pre-step, so
 assistant's floor is 15, not 16 — a counter fix, not lost paint) across six

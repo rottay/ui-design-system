@@ -1,0 +1,2221 @@
+#!/usr/bin/env node
+/**
+ * index.mjs — WO-CRA-23 cascade, PRODUCER INVENTORY (PRE_F4B A4).
+ *
+ * WHY THIS EXISTS. `index.mjs` declares a CLOSED vocabulary of four
+ * planes and scans exactly one. The other three lived as hand-written prose
+ * with hard-coded counters. The fourth, `tsx-inline-stamp`, was declared the
+ * ONLY producer of 153 governed channels — 48 of them read by the modern skin
+ * with no fallback at all — and shipped without a single line of code that
+ * could name them. A plane that is declared and not enumerated can produce ANY
+ * channel, so it contaminates every bucket whose adjudication rests on the
+ * ABSENCE of a producer. That is why this module is a precondition of the
+ * cascade gate and not an extra.
+ *
+ * THREE STRUCTURES, KEPT APART (contrato v3 + addendum C3/V3-3). Conflating
+ * them is what made the previous attempt unfalsifiable:
+ *
+ *   producerSiteId    -> exactly ONE ownerId          (ownership)
+ *   channelEmissionId -> engineScope + evidence       (applicability)
+ *   channelEmissionId -> causalRootIds[] with witness (causality)
+ *
+ * Two different functions may legitimately emit the same channel: the overlap
+ * of names is NOT an ownership conflict, and picking a "winner" by name would
+ * erase a real producer. Every producer site and every emission survives.
+ * Merge precedence is recorded as METADATA and never resolves ownership.
+ *
+ * ROOT CAUSALITY IS PER EMISSION. A global `enumeratorId -> rootId` map is
+ * refused by measurement: six of the twelve enumerators (456 names) have no
+ * unambiguous candidate, and `premium-card` alone emits 301 names whose single
+ * exact match would otherwise be propagated to all of them. An `enumerator`
+ * edge toward a root may only be created for an emission whose channel matches
+ * an authored LIVE derivation EXACTLY. `causalRootIds: []` is a legitimate,
+ * complete answer: it means `producedExternalTerminal`, never UNKNOWN.
+ *
+ * FAIL-CLOSED, AND WHY UNDER-COUNTING IS *NOT* SAFE. An earlier form of this
+ * module claimed that missing a producer merely inflates debt. That is FALSE
+ * for the contracted semantics: under STRICT, a fallback alternative is
+ * admitted only when its `guardPrimary` has NO producer. Omit a producer and
+ * the branch becomes admissible, `wiredToAdoptedRoot` grows and debt DROPS.
+ * An unenumerated site can therefore BUY a false green, which is why every
+ * expression this scanner cannot resolve becomes a row in
+ * `unknownProvenance` -- one per site, with file, symbol and reason -- and
+ * never a bare counter. `unknownProvenance` is the entry condition of lot B:
+ * while a single row survives, the gate certifies nothing (addendum F-5).
+ *
+ * CLI CONTRACT (identical to index.mjs):
+ *   node index.mjs            -> --check (DEFAULT, FAIL-CLOSED)
+ *   node index.mjs --check    -> recompute, byte-compare, exit 1 on diff, NEVER write
+ *   node index.mjs --write    -> write OUT
+ * `buildProducers()` is PURE; importing this module writes nothing.
+ */
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  realpathSync,
+  writeFileSync,
+} from "node:fs";
+import { createHash } from "node:crypto";
+import { dirname, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
+
+import ts from "typescript";
+
+import { repoRoot as findRepoRoot } from "../../../../libraries/repo-root/index.mjs";
+import { readManifestRecords } from "../../../../libraries/manifest/index.mjs";
+import { classifyCrossFileRows, dispositionIndex } from "../disposition/index.mjs";
+import {
+  BRAND_THEME,
+  CHROME_VARIABLES,
+  buildEnumerators,
+  expandTemplate,
+  functionBodies,
+  literalTokens,
+  overrideTokens,
+  tenantReach,
+  templateEmissions,
+} from "../../../orchestration/runtime/tenant-reach/index.mjs";
+
+const HERE = dirname(fileURLToPath(import.meta.url));
+const REPO_ABS = findRepoRoot(HERE);
+const CORE_ROOT = join(REPO_ABS, "packages/core");
+const MANIFEST = join(CORE_ROOT, "governance/manifest");
+const OUT = join(CORE_ROOT, "artifacts/generated/manifest/cascade/producers/index.json");
+const CSS_EDGES = join(CORE_ROOT, "artifacts/generated/manifest/cascade/edges/index.json");
+const CASCADE_ROOTS = join(MANIFEST, "cascade/roots");
+const ROOT_CATALOG = join(MANIFEST, "cascade/catalog/index.json");
+const ARTIFACTS_DIR = join(REPO_ABS, "packages/core/src/foundation/tokens/css/facade/artifacts");
+const TENANT_THEME_PATH =
+  "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts";
+
+export const PLANES = ["css", "ts-compilers", "ts-chrome-variables", "tsx-inline-stamp"];
+
+/** Which plane a compiler source belongs to. The split is BY NAME, not postal. */
+const APPEARANCE_POSTURE =
+  "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts";
+const planeOfCompilerFile = (file) =>
+  file === CHROME_VARIABLES ? "ts-chrome-variables" : "ts-compilers";
+
+/* ---------------------------------------------------------------- ids --- */
+const sha256 = (value) => createHash("sha256").update(value).digest("hex");
+export const producerSiteIdOf = (plane, file, line, symbol, occurrence) =>
+  sha256(`${plane}|${file}|${line}|${symbol}|${occurrence}`);
+export const channelEmissionIdOf = (producerSiteId, channel) =>
+  sha256(`${producerSiteId}|${channel}`);
+
+const lineAt = (source, index) => source.slice(0, index).split("\n").length;
+const bodyOf = (source, name) =>
+  functionBodies(source).find((entry) => entry.name === name)?.body ?? source;
+
+/* =========================================================== TSX PLANE ===
+ * The fourth plane, enumerated at last.
+ *
+ * MEMBERSHIP CRITERION, copied from the authored census it must reproduce: a
+ * channel belongs to this plane ONLY if it is assigned as a property of an
+ * object that reaches a JSX `style`, or via `element.style.setProperty()`, or
+ * through a variables object spread into a `style`. Enumeration is BY ENTITY
+ * (AST), never by text shape: we start at the SINK and resolve the expression
+ * backwards — identifier, property, call, useMemo/useCallback, indexed map —
+ * until the object literal. Interface keys, objects that never reach a style,
+ * comment prose, test strings and names inside evidence JSON stay out by
+ * construction.
+ * ======================================================================== */
+
+/**
+ * SCAN UNIVERSE. The authored census names `ui/**` and `infrastructure/runtime/**`
+ * as where this plane's producers LIVE, but its own file counts only reconcile
+ * against the WHOLE package source: 3391 .ts/.tsx files in `src` against its
+ * 1740 scanned + 1664 excluded = 3404, and 1727 after the same exclusions
+ * against its 1740. Measured, not assumed -- so the scan is `src`, and a stamp
+ * is counted wherever it is, not only where the prose expected it.
+ */
+const TSX_ROOTS = ["packages/core/src"];
+const TSX_EXCLUDE = [
+  "/tests/",
+  "/fixtures/",
+  "/__mocks__/",
+  "/examples/",
+  "/generated/",
+  ".test.",
+  ".spec.",
+  ".stories.",
+];
+
+function tsxCandidates(root) {
+  const out = [];
+  const walk = (dir) => {
+    let entries;
+    try {
+      entries = readdirSync(dir, { withFileTypes: true });
+    } catch {
+      return;
+    }
+    for (const entry of entries.sort((a, b) => (a.name < b.name ? -1 : 1))) {
+      const abs = join(dir, entry.name);
+      if (entry.isDirectory()) {
+        walk(abs);
+        continue;
+      }
+      if (!/\.(ts|tsx)$/.test(entry.name)) continue;
+      out.push(abs);
+    }
+  };
+  for (const rel of TSX_ROOTS) walk(join(root, rel));
+  return out;
+}
+
+const isExcluded = (rel) => TSX_EXCLUDE.some((needle) => rel.includes(needle));
+
+/** The enclosing named function/component of a node, or `<module>`. */
+function enclosingSymbol(node) {
+  let current = node;
+  while (current) {
+    if (ts.isFunctionDeclaration(current) && current.name) return current.name.text;
+    if (
+      (ts.isVariableDeclaration(current) || ts.isPropertyAssignment(current)) &&
+      current.name &&
+      ts.isIdentifier(current.name)
+    ) {
+      return current.name.text;
+    }
+    if (ts.isMethodDeclaration(current) && current.name && ts.isIdentifier(current.name)) {
+      return current.name.text;
+    }
+    current = current.parent;
+  }
+  return "<module>";
+}
+
+/** A property key that names a custom property, whatever the syntactic form. */
+function customPropertyKey(name) {
+  if (!name) return null;
+  if (ts.isStringLiteralLike(name) && name.text.startsWith("--")) return name.text;
+  if (ts.isComputedPropertyName(name)) {
+    let expression = name.expression;
+    while (ts.isAsExpression(expression) || ts.isParenthesizedExpression(expression)) {
+      expression = expression.expression;
+    }
+    if (ts.isStringLiteralLike(expression) && expression.text.startsWith("--")) {
+      return expression.text;
+    }
+  }
+  return null;
+}
+
+/**
+ * Scan ONE source file, sink-anchored.
+ *
+ * Returns the stamp sites it can prove, plus the passthroughs it could not
+ * resolve — declared, never silently dropped, because an unresolved
+ * passthrough is exactly the shape that would hide a producer.
+ */
+/**
+ * Syntactic forms that CANNOT carry a custom property. A site whose backward
+ * resolution lands on one of them is closed BY PROOF -- it is not a producer
+ * hiding behind an unresolved passthrough, so leaving it in `unknownProvenance`
+ * would overstate the debt. The vocabulary is the census shape vocabulary:
+ * literals, `undefined`, a prefix-unary (always boolean) and a template
+ * expression (always a CSS string). Anything richer stays unresolved on
+ * purpose -- this rule adds proof, it never re-routes resolution.
+ */
+// Canonical names, NOT `ts.SyntaxKind[kind]`: that reverse lookup returns the
+// first alias sharing the numeric value, so NoSubstitutionTemplateLiteral would
+// print as `FirstTemplateToken` and NumericLiteral as `FirstLiteralToken`. The
+// receipt has to be stable and readable, so the name is pinned here.
+const NONOBJECT_KINDS = new Map([
+  [ts.SyntaxKind.StringLiteral, "StringLiteral"],
+  [ts.SyntaxKind.NoSubstitutionTemplateLiteral, "NoSubstitutionTemplateLiteral"],
+  [ts.SyntaxKind.NumericLiteral, "NumericLiteral"],
+  [ts.SyntaxKind.TrueKeyword, "TrueKeyword"],
+  [ts.SyntaxKind.FalseKeyword, "FalseKeyword"],
+  [ts.SyntaxKind.NullKeyword, "NullKeyword"],
+]);
+
+/**
+ * The typed reason a node is provably non-object, or null. Decided on the
+ * TypeScript AST node kind -- never on a list of ids, files or lines.
+ */
+export function provablyNonObject(node) {
+  if (!node) return null;
+  const literalKind = NONOBJECT_KINDS.get(node.kind);
+  if (literalKind) return `literal-kind:${literalKind}`;
+  if (ts.isIdentifier(node) && node.text === "undefined") return "undefined-keyword";
+  if (ts.isPrefixUnaryExpression(node)) return "prefix-unary-not-object";
+  if (ts.isTemplateExpression(node)) return "template-expression-css-string";
+  return null;
+}
+
+export function scanTsxSource(rel, text) {
+  const source = ts.createSourceFile(rel, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const localBindings = new Map();
+  const sinks = [];
+  const stamps = [];
+  const unresolved = [];
+  const noteUnresolved = (node, form, reason) => {
+    const { line } = source.getLineAndCharacterOfPosition(node.getStart(source));
+    unresolved.push({
+      line: line + 1,
+      ordinal: node.getStart(source),
+      symbol: enclosingSymbol(node),
+      form,
+      reason,
+      expression: node.getText(source).slice(0, 120).replace(/\s+/g, " "),
+    });
+  };
+  // CLOSED BY PROOF. Same identity family as an unresolved site (line,
+  // ordinal, symbol, text) so the receipt is reconcilable row by row. It is a
+  // SEQUENCE in deterministic generation order: two occurrences can share
+  // file:line:ordinal, so nothing here asserts tuple uniqueness.
+  const closedNonObject = [];
+  const noteClosedNonObject = (node, reason) => {
+    const { line } = source.getLineAndCharacterOfPosition(node.getStart(source));
+    closedNonObject.push({
+      line: line + 1,
+      ordinal: node.getStart(source),
+      symbol: enclosingSymbol(node),
+      reason,
+      expression: node.getText(source).slice(0, 120).replace(/\s+/g, " "),
+    });
+  };
+
+  const collectBindings = (node) => {
+    if (ts.isVariableDeclaration(node) && node.name && ts.isIdentifier(node.name) && node.initializer) {
+      localBindings.set(node.name.text, node.initializer);
+    }
+    ts.forEachChild(node, collectBindings);
+  };
+  collectBindings(source);
+
+  const unwrap = (expression) => {
+    let current = expression;
+    for (let guard = 0; guard < 8 && current; guard += 1) {
+      if (ts.isAsExpression(current) || ts.isParenthesizedExpression(current) || ts.isNonNullExpression(current)) {
+        current = current.expression;
+        continue;
+      }
+      if (ts.isSatisfiesExpression?.(current)) {
+        current = current.expression;
+        continue;
+      }
+      break;
+    }
+    return current;
+  };
+
+  /**
+   * Resolve an expression to the object literals it can be, bounded.
+   *
+   * Anything it refuses to follow is recorded as an UNRESOLVED SITE, not as a
+   * counter: a site whose producer is unknown must be able to block, and a
+   * number cannot be blocked on.
+   */
+  const resolveObjects = (expression, depth, seen) => {
+    const found = [];
+    const node = unwrap(expression);
+    if (!node) return found;
+    // PROOF BEFORE SUSPICION.
+    const nonObject = provablyNonObject(node);
+    if (nonObject) {
+      noteClosedNonObject(node, nonObject);
+      return found;
+    }
+    if (depth > 6) {
+      noteUnresolved(expression, "depth-limit", "backward resolution hit the depth bound");
+      return found;
+    }
+    if (ts.isObjectLiteralExpression(node)) {
+      found.push(node);
+      for (const property of node.properties) {
+        if (ts.isSpreadAssignment(property)) {
+          const spread = resolveObjects(property.expression, depth + 1, seen);
+          if (spread.length === 0) {
+            noteUnresolved(property, "spread", "spread whose source object could not be resolved");
+          }
+          found.push(...spread);
+        }
+      }
+      return found;
+    }
+    if (ts.isIdentifier(node)) {
+      if (seen.has(node.text)) return found;
+      seen.add(node.text);
+      const binding = localBindings.get(node.text);
+      if (binding) return resolveObjects(binding, depth + 1, seen);
+      noteUnresolved(node, "identifier", "identifier is not bound in this file (import, parameter or prop passthrough)");
+      return found;
+    }
+    if (ts.isConditionalExpression(node)) {
+      return [
+        ...resolveObjects(node.whenTrue, depth + 1, seen),
+        ...resolveObjects(node.whenFalse, depth + 1, seen),
+      ];
+    }
+    if (ts.isBinaryExpression(node)) {
+      return [
+        ...resolveObjects(node.left, depth + 1, seen),
+        ...resolveObjects(node.right, depth + 1, seen),
+      ];
+    }
+    if (ts.isCallExpression(node)) {
+      const callee = unwrap(node.expression);
+      // useMemo(() => ({...}), deps) / useCallback(...)
+      if (ts.isIdentifier(callee) && /^use[A-Z]/.test(callee.text) && node.arguments.length) {
+        return resolveObjects(node.arguments[0], depth + 1, seen);
+      }
+      if (ts.isArrowFunction(callee) || ts.isFunctionExpression(callee)) {
+        return resolveObjects(callee.body, depth + 1, seen);
+      }
+      noteUnresolved(node, "call", "call expression whose callee is not an inline factory");
+      return found;
+    }
+    // A BLOCK is reachable both directly (an arrow with a block body) and
+    // through a call whose callee is an inline factory. Handling it here means
+    // both paths behave the same instead of one silently returning nothing.
+    if (ts.isBlock(node)) {
+      const returned = [];
+      const findReturns = (child) => {
+        if (ts.isReturnStatement(child) && child.expression) {
+          returned.push(...resolveObjects(child.expression, depth + 1, seen));
+        }
+        if (
+          !ts.isArrowFunction(child) &&
+          !ts.isFunctionExpression(child) &&
+          !ts.isFunctionDeclaration(child)
+        ) {
+          ts.forEachChild(child, findReturns);
+        }
+      };
+      ts.forEachChild(node, findReturns);
+      if (returned.length) return returned;
+      noteUnresolved(node, "block", "block body with no resolvable return");
+      return found;
+    }
+    if (ts.isArrowFunction(node) || ts.isFunctionExpression(node)) {
+      if (node.body) return resolveObjects(node.body, depth + 1, seen);
+      noteUnresolved(node, "function", "function without a body");
+      return found;
+    }
+    if (ts.isElementAccessExpression(node) || ts.isPropertyAccessExpression(node)) {
+      noteUnresolved(node, "member-access", "member access: the object it reads is outside this file's scope");
+      return found;
+    }
+    noteUnresolved(node, "expression", `unhandled expression kind ${ts.SyntaxKind[node.kind]}`);
+    return found;
+  };
+
+  const record = (channel, node, form) => {
+    const { line } = source.getLineAndCharacterOfPosition(node.getStart(source));
+    // `ordinal` is the character offset: a STABLE source coordinate, so two
+    // owners claiming the same site collide instead of being handed two ids.
+    stamps.push({
+      channel,
+      line: line + 1,
+      ordinal: node.getStart(source),
+      symbol: enclosingSymbol(node),
+      form,
+    });
+  };
+
+  const visit = (node) => {
+    // sink 1: JSX style attribute
+    if (
+      ts.isJsxAttribute(node) &&
+      node.name &&
+      ts.isIdentifier(node.name) &&
+      node.name.text === "style" &&
+      node.initializer &&
+      ts.isJsxExpression(node.initializer) &&
+      node.initializer.expression
+    ) {
+      sinks.push(node);
+      const objects = resolveObjects(node.initializer.expression, 0, new Set());
+      for (const object of objects) {
+        for (const property of object.properties) {
+          if (!ts.isPropertyAssignment(property) && !ts.isShorthandPropertyAssignment(property)) continue;
+          const channel = customPropertyKey(property.name);
+          if (channel) record(channel, property, "style-object-key");
+        }
+      }
+    }
+    // sink 2: element.style.setProperty('--x', v)
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression) &&
+      node.expression.name.text === "setProperty" &&
+      node.arguments.length > 0
+    ) {
+      const target = node.expression.expression;
+      const isStyleTarget =
+        ts.isPropertyAccessExpression(target) && target.name.text === "style";
+      const first = unwrap(node.arguments[0]);
+      if (isStyleTarget) {
+        sinks.push(node);
+        if (ts.isStringLiteralLike(first) && first.text.startsWith("--")) {
+          record(first.text, node, "setProperty");
+        } else if (!ts.isStringLiteralLike(first)) {
+          // `rule.style.setProperty(name, value)` -- the channel is computed at
+          // run time. It USED to be invisible: not a stamp and not even a
+          // counter. It is now an unresolved site, because a producer nobody
+          // can name is exactly what STRICT must not be allowed to assume away.
+          noteUnresolved(node, "dynamic-setProperty", "setProperty with a non-literal property name");
+        }
+      }
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(source);
+
+  return { stamps, styleSinks: sinks.length, unresolved, closedNonObject };
+}
+
+/* ================================================= AUTHORED CENSUS DIFF ===
+ * The census `index.mjs` published by hand on 2026-08-18. This
+ * module must reproduce it or publish the difference, figure by figure, with
+ * the reason. A silent match would be as unfalsifiable as the prose was.
+ * ======================================================================== */
+const AUTHORED_TSX_CENSUS = {
+  measuredOn: "2026-08-18",
+  source: "index.mjs PLANES_NOT_SCANNED[tsx-inline-stamp].census",
+  scannedFiles: 1740,
+  excludedFiles: 1664,
+  styleSinks: 3283,
+  distinctCustomProperties: 236,
+  distinctGovernedChannels: 183,
+  distinctInternalSockets: 30,
+  distinctForeignProperties: 23,
+  stampSites: 513,
+};
+
+/* ======================================================== CAUSAL ROOTS ===
+ * Authored LIVE derivations, wildcard excluded BY SHAPE and not by flag: a
+ * `to` containing `*` is a map-level fold, never a concrete channel, and one
+ * of them (`--ds-effect-intensity -> --ds-*`) collapses the whole debt to zero
+ * if expanded literally.
+ * ======================================================================== */
+export function authoredCausalRoots(cascadeRootsDir) {
+  const byChannel = new Map();
+  const excluded = [];
+  if (!existsSync(cascadeRootsDir)) {
+    throw new Error(`cascade roots directory is missing: ${cascadeRootsDir}`);
+  }
+
+  const records = readManifestRecords(cascadeRootsDir, "rootId");
+  if (records.length === 0) throw new Error(`cascade roots directory is empty: ${cascadeRootsDir}`);
+
+  for (const { document: doc, pathname: rootFile, relativePath } of records) {
+    const rel = `governance/manifest/cascade/roots/${relativePath}`;
+    if (!Array.isArray(doc.derivations)) {
+      throw new Error(`cascade root derivations are missing: ${rootFile}`);
+    }
+    for (const derivation of doc.derivations ?? []) {
+      if (derivation.state !== "LIVE") continue;
+      if (derivation.toIsPattern === true || String(derivation.to ?? "").includes("*")) {
+        excluded.push({ rootId: doc.rootId, to: derivation.to, reason: "wildcard-shape" });
+        continue;
+      }
+      if (!byChannel.has(derivation.to)) byChannel.set(derivation.to, []);
+      byChannel.get(derivation.to).push({
+        rootId: doc.rootId,
+        witness: `${rel} (derivations from ${derivation.from} to ${derivation.to}${
+          derivation.line ? `, site ${derivation.site}:${derivation.line}` : ""
+        })`,
+      });
+    }
+  }
+  return { byChannel, excluded };
+}
+
+/* ============================================================== BUILD ==== */
+
+/* ==================================================== ENGINE APPLICABILITY ===
+ * Applicability is DERIVED from the path (and, for CSS, from the substrate's
+ * own path INTERSECT selector scope). It is never inferred from specificity:
+ * an inline style winning the cascade says nothing about whether the component
+ * that stamps it ships in a given engine. A component under
+ * `.../engines/rustic/index.tsx` is Rustic's, full stop.
+ *
+ * Where applicability cannot be demonstrated the emission does NOT get all
+ * three engines: it gets `unknown`, and the site is published in
+ * `unknownProvenance`.
+ * ========================================================================== */
+export const ENGINES = ["modern", "rustic", "classic"];
+
+export function engineScopeOfPath(rel) {
+  for (const engine of ENGINES) {
+    if (rel.includes(`/engines/${engine}/`) || rel.startsWith(`engines/${engine}/`)) {
+      return {
+        engineScope: [engine],
+        applicabilityEvidence: `path segment /engines/${engine}/: this owner ships only in the ${engine} engine`,
+      };
+    }
+  }
+  return {
+    engineScope: [...ENGINES],
+    applicabilityEvidence:
+      "no /engines/<engine>/ segment on the path: the owner is engine-agnostic and renders under whichever engine is active",
+  };
+}
+
+/* ------------------------------------------- cross-file cohort rows --- */
+/**
+ * The four cohorts below are CLOSED contractually: every row is named, carries
+ * a receipt of where it came from and why, and is marked NOT consumable. None
+ * of them may ever be promoted to a tenant-consumable channel, and none of them
+ * may be merged into `closedZeroGoverned`, whose members are proven to emit no
+ * governed channel at all. Closing a row here means "this debt is identified
+ * and bounded", never "this debt is resolved".
+ */
+const cohortRow = ({ file, site, entry, reason, cause }) => ({
+  plane: "tsx-inline-stamp",
+  file,
+  symbol: site.symbol,
+  line: site.line,
+  ordinal: site.ordinal,
+  template: site.expression,
+  reason,
+  // Explicit, not inferred from the section name: a reader of a single row must
+  // be able to tell that it grants nothing.
+  consumable: false,
+  tenantSafe: false,
+  nonConsumableCause: cause,
+  // Every JSX sink this one expression reaches, merged across occurrences,
+  // and the relay kind each of those sinks implies. Both are sorted arrays and
+  // both may be empty; together they are the ONLY evidence that survives a
+  // coordinate carrying more than one occurrence, so neither may be dropped.
+  sinkTags: entry.sinkTags,
+  relayKinds: entry.relayKinds,
+  occurrences: entry.occurrences,
+  evidence: entry.receipt,
+});
+
+export function publicBoundaryRow(file, site, entry) {
+  return cohortRow({
+    file,
+    site,
+    entry,
+    reason: `public-boundary-candidate:${site.form}`,
+    // The object is supplied by the CALLER across a published entrypoint. The
+    // inventory cannot see it and never will from inside this package.
+    cause: "object-supplied-by-caller-across-public-entrypoint",
+  });
+}
+
+export function privateRelayRow(file, site, entry) {
+  /* T-SEALED-RELAY: a relay the resolver PROVED -- it followed the read across
+   * the import graph, reached one sealed producer and re-derived its key set --
+   * must not be published under the "unresolved / not followed" label. That
+   * label is a statement about the resolver, and for these rows it would be
+   * false. The row is otherwise identical: same collection, same
+   * `consumable:false` / `tenantSafe:false`, no channel attributed, no cascade
+   * root invented. Only the reason and cause change, plus `resolvedVia`, which
+   * names the route exactly as a closed zero-governed row does.
+   *
+   * Every relay published before this tranche has no such proof and keeps its
+   * exact published form. */
+  /* T-PUBLIC-STYLE-PASSTHROUGH is checked FIRST: a composite decided by the
+   * caller's own object can contain a nested sealed-import proof incidentally,
+   * and labelling it `sealed-import-relay` would name a proof that did not
+   * decide the row (and would inflate that cohort's pinned count). */
+  if (entry.receipt?.stylePassthrough) {
+    const psRow = cohortRow({
+      file,
+      site,
+      entry,
+      reason: `public-style-passthrough:${site.form}`,
+      cause: "composition-whose-only-open-operand-is-the-callers-own-style-object",
+    });
+    psRow.resolvedVia = "public-style-passthrough";
+    return psRow;
+  }
+  const proven = Array.isArray(entry.receipt?.sealedImportRelay) && entry.receipt.sealedImportRelay.length > 0;
+  /* T-NAMESPACE-RELAY: proven by NAMESPACE, not by key set. It is a relay for a
+   * weaker reason than a sealed key set, so it says so rather than borrowing
+   * the sealed label. */
+  const namespaceProven = Array.isArray(entry.receipt?.namespaceRelay) && entry.receipt.namespaceRelay.length > 0;
+  if (namespaceProven) {
+    const nsRow = cohortRow({
+      file,
+      site,
+      entry,
+      reason: `custom-property-namespace-relay:${site.form}`,
+      cause: "namespace-bounded-passthrough-whose-key-set-is-not-statically-enumerable",
+    });
+    nsRow.resolvedVia = "custom-property-namespace-relay";
+    return nsRow;
+  }
+  const row = cohortRow({
+    file,
+    site,
+    entry,
+    reason: proven ? `sealed-import-relay:${site.form}` : `private-relay-unresolved:${site.form}`,
+    cause: proven
+      ? "private-passthrough-of-a-sealed-imported-producer-attributed-to-no-cascade-root"
+      : "private-passthrough-not-followed-by-resolver",
+  });
+  if (proven) row.resolvedVia = "sealed-import-relay";
+  return row;
+}
+
+export function closedProducerRow(file, site, entry) {
+  /* T-STATIC-KEYSET: a producer whose ONLY custom properties sit outside the
+   * `--ds-` / `--_ds-` namespaces is still a producer -- it really stamps them
+   * -- but calling it "governed" would assert a governance relationship this
+   * programme does not have over that namespace. It gets its own honest label
+   * and cause; it is no more consumable and no more tenant-safe than any other
+   * producer, and it still has no attributed root. A producer with at least one
+   * governed channel or internal socket keeps its exact published form. */
+  const ungovernedOnly =
+    (entry.receipt?.governedChannelKeys?.length ?? 0) === 0 &&
+    (entry.receipt?.internalSocketKeys?.length ?? 0) === 0 &&
+    (entry.receipt?.ungovernedCustomPropertyKeys?.length ?? 0) > 0;
+  const row = cohortRow({
+    file,
+    site,
+    entry,
+    reason: ungovernedOnly
+      ? `ungoverned-custom-property-producer-object:${site.form}`
+      : `governed-producer-object:${site.form}`,
+    // It DOES emit governed channels -- that is why it is a producer -- but no
+    // cascade root claims it. Inventing a root or a tenant reach for it is
+    // exactly the relabel this programme forbids.
+    cause: ungovernedOnly
+      ? "custom-property-producer-outside-any-governed-namespace-with-no-attributed-cascade-root"
+      : "governed-producer-with-no-attributed-cascade-root",
+  });
+  // T-COMPUTED-DOMAIN: when one coordinate carries SEVERAL producer
+  // occurrences, their per-occurrence causal identities are merged by the join
+  // (they can never agree -- see PER_OCCURRENCE_IDENTITY_FIELDS). Publishing
+  // the merged sets keeps every identity visible instead of silently shipping
+  // whichever occurrence happened to be indexed first. Single-occurrence rows
+  // -- every producer published before this tranche -- gain nothing and stay
+  // byte-identical.
+  if (entry.producerSiteIds && entry.producerSiteIds.length > 1) {
+    row.occurrenceProducerSiteIds = entry.producerSiteIds;
+    row.occurrenceSourcePartRefs = entry.producerSourcePartRefs;
+  }
+  return row;
+}
+
+/* -------------------------------------------- open backlog (T-FINAL) --- */
+/**
+ * The seven OPEN dispositions. Publishing them is NOT resolving them: each row
+ * stays `consumable:false`, `tenantSafe:false` AND `blocking:true`, and the
+ * rollup keeps `openBlocking` at the full count. The only thing this buys is
+ * that the debt stops being an anonymous `unknownProvenance` blob and becomes
+ * a typed, addressable backlog: every row names the disposition that stopped
+ * resolution, the reason, and the path it got stuck on.
+ *
+ * `closed:false` is stamped explicitly so no reader can mistake one of these
+ * for a member of the CLOSED_* families.
+ */
+const OPEN_DISPOSITIONS = new Map([
+  ["BRANCH_COMPOSITE_OPEN", {
+    collection: "branchCompositeOpen",
+    reason: "branch-composite-open",
+    cause: "branch-composite-with-an-open-or-opaque-arm",
+  }],
+  ["AUTHORED_OPEN", {
+    collection: "authoredOpen",
+    reason: "authored-open",
+    cause: "authored-object-left-open-by-a-spread-or-unresolved-key",
+  }],
+  ["BRANCH_CONDITIONAL_AUTHORED", {
+    collection: "branchConditionalAuthored",
+    reason: "branch-conditional-authored",
+    cause: "conditional-arms-authored-but-not-reconciled-into-one-shape",
+  }],
+  ["OPEN_UNKNOWN", {
+    collection: "openUnknown",
+    reason: "open-unknown",
+    cause: "resolution-abandoned-before-any-shape-was-proven",
+  }],
+  ["COMPUTED_DOMAIN_PENDING", {
+    collection: "computedDomainPending",
+    reason: "computed-domain-pending",
+    cause: "computed-key-whose-domain-is-not-a-closed-literal-union",
+  }],
+  ["DYNAMIC_SINK_PENDING", {
+    collection: "dynamicSinkPending",
+    reason: "dynamic-sink-pending",
+    cause: "setProperty-name-is-not-a-literal-at-the-sink",
+  }],
+  ["CALL_ARGS_PENDING", {
+    collection: "callArgsPending",
+    reason: "call-args-pending",
+    cause: "call-argument-substitution-not-implemented",
+  }],
+]);
+
+export const OPEN_DISPOSITION_NAMES = Object.freeze([...OPEN_DISPOSITIONS.keys()].sort());
+export const OPEN_COLLECTION_NAMES = Object.freeze(
+  [...OPEN_DISPOSITIONS.values()].map((d) => d.collection).sort(),
+);
+
+export function openBacklogRow(file, site, entry, disposition) {
+  const spec = OPEN_DISPOSITIONS.get(disposition);
+  if (!spec) throw new Error(`openBacklogRow called for a non-open disposition: ${disposition}`);
+  return {
+    plane: "tsx-inline-stamp",
+    file,
+    symbol: site.symbol,
+    line: site.line,
+    ordinal: site.ordinal,
+    template: site.expression,
+    reason: `${spec.reason}:${site.form}`,
+    disposition,
+    // OPEN debt: not consumable, not tenant-safe, not closed, and still blocking
+    consumable: false,
+    tenantSafe: false,
+    closed: false,
+    blocking: true,
+    nonConsumableCause: spec.cause,
+    sinkTags: entry.sinkTags,
+    relayKinds: entry.relayKinds,
+    occurrences: entry.occurrences,
+    evidence: entry.receipt,
+  };
+}
+
+export function buildProducers({
+  root = REPO_ABS,
+  cssEdgesPath = CSS_EDGES,
+  cascadeRootsDir = CASCADE_ROOTS,
+  rootCatalogPath = ROOT_CATALOG,
+  artifactsDir = ARTIFACTS_DIR,
+} = {}) {
+  const unknownProvenance = [];
+  // Receipt for the sites the scanner CLOSES by proof (see provablyNonObject).
+  // Same identity family as `unknownProvenance`; a SEQUENCE, not a set.
+  const closedNonObject = [];
+  // Receipt for the sites the CROSS-FILE subsystem proves are closed objects
+  // that emit ZERO governed channels. Only this disposition drains: boundary,
+  // relay and every residual stay in `unknownProvenance`, non-consumable.
+  const closedZeroGoverned = [];
+  // The three cross-file dispositions this inventory closes CONTRACTUALLY
+  // without ever making them consumable. A boundary row is a public API surface
+  // whose caller supplies the object, so it can never be tenant-safe; a relay
+  // row is a private passthrough the resolver refused to follow; a producer row
+  // emits governed channels but is attributed to NO cascade root. All three are
+  // accounted for by name and receipt instead of being left as anonymous debt.
+  const publicBoundary = [];
+  const privateRelay = [];
+  const closedProducer = [];
+  // The seven OPEN cohorts. They drain `unknownProvenance` of anonymity, NOT of
+  // obligation: every row stays blocking (see `openBacklogRow`).
+  const openBacklog = new Map(
+    [...OPEN_DISPOSITIONS.values()].map((spec) => [spec.collection, []]),
+  );
+  const openRowsOf = (name) => openBacklog.get(name);
+  // FAIL-CLOSED join. `file|ordinal` is stable but NOT unique: one expression
+  // reaching several JSX sinks yields several rows. `dispositionIndex` throws on
+  // any material disagreement at a shared coordinate and merges only the
+  // per-sink evidence, so nothing is silently overwritten.
+  const crossFile = classifyCrossFileRows();
+  const dispositionAt = dispositionIndex(crossFile.rows);
+  const precedenceMetadata = [];
+
+  const { byChannel: causalByChannel, excluded: causalExcluded } =
+    authoredCausalRoots(cascadeRootsDir);
+  /**
+   * `unknownProvenance` may reach [] ONLY when every site it used to hold is
+   * accounted for exactly once somewhere else. This is checked structurally
+   * below (`assertUniverseConserved`) rather than asserted in prose: if a site
+   * were dropped, the total would fall short and the build would throw instead
+   * of publishing a flattering empty list.
+   */
+
+  /* --------------------------------------------------------- claims --- */
+  /**
+   * Claims are ACCUMULATED before ownership is resolved, and the site ordinal
+   * is a STABLE source coordinate (a character offset for AST sites, the line
+   * for textual ones) rather than an auto-incrementing counter. With a counter,
+   * two owners claiming the same coordinate silently received two different
+   * ids and `ownershipConflicts` could never fire from a real build -- the law
+   * was only testable through a hand-built helper.
+   */
+  const claims = new Map();
+  const claim = ({
+    plane,
+    file,
+    line,
+    symbol,
+    ordinal,
+    ownerId,
+    ownerEvidence,
+    channels,
+    engineScope,
+    applicabilityEvidence,
+  }) => {
+    const producerSiteId = producerSiteIdOf(plane, file, line, symbol, ordinal);
+    if (!claims.has(producerSiteId)) {
+      claims.set(producerSiteId, { producerSiteId, plane, file, line, symbol, ordinal, owners: new Map() });
+    }
+    const site = claims.get(producerSiteId);
+    if (!site.owners.has(ownerId)) {
+      site.owners.set(ownerId, {
+        ownerId,
+        ownerEvidence,
+        engineScope,
+        applicabilityEvidence,
+        channels: new Set(),
+      });
+    }
+    for (const channel of channels) site.owners.get(ownerId).channels.add(channel);
+    return producerSiteId;
+  };
+
+  const unknown = (row) => unknownProvenance.push(row);
+
+  /* ---------------------------------------------------------- plane css --- */
+  const edgesDoc = JSON.parse(readFileSync(cssEdgesPath, "utf8"));
+  const scopeTable = edgesDoc.scopeTable ?? [];
+  const cssDeclarations = new Map();
+  for (const edge of edgesDoc.edges) {
+    if (edge.edgeClass !== "decl") continue;
+    if (!String(edge.to).startsWith("--ds-")) continue;
+    const key = `${edge.file}|${edge.line}|${edge.to}`;
+    if (!cssDeclarations.has(key)) {
+      cssDeclarations.set(key, { file: edge.file, line: edge.line, channel: edge.to, scopeId: edge.scopeId });
+    }
+  }
+  for (const pin of edgesDoc.literalPins) {
+    if (!String(pin.channel).startsWith("--ds-")) continue;
+    const key = `${pin.file}|${pin.line}|${pin.channel}`;
+    if (!cssDeclarations.has(key)) {
+      cssDeclarations.set(key, {
+        file: pin.file,
+        line: pin.line,
+        channel: pin.channel,
+        scopeId: typeof pin.scopeId === "number" ? pin.scopeId : null,
+      });
+    }
+  }
+  for (const declaration of [...cssDeclarations.values()].sort((a, b) =>
+    a.file === b.file ? a.line - b.line || (a.channel < b.channel ? -1 : 1) : a.file < b.file ? -1 : 1,
+  )) {
+    const scope = declaration.scopeId === null ? null : scopeTable[declaration.scopeId];
+    if (!scope) {
+      // Absent scope is UNKNOWN applicability, never all three engines.
+      unknown({
+        plane: "css",
+        file: declaration.file,
+        symbol: declaration.channel,
+        template: null,
+        reason: "unknown-applicability",
+        detail: `declaration at ${declaration.file}:${declaration.line} has no scopeId in the substrate`,
+      });
+      continue;
+    }
+    claim({
+      plane: "css",
+      file: declaration.file,
+      line: declaration.line,
+      symbol: declaration.channel,
+      ordinal: 0,
+      ownerId: "css-declaration",
+      ownerEvidence: `${declaration.file}:${declaration.line} declares ${declaration.channel}`,
+      channels: [declaration.channel],
+      engineScope: scope.effectiveEngines,
+      applicabilityEvidence: `css-edges.json scopeTable[${declaration.scopeId}] (path ${scope.pathEngines.join("+")} INTERSECT selector ${
+        Array.isArray(scope.selectorEngines) ? scope.selectorEngines.join("+") : scope.selectorEngines
+      })`,
+    });
+  }
+
+  /* ------------------------------------------- planes ts-* (enumerated) --- */
+  const reach = tenantReach({ root });
+  const enumerators = buildEnumerators(root);
+  const read = (path) => readFileSync(join(root, path), "utf8");
+  const compilerSources = new Map();
+
+  const attributed = new Map();
+  for (const enumerator of enumerators) {
+    for (const fn of enumerator.functions) attributed.set(`${enumerator.file}::${fn}`, enumerator);
+  }
+
+  const COMPILER_APPLICABILITY =
+    "compiler emission: the theme document is applied at :root / [data-tenant] scope, above every engine selector, and the compiler has no engine branch -- engine-agnostic by construction, not by specificity";
+
+  for (const path of [CHROME_VARIABLES, BRAND_THEME, APPEARANCE_POSTURE].filter((p) =>
+    existsSync(join(root, p)),
+  )) {
+    const source = read(path);
+    compilerSources.set(path, source);
+    const plane = planeOfCompilerFile(path);
+    for (const emission of templateEmissions(source)) {
+      const enumerator = attributed.get(`${path}::${emission.owner}`);
+      const line = lineAt(source, emission.index);
+      if (enumerator) {
+        const body = bodyOf(source, emission.owner);
+        const names = expandTemplate(emission.template, enumerator.holes, (local) => {
+          const match = new RegExp(`const\\s+${local}\\s*=\\s*\`([^\`]+)\``).exec(body);
+          return match?.[1] ?? null;
+        }).filter((name) => name.startsWith("--ds-"));
+        if (names.length === 0) {
+          unknown({
+            plane,
+            file: path,
+            symbol: emission.owner,
+            template: emission.template,
+            reason: "enumerator-produced-no-names",
+          });
+          continue;
+        }
+        claim({
+          plane,
+          file: path,
+          line,
+          symbol: emission.owner,
+          ordinal: emission.index,
+          ownerId: `enumerator:${enumerator.id}`,
+          ownerEvidence: enumerator.evidence,
+          channels: names,
+          engineScope: [...ENGINES],
+          applicabilityEvidence: COMPILER_APPLICABILITY,
+        });
+        continue;
+      }
+      const adjudicated = adjudicateDeclarationOwner({ root, file: path, emission, source });
+      if (!adjudicated) {
+        unknown({
+          plane,
+          file: path,
+          symbol: emission.owner,
+          template: emission.template,
+          reason: "missing-owner",
+        });
+        continue;
+      }
+      claim({
+        plane,
+        file: path,
+        line,
+        symbol: emission.owner,
+        ordinal: emission.index,
+        ownerId: `declaration:${adjudicated.declarationOwnerId}`,
+        ownerEvidence: adjudicated.evidence,
+        channels: adjudicated.channels,
+        engineScope: [...ENGINES],
+        applicabilityEvidence: COMPILER_APPLICABILITY,
+      });
+    }
+    const literals = [...literalTokens(source)].sort();
+    if (literals.length) {
+      claim({
+        plane,
+        file: path,
+        line: 1,
+        symbol: "<literal-writes>",
+        ordinal: 0,
+        ownerId: "declaration:literal-token",
+        ownerEvidence: `${path}: literal "--ds-*" tokens, the greppable half of the reach set (tenant-reach literalTokens)`,
+        channels: literals,
+        engineScope: [...ENGINES],
+        applicabilityEvidence: COMPILER_APPLICABILITY,
+      });
+    }
+  }
+
+  const overrides = overrideTokens(root);
+  const overrideNames = [...overrides.names].sort();
+  if (overrideNames.length) {
+    claim({
+      plane: "ts-compilers",
+      file: TENANT_THEME_PATH,
+      line: 1,
+      symbol: "TENANT_THEME_OVERRIDE_TOKENS",
+      ordinal: 0,
+      ownerId: "declaration:TENANT_THEME_OVERRIDE_TOKENS",
+      ownerEvidence: "tenant-theme/index.ts: the bounded override allowlist, read by tenant-reach overrideTokens()",
+      channels: overrideNames,
+      engineScope: [...ENGINES],
+      applicabilityEvidence: "tenant override token: applied at [data-tenant] scope, engine-agnostic",
+    });
+  }
+
+  /* ------------------------------- tenant ARTIFACT declarations (STRICT) --- */
+  // STRICT counts three producer shapes: a CSS declaration, an ENUMERATED
+  // emission, and a declaration in a TENANT ARTIFACT. The third was missing, so
+  // a channel a tenant artifact declares looked unproduced. Artifacts are the
+  // compiler's own emitted snapshot, so they enter `ts-compilers` -- no fifth
+  // plane is invented.
+  const artifactFiles = existsSync(artifactsDir)
+    ? readdirSync(artifactsDir)
+        .sort()
+        .map((theme) => ({ theme, abs: join(artifactsDir, theme, "index.css") }))
+        .filter((entry) => existsSync(entry.abs))
+    : [];
+  const artifactSources = new Map();
+  for (const { theme, abs } of artifactFiles) {
+    const text = readFileSync(abs, "utf8");
+    artifactSources.set(theme, text);
+    const rel = `packages/core/src/foundation/tokens/css/facade/artifacts/${theme}/index.css`;
+    const declared = new Set();
+    for (const match of text.matchAll(/(^|[;{\s])(--ds-[A-Za-z0-9-]+)\s*:/g)) declared.add(match[2]);
+    if (declared.size === 0) continue;
+    claim({
+      plane: "ts-compilers",
+      file: rel,
+      line: 1,
+      symbol: `<tenant-artifact:${theme}>`,
+      ordinal: 0,
+      ownerId: `declaration:tenant-artifact:${theme}`,
+      ownerEvidence: `${rel}: compiled tenant snapshot declaring ${declared.size} governed channels at its own :root/[data-tenant] scope`,
+      channels: [...declared].sort(),
+      engineScope: [...ENGINES],
+      applicabilityEvidence:
+        "tenant artifact: a compiled snapshot applied at :root / [data-tenant] scope, with no engine branch",
+    });
+  }
+
+  /* ------------------------------------------- plane tsx-inline-stamp --- */
+  const candidates = tsxCandidates(root);
+  let scannedFiles = 0;
+  let excludedFiles = 0;
+  let styleSinks = 0;
+  const scannedFileList = [];
+  const tsxHashes = [];
+  const tsxChannels = new Set();
+  const tsxSockets = new Set();
+  const tsxForeign = new Set();
+  let stampSites = 0;
+  let unresolvedSites = 0;
+  // Every tsx site the scanner produced, before any routing. The conservation
+  // guard below compares the collections against THIS, not against a literal.
+  let tsxSiteTotal = 0;
+  for (const abs of candidates) {
+    const rel = relative(root, abs);
+    if (isExcluded(`/${rel}`)) {
+      excludedFiles += 1;
+      continue;
+    }
+    scannedFiles += 1;
+    scannedFileList.push(rel);
+    const text = readFileSync(abs, "utf8");
+    tsxHashes.push([rel, sha256(text)]);
+    // NO text short-circuit. Skipping files with no literal `--` also skipped
+    // their SINKS: `style={imported}` in a file that never spells a custom
+    // property is precisely an unresolved producer, and the fast path made it
+    // invisible. Parsing every scanned file is the price of not lying.
+    const scan = scanTsxSource(rel, text);
+    tsxSiteTotal += scan.unresolved.length + scan.closedNonObject.length;
+    styleSinks += scan.styleSinks;
+    const applicability = engineScopeOfPath(`/${rel}`);
+    for (const site of scan.unresolved) {
+      const entry = dispositionAt.get(`${rel}|${site.ordinal}`);
+      const disposition = entry ? entry.decision.disposition : null;
+      if (disposition === "CLOSED_ZERO_GOVERNED_EMISSION_OBJECT") {
+        const zeroRow = {
+          plane: "tsx-inline-stamp",
+          file: rel,
+          symbol: site.symbol,
+          line: site.line,
+          ordinal: site.ordinal,
+          template: site.expression,
+          reason: `zero-governed-emission-object:${site.form}`,
+        };
+        // A row that closed through a proven route carries the receipt that
+        // justified it, LABELLED BY THAT ROUTE: `branch-union` (T-BRANCH-37 /
+        // -COMPOSITE-162) or `computed-domain-enumeration` (T-COMPUTED-DOMAIN).
+        // Rows closed by an earlier route have no receipt and keep their exact
+        // published form.
+        if (entry.receipt) {
+          zeroRow.resolvedVia =
+            // T-STATIC-KEYSET: checked FIRST. The receipt already names this
+            // route, and labelling such a row "branch-union" would put two
+            // contradictory provenance claims in the same row. A row that
+            // closed by any earlier route is untouched.
+            entry.receipt.resolvedVia === "dynamic-property-domain"
+              ? "dynamic-property-domain"
+            : entry.receipt.resolvedVia === "internal-base-mutation"
+              ? "internal-base-mutation"
+            : entry.receipt.resolvedVia === "static-key-set"
+              ? "static-key-set"
+              : entry.receipt.domainKind
+                ? "computed-domain-enumeration"
+                : entry.receipt.sequentialAssignments
+                  ? "static-sequential-assignment"
+                  : entry.receipt.nestedComputedDomains
+                    ? "nested-computed-domain"
+                    : "branch-union";
+          zeroRow.evidence = entry.receipt;
+        }
+        closedZeroGoverned.push(zeroRow);
+        continue;
+      }
+      if (disposition === "PUBLIC_BOUNDARY_CANDIDATE") {
+        publicBoundary.push(publicBoundaryRow(rel, site, entry));
+        continue;
+      }
+      if (disposition === "RELAY_PRIVATE_UNRESOLVED") {
+        privateRelay.push(privateRelayRow(rel, site, entry));
+        continue;
+      }
+      if (disposition === "CLOSED_PRODUCER") {
+        closedProducer.push(closedProducerRow(rel, site, entry));
+        continue;
+      }
+      const openSpec = disposition ? OPEN_DISPOSITIONS.get(disposition) : undefined;
+      if (openSpec) {
+        openRowsOf(openSpec.collection).push(openBacklogRow(rel, site, entry, disposition));
+        continue;
+      }
+      if (disposition === "CLOSED_NONOBJECT") {
+        // The one site whose non-object nature is only visible ACROSS files:
+        // `SELECT_DEFAULTS.size` is a member of an imported object, so the local
+        // predicate in `provablyNonObject` cannot see the literal it resolves
+        // to. It joins the same receipt as the 68 locally-proven rows -- one
+        // identity, one array -- and declares its own provenance in two
+        // independent ways: the `cross-file:` reason prefix and `resolvedVia`.
+        closedNonObject.push({
+          plane: "tsx-inline-stamp",
+          file: rel,
+          symbol: site.symbol,
+          line: site.line,
+          ordinal: site.ordinal,
+          template: site.expression,
+          reason: `cross-file:${entry.receipt.nonObjectReason}`,
+          resolvedVia: "cross-file",
+          evidence: entry.receipt,
+        });
+        continue;
+      }
+      unresolvedSites += 1;
+      unknown({
+        plane: "tsx-inline-stamp",
+        file: rel,
+        symbol: site.symbol,
+        template: site.expression,
+        reason: `unresolved-${site.form}`,
+        detail: `${rel}:${site.line} ${site.reason}`,
+      });
+    }
+    for (const site of scan.closedNonObject) {
+      closedNonObject.push({
+        plane: "tsx-inline-stamp",
+        file: rel,
+        symbol: site.symbol,
+        line: site.line,
+        ordinal: site.ordinal,
+        template: site.expression,
+        reason: site.reason,
+      });
+    }
+    if (scan.stamps.length === 0) continue;
+    const bySite = new Map();
+    for (const stamp of scan.stamps) {
+      stampSites += 1;
+      if (stamp.channel.startsWith("--ds-")) tsxChannels.add(stamp.channel);
+      else if (stamp.channel.startsWith("--_ds-")) tsxSockets.add(stamp.channel);
+      else tsxForeign.add(stamp.channel);
+      const key = `${stamp.line}|${stamp.symbol}|${stamp.ordinal}`;
+      if (!bySite.has(key)) bySite.set(key, { line: stamp.line, symbol: stamp.symbol, ordinal: stamp.ordinal, channels: new Set() });
+      bySite.get(key).channels.add(stamp.channel);
+    }
+    for (const site of [...bySite.values()].sort((a, b) => a.ordinal - b.ordinal)) {
+      const governed = [...site.channels].filter((c) => c.startsWith("--ds-")).sort();
+      if (governed.length === 0) continue;
+      claim({
+        plane: "tsx-inline-stamp",
+        file: rel,
+        line: site.line,
+        symbol: site.symbol,
+        ordinal: site.ordinal,
+        ownerId: `tsx-stamp:${site.symbol}`,
+        ownerEvidence: `${rel}:${site.line} stamps the custom property onto the element's inline style attribute`,
+        channels: governed,
+        engineScope: applicability.engineScope,
+        applicabilityEvidence: applicability.applicabilityEvidence,
+      });
+    }
+  }
+
+  /* --------------------------------------------------- residual emitters --- */
+  for (const entry of reach.unattributed) {
+    const already = [...claims.values()].some(
+      (site) => site.file === entry.file && site.symbol === entry.owner,
+    );
+    if (already) continue;
+    unknown({
+      plane: planeOfCompilerFile(entry.file),
+      file: entry.file,
+      symbol: entry.owner,
+      template: entry.template,
+      reason: entry.reason ?? "missing-owner",
+    });
+  }
+
+  /* --------------------------------------------- materialise the claims --- */
+  const producerSites = [];
+  const channelEmissions = [];
+  const ownershipConflicts = [];
+  for (const site of [...claims.values()].sort((a, b) =>
+    a.producerSiteId < b.producerSiteId ? -1 : 1,
+  )) {
+    const owners = [...site.owners.values()].sort((a, b) => (a.ownerId < b.ownerId ? -1 : 1));
+    if (owners.length > 1) {
+      ownershipConflicts.push({
+        producerSiteId: site.producerSiteId,
+        plane: site.plane,
+        file: site.file,
+        line: site.line,
+        symbol: site.symbol,
+        owners: owners.map((owner) => owner.ownerId),
+      });
+    }
+    producerSites.push({
+      producerSiteId: site.producerSiteId,
+      plane: site.plane,
+      file: site.file,
+      line: site.line,
+      symbol: site.symbol,
+      ordinal: site.ordinal,
+      ownerId: owners[0].ownerId,
+      ownerEvidence: owners[0].ownerEvidence,
+      ...(owners.length > 1 ? { ownerConflict: owners.map((owner) => owner.ownerId) } : {}),
+    });
+    for (const owner of owners) {
+      for (const channel of [...owner.channels].sort()) {
+        channelEmissions.push({
+          channelEmissionId: channelEmissionIdOf(site.producerSiteId, channel),
+          producerSiteId: site.producerSiteId,
+          channel,
+          engineScope: owner.engineScope,
+          applicabilityEvidence: owner.applicabilityEvidence,
+          causalRootIds: (causalByChannel.get(channel) ?? []).map((hit) => ({
+            rootId: hit.rootId,
+            witness: hit.witness,
+          })),
+        });
+      }
+    }
+  }
+
+  /* -------------------------------------------- precedence as METADATA --- */
+  // Schema: executionContext / order / evidence. The order is the CSS cascade
+  // law, which is demonstrable; it is NOT an ownership resolution and never
+  // names a winner.
+  const CONTEXT_OF_PLANE = {
+    css: "stylesheet cascade",
+    "ts-compilers": "compileTheme document",
+    "ts-chrome-variables": "compileTheme document",
+    "tsx-inline-stamp": "render-time inline style attribute",
+  };
+  const CONTEXT_ORDER = ["stylesheet cascade", "compileTheme document", "render-time inline style attribute"];
+  const siteById = new Map(producerSites.map((site) => [site.producerSiteId, site]));
+  const emissionsByChannel = new Map();
+  for (const emission of channelEmissions) {
+    if (!emissionsByChannel.has(emission.channel)) emissionsByChannel.set(emission.channel, []);
+    emissionsByChannel.get(emission.channel).push(emission);
+  }
+  for (const [channel, emissions] of [...emissionsByChannel.entries()].sort()) {
+    if (emissions.length < 2) continue;
+    const owners = [...new Set(emissions.map((e) => siteById.get(e.producerSiteId).ownerId))].sort();
+    if (owners.length < 2) continue;
+    const contexts = [
+      ...new Set(emissions.map((e) => CONTEXT_OF_PLANE[siteById.get(e.producerSiteId).plane])),
+    ].sort((a, b) => CONTEXT_ORDER.indexOf(a) - CONTEXT_ORDER.indexOf(b));
+    precedenceMetadata.push({
+      channel,
+      executionContext: contexts,
+      order: contexts,
+      evidence:
+        "CSS cascade law: a declaration in a stylesheet is overridden by the tenant/theme document applied at :root/[data-tenant], and both are overridden by an inline style attribute. This orders EXECUTION only.",
+      owners,
+      note: "several owners legitimately emit this channel; ownership is NOT resolved here and no winner is named.",
+    });
+  }
+
+  const byChannel = {};
+  for (const [channel, emissions] of [...emissionsByChannel.entries()].sort()) {
+    byChannel[channel] = emissions.map((emission) => emission.channelEmissionId);
+  }
+
+  /* ------------------------------------------------------ tsx census --- */
+  const tsxCensus = {
+    scannedFiles,
+    excludedFiles,
+    styleSinks,
+    stampSites,
+    distinctCustomProperties: tsxChannels.size + tsxSockets.size + tsxForeign.size,
+    distinctGovernedChannels: tsxChannels.size,
+    distinctInternalSockets: tsxSockets.size,
+    distinctForeignProperties: tsxForeign.size,
+    unresolvedSites,
+  };
+  const censusDiff = Object.fromEntries(
+    Object.keys(AUTHORED_TSX_CENSUS)
+      .filter((key) => typeof AUTHORED_TSX_CENSUS[key] === "number")
+      .map((key) => [
+        key,
+        {
+          authored: AUTHORED_TSX_CENSUS[key],
+          measured: tsxCensus[key] ?? null,
+          delta: (tsxCensus[key] ?? 0) - AUTHORED_TSX_CENSUS[key],
+        },
+      ]),
+  );
+
+  const digest = (value) => sha256(JSON.stringify(value));
+  const manifestRootsDigest = (dir) =>
+    existsSync(dir)
+      ? digest(
+          readManifestRecords(dir, "rootId")
+            .map(({ relativePath, pathname }) => [relativePath, sha256(readFileSync(pathname))]),
+        )
+      : digest([]);
+
+  /* ------------------------------------------- open backlog rollup --- */
+  const openByDisposition = {};
+  for (const [dispositionName, spec] of OPEN_DISPOSITIONS) {
+    openByDisposition[dispositionName] = openRowsOf(spec.collection).length;
+  }
+  const openTotal = Object.values(openByDisposition).reduce((a, b) => a + b, 0);
+
+  /* CONSERVATION GUARD -- fail closed.
+   * Every tsx-inline-stamp site the scanner produced must land in exactly one
+   * collection. `unknownProvenance` reaching [] is legitimate ONLY when this
+   * arithmetic closes; otherwise a dropped row would read as progress. */
+  const accountedRows =
+    unknownProvenance.length +
+    closedNonObject.length +
+    closedZeroGoverned.length +
+    publicBoundary.length +
+    privateRelay.length +
+    closedProducer.length +
+    openTotal;
+  if (accountedRows !== tsxSiteTotal) {
+    throw new Error(
+      `cascade universe not conserved: ${tsxSiteTotal} tsx sites scanned but ` +
+        `${accountedRows} accounted for. Refusing to publish an inventory that ` +
+        `loses provenance rows.`,
+    );
+  }
+
+  const openBacklogRollup = {
+    // Calling it "open" is load-bearing: this is classified debt, not resolved debt.
+    total: openTotal,
+    blocking: openTotal > 0,
+    lotBOpen: unknownProvenance.length === 0 && openTotal === 0,
+    statement:
+      "These sites are CLASSIFIED, not resolved. Each carries a typed disposition, a reason and the resolution path it stopped on, which makes the debt addressable; none is consumable or tenant-safe, and none may be treated as a producer, a cascade root or a tenant-reachable channel. F4B stays blocked while any of them remains.",
+    byDisposition: openByDisposition,
+    universe: {
+      tsxSitesScanned: tsxSiteTotal,
+      accountedRows,
+      unknownProvenance: unknownProvenance.length,
+      closedNonObject: closedNonObject.length,
+      closedZeroGoverned: closedZeroGoverned.length,
+      publicBoundary: publicBoundary.length,
+      privateRelay: privateRelay.length,
+      closedProducer: closedProducer.length,
+      openBlocking: openTotal,
+    },
+  };
+
+  return {
+    generated: true,
+    generator: "index.mjs",
+    schemaVersion: 1,
+    planes: PLANES,
+    law: {
+      ownership:
+        "producerSiteId -> exactly one ownerId, where the site ordinal is a STABLE source coordinate. Claims accumulate before ownership resolves, so a second owner on the same coordinate is representable and therefore falsifiable.",
+      applicability:
+        "channelEmissionId -> engineScope + applicabilityEvidence, DERIVED from path (and, for CSS, path INTERSECT selector). Never from specificity. Undemonstrable applicability is UNKNOWN, never `all`.",
+      causality:
+        "channelEmissionId -> causalRootIds[], each with witness, matched EXACTLY by channel against an authored LIVE derivation. Never propagated from one channel to a whole enumerator. An empty list with an attributed producer is producedExternalTerminal, not UNKNOWN.",
+      failClosed:
+        "every expression the scanner cannot resolve is ONE ROW in unknownProvenance. Under STRICT a missing producer ADMITS a fallback branch and can LOWER debt, so under-counting producers can buy a false green: it is not a safe approximation and is never treated as one.",
+    },
+    inputsDigest: {
+      cssEdges: sha256(readFileSync(cssEdgesPath)),
+      cascadeRoots: manifestRootsDigest(cascadeRootsDir),
+      rootCatalog: existsSync(rootCatalogPath) ? sha256(readFileSync(rootCatalogPath)) : null,
+      srcTsx: digest(tsxHashes),
+      srcCompilers: digest(
+        [...compilerSources.entries()].sort().map(([path, text]) => [path, sha256(text)]),
+      ),
+      artifacts: digest([...artifactSources.entries()].sort().map(([theme, text]) => [theme, sha256(text)])),
+    },
+    stats: {
+      producerSites: producerSites.length,
+      channelEmissions: channelEmissions.length,
+      distinctChannels: Object.keys(byChannel).length,
+      byPlane: PLANES.reduce((acc, plane) => {
+        acc[plane] = {
+          producerSites: producerSites.filter((s) => s.plane === plane).length,
+          channelEmissions: channelEmissions.filter(
+            (e) => siteById.get(e.producerSiteId).plane === plane,
+          ).length,
+        };
+        return acc;
+      }, {}),
+      emissionsByEngineScope: channelEmissions.reduce((acc, emission) => {
+        const key = emission.engineScope.join("+") || "(unknown)";
+        acc[key] = (acc[key] ?? 0) + 1;
+        return acc;
+      }, {}),
+      emissionsWithCausalRoot: channelEmissions.filter((e) => e.causalRootIds.length > 0).length,
+      ownershipConflicts: ownershipConflicts.length,
+      unknownProvenance: unknownProvenance.length,
+      closedNonObject: closedNonObject.length,
+      closedZeroGoverned: closedZeroGoverned.length,
+      publicBoundary: publicBoundary.length,
+      privateRelay: privateRelay.length,
+      closedProducer: closedProducer.length,
+      branchCompositeOpen: openRowsOf("branchCompositeOpen").length,
+      authoredOpen: openRowsOf("authoredOpen").length,
+      branchConditionalAuthored: openRowsOf("branchConditionalAuthored").length,
+      openUnknown: openRowsOf("openUnknown").length,
+      computedDomainPending: openRowsOf("computedDomainPending").length,
+      dynamicSinkPending: openRowsOf("dynamicSinkPending").length,
+      callArgsPending: openRowsOf("callArgsPending").length,
+      // The rollup that must NOT be read as progress on resolution: these are
+      // still open, still blocking, and lot B stays shut while they exist.
+      openBlocking: openTotal,
+      openBacklogByDisposition: openByDisposition,
+      unknownProvenanceByReason: unknownProvenance.reduce((acc, row) => {
+        acc[row.reason] = (acc[row.reason] ?? 0) + 1;
+        return acc;
+      }, {}),
+      precedenceMetadata: precedenceMetadata.length,
+      causalRootsExcludedByWildcardShape: causalExcluded.length,
+      artifactThemes: artifactFiles.length,
+    },
+    tsxInlineStamp: {
+      membershipCriterion:
+        "sink-anchored AST: a channel belongs to this plane only if it is a property of an object that reaches a JSX `style`, or a literal argument of element.style.setProperty(). Resolution walks BACKWARDS from the sink through identifier, conditional, binary, useMemo/useCallback, block returns and inline arrow bodies, bounded to depth 6. EVERY expression it refuses to follow becomes a row in unknownProvenance.",
+      authoredCensus: AUTHORED_TSX_CENSUS,
+      measuredCensus: tsxCensus,
+      censusDiff,
+      censusReconciliation: {
+        method:
+          "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
+        authoredPublishesMemberLists: false,
+        scannedFiles: scannedFileList.length,
+        governedChannels: tsxChannels.size,
+        unresolvedSites,
+      },
+      governedChannels: [...tsxChannels].sort(),
+      internalSockets: [...tsxSockets].sort(),
+      foreignProperties: [...tsxForeign].sort(),
+      scannedFileList,
+    },
+    causalRootsExcluded: causalExcluded,
+    digests: {
+      producerSites: digest(producerSites.map((s) => s.producerSiteId).sort()),
+      channelEmissions: digest(channelEmissions.map((e) => e.channelEmissionId).sort()),
+      byChannel: digest(byChannel),
+      unknownProvenance: digest(
+        unknownProvenance.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      closedNonObject: digest(
+        closedNonObject.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      closedZeroGoverned: digest(
+        closedZeroGoverned.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      publicBoundary: digest(
+        publicBoundary.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      privateRelay: digest(
+        privateRelay.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      closedProducer: digest(
+        closedProducer.map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      // Receipt-bound digests: they cover the EVIDENCE, not just identity, so
+      // removing or editing a receipt reddens `--check` instead of passing.
+      // T-BRANCH-37: the branch-union receipts are digest-covered, so mutating
+      // a witness moves the digest instead of hiding behind identity alone.
+      closedZeroGovernedReceipts: digest(
+        closedZeroGoverned.map((row) => [row.file, row.ordinal, row.resolvedVia ?? null, row.evidence ?? null]),
+      ),
+      publicBoundaryReceipts: digest(
+        publicBoundary.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      privateRelayReceipts: digest(
+        privateRelay.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      closedProducerReceipts: digest(
+        closedProducer.map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      branchCompositeOpen: digest(
+        openRowsOf("branchCompositeOpen").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      authoredOpen: digest(
+        openRowsOf("authoredOpen").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      branchConditionalAuthored: digest(
+        openRowsOf("branchConditionalAuthored").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      openUnknown: digest(
+        openRowsOf("openUnknown").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      computedDomainPending: digest(
+        openRowsOf("computedDomainPending").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      dynamicSinkPending: digest(
+        openRowsOf("dynamicSinkPending").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      callArgsPending: digest(
+        openRowsOf("callArgsPending").map((row) => [row.plane, row.file, row.symbol, row.reason]),
+      ),
+      branchCompositeOpenReceipts: digest(
+        openRowsOf("branchCompositeOpen").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      authoredOpenReceipts: digest(
+        openRowsOf("authoredOpen").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      branchConditionalAuthoredReceipts: digest(
+        openRowsOf("branchConditionalAuthored").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      openUnknownReceipts: digest(
+        openRowsOf("openUnknown").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      computedDomainPendingReceipts: digest(
+        openRowsOf("computedDomainPending").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      dynamicSinkPendingReceipts: digest(
+        openRowsOf("dynamicSinkPending").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+      callArgsPendingReceipts: digest(
+        openRowsOf("callArgsPending").map((row) => [row.file, row.ordinal, row.sinkTags, row.relayKinds, row.evidence]),
+      ),
+    },
+    producerSites,
+    channelEmissions,
+    byChannel,
+    ownershipConflicts,
+    precedenceMetadata,
+    unknownProvenance,
+    closedNonObject,
+    closedZeroGoverned,
+    publicBoundary,
+    privateRelay,
+    closedProducer,
+    openBacklogRollup,
+    branchCompositeOpen: openRowsOf("branchCompositeOpen"),
+    authoredOpen: openRowsOf("authoredOpen"),
+    branchConditionalAuthored: openRowsOf("branchConditionalAuthored"),
+    openUnknown: openRowsOf("openUnknown"),
+    computedDomainPending: openRowsOf("computedDomainPending"),
+    dynamicSinkPending: openRowsOf("dynamicSinkPending"),
+    callArgsPending: openRowsOf("callArgsPending"),
+  };
+}
+
+export function ownershipConflictsOf(producerSites) {
+  const ownerBySite = new Map();
+  for (const site of producerSites) {
+    if (!ownerBySite.has(site.producerSiteId)) ownerBySite.set(site.producerSiteId, new Set());
+    ownerBySite.get(site.producerSiteId).add(site.ownerId);
+  }
+  const conflicts = [];
+  for (const [producerSiteId, owners] of ownerBySite) {
+    if (owners.size > 1) conflicts.push({ producerSiteId, owners: [...owners].sort() });
+  }
+  return conflicts.sort((a, b) => (a.producerSiteId < b.producerSiteId ? -1 : 1));
+}
+
+/* ============================================ V3-3: DECLARATION OWNERS ===
+ * The three emitters `tenantReach()` cannot enumerate are not dynamic by
+ * nature: each has a STATICALLY CLOSED domain. They are adjudicated by
+ * `declarationOwnerId` -- the declaration that closes the domain -- and never
+ * by inventing an enumerator or a root.
+ *
+ * THE EVIDENCE IS AST, NOT TEXT. An earlier form used regexes and a comma
+ * split: a homonym inside a comment or a string, a shadowed binding, or a
+ * refactor that moved an argument could invent or lose members while the
+ * counts still looked right. Every domain below is now bound through the
+ * TypeScript AST -- the real declaration, the real call sites, the real
+ * symbol -- so a homonym in prose cannot reach it.
+ * ======================================================================== */
+
+const parseTs = (fileName, text) =>
+  ts.createSourceFile(fileName, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+
+/** Every node of a source, depth first. */
+function* astNodes(node) {
+  yield node;
+  for (const child of node.getChildren()) yield* astNodes(child);
+}
+
+/** Is `name` shadowed by a local binding that is not the function we mean? */
+function functionDeclarationOf(source, name) {
+  const declarations = [];
+  for (const node of astNodes(source)) {
+    if (ts.isFunctionDeclaration(node) && node.name?.text === name) declarations.push(node);
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.name.text === name &&
+      node.initializer &&
+      (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer))
+    ) {
+      declarations.push(node);
+    }
+  }
+  return declarations;
+}
+
+export function adjudicateDeclarationOwner({ root, file, emission, source }) {
+  const read = (path) => readFileSync(join(root, path), "utf8");
+
+  if (emission.owner === "setLegacyButtonHoverBgAlias" || /button-\$\{prefix\}/.test(emission.template)) {
+    const ast = parseTs(file, source);
+    const declarations = functionDeclarationOf(ast, "setLegacyButtonHoverBgAlias");
+    if (declarations.length !== 1) return null; // shadowed or absent: not adjudicable
+    const prefixes = [];
+    for (const node of astNodes(ast)) {
+      if (!ts.isCallExpression(node)) continue;
+      const callee = node.expression;
+      if (!ts.isIdentifier(callee) || callee.text !== "setLegacyButtonHoverBgAlias") continue;
+      const second = node.arguments[1];
+      if (!second) return null;
+      if (!ts.isStringLiteralLike(second)) return null; // a dynamic argument does not close a domain
+      prefixes.push(second.text);
+    }
+    if (prefixes.length === 0) return null;
+    const unique = [...new Set(prefixes)].sort();
+    return {
+      declarationOwnerId: "setLegacyButtonHoverBgAlias",
+      evidence: `${file}: AST -- one function declaration and ${prefixes.length} call sites, every second argument a string literal, closing the domain at prefixes [${unique.join(", ")}]`,
+      channels: unique.map((prefix) => emission.template.replace("${prefix}", prefix)).sort(),
+    };
+  }
+
+  if (/chart-series-\$\{index \+ 1\}/.test(emission.template)) {
+    const rel = "packages/core/src/foundation/kernel/color/oklch/chart-series/index.ts";
+    let text;
+    try {
+      text = read(rel);
+    } catch {
+      return null;
+    }
+    const ast = parseTs(rel, text);
+    const arrays = [];
+    for (const node of astNodes(ast)) {
+      if (
+        ts.isVariableDeclaration(node) &&
+        ts.isIdentifier(node.name) &&
+        node.name.text === "CHART_SERIES_HUE_OFFSETS"
+      ) {
+        let initializer = node.initializer;
+        while (initializer && (ts.isAsExpression(initializer) || ts.isParenthesizedExpression(initializer))) {
+          initializer = initializer.expression;
+        }
+        if (initializer && ts.isArrayLiteralExpression(initializer)) arrays.push(initializer);
+        else return null; // present but not a literal array: the domain is not closed
+      }
+    }
+    if (arrays.length !== 1) return null;
+    const count = arrays[0].elements.length;
+    if (count === 0) return null;
+    return {
+      declarationOwnerId: "CHART_SERIES_HUE_OFFSETS",
+      evidence: `${rel}: AST -- a single const whose initializer is an array literal of ${count} elements; deriveChartSeriesPalette maps one colour per offset`,
+      channels: Array.from({ length: count }, (_, index) =>
+        emission.template.replace("${index + 1}", String(index + 1)),
+      ),
+    };
+  }
+
+  if (/chart-category-\$\{index \+ 1\}/.test(emission.template)) {
+    const ast = parseTs(file, source);
+    let bound = null;
+    for (const node of astNodes(ast)) {
+      // the guard must GOVERN the emission: `if (index < N && …) vars[`--ds-chart-category-…`] = …`
+      if (!ts.isIfStatement(node)) continue;
+      if (!node.thenStatement.getText(ast).includes("--ds-chart-category-")) continue;
+      const conditions = [node.expression];
+      while (conditions.length) {
+        const condition = conditions.pop();
+        if (ts.isBinaryExpression(condition)) {
+          if (condition.operatorToken.kind === ts.SyntaxKind.AmpersandAmpersandToken) {
+            conditions.push(condition.left, condition.right);
+            continue;
+          }
+          if (
+            condition.operatorToken.kind === ts.SyntaxKind.LessThanToken &&
+            ts.isIdentifier(condition.left) &&
+            condition.left.text === "index" &&
+            ts.isNumericLiteral(condition.right)
+          ) {
+            bound = Number(condition.right.text);
+          }
+        }
+      }
+    }
+    if (bound === null || !Number.isInteger(bound) || bound <= 0) return null;
+    return {
+      declarationOwnerId: "chart-category-index-guard",
+      evidence: `${file}: AST -- an if-statement whose then-branch performs the emission and whose condition bounds \`index < ${bound}\`, closing the domain at ${bound} channels`,
+      channels: Array.from({ length: bound }, (_, index) =>
+        emission.template.replace("${index + 1}", String(index + 1)),
+      ),
+    };
+  }
+
+  return null;
+}
+
+/* --------------------------------------------------------- serialise --- */
+const ROW_ARRAYS = new Set([
+  "scannedFileList",
+  "producerSites",
+  "channelEmissions",
+  "ownershipConflicts",
+  "precedenceMetadata",
+  "unknownProvenance",
+  "closedNonObject",
+  "closedZeroGoverned",
+  "publicBoundary",
+  "privateRelay",
+  "closedProducer",
+  "branchCompositeOpen",
+  "authoredOpen",
+  "branchConditionalAuthored",
+  "openUnknown",
+  "computedDomainPending",
+  "dynamicSinkPending",
+  "callArgsPending",
+  "causalRootsExcluded",
+]);
+
+export function serialize(output) {
+  const keys = Object.keys(output);
+  const lines = ["{"];
+  keys.forEach((key, index) => {
+    const comma = index === keys.length - 1 ? "" : ",";
+    if (ROW_ARRAYS.has(key)) {
+      const rows = output[key];
+      if (rows.length === 0) {
+        lines.push(`  ${JSON.stringify(key)}: []${comma}`);
+        return;
+      }
+      lines.push(`  ${JSON.stringify(key)}: [`);
+      rows.forEach((row, rowIndex) => {
+        lines.push(`    ${JSON.stringify(row)}${rowIndex === rows.length - 1 ? "" : ","}`);
+      });
+      lines.push(`  ]${comma}`);
+      return;
+    }
+    const body = JSON.stringify(output[key], null, 2)
+      .split("\n")
+      .map((line, lineIndex) => (lineIndex === 0 ? line : `  ${line}`))
+      .join("\n");
+    lines.push(`  ${JSON.stringify(key)}: ${body}${comma}`);
+  });
+  lines.push("}");
+  return lines.join("\n") + "\n";
+}
+
+export const OUT_PATH = OUT;
+
+/* ==================================================== talking --check === */
+/*
+ * WHY THIS EXISTS. `--check` used to say only "the committed inventory is not
+ * what the tree produces", and twice (T-2, T-4) somebody had to write a
+ * throwaway leaf-differ to find out WHAT moved. In T-4 the answer was ONE leaf
+ * out of 215942 -- a digest of a source file that contributes no rows at all --
+ * and finding that took a packet.
+ *
+ * IT CHANGES NOTHING ABOUT THE VERDICT. What is hashed, what is compared and
+ * the exit codes are untouched: the comparison is still the byte comparison of
+ * the serialized artifact, and this only explains a failure that already
+ * happened. A diagnostic that could change a verdict would be a second
+ * authority on freshness.
+ *
+ * IT IS CAPPED, and the cap is drilled. A report that can print 215942 lines is
+ * a report nobody reads, and a check whose failure scrolls the terminal is the
+ * same silence it replaces.
+ */
+
+/** Hard ceiling on the diagnostic. A truncated report says how much it dropped. */
+export const REPORT_MAX_LINES = 40;
+
+/** How many identities to name per collection before switching to a count. */
+const REPORT_MAX_IDENTITIES = 4;
+
+/**
+ * What each `inputsDigest` entry covers, so the reader knows where to look
+ * WITHOUT opening this file. Static prose about a static surface: computing it
+ * would mean re-deriving the surface just to describe it.
+ */
+const INPUTS_DIGEST_COVERAGE = Object.freeze({
+  cssEdges: "the extracted CSS edge inventory (one JSON file)",
+  cascadeRoots: "every governance/manifest/cascade/roots/*/index.json",
+  rootCatalog: "the cascade root catalog (one JSON file)",
+  srcTsx:
+    "sha256 of every scanned .ts/.tsx under packages/core/src " +
+    "(/tests/, /fixtures/, /__mocks__/, /examples/, /generated/, .test., .spec. and .stories. excluded)",
+  srcCompilers: "the TypeScript compiler sources the ts-compilers plane reads",
+  artifacts: "the compiled per-tenant CSS artifacts",
+});
+
+/**
+ * Collections compared by IDENTITY rather than by position.
+ *
+ * `scannedFileList` is deliberately NOT one of them: it is the scan surface, not
+ * a census row, and it is the only mechanical hint available for `srcTsx`. It is
+ * reported there instead of twice.
+ */
+const KEYED_COLLECTIONS = new Set(
+  [...ROW_ARRAYS, "byChannel"].filter((key) => key !== "scannedFileList"),
+);
+
+/**
+ * Leaves at which the reader should stop reading and escalate: a moved one is a
+ * census change, not a freshness one. Named so they sort to the top of the
+ * report instead of being the fortieth line.
+ */
+const ESCALATION_LEAVES = Object.freeze([
+  "stats.unknownProvenance",
+  "stats.openBlocking",
+  "stats.ownershipConflicts",
+  "openBacklogRollup.lotBOpen",
+  "openBacklogRollup.blocking",
+]);
+
+/** Fields that make a row recognisable to a person, in the order a person reads them. */
+const READABLE_IDENTITY_FIELDS = Object.freeze([
+  "plane",
+  "file",
+  "line",
+  "symbol",
+  "ordinal",
+  "channel",
+  "rootId",
+  "to",
+]);
+
+/** A row's identity: readable when the row has readable fields, hashed when it does not. */
+function identityOf(row) {
+  if (typeof row === "string") return row;
+  if (row === null || typeof row !== "object") return JSON.stringify(row);
+  const parts = READABLE_IDENTITY_FIELDS.filter((field) => row[field] !== undefined).map(
+    (field) => `${field}=${row[field]}`,
+  );
+  if (parts.length === 0) {
+    return JSON.stringify(row).slice(0, 120);
+  }
+  // A channel emission is only unique WITH its site, and the site is a hash.
+  if (row.channel !== undefined && row.file === undefined && row.producerSiteId !== undefined) {
+    parts.push(`site=${String(row.producerSiteId).slice(0, 12)}`);
+  }
+  return parts.join(" ");
+}
+
+/** Every leaf of a JSON document, keyed by its path. Arrays contribute their length. */
+function leavesOf(value, path = "", out = new Map()) {
+  if (value === null || typeof value !== "object") {
+    out.set(path, value);
+    return out;
+  }
+  if (Array.isArray(value)) {
+    out.set(`${path}.length`, value.length);
+    value.forEach((entry, index) => leavesOf(entry, `${path}[${index}]`, out));
+    return out;
+  }
+  for (const [key, child] of Object.entries(value)) {
+    leavesOf(child, path ? `${path}.${key}` : key, out);
+  }
+  return out;
+}
+
+/** Identity -> row, for a collection that is either an array of rows or a keyed map. */
+function indexCollection(collection) {
+  const index = new Map();
+  if (Array.isArray(collection)) {
+    for (const row of collection) {
+      const id = identityOf(row);
+      index.set(id, row);
+    }
+    return index;
+  }
+  if (collection && typeof collection === "object") {
+    for (const [key, row] of Object.entries(collection)) index.set(key, row);
+  }
+  return index;
+}
+
+function sizeOf(collection) {
+  if (Array.isArray(collection)) return collection.length;
+  if (collection && typeof collection === "object") return Object.keys(collection).length;
+  return 0;
+}
+
+/**
+ * The structured divergence between the committed inventory and this tree.
+ *
+ * PURE: it reads nothing and writes nothing. Both documents are handed in
+ * already parsed, so the same function serves the CLI and its drills.
+ *
+ * @param {object} committed the parsed inventory on disk
+ * @param {object} fresh     the parsed inventory this tree produces
+ */
+export function diffInventory(committed, fresh) {
+  const before = leavesOf(committed);
+  const after = leavesOf(fresh);
+  const movedLeaves = [];
+  const addedLeaves = [];
+  const removedLeaves = [];
+  for (const [path, value] of before) {
+    if (!after.has(path)) {
+      removedLeaves.push(path);
+      continue;
+    }
+    if (JSON.stringify(after.get(path)) !== JSON.stringify(value)) {
+      movedLeaves.push({ path, before: value, after: after.get(path) });
+    }
+  }
+  for (const path of after.keys()) if (!before.has(path)) addedLeaves.push(path);
+
+  /* The one mechanical cause available without re-deriving anything: which
+   * files entered or left the scan surface. When the set is unchanged the move
+   * is a CONTENT change, and the report says so rather than implying the
+   * inventory can name the file -- it stores no per-file hash, so it cannot. */
+  const scannedBefore = committed.tsxInlineStamp?.scannedFileList ?? [];
+  const scannedAfter = fresh.tsxInlineStamp?.scannedFileList ?? [];
+  const scannedBeforeSet = new Set(scannedBefore);
+  const scannedAfterSet = new Set(scannedAfter);
+  const scannedSetDelta = {
+    size: scannedAfter.length,
+    added: scannedAfter.filter((file) => !scannedBeforeSet.has(file)),
+    removed: scannedBefore.filter((file) => !scannedAfterSet.has(file)),
+  };
+
+  const hintsFor = (entry) => {
+    if (entry !== "srcTsx") return [];
+    const { added: enteredFiles, removed: leftFiles, size } = scannedSetDelta;
+    if (enteredFiles.length === 0 && leftFiles.length === 0) {
+      return [
+        `scanned set unchanged (${size} files), so this is a CONTENT change inside the surface`,
+        "the inventory stores no per-file hash: diff the scanned surface against the commit that last wrote it",
+      ];
+    }
+    return [
+      `scanned set moved: +${enteredFiles.length} -${leftFiles.length} (now ${size} files)`,
+      ...cappedIdentities("+", enteredFiles, ""),
+      ...cappedIdentities("-", leftFiles, ""),
+    ];
+  };
+
+  const inputsDigest = [];
+  for (const entry of Object.keys({ ...committed.inputsDigest, ...fresh.inputsDigest })) {
+    const b = committed.inputsDigest?.[entry];
+    const a = fresh.inputsDigest?.[entry];
+    if (JSON.stringify(b) === JSON.stringify(a)) continue;
+    inputsDigest.push({
+      entry,
+      before: b,
+      after: a,
+      covers: INPUTS_DIGEST_COVERAGE[entry] ?? null,
+      hints: hintsFor(entry),
+    });
+  }
+
+  const rows = [];
+  for (const key of KEYED_COLLECTIONS) {
+    const b = committed[key];
+    const a = fresh[key];
+    if (b === undefined && a === undefined) continue;
+    if (JSON.stringify(b) === JSON.stringify(a)) continue;
+    const bIndex = indexCollection(b);
+    const aIndex = indexCollection(a);
+    const added = [...aIndex.keys()].filter((id) => !bIndex.has(id));
+    const removed = [...bIndex.keys()].filter((id) => !aIndex.has(id));
+    let changed = 0;
+    for (const [id, row] of aIndex) {
+      if (!bIndex.has(id)) continue;
+      if (JSON.stringify(bIndex.get(id)) !== JSON.stringify(row)) changed += 1;
+    }
+    rows.push({
+      collection: key,
+      beforeSize: sizeOf(b),
+      afterSize: sizeOf(a),
+      added,
+      removed,
+      changed,
+    });
+  }
+
+  // Everything the two classes above do not already explain.
+  const explained = (path) =>
+    path.startsWith("inputsDigest.") ||
+    path.startsWith("tsxInlineStamp.scannedFileList") ||
+    [...KEYED_COLLECTIONS].some((key) => path === key || path.startsWith(`${key}.`) || path.startsWith(`${key}[`));
+  const other = movedLeaves.filter((leaf) => !explained(leaf.path));
+  other.sort((left, right) => {
+    const rank = (path) => {
+      const index = ESCALATION_LEAVES.indexOf(path);
+      return index === -1 ? ESCALATION_LEAVES.length : index;
+    };
+    return rank(left.path) - rank(right.path) || (left.path < right.path ? -1 : 1);
+  });
+
+  return {
+    totals: {
+      leaves: after.size,
+      moved: movedLeaves.length,
+      added: addedLeaves.length,
+      removed: removedLeaves.length,
+    },
+    identical: movedLeaves.length === 0 && addedLeaves.length === 0 && removedLeaves.length === 0,
+    escalations: other.filter((leaf) => ESCALATION_LEAVES.includes(leaf.path)).map((leaf) => leaf.path),
+    inputsDigest,
+    rows,
+    other,
+  };
+}
+
+/** Short form of a digest, so two 64-hex strings fit on one line. */
+const shortDigest = (value) => (typeof value === "string" && value.length > 16 ? `${value.slice(0, 12)}...` : String(value));
+
+/** `added`/`removed` identities, capped, with the remainder counted rather than dropped in silence. */
+function cappedIdentities(prefix, identities, indent) {
+  const lines = [];
+  for (const id of identities.slice(0, REPORT_MAX_IDENTITIES)) {
+    lines.push(`${indent}${prefix} ${id}`);
+  }
+  const rest = identities.length - REPORT_MAX_IDENTITIES;
+  if (rest > 0) lines.push(`${indent}${prefix} ... and ${rest} more`);
+  return lines;
+}
+
+/**
+ * The divergence, as lines a person reads top to bottom, HARD CAPPED.
+ *
+ * @param {ReturnType<typeof diffInventory>} diff
+ * @param {{maxLines?: number, scannedSetDelta?: {added: string[], removed: string[], size: number}}} [options]
+ * @returns {string[]} at most `maxLines` lines
+ */
+export function formatDivergence(diff, { maxLines = REPORT_MAX_LINES } = {}) {
+  const lines = [];
+  const { leaves, moved, added, removed } = diff.totals;
+
+  if (diff.identical) {
+    lines.push(
+      `  divergence: the parsed documents are IDENTICAL (${leaves} leaves), so the bytes differ in`,
+      "              SERIALIZATION only -- formatting or key order, not content.",
+    );
+    return lines.slice(0, maxLines);
+  }
+
+  lines.push(`  divergence: ${moved} leaf(es) moved, ${added} added, ${removed} removed, of ${leaves}`);
+
+  if (diff.escalations.length > 0) {
+    lines.push(`  ESCALATE: ${diff.escalations.join(", ")} moved -- this is a census change, not freshness`);
+  }
+
+  if (diff.inputsDigest.length > 0) {
+    lines.push(`  [inputsDigest] ${diff.inputsDigest.length} entry(ies) moved`);
+    for (const entry of diff.inputsDigest) {
+      lines.push(`    ${entry.entry}: ${shortDigest(entry.before)} -> ${shortDigest(entry.after)}`);
+      if (entry.covers) lines.push(`      covers ${entry.covers}`);
+      for (const hint of entry.hints ?? []) lines.push(`      ${hint}`);
+    }
+  }
+
+  if (diff.rows.length > 0) {
+    lines.push(`  [rows] ${diff.rows.length} collection(s) moved`);
+    for (const row of diff.rows) {
+      lines.push(
+        `    ${row.collection}: ${row.beforeSize} -> ${row.afterSize}` +
+          ` (+${row.added.length} -${row.removed.length} ~${row.changed})`,
+      );
+      lines.push(...cappedIdentities("+", row.added, "      "));
+      lines.push(...cappedIdentities("-", row.removed, "      "));
+    }
+  } else if (diff.inputsDigest.length > 0) {
+    lines.push("  [rows] no collection moved -- no producer, emission or classification changed");
+  }
+
+  if (diff.other.length > 0) {
+    lines.push(`  [other] ${diff.other.length} leaf(es) moved outside inputsDigest and the collections`);
+    for (const leaf of diff.other.slice(0, REPORT_MAX_IDENTITIES)) {
+      lines.push(`    ${leaf.path}: ${shortDigest(leaf.before)} -> ${shortDigest(leaf.after)}`);
+    }
+    const rest = diff.other.length - REPORT_MAX_IDENTITIES;
+    if (rest > 0) lines.push(`    ... and ${rest} more`);
+  }
+
+  if (lines.length <= maxLines) return lines;
+  const kept = lines.slice(0, maxLines - 1);
+  kept.push(`  ... ${lines.length - kept.length} more report line(s) not shown (cap ${maxLines})`);
+  return kept;
+}
+
+function usage(stream) {
+  stream.write(
+    "usage: node index.mjs [--check|--write]\n" +
+      "  --check  (default) recompute and byte-compare against the committed inventory; never writes\n" +
+      "  --write  regenerate the inventory\n",
+  );
+}
+
+function main(argv) {
+  const mode = argv.length === 0 ? "--check" : argv[0];
+  if (argv.length > 1 || (mode !== "--check" && mode !== "--write")) {
+    usage(process.stderr);
+    process.exit(2);
+  }
+  const output = buildProducers();
+  const text = serialize(output);
+  if (mode === "--check") {
+    let onDisk = null;
+    try {
+      onDisk = readFileSync(OUT, "utf8");
+    } catch {
+      console.error(`cascade-producers --check FAILED: ${OUT} does not exist`);
+      process.exit(1);
+    }
+    if (onDisk !== text) {
+      console.error(
+        "cascade-producers --check FAILED: the committed inventory is not what the tree produces.\n" +
+          "  run: node index.mjs --write",
+      );
+      /* The verdict above is already decided by the byte comparison. Everything
+       * below only EXPLAINS it, so a report that cannot be produced must not
+       * change the exit code -- a diagnostic that can turn a failure into a
+       * crash is worse than the silence it replaces. */
+      try {
+        for (const line of formatDivergence(diffInventory(JSON.parse(onDisk), JSON.parse(text)))) {
+          console.error(line);
+        }
+      } catch (error) {
+        console.error(`  (no divergence report: the committed inventory did not parse -- ${error.message})`);
+      }
+      process.exit(1);
+    }
+    console.log(`cascade-producers --check OK -- ${OUT} matches the tree`);
+    return;
+  }
+  mkdirSync(dirname(OUT), { recursive: true });
+  writeFileSync(OUT, text);
+  console.log(`producer sites:       ${output.stats.producerSites}`);
+  console.log(`channel emissions:    ${output.stats.channelEmissions}`);
+  console.log(`distinct channels:    ${output.stats.distinctChannels}`);
+  console.log(`by plane:             ${JSON.stringify(output.stats.byPlane)}`);
+  console.log(`with causal root:     ${output.stats.emissionsWithCausalRoot}`);
+  console.log(`ownership conflicts:  ${output.stats.ownershipConflicts}`);
+  console.log(`unknownProvenance:    ${output.stats.unknownProvenance}`);
+  console.log(
+    `closed non-consumable: nonObject=${output.stats.closedNonObject} zeroGoverned=${output.stats.closedZeroGoverned} ` +
+      `boundary=${output.stats.publicBoundary} relay=${output.stats.privateRelay} producer=${output.stats.closedProducer}`,
+  );
+  console.log(
+    `OPEN blocking:        ${output.stats.openBlocking} ${JSON.stringify(output.stats.openBacklogByDisposition)}`,
+  );
+  console.log(`tsx census diff:      ${JSON.stringify(output.tsxInlineStamp.censusDiff)}`);
+  console.log(`wrote ${OUT}`);
+}
+
+const isMain =
+  process.argv[1] &&
+  realpathSync(process.argv[1]) === realpathSync(fileURLToPath(import.meta.url));
+if (isMain) main(process.argv.slice(2));

@@ -8,15 +8,15 @@
     "components": [
       "SelectionPreviewRail"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/selection-preview-rail",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/selection-preview-rail",
     "publicComponents": [
       "SelectionPreviewRail"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "0581fe07143e6413f4eb724e9158b625c01cf6691e54b353f4ccaa1b9b8d2062"
+    "inventoryRowDigest": "3e7043907fd62f9c7c4cdf5c5dc0338204cdb1430e1467b2947de1dfb8c829d0"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/workspace/selection-preview-rail",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+      "packages/core/src/components/structures/workspace/selection-preview-rail",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
     ],
     "stableParts": [
       "fallback-empty",
@@ -66,9 +66,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:329, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:333]",
-      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:123]",
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:306, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:307, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:310]"
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:329, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:333]",
+      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:123]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:306, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:307, packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:310]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -95,132 +95,132 @@
         {
           "part": "fallback-empty",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:141"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:141"
         },
         {
           "part": "fallback-boolean",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:150"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:150"
         },
         {
           "part": "fallback-string",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:159"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:159"
         },
         {
           "part": "root",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:264"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:264"
         },
         {
           "part": "sticky",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:268"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:268"
         },
         {
           "part": "custom-sticky-card",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:270"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:270"
         },
         {
           "part": "custom-content",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:297"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:297"
         },
         {
           "part": "identity-card",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:316"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:316"
         },
         {
           "part": "identity-card-accent",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:323"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:323"
         },
         {
           "part": "identity-card-body",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:329"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:329"
         },
         {
           "part": "close",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:339"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:339"
         },
         {
           "part": "identity-title",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:350"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:350"
         },
         {
           "part": "identity-subtitle",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:361"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:361"
         },
         {
           "part": "match-reason-panel",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:374"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:374"
         },
         {
           "part": "match-reason-icon",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:378"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:378"
         },
         {
           "part": "match-reason-eyebrow",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:398"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:398"
         },
         {
           "part": "match-reason-body",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:409"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:409"
         },
         {
           "part": "snapshot-card",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:471"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:471"
         },
         {
           "part": "snapshot-header",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:477"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:477"
         },
         {
           "part": "snapshot-title",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:482"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:482"
         },
         {
           "part": "snapshot-subtitle",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:492"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:492"
         },
         {
           "part": "snapshot-body",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:502"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:502"
         },
         {
           "part": "snapshot-row",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:512"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:512"
         },
         {
           "part": "snapshot-row-label",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:518"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:518"
         },
         {
           "part": "snapshot-empty-frame",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:532"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:532"
         },
         {
           "part": "snapshot-empty",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:536"
+          "anchor": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:536"
         }
       ],
       "partCensus": {
@@ -233,35 +233,35 @@
           "token": "preview=custom",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:95",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:96",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:97"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:96",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:97"
           ]
         },
         {
           "token": "preview=default",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:109",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:110",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:111"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:109",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:110",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:111"
           ]
         },
         {
           "token": "size",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:274",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:275",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:278"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:274",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:275",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:278"
           ]
         },
         {
           "token": "data-preview",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:265",
-            "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:311"
+            "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:265",
+            "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:311"
           ]
         }
       ],
@@ -271,32 +271,32 @@
             "token": "@container ds-rail (max-width: 340px) >> .ds-structure.ds-selection-preview-rail [data-part='identity-card-body']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:306",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:307"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:306",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:307"
             ]
           },
           {
             "token": "@container ds-rail (max-width: 340px) >> .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:310",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:311"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:310",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:311"
             ]
           },
           {
             "token": "@container ds-rail (max-width: 340px) >> .ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:314",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:315"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:314",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:315"
             ]
           },
           {
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:329",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:333"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:329",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:333"
             ]
           }
         ],
@@ -308,10 +308,10 @@
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:266",
-              "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:288",
-              "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:312",
-              "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:341"
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:266",
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:288",
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:312",
+              "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:341"
             ]
           }
         ],
@@ -320,7 +320,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css": {
             "rows": 82,
             "layer": "engine-agnostic skin"
           }
@@ -421,7 +421,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:98",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:98",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom']",
             "states": [
               "preview=custom"
@@ -437,16 +437,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:112",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
             "states": [
               "preview=default"
@@ -462,16 +462,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:113",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
             "states": [
               "preview=default"
@@ -487,14 +487,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-elevated",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:113",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
             "states": [
               "preview=default"
@@ -509,17 +509,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:113",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='default']",
             "states": [
               "preview=default"
@@ -535,14 +535,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-spacing-4",
             "part": "sticky",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:124",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='sticky']",
             "states": [],
             "landsOn": "top",
@@ -555,15 +555,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-radius-xl",
             "part": "custom-sticky-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:135",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:135",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
             "states": [],
             "landsOn": "border-radius",
@@ -577,15 +577,15 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-surface-panel",
             "part": "custom-sticky-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
             "states": [],
             "landsOn": "background",
@@ -599,14 +599,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:335",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:264"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:264"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-elevated",
             "part": "custom-sticky-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
             "states": [],
             "landsOn": "background",
@@ -619,17 +619,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-surface-card",
             "part": "custom-sticky-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
             "states": [],
             "landsOn": "background",
@@ -643,14 +643,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "custom-sticky-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:137",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:137",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-sticky-card']",
             "states": [],
             "landsOn": "box-shadow",
@@ -664,16 +664,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "custom-sticky-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:141",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:141",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='custom-sticky-card']",
             "states": [],
             "landsOn": "border",
@@ -687,16 +687,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-surface-card",
             "part": "close",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:153",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] [data-part='custom-sticky-card'] .ds-selection-preview-rail__close",
             "states": [
               "preview=custom"
@@ -712,14 +712,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-selection-preview-rail-close-backdrop",
             "part": "close",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:154",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:154",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'][data-preview='custom'] [data-part='custom-sticky-card'] .ds-selection-preview-rail__close",
             "states": [
               "preview=custom"
@@ -739,7 +739,7 @@
           {
             "variable": "--ds-spacing-4",
             "part": "custom-content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:159",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:159",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='custom-content']",
             "states": [],
             "landsOn": "padding",
@@ -752,15 +752,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-radius-xl",
             "part": "identity-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:165",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:165",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
             "states": [],
             "landsOn": "border-radius",
@@ -774,15 +774,15 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-surface-panel",
             "part": "identity-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:166",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
             "states": [],
             "landsOn": "background",
@@ -796,14 +796,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:335",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:264"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:264"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-elevated",
             "part": "identity-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:166",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
             "states": [],
             "landsOn": "background",
@@ -816,17 +816,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-surface-card",
             "part": "identity-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:166",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
             "states": [],
             "landsOn": "background",
@@ -840,14 +840,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "identity-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:167",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card']",
             "states": [],
             "landsOn": "box-shadow",
@@ -861,16 +861,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "identity-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:171",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:171",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='identity-card']",
             "states": [],
             "landsOn": "border",
@@ -884,16 +884,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-primary",
             "part": "identity-card-accent",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:191",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card-accent']",
             "states": [],
             "landsOn": "background",
@@ -906,17 +906,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "identity-card-accent",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:191",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='identity-card-accent']",
             "states": [],
             "landsOn": "background",
@@ -929,17 +929,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-radius-lg",
             "part": "match-reason-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:197",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:197",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
             "states": [],
             "landsOn": "border-radius",
@@ -953,16 +953,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-primary",
             "part": "match-reason-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:198",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
             "states": [],
             "landsOn": "background",
@@ -975,17 +975,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "match-reason-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:198",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
             "states": [],
             "landsOn": "background",
@@ -998,17 +998,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-spacing-4",
             "part": "match-reason-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:200",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:200",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
             "states": [],
             "landsOn": "margin-block-start",
@@ -1021,15 +1021,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-spacing-4",
             "part": "match-reason-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:202",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:202",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-panel']",
             "states": [],
             "landsOn": "padding-inline",
@@ -1042,15 +1042,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "match-reason-panel",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:206",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:206",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='match-reason-panel']",
             "states": [],
             "landsOn": "border",
@@ -1063,17 +1063,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "match-reason-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:211",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:211",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='match-reason-icon']",
             "states": [],
             "landsOn": "color",
@@ -1086,17 +1086,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-radius-xl",
             "part": "snapshot-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:217",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:217",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='snapshot-card']",
             "states": [],
             "landsOn": "border-radius",
@@ -1110,15 +1110,15 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-surface-card",
             "part": "snapshot-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:218",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:218",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='snapshot-card']",
             "states": [],
             "landsOn": "background",
@@ -1132,14 +1132,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "snapshot-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:219",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:219",
             "selector": ".ds-structure.ds-selection-preview-rail [data-part='snapshot-card']",
             "states": [],
             "landsOn": "box-shadow",
@@ -1153,16 +1153,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "snapshot-card",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:223",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:223",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-card']",
             "states": [],
             "landsOn": "border",
@@ -1176,16 +1176,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "snapshot-header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:227",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:227",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-header']",
             "states": [],
             "landsOn": "border-bottom",
@@ -1199,16 +1199,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "snapshot-row",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:240",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:240",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row']",
             "states": [],
             "landsOn": "border-top",
@@ -1222,16 +1222,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-spacing-3",
             "part": "snapshot-row",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:242",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:242",
             "selector": ".ds-structure.ds-selection-preview-rail[data-part='root'] [data-part='snapshot-row']",
             "states": [],
             "landsOn": "padding-block",
@@ -1244,8 +1244,8 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           }
@@ -1267,7 +1267,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:98",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:98",
                   "part": "root",
                   "landsOn": "border-inline-start",
                   "fallbackPresent": false,
@@ -1276,7 +1276,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:112",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:112",
                   "part": "root",
                   "landsOn": "border-inline-start",
                   "fallbackPresent": false,
@@ -1285,7 +1285,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:141",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:141",
                   "part": "custom-sticky-card",
                   "landsOn": "border",
                   "fallbackPresent": false,
@@ -1294,7 +1294,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:171",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:171",
                   "part": "identity-card",
                   "landsOn": "border",
                   "fallbackPresent": false,
@@ -1303,7 +1303,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:223",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:223",
                   "part": "snapshot-card",
                   "landsOn": "border",
                   "fallbackPresent": false,
@@ -1312,7 +1312,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:227",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:227",
                   "part": "snapshot-header",
                   "landsOn": "border-bottom",
                   "fallbackPresent": false,
@@ -1321,7 +1321,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:240",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:240",
                   "part": "snapshot-row",
                   "landsOn": "border-top",
                   "fallbackPresent": false,
@@ -1344,7 +1344,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:113",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1353,7 +1353,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:113",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1362,7 +1362,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:136",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
                   "part": "custom-sticky-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1371,7 +1371,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:153",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:153",
                   "part": "custom-sticky-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1380,7 +1380,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:166",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
                   "part": "identity-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1389,7 +1389,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:218",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:218",
                   "part": "snapshot-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1399,7 +1399,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             },
             {
               "variable": "--ds-color-bg-elevated",
@@ -1411,7 +1411,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:113",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:113",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1420,7 +1420,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:136",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
                   "part": "custom-sticky-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1429,7 +1429,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:166",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
                   "part": "identity-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1439,7 +1439,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140"
             },
             {
               "variable": "--ds-spacing-4",
@@ -1451,7 +1451,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:124",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:124",
                   "part": "sticky",
                   "landsOn": "top",
                   "fallbackPresent": true,
@@ -1460,7 +1460,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:159",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:159",
                   "part": "custom-content",
                   "landsOn": "padding",
                   "fallbackPresent": true,
@@ -1469,7 +1469,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:200",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:200",
                   "part": "match-reason-panel",
                   "landsOn": "margin-block-start",
                   "fallbackPresent": true,
@@ -1478,7 +1478,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:202",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:202",
                   "part": "match-reason-panel",
                   "landsOn": "padding-inline",
                   "fallbackPresent": true,
@@ -1488,7 +1488,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             },
             {
               "variable": "--ds-radius-xl",
@@ -1500,7 +1500,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:135",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:135",
                   "part": "custom-sticky-card",
                   "landsOn": "border-radius",
                   "fallbackPresent": true,
@@ -1509,7 +1509,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:165",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:165",
                   "part": "identity-card",
                   "landsOn": "border-radius",
                   "fallbackPresent": true,
@@ -1518,7 +1518,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:217",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:217",
                   "part": "snapshot-card",
                   "landsOn": "border-radius",
                   "fallbackPresent": true,
@@ -1528,7 +1528,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772"
             },
             {
               "variable": "--ds-surface-panel",
@@ -1539,7 +1539,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:136",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:136",
                   "part": "custom-sticky-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1548,7 +1548,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:166",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:166",
                   "part": "identity-card",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1558,7 +1558,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:264"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:264"
             },
             {
               "variable": "--ds-color-text-primary",
@@ -1570,7 +1570,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:137",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:137",
                   "part": "custom-sticky-card",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -1579,7 +1579,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:167",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:167",
                   "part": "identity-card",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -1588,7 +1588,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:219",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:219",
                   "part": "snapshot-card",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -1598,7 +1598,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:143"
             },
             {
               "variable": "--ds-selection-preview-rail-close-backdrop",
@@ -1608,7 +1608,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:154",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:154",
                   "part": "custom-sticky-card",
                   "landsOn": "backdrop-filter",
                   "fallbackPresent": true,
@@ -1630,7 +1630,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:191",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
                   "part": "identity-card-accent",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1639,7 +1639,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:191",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:191",
                   "part": "identity-card-accent",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1648,7 +1648,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:198",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
                   "part": "match-reason-panel",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1657,7 +1657,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:198",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:198",
                   "part": "match-reason-panel",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1666,7 +1666,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:206",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:206",
                   "part": "match-reason-panel",
                   "landsOn": "border",
                   "fallbackPresent": false,
@@ -1675,7 +1675,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:211",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:211",
                   "part": "match-reason-icon",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -1685,7 +1685,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156"
             },
             {
               "variable": "--ds-radius-lg",
@@ -1695,7 +1695,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:197",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:197",
                   "part": "match-reason-panel",
                   "landsOn": "border-radius",
                   "fallbackPresent": true,
@@ -1705,7 +1705,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771"
             },
             {
               "variable": "--ds-spacing-3",
@@ -1715,7 +1715,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:242",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:242",
                   "part": "snapshot-row",
                   "landsOn": "padding-block",
                   "fallbackPresent": true,
@@ -1725,7 +1725,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             },
             {
               "variable": "--ds-z-index-relative-above",
@@ -1735,7 +1735,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:281",
+                  "at": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:281",
                   "part": "(component-inline)",
                   "landsOn": "(inline-style)",
                   "fallbackPresent": true,
@@ -1745,7 +1745,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/z-index.css:55"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/z-index/index.css:55"
             }
           ]
         },
@@ -1753,7 +1753,7 @@
           {
             "variable": "--ds-selection-preview-rail-close-backdrop",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:154",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:154",
             "fallbackPresent": true,
             "fallback": "none",
             "landsOn": "backdrop-filter"
@@ -1762,69 +1762,69 @@
         "inertFallbackChainSample": [
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:124",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:124",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:135",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:135",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
           },
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:159",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:159",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:165",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:165",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
           },
           {
             "name": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:197",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:197",
             "fallback": "12px",
-            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:44"
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:44"
           },
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:200",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:200",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:202",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:202",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:217",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:217",
             "fallback": "16px",
-            "rootDeclaredAt": "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+            "rootDeclaredAt": "packages/core/tests/fixtures/tenants/default/index.css:45"
           },
           {
             "name": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css:242",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css:242",
             "fallback": "12px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
           },
           {
             "name": "--ds-z-index-relative-above",
-            "at": "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx:281",
+            "at": "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx:281",
             "fallback": "1",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/z-index.css:55"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/z-index/index.css:55"
           }
         ],
         "inertFallbackChainSites": 10,
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 95,
             "property": "flex",
             "literal": "320px",
@@ -1832,7 +1832,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 95,
             "property": "flex",
             "literal": "29vw",
@@ -1840,7 +1840,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 95,
             "property": "flex",
             "literal": "380px",
@@ -1848,7 +1848,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 96,
             "property": "inline-size",
             "literal": "380px",
@@ -1856,7 +1856,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 97,
             "property": "min-inline-size",
             "literal": "320px",
@@ -1864,7 +1864,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 98,
             "property": "border-inline-start",
             "literal": "1px",
@@ -1872,7 +1872,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 104,
             "property": "padding-block",
             "literal": "14px",
@@ -1880,7 +1880,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 105,
             "property": "padding-inline",
             "literal": "14px",
@@ -1888,7 +1888,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 105,
             "property": "padding-inline",
             "literal": "16px",
@@ -1896,7 +1896,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 109,
             "property": "flex",
             "literal": "320px",
@@ -1904,7 +1904,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 109,
             "property": "flex",
             "literal": "29vw",
@@ -1912,7 +1912,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 109,
             "property": "flex",
             "literal": "380px",
@@ -1920,7 +1920,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 110,
             "property": "inline-size",
             "literal": "380px",
@@ -1928,7 +1928,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 111,
             "property": "min-inline-size",
             "literal": "320px",
@@ -1936,7 +1936,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 112,
             "property": "border-inline-start",
             "literal": "1px",
@@ -1944,7 +1944,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 117,
             "property": "padding-block",
             "literal": "18px",
@@ -1952,7 +1952,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 118,
             "property": "padding-inline",
             "literal": "16px",
@@ -1960,7 +1960,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 118,
             "property": "padding-inline",
             "literal": "18px",
@@ -1968,7 +1968,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 129,
             "property": "gap",
             "literal": "14px",
@@ -1976,7 +1976,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 137,
             "property": "box-shadow",
             "literal": "18px",
@@ -1984,7 +1984,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 137,
             "property": "box-shadow",
             "literal": "44px",
@@ -1992,7 +1992,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 141,
             "property": "border",
             "literal": "1px",
@@ -2000,7 +2000,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 151,
             "property": "inline-size",
             "literal": "34px",
@@ -2008,7 +2008,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 152,
             "property": "min-inline-size",
             "literal": "34px",
@@ -2016,7 +2016,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 167,
             "property": "box-shadow",
             "literal": "18px",
@@ -2024,7 +2024,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 167,
             "property": "box-shadow",
             "literal": "48px",
@@ -2032,7 +2032,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 171,
             "property": "border",
             "literal": "1px",
@@ -2040,7 +2040,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 178,
             "property": "padding-block",
             "literal": "18px",
@@ -2048,7 +2048,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 178,
             "property": "padding-block",
             "literal": "16px",
@@ -2056,7 +2056,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 179,
             "property": "padding-inline",
             "literal": "18px",
@@ -2064,7 +2064,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 182,
             "property": "inline-size",
             "literal": "34px",
@@ -2072,7 +2072,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 183,
             "property": "min-inline-size",
             "literal": "34px",
@@ -2080,7 +2080,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 201,
             "property": "padding-block",
             "literal": "14px",
@@ -2088,7 +2088,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 202,
             "property": "padding-inline",
             "literal": "14px",
@@ -2096,7 +2096,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 206,
             "property": "border",
             "literal": "1px",
@@ -2104,7 +2104,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 219,
             "property": "box-shadow",
             "literal": "10px",
@@ -2112,7 +2112,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 219,
             "property": "box-shadow",
             "literal": "30px",
@@ -2120,7 +2120,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 223,
             "property": "border",
             "literal": "1px",
@@ -2128,7 +2128,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 227,
             "property": "border-bottom",
             "literal": "1px",
@@ -2136,7 +2136,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 229,
             "property": "padding-block",
             "literal": "14px",
@@ -2144,7 +2144,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 230,
             "property": "padding-inline",
             "literal": "18px",
@@ -2152,7 +2152,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 235,
             "property": "padding-block",
             "literal": "6px",
@@ -2160,7 +2160,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 240,
             "property": "border-top",
             "literal": "1px",
@@ -2168,7 +2168,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 243,
             "property": "padding-inline",
             "literal": "18px",
@@ -2176,7 +2176,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 250,
             "property": "padding",
             "literal": "18px",
@@ -2184,7 +2184,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 281,
             "property": "letter-spacing",
             "literal": "0.06em",
@@ -2192,7 +2192,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 288,
             "property": "letter-spacing",
             "literal": "0.05em",
@@ -2200,7 +2200,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 306,
             "property": "padding-block",
             "literal": "14px",
@@ -2208,7 +2208,7 @@
             "atRule": "@container ds-rail (max-width: 340px)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 306,
             "property": "padding-block",
             "literal": "12px",
@@ -2216,7 +2216,7 @@
             "atRule": "@container ds-rail (max-width: 340px)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 307,
             "property": "padding-inline",
             "literal": "14px",
@@ -2224,7 +2224,7 @@
             "atRule": "@container ds-rail (max-width: 340px)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 310,
             "property": "padding-block",
             "literal": "12px",
@@ -2232,7 +2232,7 @@
             "atRule": "@container ds-rail (max-width: 340px)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 311,
             "property": "padding-inline",
             "literal": "14px",
@@ -2240,7 +2240,7 @@
             "atRule": "@container ds-rail (max-width: 340px)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 314,
             "property": "padding-block",
             "literal": "10px",
@@ -2248,7 +2248,7 @@
             "atRule": "@container ds-rail (max-width: 340px)"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
             "line": 315,
             "property": "padding-inline",
             "literal": "14px",
@@ -2258,7 +2258,7 @@
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css": {
               "rows": 82,
               "layer": "engine-agnostic skin"
             }
@@ -2288,7 +2288,7 @@
             "styleAttribute": 21
           },
           "perFile": {
-            "packages/core/src/ui/structures/workspace/selection-preview-rail/index.tsx": {
+            "packages/core/src/components/structures/workspace/selection-preview-rail/index.tsx": {
               "classNameOccurrences": 3,
               "dataPartOccurrences": 28,
               "styleAttributeOccurrences": 21,
@@ -2334,13 +2334,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2358,7 +2358,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2383,7 +2383,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2408,7 +2408,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -2444,13 +2444,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2470,13 +2470,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2496,13 +2496,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2522,13 +2522,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2548,13 +2548,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2573,7 +2573,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo plano; lo flotante usa sockets overlay",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido foundation (nivel 2/3)": [
             "--ds-shadow-sm"
@@ -2610,7 +2610,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2641,13 +2641,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-panel-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2667,13 +2667,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2697,7 +2697,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2753,7 +2753,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2780,13 +2780,13 @@
         {
           "channelId": "--_ds-selection-preview-rail-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/selection-preview-rail"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/selection-preview-rail/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2806,11 +2806,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -16,12 +16,12 @@ provider mark changed.
 
 Migration scope:
 
-- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/index.tsx`
-- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/styles/index.ts` (removed)
+- `packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/index.tsx`
+- `packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition/styles/index.ts` (removed)
 - `packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css` (byte-exact destination)
-- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx`
-- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/runtime/config/index.ts`
-- `packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition/foundation/contracts/index.ts`
+- `packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition/presentation/screen/provider-icons/index.tsx`
+- `packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition/runtime/config/index.ts`
+- `packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition/foundation/contracts/index.ts`
 - `packages/core/src/foundation/tokens/css/facade/entrypoints/base.css`
 - `packages/core/src/foundation/tokens/css/facade/entrypoints/styles.css`
 - the focused unit contract, production showroom fixture/spec and this addendum

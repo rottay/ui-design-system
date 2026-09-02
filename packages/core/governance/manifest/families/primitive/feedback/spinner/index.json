@@ -8,15 +8,15 @@
     "components": [
       "Spinner"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/feedback/Spinner",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/feedback/spinner",
     "publicComponents": [
       "Spinner"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "0c14d48d8ab3377f1e41c0cae646dda526a1750558a8ea83488d7e405cfa5285"
+    "inventoryRowDigest": "8b6d489ce94e9fe0a06a99b54bbdd674bdf41efc2593af65143c50834f802c30"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/feedback/Spinner/compound/index.ts",
-      "packages/core/src/ui/primitives/feedback/Spinner/contracts/index.ts",
-      "packages/core/src/ui/primitives/feedback/Spinner/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Spinner/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Spinner/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+      "packages/core/src/components/primitives/feedback/spinner/compound/index.ts",
+      "packages/core/src/components/primitives/feedback/spinner/contracts/index.ts",
+      "packages/core/src/components/primitives/feedback/spinner/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/feedback/spinner/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/feedback/spinner/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/feedback/spinner/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
     ],
     "stableParts": [
       "root",
@@ -47,9 +47,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:121]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:128, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:132]",
-      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:23, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:59, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:124]"
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:121]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:128, src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:132]",
+      "rtl-logical-properties [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:23, src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:59, src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:124]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -71,23 +71,23 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:102",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:46",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:47",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:48",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:49"
+            "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:102",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:46",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:47",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:48",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:49"
           ]
         },
         {
           "part": "indicator",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:107",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:53",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:56",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:66",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:67"
+            "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:107",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:53",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:55",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:56",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:66",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:67"
           ],
           "atSiteCount": 7
         },
@@ -95,52 +95,52 @@
           "part": "label",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:109",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:108",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:109",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:113",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:114",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:115"
+            "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:109",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:108",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:109",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:113",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:114",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:115"
           ],
           "atSiteCount": 7
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:36, src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:39]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:36, src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:39]"
         ]
       },
       "variantAxisAnchors": [
         {
           "token": "data-size=sm",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:87",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:88",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:89"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:87",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:88",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:89"
           ]
         },
         {
           "token": "data-size=md",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:92",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:93",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:94"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:92",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:93",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:94"
           ]
         },
         {
           "token": "data-size=lg",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:97",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:98",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:99"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:97",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:98",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:99"
           ]
         },
         {
           "token": "data-size=xl",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:102",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:103",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:104"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:102",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:103",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:104"
           ]
         }
       ],
@@ -231,7 +231,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:49",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:49",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "gap",
@@ -252,17 +252,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:125",
-              "src/tooling/testing/fixtures/tenants/default.css:36",
-              "src/foundation/tokens/css/foundation/themes/default.css:703"
+              "tests/integration/theming-precedence/index.test.ts:125",
+              "tests/fixtures/tenants/default/index.css:36",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:703"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:703"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:703"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:49",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:49",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "gap",
@@ -283,15 +283,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:89",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:94",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:99"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:89",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:94",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:99"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:54",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:54",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border",
@@ -313,15 +313,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:45"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:45"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:45"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:45"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border",
@@ -329,7 +329,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -356,12 +356,12 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1342"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:404"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:404"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border",
@@ -369,7 +369,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -391,18 +391,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
-              "src/ui/patterns/customization/brand-studio/index.tsx:147",
-              "src/ui/patterns/customization/brand-studio/index.tsx:165"
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
+              "src/components/patterns/customization/brand-studio/index.tsx:147",
+              "src/components/patterns/customization/brand-studio/index.tsx:165"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:229",
-              "src/foundation/tokens/css/foundation/themes/default.css:2111"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2111"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border",
@@ -410,7 +410,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -433,17 +433,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/foundation/loading-indicator/index.tsx:23",
+              "src/components/primitives/foundation/loading-indicator/index.tsx:23",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1653",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2607"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1775"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1775"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:56",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:56",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-top-color",
@@ -451,7 +451,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:63",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:63",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -459,7 +459,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:124",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:124",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -467,7 +467,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:68",
+                "at": "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:68",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "(const-indirection:spinnerColor)",
@@ -489,17 +489,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:156"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:56",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:56",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-top-color",
@@ -507,7 +507,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:63",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:63",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -515,7 +515,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:124",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:124",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -540,7 +540,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:59",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:59",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "border-inline-end-color",
@@ -561,15 +561,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:16"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:16"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:16"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:16"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:80",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:80",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "animation",
@@ -577,7 +577,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:83",
+                "at": "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:83",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "animation",
@@ -598,15 +598,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:927",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:96",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:400"
+              "src/foundation/tokens/css/runtime/personality/index.css:927",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:96",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:400"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:80",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:80",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "animation",
@@ -631,7 +631,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:81",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:81",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "animation",
@@ -654,15 +654,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:24"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:24"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:24"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:24"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:87",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:87",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "inline-size",
@@ -670,7 +670,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:88",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:88",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "block-size",
@@ -678,7 +678,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:153",
+                "at": "src/components/primitives/feedback/spinner/contracts/index.ts:153",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "sm",
@@ -703,7 +703,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:89",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:89",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "--_ds-spinner-ring-width",
@@ -726,15 +726,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:27"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:27"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:27"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:27"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:92",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:92",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "inline-size",
@@ -742,7 +742,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "block-size",
@@ -750,7 +750,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:155",
+                "at": "src/components/primitives/feedback/spinner/contracts/index.ts:155",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "md",
@@ -775,7 +775,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:94",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:94",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "--_ds-spinner-ring-width",
@@ -798,15 +798,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:30"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:30"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:30"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:30"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:97",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:97",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "inline-size",
@@ -814,7 +814,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:98",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:98",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "block-size",
@@ -822,7 +822,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:157",
+                "at": "src/components/primitives/feedback/spinner/contracts/index.ts:157",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "lg",
@@ -847,7 +847,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "--_ds-spinner-ring-width",
@@ -870,15 +870,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:33"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:33"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/spinner.css:33"
+              "src/foundation/tokens/css/presentation/components/spinner/index.css:33"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:102",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:102",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "inline-size",
@@ -886,7 +886,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:103",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:103",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "block-size",
@@ -894,7 +894,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/contracts/index.ts:159",
+                "at": "src/components/primitives/feedback/spinner/contracts/index.ts:159",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "xl",
@@ -919,7 +919,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:104",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:104",
                 "readIn": "modern-skin-css",
                 "part": "indicator",
                 "landsOn": "--_ds-spinner-ring-width",
@@ -944,7 +944,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "color",
@@ -965,18 +965,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:218",
-              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "color",
@@ -1002,12 +1002,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:324"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:555"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:555"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-family",
@@ -1028,17 +1028,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-family",
@@ -1063,7 +1063,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:110",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:110",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -1071,7 +1071,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:109",
+                "at": "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:109",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "font-size",
@@ -1097,12 +1097,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:325"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:556"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:556"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:112",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:112",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -1123,17 +1123,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:30",
-              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:609"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:112",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:112",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -1159,12 +1159,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:329"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:558"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:558"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:114",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:114",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "line-height",
@@ -1190,12 +1190,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:328"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:559"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:559"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:115",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:115",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "letter-spacing",
@@ -1220,7 +1220,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css:117",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css:117",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "max-inline-size",
@@ -1239,17 +1239,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
-              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:552",
-              "src/tooling/testing/system/tests/theming.test.ts:254"
+              "src/components/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
+              "tests/integration/capability-propagation/tests/index.test.ts:552",
+              "tests/system/theming/index.test.ts:254"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:30"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:30"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/feedback/Spinner/engines/rustic/index.tsx:68",
+                "at": "src/components/primitives/feedback/spinner/engines/rustic/index.tsx:68",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "(const-indirection:spinnerColor)",
@@ -1295,13 +1295,13 @@
         {
           "channelId": "--_ds-spinner-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1310,13 +1310,13 @@
         {
           "channelId": "--_ds-spinner-label-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1325,13 +1325,13 @@
         {
           "channelId": "--_ds-spinner-track-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1348,7 +1348,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -1372,7 +1372,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -1445,7 +1445,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones dentro de alert/toast son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -1466,13 +1466,13 @@
         {
           "channelId": "--_ds-spinner-label-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1481,13 +1481,13 @@
         {
           "channelId": "--_ds-spinner-lg-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1496,13 +1496,13 @@
         {
           "channelId": "--_ds-spinner-md-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1511,13 +1511,13 @@
         {
           "channelId": "--_ds-spinner-sm-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1526,13 +1526,13 @@
         {
           "channelId": "--_ds-spinner-xl-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1550,7 +1550,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -1584,13 +1584,13 @@
         {
           "channelId": "--_ds-spinner-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/spinner/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1599,13 +1599,13 @@
         {
           "channelId": "--_ds-spinner-spin-easing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1664,7 +1664,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1743,7 +1743,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1800,7 +1800,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1832,13 +1832,13 @@
         {
           "channelId": "--_ds-spinner-lg-ring-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1847,13 +1847,13 @@
         {
           "channelId": "--_ds-spinner-md-ring-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1862,13 +1862,13 @@
         {
           "channelId": "--_ds-spinner-sm-ring-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1877,13 +1877,13 @@
         {
           "channelId": "--_ds-spinner-xl-ring-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/spinner"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/spinner/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1902,11 +1902,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

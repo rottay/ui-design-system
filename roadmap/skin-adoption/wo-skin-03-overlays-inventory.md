@@ -2,7 +2,7 @@
 
 Scope: Modal (51 sites, 6 files), Drawer (42, 5), Toast (47, 4), Message (46, 2), Notification (34, 2),
 Result (15, 2) — 6 components, ~21 files, all under
-`packages/core/src/ui/primitives/feedback/{Component}/`. File lists/counts from
+`packages/core/src/components/primitives/feedback/{Component}/`. File lists/counts from
 `roadmap/skin-census.json` batch WO-SKIN-03. Format follows the dropdowns checkpoint precedent
 (`skin02-dropdowns-inventory.md`). Note the census also lists a **separate, unrelated**
 `primitives/overlay/Modal` (batch WO-SKIN-04, 53 sites) — not in scope here; do not conflate.

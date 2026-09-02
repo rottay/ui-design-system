@@ -8,15 +8,15 @@
     "components": [
       "StatusFilterPills"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/status-filter-pills",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/status-filter-pills",
     "publicComponents": [
       "StatusFilterPills"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "c8e5ce07c58086f94064411cbb82d9f4a9a9c10b73da0e58fe303a90437dc5c8"
+    "inventoryRowDigest": "aeac92536a7c33a9250fc80a0c382e9597bc4ed394c5a86ecffe9964797b1fdc"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
-      "packages/core/src/ui/patterns/data/status-filter-pills",
-      "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx"
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
+      "packages/core/src/components/patterns/data/status-filter-pills",
+      "packages/core/src/components/patterns/data/status-filter-pills/index.tsx"
     ],
     "stableParts": [
       "count-badge",
@@ -51,10 +51,10 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:82]",
-      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:216, packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:217]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (6 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:61, packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:76, packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:87, packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:93]",
-      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-pressed`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:82]"
+      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/components/patterns/data/status-filter-pills/index.tsx:82]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:216, packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:217]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (6 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/status-filter-pills/index.tsx:61, packages/core/src/components/patterns/data/status-filter-pills/index.tsx:76, packages/core/src/components/patterns/data/status-filter-pills/index.tsx:87, packages/core/src/components/patterns/data/status-filter-pills/index.tsx:93]",
+      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-pressed`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/status-filter-pills/index.tsx:82]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -84,15 +84,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:101"
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:101"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:49",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:50",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:51",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:53"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:49",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:50",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:51",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:53"
           ],
           "anchorStatus": "verified"
         },
@@ -101,15 +101,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:106"
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:106"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:64",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:65",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:66",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:145",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:150"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:64",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:65",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:66",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:145",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:150"
           ],
           "anchorStatus": "verified"
         },
@@ -118,15 +118,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:72",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:10",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:11",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:12"
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:72",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:10",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:11",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:12"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:13",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:18"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:13",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:18"
           ],
           "anchorStatus": "verified"
         },
@@ -135,15 +135,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:86"
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:86"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:40",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:41",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:45",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:110"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:110"
           ],
           "anchorStatus": "verified"
         },
@@ -152,15 +152,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:92"
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:92"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:32",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:33",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:36",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:120",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:125"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:32",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:120",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:125"
           ],
           "anchorStatus": "verified"
         },
@@ -169,8 +169,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:60",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:5"
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:60",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:5"
           ]
         }
       ],
@@ -178,7 +178,7 @@
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:101"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:101"
           ],
           "state": "active"
         },
@@ -187,12 +187,12 @@
           "at": [],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:36",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:84",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:85",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:86",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:87",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:93"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:85",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:87",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:93"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -202,10 +202,10 @@
           "at": [],
           "state": "focus-visible",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:106",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:216",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:217",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:218"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:106",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:216",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:217",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:218"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -215,8 +215,8 @@
           "at": [],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:93",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:94"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:94"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -226,10 +226,10 @@
           "occurrences": 24,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:47",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:78",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:89",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:95"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:47",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:78",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:89",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:95"
           ],
           "state": "selected"
         },
@@ -238,7 +238,7 @@
           "occurrences": 4,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:120"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:120"
           ],
           "state": "focus-visible"
         },
@@ -247,7 +247,7 @@
           "occurrences": 2,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:107"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:107"
           ],
           "state": "hover"
         },
@@ -256,7 +256,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:115"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:115"
           ],
           "state": "active"
         }
@@ -265,19 +265,19 @@
         {
           "token": "data-size=md",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:26",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:27"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:27"
           ]
         },
         {
           "token": "data-size=sm",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:22",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:23",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:45",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:58",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:59"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:22",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:23",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:58",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:59"
           ]
         },
         {
@@ -285,9 +285,9 @@
           "occurrences": 6,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:33",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:63",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:79"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:33",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:63",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:79"
           ]
         },
         {
@@ -295,9 +295,9 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css:37",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:63",
-            "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:79"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css:37",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:63",
+            "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:79"
           ]
         }
       ],
@@ -307,7 +307,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
               "paintKind": "own"
             }
           ]
@@ -447,7 +447,7 @@
         "variableCensus": [
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 12,
             "part": "pill",
             "landsOn": "gap",
@@ -463,7 +463,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -479,7 +479,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -495,7 +495,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -511,7 +511,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -527,7 +527,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -543,7 +543,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -559,7 +559,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -575,7 +575,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 18,
             "part": "pill",
             "landsOn": "transition",
@@ -591,7 +591,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 23,
             "part": "pill",
             "landsOn": "font-size",
@@ -607,7 +607,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 27,
             "part": "pill",
             "landsOn": "font-size",
@@ -623,7 +623,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 55,
             "part": "count-badge",
             "landsOn": "padding-inline",
@@ -639,7 +639,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 64,
             "part": "count-badge-text",
             "landsOn": "font-family",
@@ -655,7 +655,7 @@
           },
           {
             "variable": "--ds-edge-hairline-width",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 65,
             "part": "count-badge-text",
             "landsOn": "font-size",
@@ -671,7 +671,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 71,
             "part": "pill",
             "landsOn": "border-radius",
@@ -687,7 +687,7 @@
           },
           {
             "variable": "--ds-filter-pill-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 72,
             "part": "pill",
             "landsOn": "border",
@@ -703,7 +703,7 @@
           },
           {
             "variable": "--ds-filter-pill-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 73,
             "part": "pill",
             "landsOn": "background",
@@ -719,7 +719,7 @@
           },
           {
             "variable": "--ds-filter-pill-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 74,
             "part": "pill",
             "landsOn": "color",
@@ -736,7 +736,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 74,
             "part": "pill",
             "landsOn": "color",
@@ -752,7 +752,7 @@
           },
           {
             "variable": "--ds-filter-pill-shadow",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 76,
             "part": "pill",
             "landsOn": "box-shadow",
@@ -768,7 +768,7 @@
           },
           {
             "variable": "--ds-glass-backdrop-filter",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 78,
             "part": "pill",
             "landsOn": "backdrop-filter",
@@ -784,7 +784,7 @@
           },
           {
             "variable": "--ds-glass-backdrop-filter",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 79,
             "part": "pill",
             "landsOn": "-webkit-backdrop-filter",
@@ -800,7 +800,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 84,
             "part": "pill",
             "landsOn": "border",
@@ -817,7 +817,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 84,
             "part": "pill",
             "landsOn": "border",
@@ -833,7 +833,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 85,
             "part": "pill",
             "landsOn": "background",
@@ -849,7 +849,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 85,
             "part": "pill",
             "landsOn": "background",
@@ -865,7 +865,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 86,
             "part": "pill",
             "landsOn": "color",
@@ -882,7 +882,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 86,
             "part": "pill",
             "landsOn": "color",
@@ -898,7 +898,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-shadow",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 87,
             "part": "pill",
             "landsOn": "box-shadow",
@@ -915,7 +915,7 @@
           },
           {
             "variable": "--ds-filter-pill-shadow",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 87,
             "part": "pill",
             "landsOn": "box-shadow",
@@ -931,7 +931,7 @@
           },
           {
             "variable": "--ds-filter-pill-hover-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 93,
             "part": "pill",
             "landsOn": "background",
@@ -950,7 +950,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 93,
             "part": "pill",
             "landsOn": "background",
@@ -968,7 +968,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 93,
             "part": "pill",
             "landsOn": "background",
@@ -986,7 +986,7 @@
           },
           {
             "variable": "--ds-filter-pill-hover-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 94,
             "part": "pill",
             "landsOn": "border-color",
@@ -1006,7 +1006,7 @@
           },
           {
             "variable": "--ds-toolbar-control-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 94,
             "part": "pill",
             "landsOn": "border-color",
@@ -1025,7 +1025,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 94,
             "part": "pill",
             "landsOn": "border-color",
@@ -1043,7 +1043,7 @@
           },
           {
             "variable": "--ds-filter-pill-hover-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 101,
             "part": "pill",
             "landsOn": "background",
@@ -1060,7 +1060,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 101,
             "part": "pill",
             "landsOn": "background",
@@ -1076,7 +1076,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 101,
             "part": "pill",
             "landsOn": "background",
@@ -1092,7 +1092,7 @@
           },
           {
             "variable": "--ds-filter-pill-focus-ring",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 106,
             "part": "pill",
             "landsOn": "box-shadow",
@@ -1108,7 +1108,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 106,
             "part": "pill",
             "landsOn": "box-shadow",
@@ -1124,7 +1124,7 @@
           },
           {
             "variable": "--ds-filter-pill-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 110,
             "part": "pill-icon",
             "landsOn": "color",
@@ -1141,7 +1141,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 110,
             "part": "pill-icon",
             "landsOn": "color",
@@ -1157,7 +1157,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 115,
             "part": "pill-icon",
             "landsOn": "color",
@@ -1174,7 +1174,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 115,
             "part": "pill-icon",
             "landsOn": "color",
@@ -1190,7 +1190,7 @@
           },
           {
             "variable": "--ds-filter-pill-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 120,
             "part": "pill-label",
             "landsOn": "color",
@@ -1207,7 +1207,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 120,
             "part": "pill-label",
             "landsOn": "color",
@@ -1223,7 +1223,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 125,
             "part": "pill-label",
             "landsOn": "color",
@@ -1240,7 +1240,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 125,
             "part": "pill-label",
             "landsOn": "color",
@@ -1256,7 +1256,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 130,
             "part": "count-badge",
             "landsOn": "border-radius",
@@ -1272,7 +1272,7 @@
           },
           {
             "variable": "--ds-filter-pill-count-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 131,
             "part": "count-badge",
             "landsOn": "background",
@@ -1288,7 +1288,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 131,
             "part": "count-badge",
             "landsOn": "background",
@@ -1304,7 +1304,7 @@
           },
           {
             "variable": "--ds-filter-pill-count-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 132,
             "part": "count-badge",
             "landsOn": "border",
@@ -1320,7 +1320,7 @@
           },
           {
             "variable": "--ds-filter-pill-count-ring",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 133,
             "part": "count-badge",
             "landsOn": "box-shadow",
@@ -1336,7 +1336,7 @@
           },
           {
             "variable": "--ds-filter-pill-count-active-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 138,
             "part": "count-badge",
             "landsOn": "background",
@@ -1354,7 +1354,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 138,
             "part": "count-badge",
             "landsOn": "background",
@@ -1371,7 +1371,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 138,
             "part": "count-badge",
             "landsOn": "background",
@@ -1387,7 +1387,7 @@
           },
           {
             "variable": "--ds-filter-pill-count-active-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 139,
             "part": "count-badge",
             "landsOn": "border",
@@ -1403,7 +1403,7 @@
           },
           {
             "variable": "--ds-filter-pill-count-active-ring",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 140,
             "part": "count-badge",
             "landsOn": "box-shadow",
@@ -1419,7 +1419,7 @@
           },
           {
             "variable": "--ds-filter-pill-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 145,
             "part": "count-badge-text",
             "landsOn": "color",
@@ -1436,7 +1436,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 145,
             "part": "count-badge-text",
             "landsOn": "color",
@@ -1452,7 +1452,7 @@
           },
           {
             "variable": "--ds-filter-pill-active-color",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 150,
             "part": "count-badge-text",
             "landsOn": "color",
@@ -1469,7 +1469,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 150,
             "part": "count-badge-text",
             "landsOn": "color",
@@ -1485,7 +1485,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
             "line": 163,
             "part": "pill",
             "landsOn": "min-block-size",
@@ -1510,7 +1510,7 @@
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
               "engine": "engine-agnostic",
               "lines": 240,
               "role": "skin-css",
@@ -1525,7 +1525,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/layout/Box",
               "importSites": [
-                "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:18"
+                "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:18"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -1537,7 +1537,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/layout/Flex",
               "importSites": [
-                "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:19"
+                "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:19"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1549,7 +1549,7 @@
               "tier": "primitive",
               "importedFrom": "../../../primitives/display/Typography/compound/Text",
               "importSites": [
-                "packages/core/src/ui/patterns/data/status-filter-pills/index.tsx:20"
+                "packages/core/src/components/patterns/data/status-filter-pills/index.tsx:20"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -1563,7 +1563,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
               "paintKind": "own"
             }
           ]
@@ -1633,13 +1633,13 @@
         {
           "channelId": "--_ds-status-filter-pills-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1649,13 +1649,13 @@
         {
           "channelId": "--_ds-status-filter-pills-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1665,13 +1665,13 @@
         {
           "channelId": "--_ds-filter-pill-hover-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1680,13 +1680,13 @@
         {
           "channelId": "--_ds-filter-pill-hover-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1695,13 +1695,13 @@
         {
           "channelId": "--_ds-status-filter-pills-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1711,13 +1711,13 @@
         {
           "channelId": "--_ds-status-filter-pills-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1727,13 +1727,13 @@
         {
           "channelId": "--_ds-status-filter-pills-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1743,13 +1743,13 @@
         {
           "channelId": "--_ds-status-filter-pills-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1770,7 +1770,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
@@ -1785,7 +1785,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
@@ -1800,7 +1800,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
@@ -1815,7 +1815,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
@@ -1855,13 +1855,13 @@
         {
           "channelId": "--_ds-status-filter-pills-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1889,13 +1889,13 @@
         {
           "channelId": "--_ds-status-filter-pills-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1923,13 +1923,13 @@
         {
           "channelId": "--_ds-status-filter-pills-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1948,7 +1948,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1962,13 +1962,13 @@
         {
           "channelId": "--_ds-status-filter-pills-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1987,7 +1987,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2033,13 +2033,13 @@
         {
           "channelId": "--_ds-status-filter-pills-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2142,13 +2142,13 @@
         {
           "channelId": "--_ds-status-filter-pills-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2158,13 +2158,13 @@
         {
           "channelId": "--_ds-filter-pill-focus-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/status-filter-pills"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/status-filter-pills/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2187,7 +2187,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2243,7 +2243,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2292,11 +2292,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

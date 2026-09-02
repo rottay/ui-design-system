@@ -8,15 +8,15 @@
     "components": [
       "OTPInput"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/OTPInput",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/otp-input",
     "publicComponents": [
       "OTPInput"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "6852366b7e7f76794c30c837c68a6e8daf20ed9b53cd404209e4a199dd03b9b9"
+    "inventoryRowDigest": "ab6a9e1e4e2c2831713303acfbbf85cbdddad69cd251c2bc3ff384451941334e"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css",
-      "packages/core/src/ui/primitives/inputs/OTPInput"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css",
+      "packages/core/src/components/primitives/inputs/otp-input"
     ],
     "stableParts": [
       "slot",
@@ -51,7 +51,7 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "Error posture stamps aria-invalid on the digit inputs and wires aria-describedby to a role=\"alert\" error message. [at packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:225, packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:226, packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:232]"
+      "Error posture stamps aria-invalid on the digit inputs and wires aria-describedby to a role=\"alert\" error message. [at packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:225, packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:226, packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:232]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -74,9 +74,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:200",
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:99"
+            "packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:200",
+            "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:99"
           ]
         },
         {
@@ -84,9 +84,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:232",
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:200"
+            "packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:232",
+            "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:200"
           ]
         },
         {
@@ -94,9 +94,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:190",
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx:167",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:88"
+            "packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:190",
+            "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:88"
           ]
         },
         {
@@ -104,8 +104,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:231",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:197"
+            "packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:231",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:197"
           ]
         },
         {
@@ -113,7 +113,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx:189"
+            "packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx:189"
           ]
         }
       ],
@@ -122,7 +122,7 @@
           "token": "pseudo:focus",
           "occurrences": 9,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:137"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:137"
           ],
           "state": "focus"
         },
@@ -130,7 +130,7 @@
           "token": "data-error='true'",
           "occurrences": 8,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:137"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:137"
           ],
           "state": "error"
         },
@@ -138,7 +138,7 @@
           "token": "data-disabled='true'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:192"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:192"
           ],
           "state": "disabled"
         },
@@ -146,7 +146,7 @@
           "token": "data-filled='true'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:145"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:145"
           ],
           "state": "filled"
         },
@@ -154,7 +154,7 @@
           "token": "pseudo:hover",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:137"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:137"
           ],
           "state": "hover"
         }
@@ -164,21 +164,21 @@
           "token": "data-size='lg'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:187"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:187"
           ]
         },
         {
           "token": "data-size='md'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:183"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:183"
           ]
         },
         {
           "token": "data-size='sm'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:179"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:179"
           ]
         }
       ],
@@ -187,28 +187,28 @@
           "token": "data-part='slot'",
           "occurrences": 61,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:99"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:99"
           ]
         },
         {
           "token": "data-part='root'",
           "occurrences": 22,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:88"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:88"
           ]
         },
         {
           "token": "data-part='error-message'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:200"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:200"
           ]
         },
         {
           "token": "data-part='error-wrapper'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:197"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:197"
           ]
         }
       ],
@@ -216,22 +216,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx",
             "lines": 208
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/OTPInput/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/otp-input/engines/modern/index.tsx",
             "lines": 240
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx",
             "lines": 210
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "root",
           "error-wrapper"
@@ -322,7 +322,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:200",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:200",
                 "part": "error-message",
                 "property": "font-size",
                 "hasFallback": true,
@@ -350,7 +350,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:197",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:197",
                 "part": "error-wrapper",
                 "property": "margin-block-start",
                 "hasFallback": true,
@@ -378,7 +378,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:218",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:218",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
@@ -406,7 +406,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:201",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:201",
                 "part": "error-message",
                 "property": "line-height",
                 "hasFallback": true,
@@ -435,14 +435,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:110",
                 "part": "slot",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:160",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": true,
@@ -470,7 +470,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:145",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": true,
@@ -500,7 +500,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:137",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:137",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": true,
@@ -528,7 +528,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:89",
                 "part": "root",
                 "property": "gap",
                 "hasFallback": true,
@@ -556,7 +556,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:188",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:188",
                 "part": "slot",
                 "property": "font-size",
                 "hasFallback": true,
@@ -584,7 +584,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:187",
                 "part": "slot",
                 "property": "max-inline-size",
                 "hasFallback": true,
@@ -612,7 +612,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:184",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:184",
                 "part": "slot",
                 "property": "font-size",
                 "hasFallback": true,
@@ -640,7 +640,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:183",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:183",
                 "part": "slot",
                 "property": "max-inline-size",
                 "hasFallback": true,
@@ -668,14 +668,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:169",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:169",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-shadow-focus, var(--ds-focus-ring))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:172",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -703,7 +703,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:180",
                 "part": "slot",
                 "property": "font-size",
                 "hasFallback": true,
@@ -731,7 +731,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:179",
                 "part": "slot",
                 "property": "max-inline-size",
                 "hasFallback": true,
@@ -763,7 +763,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:28",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:28",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": true,
@@ -797,21 +797,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:129",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:129",
                 "part": "slot",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:145",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:150",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:150",
                 "part": "slot",
                 "property": "background-image",
                 "hasFallback": false,
@@ -846,21 +846,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:153",
                 "part": "slot",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:160",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:218",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:218",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": false,
@@ -897,28 +897,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:48",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:48",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "#ef4444"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:52",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:52",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "#ef4444"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:154",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:154",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#ff4d4f"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:181",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:181",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": true,
@@ -953,14 +953,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:32",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:32",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": true,
                 "fallback": "#f3f4f6"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:160",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:160",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "backgroundColor",
                 "hasFallback": true,
@@ -995,21 +995,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:39",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:39",
                 "part": "slot",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#d1d5db"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:154",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:154",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "#d9d9d9"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:185",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:185",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": true,
@@ -1041,7 +1041,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:42",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:42",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": true,
@@ -1074,14 +1074,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:112",
                 "part": "slot",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:163",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1116,14 +1116,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:35",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:35",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "rgba(59, 130, 246, 0.2)"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:182",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:182",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": true,
@@ -1158,14 +1158,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:45",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:45",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "#3b82f6"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:181",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:181",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": true,
@@ -1198,21 +1198,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:111",
                 "part": "slot",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:120",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:120",
                 "part": "slot",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:218",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:218",
                 "part": "error-message",
                 "property": "color",
                 "hasFallback": false,
@@ -1243,21 +1243,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:179",
                 "part": "slot",
                 "property": "max-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:183",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:183",
                 "part": "slot",
                 "property": "max-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:187",
                 "part": "slot",
                 "property": "max-inline-size",
                 "hasFallback": false,
@@ -1288,14 +1288,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:169",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:169",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:172",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1330,21 +1330,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:104",
                 "part": "slot",
                 "property": "font-family",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:157",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:157",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": true,
                 "fallback": "monospace"
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx:158",
+                "at": "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx:158",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": true,
@@ -1377,14 +1377,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:110",
                 "part": "slot",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:160",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": true,
@@ -1415,7 +1415,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:112",
                 "part": "slot",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -1446,7 +1446,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:160",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": true,
@@ -1478,7 +1478,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:172",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1509,7 +1509,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:121",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:121",
                 "part": "slot",
                 "property": "background",
                 "hasFallback": false,
@@ -1540,7 +1540,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:120",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:120",
                 "part": "slot",
                 "property": "color",
                 "hasFallback": true,
@@ -1572,7 +1572,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:169",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:169",
                 "part": "slot",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1606,14 +1606,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:225",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:225",
                 "part": "slot",
                 "property": "min-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:226",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:226",
                 "part": "slot",
                 "property": "min-block-size",
                 "hasFallback": false,
@@ -1644,14 +1644,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-fast)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": true,
@@ -1682,14 +1682,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-ease-out)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": true,
@@ -1720,7 +1720,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:201",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:201",
                 "part": "error-message",
                 "property": "line-height",
                 "hasFallback": false,
@@ -1753,7 +1753,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:137",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:137",
                 "part": "slot",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1784,14 +1784,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": false,
@@ -1823,14 +1823,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:116",
                 "part": "slot",
                 "property": "transition",
                 "hasFallback": false,
@@ -1861,7 +1861,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:107",
                 "part": "slot",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1893,14 +1893,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:110",
                 "part": "slot",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css:160",
                 "part": "slot",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1941,7 +1941,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:26",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:26",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_RADIUS_DIRECT",
             "property": "border-radius",
@@ -1949,7 +1949,7 @@
             "declaration": "border-radius: 8px;"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:28",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:28",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "background-color",
@@ -1957,7 +1957,7 @@
             "declaration": "background-color: var(--ds-color-bg-input, #fff);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:32",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "background-color",
@@ -1965,7 +1965,7 @@
             "declaration": "background-color: var(--ds-color-neutral-100, #f3f4f6);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:35",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:35",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "box-shadow",
@@ -1973,7 +1973,7 @@
             "declaration": "box-shadow: 0 0 0 3px var(--ds-color-primary-100, rgba(59, 130, 246, 0.2));"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:39",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -1981,7 +1981,7 @@
             "declaration": "border: 2px solid var(--ds-color-neutral-300, #d1d5db);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:42",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-color",
@@ -1989,7 +1989,7 @@
             "declaration": "border-color: var(--ds-color-neutral-400, #9ca3af);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:45",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:45",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-color",
@@ -1997,7 +1997,7 @@
             "declaration": "border-color: var(--ds-color-primary-500, #3b82f6);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:48",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-color",
@@ -2005,7 +2005,7 @@
             "declaration": "border-color: var(--ds-color-error-500, #ef4444);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input.css:52",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/otp-input/index.css:52",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "color",
@@ -2013,7 +2013,7 @@
             "declaration": "color: var(--ds-color-error-500, #ef4444);"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:154",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:154",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -2021,7 +2021,7 @@
             "declaration": "border: `1px solid ${error ? 'var(--ds-color-error-500, #ff4d4f)' : 'var(--ds-color-neutral-300, #d9d9d9)'}`,"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:154",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:154",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border",
@@ -2029,7 +2029,7 @@
             "declaration": "border: `1px solid ${error ? 'var(--ds-color-error-500, #ff4d4f)' : 'var(--ds-color-neutral-300, #d9d9d9)'}`,"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:159",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:159",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -2037,7 +2037,7 @@
             "declaration": "transition: 'border-color 0.2s, box-shadow 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:159",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:159",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -2045,7 +2045,7 @@
             "declaration": "transition: 'border-color 0.2s, box-shadow 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:160",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:160",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "backgroundColor",
@@ -2053,7 +2053,7 @@
             "declaration": "backgroundColor: disabled ? 'var(--ds-color-neutral-100, #f5f5f5)' : '#fff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:160",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:160",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "backgroundColor",
@@ -2061,7 +2061,7 @@
             "declaration": "backgroundColor: disabled ? 'var(--ds-color-neutral-100, #f5f5f5)' : '#fff',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:181",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:181",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "e.target.style.borderColor = error ? 'var(--ds-color-error-500, #ff4d4f)",
@@ -2069,7 +2069,7 @@
             "declaration": "e.target.style.borderColor = error ? 'var(--ds-color-error-500, #ff4d4f)' : 'var(--ds-color-primary-500, #1890ff)';"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:185",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:185",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "e.target.style.borderColor = error ? 'var(--ds-color-error-500, #ff4d4f)",
@@ -2077,7 +2077,7 @@
             "declaration": "e.target.style.borderColor = error ? 'var(--ds-color-error-500, #ff4d4f)' : 'var(--ds-color-neutral-300, #d9d9d9)';"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/classic/index.tsx:199",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/classic/index.tsx:199",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "<span style={{ fontSize",
@@ -2085,7 +2085,7 @@
             "declaration": "<span style={{ fontSize: 12, color: 'var(--ds-color-error-500, #ff4d4f)', marginTop: 4, display: 'block' }}>"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx:161",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx:161",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -2093,7 +2093,7 @@
             "declaration": "transition: 'border-color 0.2s, box-shadow 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/OTPInput/engines/rustic/index.tsx:161",
+            "at": "packages/core/src/components/primitives/inputs/otp-input/engines/rustic/index.tsx:161",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -2144,13 +2144,13 @@
         {
           "channelId": "--_ds-otp-input-accent-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2160,13 +2160,13 @@
         {
           "channelId": "--_ds-otp-input-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2176,13 +2176,13 @@
         {
           "channelId": "--_ds-otp-slot-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2191,13 +2191,13 @@
         {
           "channelId": "--_ds-otp-slot-border-filled",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2206,13 +2206,13 @@
         {
           "channelId": "--_ds-otp-slot-border-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2221,13 +2221,13 @@
         {
           "channelId": "--_ds-otp-input-error-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2237,13 +2237,13 @@
         {
           "channelId": "--_ds-otp-input-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2297,13 +2297,13 @@
         {
           "channelId": "--_ds-otp-input-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2313,13 +2313,13 @@
         {
           "channelId": "--_ds-otp-error-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2328,13 +2328,13 @@
         {
           "channelId": "--_ds-otp-error-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2343,13 +2343,13 @@
         {
           "channelId": "--_ds-otp-slot-lg-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2358,13 +2358,13 @@
         {
           "channelId": "--_ds-otp-slot-md-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2373,13 +2373,13 @@
         {
           "channelId": "--_ds-otp-slot-sm-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2398,13 +2398,13 @@
         {
           "channelId": "--_ds-otp-input-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2458,13 +2458,13 @@
         {
           "channelId": "--_ds-otp-input-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2474,13 +2474,13 @@
         {
           "channelId": "--_ds-otp-error-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2489,13 +2489,13 @@
         {
           "channelId": "--_ds-otp-slot-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2504,13 +2504,13 @@
         {
           "channelId": "--_ds-otp-slot-lg-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2519,13 +2519,13 @@
         {
           "channelId": "--_ds-otp-slot-md-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2534,13 +2534,13 @@
         {
           "channelId": "--_ds-otp-slot-sm-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2576,13 +2576,13 @@
         {
           "channelId": "--_ds-otp-input-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2687,13 +2687,13 @@
         {
           "channelId": "--_ds-otp-input-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2703,13 +2703,13 @@
         {
           "channelId": "--_ds-otp-input-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2719,13 +2719,13 @@
         {
           "channelId": "--_ds-otp-input-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2735,13 +2735,13 @@
         {
           "channelId": "--_ds-otp-slot-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2764,7 +2764,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2820,7 +2820,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2848,7 +2848,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
         ]
       }
     },
@@ -2863,13 +2863,13 @@
         {
           "channelId": "--_ds-otp-input-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/otp-input"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/otp-input/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2889,11 +2889,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

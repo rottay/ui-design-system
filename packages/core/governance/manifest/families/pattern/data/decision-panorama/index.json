@@ -8,15 +8,15 @@
     "components": [
       "DecisionPanorama"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/decision-panorama",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/decision-panorama",
     "publicComponents": [
       "DecisionPanorama"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1a5800814a396f668ddac604d263065474c7d9166e257a9ed23a09e5ae6ab93c"
+    "inventoryRowDigest": "ef675cdd2e7fb6a15ed5761334631bd36814c90e873ed0b40bc1e54b9828076c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
-      "packages/core/src/ui/patterns/data/decision-panorama",
-      "packages/core/src/ui/patterns/data/decision-panorama/contracts/index.ts",
-      "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx",
-      "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/data/decision-panorama/index.ts"
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
+      "packages/core/src/components/patterns/data/decision-panorama",
+      "packages/core/src/components/patterns/data/decision-panorama/contracts/index.ts",
+      "packages/core/src/components/patterns/data/decision-panorama/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx",
+      "packages/core/src/components/patterns/data/decision-panorama/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/data/decision-panorama/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/data/decision-panorama/index.ts"
     ],
     "stableParts": [
       "actions",
@@ -53,18 +53,18 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "aria-busy is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-busy) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:32]",
-      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:44, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:66]",
-      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:31]",
-      "<dd> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dd) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:50]",
-      "<dl> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dl) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:40]",
-      "<dt> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dt) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:49]",
-      "<footer> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: footer) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:102]",
-      "<header> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: header) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:60]",
-      "<section> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: section) [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:27]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (8 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:29, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:35, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:36, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:42]",
-      "The family sets ARIA state/label attributes in source (4 sites; observed: `aria-hidden`, `aria-label`, `aria-busy`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:31, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:32, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:44, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:66]",
-      "The family renders semantic HTML elements directly (7 sites; observed: `aside`, `dl`, `dt`, `dd`, `header`); the element semantics are structural and are not a themeable choice. [at packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:36, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:40, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:49, packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:50]"
+      "aria-busy is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-busy) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:32]",
+      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:44, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:66]",
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:31]",
+      "<dd> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dd) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:50]",
+      "<dl> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dl) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:40]",
+      "<dt> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: dt) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:49]",
+      "<footer> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: footer) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:102]",
+      "<header> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: header) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:60]",
+      "<section> is the authored element; a tenant control may restyle it but the element contract is not themable (semantic-element: section) [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:27]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (8 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:29, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:35, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:36, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:42]",
+      "The family sets ARIA state/label attributes in source (4 sites; observed: `aria-hidden`, `aria-label`, `aria-busy`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:31, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:32, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:44, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:66]",
+      "The family renders semantic HTML elements directly (7 sites; observed: `aside`, `dl`, `dt`, `dd`, `header`); the element semantics are structural and are not a themeable choice. [at packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:36, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:40, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:49, packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:50]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -94,15 +94,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:102"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:102"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:294",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:295",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:296",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:297",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:298"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:294",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:295",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:296",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:297",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:298"
           ],
           "anchorStatus": "verified"
         },
@@ -111,15 +111,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:36",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:58"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:36",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:58"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:339",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:340",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:341",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:377"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:339",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:340",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:341",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:377"
           ],
           "anchorStatus": "verified"
         },
@@ -128,12 +128,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:77",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:39",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:40",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:41",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:54",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:62"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:77",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:39",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:40",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:41",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:54",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:62"
           ],
           "atSiteCount": 7
         },
@@ -142,15 +142,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:42"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:42"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:92",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:93",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:95",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:96"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:92",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:96"
           ],
           "anchorStatus": "verified"
         },
@@ -159,15 +159,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:35"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:35"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:24",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:25",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:26",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:27",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:328"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:24",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:25",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:27",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:328"
           ],
           "anchorStatus": "verified"
         },
@@ -176,15 +176,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:60"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:60"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:33",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:34",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:155",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:156"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:34",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:155",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:156"
           ],
           "anchorStatus": "verified"
         },
@@ -193,15 +193,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:65"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:65"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:175",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:176",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:177",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:178",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:179"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:175",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:176",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:177",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:178",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:179"
           ],
           "anchorStatus": "verified"
         },
@@ -210,12 +210,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:27",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:4",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:5",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:6",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:7",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:8"
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:27",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:4",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:5",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:6",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:7",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:8"
           ],
           "atSiteCount": 7
         }
@@ -226,7 +226,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__visual-aura",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:207"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:207"
           ]
         },
         {
@@ -234,7 +234,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__fact-icon",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:130"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:130"
           ]
         },
         {
@@ -242,7 +242,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__decision-heading",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:261"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:261"
           ]
         },
         {
@@ -250,7 +250,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__decision-meta",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:311"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:311"
           ]
         },
         {
@@ -258,7 +258,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__decision-title",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:271"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:271"
           ]
         },
         {
@@ -266,7 +266,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__identity-eyebrow",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:97"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:97"
           ]
         },
         {
@@ -274,7 +274,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__badges",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:252"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:252"
           ]
         },
         {
@@ -282,7 +282,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__score",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:280"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:280"
           ]
         },
         {
@@ -290,7 +290,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__title",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:237"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:237"
           ]
         },
         {
@@ -298,7 +298,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__visual",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:198"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:198"
           ]
         },
         {
@@ -306,7 +306,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__decision-summary",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:300"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:300"
           ]
         },
         {
@@ -314,7 +314,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__facts",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:107"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:107"
           ]
         },
         {
@@ -322,7 +322,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__identity-copy",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:231"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:231"
           ]
         },
         {
@@ -330,7 +330,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__subtitle",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:246"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:246"
           ]
         },
         {
@@ -338,7 +338,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__fact-copy",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:142"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:142"
           ]
         },
         {
@@ -346,7 +346,7 @@
           "scoutAnchorClaim": "class:ds-decision-panorama__progress",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:307"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:307"
           ]
         }
       ],
@@ -356,8 +356,8 @@
           "at": [],
           "state": "loading",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:317",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:318"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:317",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:318"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -367,8 +367,8 @@
           "occurrences": 13,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:24",
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:30"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:24",
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:30"
           ],
           "state": "loading"
         },
@@ -377,32 +377,32 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:342",
-            "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx:30"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:342",
+            "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx:30"
           ],
           "state": "loading"
         }
       ],
       "engineDivergence": {
         "engineDivergence": {
-          "engineSiblingDirectory": "packages/core/src/ui/patterns/data/decision-panorama/engines",
+          "engineSiblingDirectory": "packages/core/src/components/patterns/data/decision-panorama/engines",
           "engines": {
             "classic": {
-              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/decision-panorama/engines/classic/index.tsx",
               "lines": 8,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": true,
               "addsScopeClass": []
             },
             "foundation": {
-              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx",
+              "path": "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx",
               "lines": 109,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "modern": {
-              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx",
+              "path": "packages/core/src/components/patterns/data/decision-panorama/engines/modern/index.tsx",
               "lines": 23,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": true,
@@ -411,7 +411,7 @@
               ]
             },
             "rustic": {
-              "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/decision-panorama/engines/rustic/index.tsx",
               "lines": 8,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": true,
@@ -421,7 +421,7 @@
           "paintByEngine": {
             "engine-agnostic-presentation": [
               {
-                "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+                "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
                 "paintKind": "own"
               }
             ]
@@ -431,28 +431,28 @@
             "classic": {
               "lines": 8,
               "files": [
-                "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx"
+                "packages/core/src/components/patterns/data/decision-panorama/engines/classic/index.tsx"
               ],
               "fileCount": 1
             },
             "foundation": {
               "lines": 109,
               "files": [
-                "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx"
+                "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx"
               ],
               "fileCount": 1
             },
             "modern": {
               "lines": 23,
               "files": [
-                "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx"
+                "packages/core/src/components/patterns/data/decision-panorama/engines/modern/index.tsx"
               ],
               "fileCount": 1
             },
             "rustic": {
               "lines": 8,
               "files": [
-                "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx"
+                "packages/core/src/components/patterns/data/decision-panorama/engines/rustic/index.tsx"
               ],
               "fileCount": 1
             }
@@ -510,21 +510,21 @@
         },
         "engines": {
           "classic": {
-            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/classic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/decision-panorama/engines/classic/index.tsx",
             "lines": 8,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": true,
             "addsScopeClass": []
           },
           "foundation": {
-            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/foundation/index.tsx",
+            "path": "packages/core/src/components/patterns/data/decision-panorama/engines/foundation/index.tsx",
             "lines": 109,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "modern": {
-            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/modern/index.tsx",
+            "path": "packages/core/src/components/patterns/data/decision-panorama/engines/modern/index.tsx",
             "lines": 23,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": true,
@@ -533,7 +533,7 @@
             ]
           },
           "rustic": {
-            "path": "packages/core/src/ui/patterns/data/decision-panorama/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/decision-panorama/engines/rustic/index.tsx",
             "lines": 8,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": true,
@@ -550,7 +550,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:220",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:220",
               "landsOnProperties": [
                 "animation"
               ],
@@ -564,7 +564,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:221",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:221",
               "landsOnProperties": [
                 "animation"
               ],
@@ -578,7 +578,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:272",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:272",
               "landsOnProperties": [
                 "font-size"
               ],
@@ -592,7 +592,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:138",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:138",
               "landsOnProperties": [
                 "font-size"
               ],
@@ -606,7 +606,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:281",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:281",
               "landsOnProperties": [
                 "font-size"
               ],
@@ -620,7 +620,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:238",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:238",
               "landsOnProperties": [
                 "font-size"
               ],
@@ -633,24 +633,24 @@
           "hardcodedValue": [
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:210",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:210",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:210",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:210",
               "literal": "999px",
               "property": "border-radius",
               "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura",
               "position": "DIRECT",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:210",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:210",
               "line": "border-radius: 999px;"
             },
             {
               "kind": "LITERAL_DURATION",
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:220",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:219",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:220",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:219",
               "literal": "500ms",
               "property": "animation",
               "selector": ".ds-pattern-decision-panorama .ds-decision-panorama__visual-aura",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css:221",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css:221",
               "line": "var(--ds-decision-panorama-aura-duration, calc(var(--ds-motion-glacial, 500ms) * 10))"
             }
           ],
@@ -759,7 +759,7 @@
         "variableCensus": [
           {
             "variable": "--ds-surface-card-border-strong",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 9,
             "part": "root",
             "landsOn": "border",
@@ -776,7 +776,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 9,
             "part": "root",
             "landsOn": "border",
@@ -792,7 +792,7 @@
           },
           {
             "variable": "--ds-radius-2xl",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 10,
             "part": "root",
             "landsOn": "border-radius",
@@ -808,7 +808,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 15,
             "part": "root",
             "landsOn": "background",
@@ -824,7 +824,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 15,
             "part": "root",
             "landsOn": "background",
@@ -841,7 +841,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 15,
             "part": "root",
             "landsOn": "background",
@@ -857,7 +857,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 15,
             "part": "root",
             "landsOn": "background",
@@ -874,7 +874,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 15,
             "part": "root",
             "landsOn": "background",
@@ -890,7 +890,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 18,
             "part": "root",
             "landsOn": "box-shadow",
@@ -906,7 +906,7 @@
           },
           {
             "variable": "--ds-shadow-md",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 18,
             "part": "root",
             "landsOn": "box-shadow",
@@ -922,7 +922,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 18,
             "part": "root",
             "landsOn": "box-shadow",
@@ -938,7 +938,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 19,
             "part": "root",
             "landsOn": "color",
@@ -954,7 +954,7 @@
           },
           {
             "variable": "--ds-surface-panel-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -971,7 +971,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -987,7 +987,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -1004,7 +1004,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -1020,7 +1020,7 @@
           },
           {
             "variable": "--ds-surface-panel-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -1037,7 +1037,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -1053,7 +1053,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -1070,7 +1070,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 54,
             "part": "decision",
             "landsOn": "background",
@@ -1086,7 +1086,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 58,
             "part": "context",
             "landsOn": "border-inline-end",
@@ -1103,7 +1103,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 58,
             "part": "context",
             "landsOn": "border-inline-end",
@@ -1119,7 +1119,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 62,
             "part": "decision",
             "landsOn": "border-inline-start",
@@ -1136,7 +1136,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 62,
             "part": "decision",
             "landsOn": "border-inline-start",
@@ -1152,7 +1152,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1168,7 +1168,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1185,7 +1185,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1201,7 +1201,7 @@
           },
           {
             "variable": "--ds-surface-panel-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1218,7 +1218,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1234,7 +1234,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1251,7 +1251,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 71,
             "part": "decision",
             "landsOn": "background",
@@ -1267,7 +1267,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 76,
             "part": "root",
             "landsOn": "color",
@@ -1283,7 +1283,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 77,
             "part": "root",
             "landsOn": "font-size",
@@ -1299,7 +1299,7 @@
           },
           {
             "variable": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 78,
             "part": "root",
             "landsOn": "font-weight",
@@ -1315,7 +1315,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 82,
             "part": "root",
             "landsOn": "font-family",
@@ -1331,7 +1331,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 88,
             "part": "root",
             "landsOn": "margin",
@@ -1347,7 +1347,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 94,
             "part": "fact",
             "landsOn": "gap",
@@ -1363,7 +1363,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 96,
             "part": "fact",
             "landsOn": "padding-block",
@@ -1379,7 +1379,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 101,
             "part": "fact",
             "landsOn": "border-bottom",
@@ -1396,7 +1396,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 101,
             "part": "fact",
             "landsOn": "border-bottom",
@@ -1412,7 +1412,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 113,
             "part": "root",
             "landsOn": "border",
@@ -1428,7 +1428,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 113,
             "part": "root",
             "landsOn": "border",
@@ -1444,7 +1444,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 114,
             "part": "root",
             "landsOn": "border-radius",
@@ -1460,7 +1460,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 115,
             "part": "root",
             "landsOn": "background",
@@ -1476,7 +1476,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 115,
             "part": "root",
             "landsOn": "background",
@@ -1492,7 +1492,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 116,
             "part": "root",
             "landsOn": "color",
@@ -1508,7 +1508,7 @@
           },
           {
             "variable": "--ds-decision-panorama-fact-icon-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 117,
             "part": "root",
             "landsOn": "font-size",
@@ -1525,7 +1525,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 117,
             "part": "root",
             "landsOn": "font-size",
@@ -1541,7 +1541,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 125,
             "part": "fact",
             "landsOn": "color",
@@ -1557,7 +1557,7 @@
           },
           {
             "variable": "--ds-text-detail-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 126,
             "part": "fact",
             "landsOn": "font-size",
@@ -1574,7 +1574,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 126,
             "part": "fact",
             "landsOn": "font-size",
@@ -1590,7 +1590,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 139,
             "part": "fact",
             "landsOn": "color",
@@ -1606,7 +1606,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 140,
             "part": "fact",
             "landsOn": "font-size",
@@ -1622,7 +1622,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 141,
             "part": "fact",
             "landsOn": "font-weight",
@@ -1638,7 +1638,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 148,
             "part": "fact",
             "landsOn": "color",
@@ -1654,7 +1654,7 @@
           },
           {
             "variable": "--ds-text-detail-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 149,
             "part": "fact",
             "landsOn": "font-size",
@@ -1671,7 +1671,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 149,
             "part": "fact",
             "landsOn": "font-size",
@@ -1687,7 +1687,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 171,
             "part": "identity",
             "landsOn": "background",
@@ -1703,7 +1703,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 171,
             "part": "identity",
             "landsOn": "background",
@@ -1719,7 +1719,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 171,
             "part": "identity",
             "landsOn": "background",
@@ -1735,7 +1735,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 171,
             "part": "identity",
             "landsOn": "background",
@@ -1751,7 +1751,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 179,
             "part": "identity-visual",
             "landsOn": "margin-top",
@@ -1767,7 +1767,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 186,
             "part": "root",
             "landsOn": "border",
@@ -1783,7 +1783,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 192,
             "part": "root",
             "landsOn": "background",
@@ -1799,7 +1799,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 195,
             "part": "root",
             "landsOn": "box-shadow",
@@ -1815,7 +1815,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 195,
             "part": "root",
             "landsOn": "box-shadow",
@@ -1831,7 +1831,7 @@
           },
           {
             "variable": "--ds-decision-panorama-aura-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 198,
             "part": "root",
             "landsOn": "animation",
@@ -1847,7 +1847,7 @@
           },
           {
             "variable": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 198,
             "part": "root",
             "landsOn": "animation",
@@ -1863,7 +1863,7 @@
           },
           {
             "variable": "--ds-decision-panorama-aura-timing",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 198,
             "part": "root",
             "landsOn": "animation",
@@ -1880,7 +1880,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 198,
             "part": "root",
             "landsOn": "animation",
@@ -1896,7 +1896,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 209,
             "part": "root",
             "landsOn": "gap",
@@ -1912,7 +1912,7 @@
           },
           {
             "variable": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 210,
             "part": "root",
             "landsOn": "margin-top",
@@ -1928,7 +1928,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 214,
             "part": "root",
             "landsOn": "color",
@@ -1944,7 +1944,7 @@
           },
           {
             "variable": "--ds-decision-panorama-title-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 215,
             "part": "root",
             "landsOn": "font-size",
@@ -1961,7 +1961,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-4xl",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 215,
             "part": "root",
             "landsOn": "font-size",
@@ -1977,7 +1977,7 @@
           },
           {
             "variable": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 216,
             "part": "root",
             "landsOn": "font-weight",
@@ -1993,7 +1993,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 223,
             "part": "root",
             "landsOn": "color",
@@ -2009,7 +2009,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 224,
             "part": "root",
             "landsOn": "font-size",
@@ -2025,7 +2025,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 233,
             "part": "root",
             "landsOn": "gap",
@@ -2041,7 +2041,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 234,
             "part": "root",
             "landsOn": "margin-top",
@@ -2057,7 +2057,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 241,
             "part": "root",
             "landsOn": "gap",
@@ -2073,7 +2073,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 242,
             "part": "root",
             "landsOn": "margin-top",
@@ -2089,7 +2089,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 243,
             "part": "root",
             "landsOn": "padding-bottom",
@@ -2105,7 +2105,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 244,
             "part": "root",
             "landsOn": "border-bottom",
@@ -2122,7 +2122,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 244,
             "part": "root",
             "landsOn": "border-bottom",
@@ -2138,7 +2138,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 248,
             "part": "root",
             "landsOn": "color",
@@ -2154,7 +2154,7 @@
           },
           {
             "variable": "--ds-decision-panorama-decision-title-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 249,
             "part": "root",
             "landsOn": "font-size",
@@ -2171,7 +2171,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-2xl",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 249,
             "part": "root",
             "landsOn": "font-size",
@@ -2187,7 +2187,7 @@
           },
           {
             "variable": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 250,
             "part": "root",
             "landsOn": "font-weight",
@@ -2203,7 +2203,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 257,
             "part": "root",
             "landsOn": "color",
@@ -2219,7 +2219,7 @@
           },
           {
             "variable": "--ds-decision-panorama-score-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 258,
             "part": "root",
             "landsOn": "font-size",
@@ -2236,7 +2236,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-5xl",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 258,
             "part": "root",
             "landsOn": "font-size",
@@ -2252,7 +2252,7 @@
           },
           {
             "variable": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 259,
             "part": "root",
             "landsOn": "font-weight",
@@ -2268,7 +2268,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 274,
             "part": "root",
             "landsOn": "margin-top",
@@ -2284,7 +2284,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 275,
             "part": "root",
             "landsOn": "color",
@@ -2300,7 +2300,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 276,
             "part": "root",
             "landsOn": "font-size",
@@ -2316,7 +2316,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 281,
             "part": "root",
             "landsOn": "margin-top",
@@ -2332,7 +2332,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 285,
             "part": "root",
             "landsOn": "margin-top",
@@ -2348,7 +2348,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 286,
             "part": "root",
             "landsOn": "padding-top",
@@ -2364,7 +2364,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 287,
             "part": "root",
             "landsOn": "border-top",
@@ -2381,7 +2381,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 287,
             "part": "root",
             "landsOn": "border-top",
@@ -2397,7 +2397,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 288,
             "part": "root",
             "landsOn": "color",
@@ -2413,7 +2413,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 289,
             "part": "root",
             "landsOn": "font-size",
@@ -2429,7 +2429,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 298,
             "part": "actions",
             "landsOn": "gap",
@@ -2445,7 +2445,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 299,
             "part": "actions",
             "landsOn": "padding",
@@ -2461,7 +2461,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 300,
             "part": "actions",
             "landsOn": "border-top",
@@ -2478,7 +2478,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 300,
             "part": "actions",
             "landsOn": "border-top",
@@ -2494,7 +2494,7 @@
           },
           {
             "variable": "--ds-surface-panel-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2511,7 +2511,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2527,7 +2527,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2544,7 +2544,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2560,7 +2560,7 @@
           },
           {
             "variable": "--ds-surface-panel-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2577,7 +2577,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2593,7 +2593,7 @@
           },
           {
             "variable": "--ds-surface-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2610,7 +2610,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 313,
             "part": "actions",
             "landsOn": "background",
@@ -2626,7 +2626,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 335,
             "part": "identity",
             "landsOn": "border-bottom",
@@ -2645,7 +2645,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 335,
             "part": "identity",
             "landsOn": "border-bottom",
@@ -2663,7 +2663,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 341,
             "part": "context",
             "landsOn": "border-inline-end",
@@ -2682,7 +2682,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 341,
             "part": "context",
             "landsOn": "border-inline-end",
@@ -2700,7 +2700,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 353,
             "part": "root",
             "landsOn": "border-radius",
@@ -2718,7 +2718,7 @@
           },
           {
             "variable": "--ds-surface-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 373,
             "part": "decision",
             "landsOn": "border-bottom",
@@ -2737,7 +2737,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
             "line": 373,
             "part": "decision",
             "landsOn": "border-bottom",
@@ -2762,7 +2762,7 @@
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
               "engine": "engine-agnostic",
               "lines": 459,
               "role": "skin-css",
@@ -2778,7 +2778,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
               "paintKind": "own"
             }
           ]
@@ -2842,13 +2842,13 @@
         {
           "channelId": "--_ds-decision-panorama-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2858,13 +2858,13 @@
         {
           "channelId": "--_ds-decision-panorama-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2874,13 +2874,13 @@
         {
           "channelId": "--_ds-decision-panorama-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2890,13 +2890,13 @@
         {
           "channelId": "--_ds-decision-panorama-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2906,13 +2906,13 @@
         {
           "channelId": "--_ds-decision-panorama-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2922,13 +2922,13 @@
         {
           "channelId": "--_ds-decision-panorama-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2961,7 +2961,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
@@ -2976,7 +2976,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
@@ -2991,7 +2991,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
@@ -3006,7 +3006,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
@@ -3038,13 +3038,13 @@
         {
           "channelId": "--_ds-decision-panorama-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3076,13 +3076,13 @@
         {
           "channelId": "--_ds-decision-panorama-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3112,13 +3112,13 @@
         {
           "channelId": "--_ds-decision-panorama-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3137,7 +3137,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3159,13 +3159,13 @@
         {
           "channelId": "--_ds-decision-panorama-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3175,13 +3175,13 @@
         {
           "channelId": "--_ds-decision-panorama-decision-title-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3190,13 +3190,13 @@
         {
           "channelId": "--_ds-decision-panorama-score-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3205,13 +3205,13 @@
         {
           "channelId": "--_ds-decision-panorama-title-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3229,7 +3229,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3274,13 +3274,13 @@
         {
           "channelId": "--_ds-decision-panorama-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3368,13 +3368,13 @@
         {
           "channelId": "--_ds-decision-panorama-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/decision-panorama"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/decision-panorama/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3398,7 +3398,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3454,7 +3454,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3504,11 +3504,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

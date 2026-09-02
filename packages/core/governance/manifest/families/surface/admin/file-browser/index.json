@@ -8,15 +8,15 @@
     "components": [
       "FileBrowserSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/admin",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/admin/file-browser",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/admin",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/admin/file-browser",
     "publicComponents": [
       "FileBrowserSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "55904f91f6f49707ef037650aea2f8c277957942ec048d521b017a04650e744f"
+    "inventoryRowDigest": "a6c370946c17c48bbc66e71e3844a0c0b7fcfa35a1479bc76e5bd49f6c28a43a"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/admin/file-browser",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css"
+      "packages/core/src/components/surfaces/presentation/pages/admin/file-browser",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css"
     ],
     "stableParts": [
       "empty-slot",
@@ -102,7 +102,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-action` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:45"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:45"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -111,7 +111,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-breadcrumb` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:39"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:39"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -120,9 +120,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-card` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:79",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:88",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:94"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:79",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:88",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:94"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -131,7 +131,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-card-icon` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:88"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:88"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -140,7 +140,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-card-line` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:94"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:94"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -149,9 +149,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-row` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:53",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:57",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:64"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:53",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:57",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:64"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -160,7 +160,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-row-icon` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:57"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:57"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -169,7 +169,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-file-browser__skeleton-row-line` bound by the root pair `.ds-surface.ds-file-browser`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css:64"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css:64"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -476,7 +476,7 @@
         "atRuleContexts": {}
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/file-browser/index.css",
         "rootAnchor": ".ds-surface.ds-file-browser",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -522,7 +522,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -541,7 +541,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -560,7 +560,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -579,7 +579,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.radius-scale",
@@ -604,7 +604,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -623,7 +623,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -642,7 +642,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -669,7 +669,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -689,7 +689,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -709,7 +709,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -729,7 +729,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -749,7 +749,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -769,7 +769,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -788,7 +788,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "chrome.anatomy",
@@ -813,7 +813,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -826,7 +826,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -872,7 +872,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -903,7 +903,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -924,11 +924,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

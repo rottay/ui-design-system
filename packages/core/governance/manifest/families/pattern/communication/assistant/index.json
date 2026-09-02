@@ -15,8 +15,8 @@
       "ConfirmActionCard",
       "MessageBubble"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/communication/assistant",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/communication/assistant",
     "publicComponents": [
       "AssistantStatusBadge",
       "AssistantStatusIndicator",
@@ -30,7 +30,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "44ea1d200003147937736f64b746e499e15098777e7e71131d8162f101046651"
+    "inventoryRowDigest": "3196a3ea7f76fe06f6323576b0c446e35c722e6cc6e4880f3881669cd1de8851"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -42,9 +42,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/communication/assistant/index.tsx",
-      "packages/core/src/ui/patterns/communication/assistant/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css"
+      "packages/core/src/components/patterns/communication/assistant/index.tsx",
+      "packages/core/src/components/patterns/communication/assistant/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css"
     ],
     "stableParts": [
       "author",
@@ -101,137 +101,137 @@
           "part": "author",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:729",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:355"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:729",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:355"
           ]
         },
         {
           "part": "caret",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:291",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:109",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:114"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:291",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:109",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:114"
           ]
         },
         {
           "part": "diff-arrow",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:503",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:533",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:260"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:503",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:533",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:260"
           ]
         },
         {
           "part": "diff-cell-wrap",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:521",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:536",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:275"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:521",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:536",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:275"
           ]
         },
         {
           "part": "diff-head-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:500",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:504",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:256",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:282"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:500",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:504",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:256",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:282"
           ]
         },
         {
           "part": "diff-label",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:518",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:268"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:518",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:268"
           ]
         },
         {
           "part": "diff-spacer",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:499",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:252"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:499",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:252"
           ]
         },
         {
           "part": "divider",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:513",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:286",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:381"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:513",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:286",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:381"
           ]
         },
         {
           "part": "dot",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:458",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:208",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:213"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:458",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:208",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:213"
           ]
         },
         {
           "part": "dots",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:331",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:140"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:331",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:140"
           ]
         },
         {
           "part": "preview-cell",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:524",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:539",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:281",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:292"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:524",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:539",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:281",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:292"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:230",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:275",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:322",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:370",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:453",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:490"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:230",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:275",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:322",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:370",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:453",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:490"
           ]
         },
         {
           "part": "timestamp",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:759",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:363"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:759",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:363"
           ]
         },
         {
           "part": "tool-card",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:393",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:171",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:174"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:393",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:171",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:174"
           ]
         },
         {
           "part": "typing-dot",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:333",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:144",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:152",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:155"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:333",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:144",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:152",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:155"
           ]
         }
       ],
@@ -239,42 +239,42 @@
         {
           "token": "status=acting",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:234"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:234"
           ],
           "state": "acting"
         },
         {
           "token": "status=error",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:237"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:237"
           ],
           "state": "error"
         },
         {
           "token": "status=idle",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:217"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:217"
           ],
           "state": "idle"
         },
         {
           "token": "status=status",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:459"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:459"
           ],
           "state": "status"
         },
         {
           "token": "status=streaming",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:227"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:227"
           ],
           "state": "streaming"
         },
         {
           "token": "status=thinking",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:220"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:220"
           ],
           "state": "thinking"
         }
@@ -283,121 +283,121 @@
         {
           "token": "align=alignEnd ? 'end' : 'start'",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:713"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:713"
           ]
         },
         {
           "token": "align=end",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:338"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:338"
           ]
         },
         {
           "token": "change=added",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:306"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:306"
           ]
         },
         {
           "token": "change=change",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:526",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:541"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:526",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:541"
           ]
         },
         {
           "token": "change=removed",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:298",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:302",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:312"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:298",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:302",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:312"
           ]
         },
         {
           "token": "change=updated",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:299",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:309"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:299",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:309"
           ]
         },
         {
           "token": "color=default",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:33",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:35"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:33",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:35"
           ]
         },
         {
           "token": "diff-side=after",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:504",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:536",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:540",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:306",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:309",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:312"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:504",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:536",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:540",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:306",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:309",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:312"
           ]
         },
         {
           "token": "diff-side=before",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:500",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:521",
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:525",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:292",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:298",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:299"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:500",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:521",
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:525",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:292",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:298",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:299"
           ]
         },
         {
           "token": "motion=animate ? 'live' : 'static'",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:460"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:460"
           ]
         },
         {
           "token": "motion=live",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:114",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:119",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:208",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:213"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:114",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:119",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:208",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:213"
           ]
         },
         {
           "token": "motion=reduceMotion ? 'static' : 'live'",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:292"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:292"
           ]
         },
         {
           "token": "tone=danger",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:180"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:180"
           ]
         },
         {
           "token": "tone=info",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:183"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:183"
           ]
         },
         {
           "token": "tone=success",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:174"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:174"
           ]
         },
         {
           "token": "tone=tone",
           "at": [
-            "packages/core/src/ui/patterns/communication/assistant/index.tsx:393"
+            "packages/core/src/components/patterns/communication/assistant/index.tsx:393"
           ]
         },
         {
           "token": "tone=warning",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css:177"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css:177"
           ]
         }
       ],
@@ -411,7 +411,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 111,
             "fallback": false,
             "fallbackValue": null,
@@ -424,7 +424,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 112,
             "fallback": false,
             "fallbackValue": null,
@@ -437,7 +437,7 @@
           },
           {
             "name": "--_ds-assistant-caret-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 115,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2)",
@@ -450,7 +450,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 115,
             "fallback": false,
             "fallbackValue": null,
@@ -463,7 +463,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 138,
             "fallback": false,
             "fallbackValue": null,
@@ -476,7 +476,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 142,
             "fallback": false,
             "fallbackValue": null,
@@ -489,7 +489,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 145,
             "fallback": false,
             "fallbackValue": null,
@@ -502,7 +502,7 @@
           },
           {
             "name": "--ds-spacing-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 146,
             "fallback": false,
             "fallbackValue": null,
@@ -515,7 +515,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 148,
             "fallback": false,
             "fallbackValue": null,
@@ -528,7 +528,7 @@
           },
           {
             "name": "--_ds-assistant-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 149,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
@@ -541,7 +541,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 149,
             "fallback": false,
             "fallbackValue": null,
@@ -554,7 +554,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 150,
             "fallback": false,
             "fallbackValue": null,
@@ -567,7 +567,7 @@
           },
           {
             "name": "--_ds-assistant-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 153,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
@@ -580,7 +580,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -593,7 +593,7 @@
           },
           {
             "name": "--_ds-assistant-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 156,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
@@ -606,7 +606,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 156,
             "fallback": false,
             "fallbackValue": null,
@@ -619,7 +619,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 172,
             "fallback": false,
             "fallbackValue": null,
@@ -632,7 +632,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 175,
             "fallback": false,
             "fallbackValue": null,
@@ -645,7 +645,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 178,
             "fallback": false,
             "fallbackValue": null,
@@ -658,7 +658,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 181,
             "fallback": false,
             "fallbackValue": null,
@@ -671,7 +671,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 184,
             "fallback": false,
             "fallbackValue": null,
@@ -684,7 +684,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 201,
             "fallback": false,
             "fallbackValue": null,
@@ -697,7 +697,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 204,
             "fallback": false,
             "fallbackValue": null,
@@ -710,7 +710,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 205,
             "fallback": false,
             "fallbackValue": null,
@@ -723,7 +723,7 @@
           },
           {
             "name": "--_ds-assistant-dot-duration",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 209,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-motion-glacial) * 2.2)",
@@ -736,7 +736,7 @@
           },
           {
             "name": "--ds-motion-glacial",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 209,
             "fallback": false,
             "fallbackValue": null,
@@ -749,7 +749,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 210,
             "fallback": false,
             "fallbackValue": null,
@@ -762,7 +762,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 218,
             "fallback": false,
             "fallbackValue": null,
@@ -775,7 +775,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 221,
             "fallback": false,
             "fallbackValue": null,
@@ -788,7 +788,7 @@
           },
           {
             "name": "--ds-shadow-glow-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 224,
             "fallback": false,
             "fallbackValue": null,
@@ -801,7 +801,7 @@
           },
           {
             "name": "--ds-color-primary-500",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 228,
             "fallback": false,
             "fallbackValue": null,
@@ -814,7 +814,7 @@
           },
           {
             "name": "--ds-shadow-glow-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 231,
             "fallback": false,
             "fallbackValue": null,
@@ -827,7 +827,7 @@
           },
           {
             "name": "--ds-color-warning",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 235,
             "fallback": false,
             "fallbackValue": null,
@@ -840,7 +840,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 238,
             "fallback": false,
             "fallbackValue": null,
@@ -853,7 +853,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 266,
             "fallback": false,
             "fallbackValue": null,
@@ -866,7 +866,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 288,
             "fallback": false,
             "fallbackValue": null,
@@ -879,7 +879,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 289,
             "fallback": false,
             "fallbackValue": null,
@@ -892,7 +892,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 293,
             "fallback": false,
             "fallbackValue": null,
@@ -905,7 +905,7 @@
           },
           {
             "name": "--ds-color-error",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 303,
             "fallback": false,
             "fallbackValue": null,
@@ -918,7 +918,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 307,
             "fallback": false,
             "fallbackValue": null,
@@ -931,7 +931,7 @@
           },
           {
             "name": "--ds-color-success",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 310,
             "fallback": false,
             "fallbackValue": null,
@@ -944,7 +944,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 313,
             "fallback": false,
             "fallbackValue": null,
@@ -957,7 +957,7 @@
           },
           {
             "name": "--_ds-assistant-bubble-measure",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 342,
             "fallback": true,
             "fallbackValue": "80%",
@@ -970,7 +970,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 364,
             "fallback": false,
             "fallbackValue": null,
@@ -983,7 +983,7 @@
           },
           {
             "name": "--ds-font-family-mono",
-            "file": "packages/core/src/ui/patterns/communication/assistant/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/assistant/index.tsx",
             "line": 268,
             "fallback": false,
             "fallbackValue": null,
@@ -997,25 +997,25 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 88,
             "literal": "2px",
             "text": "transform: translateY(-2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 261,
             "literal": "1rem",
             "text": "inline-size: 1rem;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 289,
             "literal": "1px",
             "text": "border-top: 1px solid var(--ds-color-border);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
             "line": 346,
             "literal": "30rem",
             "text": "@container ds-assistant-bubble (inline-size < 30rem) {"
@@ -1062,7 +1062,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -1081,7 +1081,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -1102,13 +1102,13 @@
         {
           "channelId": "--_ds-assistant-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/assistant"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1126,7 +1126,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reviewedFrom": "anatomy",
         "bindings": [
@@ -1159,7 +1159,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -1178,7 +1178,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -1198,7 +1198,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
@@ -1247,13 +1247,13 @@
         {
           "channelId": "--_ds-assistant-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/assistant"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/assistant/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1272,7 +1272,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -1297,7 +1297,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "legibilidad del mensaje: mate; la tinta manda",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1317,7 +1317,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de conversacion, no chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1337,7 +1337,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -1357,7 +1357,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -1376,7 +1376,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -1402,7 +1402,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1415,7 +1415,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -1461,7 +1461,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1500,7 +1500,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los ticks de estado del mensaje son iconos de la libreria",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -1521,11 +1521,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

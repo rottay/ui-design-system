@@ -8,15 +8,15 @@
     "components": [
       "AutoComplete"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/AutoComplete",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/auto-complete",
     "publicComponents": [
       "AutoComplete"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "8af712963385da2138e68356bf1b22c0d61d05cea2d782c204c5dff7f5d641b3"
+    "inventoryRowDigest": "48b8c4ed21aeedf9e54f17fefcf726fdee6087b2e6192072f1eaabe85883ed00"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css",
-      "packages/core/src/ui/primitives/inputs/AutoComplete"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css",
+      "packages/core/src/components/primitives/inputs/auto-complete"
     ],
     "stableParts": [
       "input",
@@ -59,9 +59,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The trigger is a combobox: role, aria-haspopup, aria-expanded and aria-activedescendant are forwarded from the behaviour layer onto the input, and the active option is announced through aria-activedescendant rather than focus movement. [at packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:372, packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:373, packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:374, packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:376]",
-      "The listbox owner keeps role=\"listbox\" and every direct child row keeps role=\"option\" - a disabled or loading row stays an option and carries aria-disabled instead of losing the role, so aria-required-children is not broken. [at packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:411, packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:429, packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:435]",
-      "Error posture is stamped as aria-invalid on the input, not merely painted. [at packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:371]"
+      "The trigger is a combobox: role, aria-haspopup, aria-expanded and aria-activedescendant are forwarded from the behaviour layer onto the input, and the active option is announced through aria-activedescendant rather than focus movement. [at packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:372, packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:373, packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:374, packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:376]",
+      "The listbox owner keeps role=\"listbox\" and every direct child row keeps role=\"option\" - a disabled or loading row stays an option and carries aria-disabled instead of losing the role, so aria-required-children is not broken. [at packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:411, packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:429, packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:435]",
+      "Error posture is stamped as aria-invalid on the input, not merely painted. [at packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:371]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -84,9 +84,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:365",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:292",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:90"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:365",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:90"
           ]
         },
         {
@@ -94,9 +94,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:464",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:318",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:277"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:464",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:318",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:277"
           ]
         },
         {
@@ -104,9 +104,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:391",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:300",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:197"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:391",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:300",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:197"
           ]
         },
         {
@@ -114,9 +114,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:410",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:308",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:233"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:410",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:308",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:233"
           ]
         },
         {
@@ -124,8 +124,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:429",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:364"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:429",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:364"
           ]
         },
         {
@@ -133,9 +133,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:438",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:326",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:346"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:438",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:326",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:346"
           ]
         },
         {
@@ -143,8 +143,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:480",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:300"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:480",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:300"
           ]
         },
         {
@@ -152,9 +152,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:353",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:276",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:86"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:353",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:276",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:86"
           ]
         },
         {
@@ -162,9 +162,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:349",
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:271",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:82"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:349",
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:271",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:82"
           ]
         },
         {
@@ -172,7 +172,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx:431"
+            "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx:431"
           ]
         }
       ],
@@ -182,7 +182,7 @@
           "scoutAnchorClaim": "element:from, element:to",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:72"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:72"
           ]
         }
       ],
@@ -191,7 +191,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 21,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:139"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:139"
           ],
           "state": "focus-visible"
         },
@@ -199,7 +199,7 @@
           "token": "data-disabled='true'",
           "occurrences": 9,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:307"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:307"
           ],
           "state": "disabled"
         },
@@ -207,7 +207,7 @@
           "token": "data-active='true'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:326"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:326"
           ],
           "state": "active"
         },
@@ -215,7 +215,7 @@
           "token": "data-status='error'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:160"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:160"
           ],
           "state": "error"
         },
@@ -223,7 +223,7 @@
           "token": "data-status='warning'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:168"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:168"
           ],
           "state": "warning"
         },
@@ -231,7 +231,7 @@
           "token": "pseudo:active",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:144"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:144"
           ],
           "state": "active"
         },
@@ -239,7 +239,7 @@
           "token": "pseudo:hover",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:139"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:139"
           ],
           "state": "hover"
         },
@@ -247,7 +247,7 @@
           "token": "pseudo:disabled",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:139"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:139"
           ],
           "state": "disabled"
         },
@@ -255,7 +255,7 @@
           "token": "pseudo:focus",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:42"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:42"
           ],
           "state": "focus"
         }
@@ -265,28 +265,28 @@
           "token": "data-size='lg'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:122"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:122"
           ]
         },
         {
           "token": "data-size='md'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:116"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:116"
           ]
         },
         {
           "token": "data-size='sm'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:110"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:110"
           ]
         },
         {
           "token": "data-match-width='false'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:266"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:266"
           ]
         }
       ],
@@ -295,63 +295,63 @@
           "token": "data-part='root'",
           "occurrences": 179,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:82"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:82"
           ]
         },
         {
           "token": "data-part='input'",
           "occurrences": 57,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:90"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:90"
           ]
         },
         {
           "token": "data-part='option'",
           "occurrences": 43,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:277"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:277"
           ]
         },
         {
           "token": "data-part='clear-button'",
           "occurrences": 30,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:188"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:188"
           ]
         },
         {
           "token": "data-part='dropdown'",
           "occurrences": 23,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:233"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:233"
           ]
         },
         {
           "token": "data-part='loading-state'",
           "occurrences": 13,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:364"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:364"
           ]
         },
         {
           "token": "data-part='empty'",
           "occurrences": 12,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:346"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:346"
           ]
         },
         {
           "token": "data-part='option-label'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:300"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:300"
           ]
         },
         {
           "token": "data-part='input-wrapper'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:86"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:86"
           ]
         }
       ],
@@ -359,22 +359,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/auto-complete/engines/classic/index.tsx",
             "lines": 105
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/auto-complete/engines/modern/index.tsx",
             "lines": 496
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx",
             "lines": 338
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "loading-state",
           "UNATTRIBUTED(elementSelector)",
@@ -498,14 +498,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:139",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-control-border-hover)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:144",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
@@ -533,7 +533,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:188",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:188",
                 "part": "input",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -562,14 +562,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:201",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:201",
                 "part": "clear-button",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "24px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:202",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:202",
                 "part": "clear-button",
                 "property": "block-size",
                 "hasFallback": true,
@@ -597,7 +597,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:239",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:239",
                 "part": "dropdown",
                 "property": "max-block-size",
                 "hasFallback": true,
@@ -625,7 +625,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:244",
                 "part": "dropdown",
                 "property": "scrollbar-width",
                 "hasFallback": true,
@@ -653,7 +653,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:235",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:235",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": true,
@@ -683,28 +683,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:148",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-shadow-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:165",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:165",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-shadow-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:173",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-shadow-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:225",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:225",
                 "part": "clear-button",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -734,7 +734,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:384",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:384",
                 "part": "clear-button",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -763,14 +763,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:151",
                 "part": "input",
                 "property": "opacity",
                 "hasFallback": true,
                 "fallback": "0.5"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:338",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:338",
                 "part": "option",
                 "property": "opacity",
                 "hasFallback": true,
@@ -805,28 +805,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:97",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:97",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:160",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:168",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:180",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -858,7 +858,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:35",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:35",
                 "part": "input",
                 "property": "border",
                 "hasFallback": false,
@@ -891,14 +891,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:147",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:42",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:42",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -931,14 +931,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:209",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:209",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-muted)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:55",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:55",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
@@ -972,14 +972,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:255",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-card)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:59",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:59",
                 "part": "dropdown",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1011,14 +1011,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:252",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:252",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-lg)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:60",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:60",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1051,14 +1051,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:257",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:257",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-elevation-2)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:61",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:61",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1092,21 +1092,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:352",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:352",
                 "part": "empty",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-muted)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:372",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:372",
                 "part": "loading-state",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-muted)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:72",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:72",
                 "part": "empty",
                 "property": "color",
                 "hasFallback": false,
@@ -1139,21 +1139,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:161",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:161",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:164",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:45",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:45",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1184,7 +1184,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:34",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:34",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "large",
                 "hasFallback": false,
@@ -1215,7 +1215,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:33",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:33",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "default",
                 "hasFallback": false,
@@ -1251,28 +1251,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:312",
                 "part": "option",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:323",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:323",
                 "part": "option",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:331",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:331",
                 "part": "option",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "color-mix(in srgb, var(--ds-color-primary) 5%, var(--ds-surface-card))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:68",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:68",
                 "part": "option",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1303,7 +1303,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:36",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:36",
                 "part": "input",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1334,7 +1334,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:32",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:32",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "small",
                 "hasFallback": false,
@@ -1367,21 +1367,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:169",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:169",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:172",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:48",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:48",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1415,21 +1415,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:92",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:92",
                 "part": "input",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:350",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:350",
                 "part": "empty",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:370",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:370",
                 "part": "loading-state",
                 "property": "border",
                 "hasFallback": false,
@@ -1465,28 +1465,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:256",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:256",
                 "part": "dropdown",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:308",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:308",
                 "part": "option",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:319",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:319",
                 "part": "option",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:327",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:327",
                 "part": "option",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1518,14 +1518,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:161",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:161",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:164",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:164",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1557,7 +1557,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete.css:39",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/autocomplete/index.css:39",
                 "part": "input",
                 "property": "color",
                 "hasFallback": false,
@@ -1594,28 +1594,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:99",
                 "part": "input",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:147",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:179",
                 "part": "input",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:312",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
@@ -1650,28 +1650,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:129",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:129",
                 "part": "input",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:209",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:209",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:352",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:352",
                 "part": "empty",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:372",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:372",
                 "part": "loading-state",
                 "property": "color",
                 "hasFallback": false,
@@ -1708,28 +1708,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:98",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:98",
                 "part": "input",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:133",
                 "part": "input",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:178",
                 "part": "input",
                 "property": "-webkit-text-fill-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:216",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
@@ -1761,7 +1761,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:287",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:287",
                 "part": "option",
                 "property": "color",
                 "hasFallback": false,
@@ -1793,14 +1793,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:169",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:169",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:172",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1833,28 +1833,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:110",
                 "part": "input",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:116",
                 "part": "input",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:122",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:122",
                 "part": "input",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:281",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:281",
                 "part": "option",
                 "property": "min-block-size",
                 "hasFallback": false,
@@ -1885,7 +1885,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:257",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:257",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1916,14 +1916,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:255",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:255",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -1955,7 +1955,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:203",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:203",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -1990,28 +1990,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:353",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:353",
                 "part": "empty",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:373",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:373",
                 "part": "loading-state",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:212",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:212",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:250",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:250",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -2042,14 +2042,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:180",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-autocomplete-bg, var(--ds-input-bg, var(--ds-surface-control)))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:183",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:183",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2080,7 +2080,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:179",
                 "part": "input",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -2111,7 +2111,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:178",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:178",
                 "part": "input",
                 "property": "-webkit-text-fill-color",
                 "hasFallback": true,
@@ -2144,28 +2144,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:97",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:97",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:160",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:168",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:180",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2197,7 +2197,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:99",
                 "part": "input",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -2228,14 +2228,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:99",
                 "part": "input",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-border-focus, var(--ds-color-primary))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:179",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:179",
                 "part": "input",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -2269,14 +2269,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:216",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:216",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:221",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:221",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": true,
@@ -2308,7 +2308,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:129",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:129",
                 "part": "input",
                 "property": "color",
                 "hasFallback": true,
@@ -2339,7 +2339,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:160",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
@@ -2371,7 +2371,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:165",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:165",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2402,7 +2402,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:125",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:125",
                 "part": "input",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2433,7 +2433,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:122",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:122",
                 "part": "input",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2464,7 +2464,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:124",
                 "part": "input",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -2496,7 +2496,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:119",
                 "part": "input",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2527,7 +2527,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:116",
                 "part": "input",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2558,7 +2558,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:118",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:118",
                 "part": "input",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -2589,7 +2589,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:130",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:130",
                 "part": "input",
                 "property": "opacity",
                 "hasFallback": false,
@@ -2620,7 +2620,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:134",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:134",
                 "part": "input",
                 "property": "background",
                 "hasFallback": false,
@@ -2651,7 +2651,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:133",
                 "part": "input",
                 "property": "color",
                 "hasFallback": true,
@@ -2683,14 +2683,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:113",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:113",
                 "part": "input",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:288",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:288",
                 "part": "option",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2721,7 +2721,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:110",
                 "part": "input",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2752,7 +2752,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:112",
                 "part": "input",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -2783,7 +2783,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:168",
                 "part": "input",
                 "property": "background",
                 "hasFallback": true,
@@ -2815,7 +2815,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:173",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2847,14 +2847,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:354",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:354",
                 "part": "empty",
                 "property": "line-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:374",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:374",
                 "part": "loading-state",
                 "property": "line-height",
                 "hasFallback": false,
@@ -2887,14 +2887,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:139",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:144",
                 "part": "input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2929,28 +2929,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:104",
                 "part": "input",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:104",
                 "part": "input",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:104",
                 "part": "input",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:212",
                 "part": "clear-button",
                 "property": "transition",
                 "hasFallback": false,
@@ -2986,28 +2986,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:104",
                 "part": "input",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:104",
                 "part": "input",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:104",
                 "part": "input",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:212",
                 "part": "clear-button",
                 "property": "transition",
                 "hasFallback": false,
@@ -3038,7 +3038,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:252",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:252",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3071,21 +3071,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:93",
                 "part": "input",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:351",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:351",
                 "part": "empty",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:371",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:371",
                 "part": "loading-state",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3116,7 +3116,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:284",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:284",
                 "part": "option",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3147,7 +3147,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:281",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:281",
                 "part": "option",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -3181,28 +3181,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:148",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:165",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:165",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:173",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:225",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:225",
                 "part": "clear-button",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -3237,28 +3237,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:111",
                 "part": "input",
                 "property": "padding-block",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:237",
                 "part": "dropdown",
                 "property": "margin-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:238",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:238",
                 "part": "dropdown",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:282",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:282",
                 "part": "option",
                 "property": "padding-block",
                 "hasFallback": false,
@@ -3299,28 +3299,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:123",
                 "part": "input",
                 "property": "padding-block",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:198",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:198",
                 "part": "clear-button",
                 "property": "inset-inline-end",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:251",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:251",
                 "part": "dropdown",
                 "property": "mask-image",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:251",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:251",
                 "part": "dropdown",
                 "property": "mask-image",
                 "hasFallback": false,
@@ -3354,21 +3354,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:117",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:117",
                 "part": "input",
                 "property": "padding-block",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:349",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:349",
                 "part": "empty",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:369",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:369",
                 "part": "loading-state",
                 "property": "padding",
                 "hasFallback": false,
@@ -3402,28 +3402,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:255",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:312",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:323",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:323",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:331",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:331",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
@@ -3455,28 +3455,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:97",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:97",
                 "part": "input",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:160",
                 "part": "input",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:168",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:168",
                 "part": "input",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:180",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:180",
                 "part": "input",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -3509,7 +3509,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:384",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:384",
                 "part": "clear-button",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -3540,7 +3540,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:215",
+                "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:215",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "transition",
                 "hasFallback": false,
@@ -3571,7 +3571,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css:235",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css:235",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": false,
@@ -3606,7 +3606,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/ui/primitives/inputs/AutoComplete/engines/rustic/index.tsx:251",
+            "at": "packages/core/src/components/primitives/inputs/auto-complete/engines/rustic/index.tsx:251",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3680,13 +3680,13 @@
         {
           "channelId": "--_ds-autocomplete-accent-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3696,13 +3696,13 @@
         {
           "channelId": "--_ds-autocomplete-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3712,13 +3712,13 @@
         {
           "channelId": "--_ds-autocomplete-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3727,13 +3727,13 @@
         {
           "channelId": "--_ds-autocomplete-border-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3742,13 +3742,13 @@
         {
           "channelId": "--_ds-autocomplete-clear-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3757,13 +3757,13 @@
         {
           "channelId": "--_ds-autocomplete-dropdown-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3772,13 +3772,13 @@
         {
           "channelId": "--_ds-autocomplete-empty-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3787,13 +3787,13 @@
         {
           "channelId": "--_ds-autocomplete-error-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3802,13 +3802,13 @@
         {
           "channelId": "--_ds-autocomplete-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3818,13 +3818,13 @@
         {
           "channelId": "--_ds-autocomplete-warning-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3877,13 +3877,13 @@
         {
           "channelId": "--_ds-autocomplete-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3903,13 +3903,13 @@
         {
           "channelId": "--_ds-autocomplete-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3919,13 +3919,13 @@
         {
           "channelId": "--_ds-autocomplete-dropdown-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3978,13 +3978,13 @@
         {
           "channelId": "--_ds-autocomplete-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3994,13 +3994,13 @@
         {
           "channelId": "--_ds-autocomplete-clear-reserve",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4009,13 +4009,13 @@
         {
           "channelId": "--_ds-autocomplete-clear-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4024,13 +4024,13 @@
         {
           "channelId": "--_ds-autocomplete-dropdown-max-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4039,13 +4039,13 @@
         {
           "channelId": "--_ds-autocomplete-dropdown-scrollbar-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4081,13 +4081,13 @@
         {
           "channelId": "--_ds-autocomplete-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4195,13 +4195,13 @@
         {
           "channelId": "--_ds-autocomplete-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4211,13 +4211,13 @@
         {
           "channelId": "--_ds-autocomplete-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4227,13 +4227,13 @@
         {
           "channelId": "--_ds-autocomplete-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4243,13 +4243,13 @@
         {
           "channelId": "--_ds-autocomplete-border-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4258,13 +4258,13 @@
         {
           "channelId": "--_ds-autocomplete-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4287,7 +4287,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4343,7 +4343,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4371,7 +4371,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
         ]
       }
     },
@@ -4386,13 +4386,13 @@
         {
           "channelId": "--_ds-autocomplete-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/auto-complete"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/autocomplete/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4412,11 +4412,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

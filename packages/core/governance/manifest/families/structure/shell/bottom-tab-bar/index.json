@@ -8,15 +8,15 @@
     "components": [
       "BottomTabBar"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/shell/bottom-tab-bar",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/shell/bottom-tab-bar",
     "publicComponents": [
       "BottomTabBar"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "7f2089a8637eec7d76f38e71d4922907b39153dc67acc0ed73a9b5f8845d1297"
+    "inventoryRowDigest": "df05b41ff31ba2a48281008e5bc7196b29bc84e1254d46537a086f01ff9eec8d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/shell/bottom-tab-bar",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+      "packages/core/src/components/structures/shell/bottom-tab-bar",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
     ],
     "stableParts": [
       "root",
@@ -54,11 +54,11 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:353, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:354]",
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:362, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:366, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:370]",
-      "keyboard focus is expressed through an outline on :focus-visible [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:188, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:189]",
-      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:125]",
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:318, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:319, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:329]"
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:353, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:354]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:362, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:366, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:370]",
+      "keyboard focus is expressed through an outline on :focus-visible [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:188, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:189]",
+      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:125]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:318, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:319, packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:329]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -86,7 +86,7 @@
           "anchorKind": "data-part",
           "anchor": "root-class-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:168"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:168"
           ]
         },
         {
@@ -94,11 +94,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:118",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:258",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:259",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:260",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:261"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:118",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:258",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:259",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:260",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:261"
           ]
         },
         {
@@ -106,11 +106,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:124",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:282",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:283",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:284",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:285"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:124",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:282",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:283",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:284",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:285"
           ]
         },
         {
@@ -118,11 +118,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:111",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:196",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:210",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:248"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:111",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:196",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:210",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:248"
           ]
         },
         {
@@ -130,11 +130,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:110",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:218",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:219",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:220",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:221"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:110",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:218",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:219",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:220",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:221"
           ]
         },
         {
@@ -142,11 +142,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:132",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:196",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:210",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:292"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:132",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:196",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:210",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:292"
           ]
         },
         {
@@ -154,10 +154,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:178",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:147",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:318",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:319"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:178",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:147",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:318",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:319"
           ]
         },
         {
@@ -165,11 +165,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:106",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:155",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:156",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:157"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:106",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:155",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:156",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:157"
           ]
         }
       ],
@@ -179,11 +179,11 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:101",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:155",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:156",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:157"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:101",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:155",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:156",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:157"
           ]
         }
       ],
@@ -192,8 +192,8 @@
           "token": ":active",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:239",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:244"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:239",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:244"
           ],
           "state": "active"
         },
@@ -201,9 +201,9 @@
           "token": ":focus",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:188",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:189",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:190"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:188",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:189",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:190"
           ],
           "state": "focus"
         },
@@ -211,9 +211,9 @@
           "token": ":focus-visible",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:188",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:189",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:190"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:188",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:189",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:190"
           ],
           "state": "focus-visible"
         },
@@ -221,8 +221,8 @@
           "token": ":hover",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:239"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:239"
           ],
           "state": "hover"
         },
@@ -230,9 +230,9 @@
           "token": "selected=false",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:196",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:239"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:196",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:239"
           ],
           "state": "selected"
         },
@@ -240,9 +240,9 @@
           "token": "selected=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:177",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:178",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:179"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:177",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:178",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:179"
           ],
           "state": "selected"
         },
@@ -250,7 +250,7 @@
           "token": "data-selected",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:107"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:107"
           ],
           "state": "selected"
         },
@@ -258,7 +258,7 @@
           "token": "aria-current",
           "axis": "aria-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:103"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:103"
           ],
           "state": "aria-current"
         }
@@ -268,14 +268,14 @@
           "token": "wide=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:273"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:273"
           ]
         },
         {
           "token": "data-wide",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:120"
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:120"
           ]
         }
       ],
@@ -285,47 +285,47 @@
             "token": "@container ds-bottom-tab-bar (max-width: 360px) >> .rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:329"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:329"
             ]
           },
           {
             "token": "@container ds-bottom-tab-bar (max-width: 360px) >> .rottay-bottom-tab-bar__label[data-part='label']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:333"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:333"
             ]
           },
           {
             "token": "@container ds-bottom-tab-bar (min-width: 600px) >> .rottay-bottom-tab-bar__list[data-part='list']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:318",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:319"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:318",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:319"
             ]
           },
           {
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:362",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:366",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:370"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:362",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:366",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:370"
             ]
           },
           {
             "token": "@media(hover: hover)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:203",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:239"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:203",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:239"
             ]
           },
           {
             "token": "@media(prefers-reduced-motion: reduce)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:353",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:354"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:353",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:354"
             ]
           }
         ],
@@ -337,15 +337,15 @@
             "token": "aria-hidden",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:122"
+              "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:122"
             ]
           },
           {
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:104",
-              "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:171"
+              "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:104",
+              "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:171"
             ]
           }
         ],
@@ -357,9 +357,9 @@
             "token": "::before",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:177",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:178",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:179"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:177",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:178",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:179"
             ]
           }
         ],
@@ -371,16 +371,16 @@
             "token": "testid=bottom-tab-bar",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:142"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:142"
             ]
           },
           {
             "token": "data-testid",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:105",
-              "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:121",
-              "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:170"
+              "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:105",
+              "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:121",
+              "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx:170"
             ]
           }
         ],
@@ -389,11 +389,11 @@
       "engineDivergence": {
         "hasEnginesDirectory": true,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css": {
             "rows": 109,
             "layer": "engine-agnostic skin"
           },
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css": {
             "rows": 1,
             "layer": "engine-agnostic skin"
           }
@@ -417,7 +417,7 @@
           {
             "variable": "--ds-shell-bottom-inset",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css:422",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css:422",
             "selector": ".rottay-app-shell:has(.rottay-bottom-tab-bar[data-part='root']) .rottay-app-shell__main",
             "states": [],
             "landsOn": "--ds-shell-main-padding-block-end",
@@ -430,14 +430,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/shell/app-shell/index.tsx:299"
+              "packages/core/src/components/structures/shell/app-shell/index.tsx:299"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-2xs",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:104",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-label-size",
@@ -450,14 +450,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:104",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-label-size",
@@ -470,14 +470,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-safe-area-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:108",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:108",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-safe-area",
@@ -495,7 +495,7 @@
           {
             "variable": "--_ds-bottom-tab-bar-tab-lead",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-content-block-size",
@@ -508,14 +508,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:99"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:99"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-pill-block-size",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-content-block-size",
@@ -528,14 +528,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:101"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:101"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-gap",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-content-block-size",
@@ -548,14 +548,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:103"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:103"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-size",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-content-block-size",
@@ -568,14 +568,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:104"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:104"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-leading",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-content-block-size",
@@ -588,14 +588,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:107"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:107"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-tab-trail",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--_ds-bottom-tab-bar-content-block-size",
@@ -608,14 +608,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:100"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:100"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-content-block-size",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:121",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:121",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--ds-bottom-tab-bar-reserved-block-end",
@@ -628,14 +628,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:112"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:112"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-safe-area",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:121",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:121",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "--ds-bottom-tab-bar-reserved-block-end",
@@ -648,14 +648,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:108"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:108"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-bottom-tab-bar-z",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:128",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:128",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "z-index",
@@ -673,7 +673,7 @@
           {
             "variable": "--_ds-bottom-tab-bar-safe-area",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:129",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:129",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "padding-block-end",
@@ -686,14 +686,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:108"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:108"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:130",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "background",
@@ -706,8 +706,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -716,7 +716,7 @@
           {
             "variable": "--ds-bottom-tab-bar-shadow",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:131",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "box-shadow",
@@ -734,7 +734,7 @@
           {
             "variable": "--ds-elevation-2",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:131",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "box-shadow",
@@ -747,7 +747,7 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:801",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:801",
               "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:88",
               "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:94"
             ],
@@ -756,7 +756,7 @@
           {
             "variable": "--ds-motion-reveal",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:132",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "animation",
@@ -769,16 +769,16 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:106",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:403",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:930"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:106",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:403",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:930"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-slow",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:132",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "animation",
@@ -791,16 +791,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:96",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:400",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:927"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:96",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:400",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:927"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:132",
             "selector": ".rottay-bottom-tab-bar[data-part='root']",
             "states": [],
             "landsOn": "animation",
@@ -813,14 +813,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-border",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:142",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:142",
             "selector": ".rottay-bottom-tab-bar[data-part='root'][data-testid='bottom-tab-bar'][aria-label]",
             "states": [
               "testid=bottom-tab-bar"
@@ -836,16 +836,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:28"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-touch-target-min",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:160",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:160",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "min-inline-size",
@@ -858,14 +858,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:921"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:921"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-touch-target-min",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:161",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "min-block-size",
@@ -878,14 +878,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:921"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:921"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-tab-lead",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:162",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "padding-block",
@@ -898,14 +898,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:99"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:99"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-tab-trail",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:162",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "padding-block",
@@ -918,14 +918,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:100"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:100"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-feedback",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:169",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:169",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "transition",
@@ -938,16 +938,16 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:103",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:402",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:929"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:103",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:402",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:929"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-fast",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:169",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:169",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "transition",
@@ -960,16 +960,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:169",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:169",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']",
             "states": [],
             "landsOn": "transition",
@@ -982,14 +982,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-active-rule-size",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:181",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:181",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before",
             "states": [
               "selected=true",
@@ -1010,7 +1010,7 @@
           {
             "variable": "--ds-radius-full",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:182",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:182",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before",
             "states": [
               "selected=true",
@@ -1026,17 +1026,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:775",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:775",
               "packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:450",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:46",
-              "packages/core/src/ui/primitives/inputs/Button/contracts/index.ts:629"
+              "packages/core/tests/fixtures/tenants/default/index.css:46",
+              "packages/core/src/components/primitives/inputs/Button/contracts/index.ts:629"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-radius-full",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:182",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:182",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before",
             "states": [
               "selected=true",
@@ -1052,17 +1052,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:775",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:775",
               "packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:450",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:46",
-              "packages/core/src/ui/primitives/inputs/Button/contracts/index.ts:629"
+              "packages/core/tests/fixtures/tenants/default/index.css:46",
+              "packages/core/src/components/primitives/inputs/Button/contracts/index.ts:629"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--_ds-bottom-tab-bar-active-rule-ink",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:183",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:183",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before",
             "states": [
               "selected=true",
@@ -1083,7 +1083,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:183",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:183",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true']::before",
             "states": [
               "selected=true",
@@ -1099,17 +1099,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-focus-ring-width",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:188",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible",
             "states": [
               ":focus-visible",
@@ -1125,14 +1125,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:872"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:872"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-focus-ring-color",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:188",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible",
             "states": [
               ":focus-visible",
@@ -1148,15 +1148,15 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:879",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2140"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:879",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2140"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:188",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible",
             "states": [
               ":focus-visible",
@@ -1172,17 +1172,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-focus-ring-width",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:189",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:189",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible",
             "states": [
               ":focus-visible",
@@ -1198,14 +1198,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:872"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:872"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-radius-md",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:190",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:190",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button']:focus-visible",
             "states": [
               ":focus-visible",
@@ -1222,16 +1222,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:236",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:770",
-              "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json:150",
-              "packages/core/src/tooling/resolution-probe/public/drills/index.mjs:59"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:770",
+              "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json:150",
+              "packages/core/scripts/check/tokens/cascade/probe/public/drills/index.mjs:59"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:196",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:196",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'], .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__icon, .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false'] .rottay-bottom-tab-bar__label",
             "states": [
               "selected=false"
@@ -1248,15 +1248,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-text-secondary",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:203",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:203",
             "selector": "@media (hover: hover) >> .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover, .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__icon, .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:hover .rottay-bottom-tab-bar__label",
             "states": [
               "selected=false",
@@ -1275,15 +1275,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:57",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:218",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-primary",
             "part": "tab-button",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:210",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:210",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'], .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon, .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__label",
             "states": [
               "selected=true"
@@ -1298,17 +1298,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--_ds-bottom-tab-bar-pill-block-size",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:222",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:222",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "block-size",
@@ -1321,14 +1321,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:101"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:101"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-pill-inline-padding",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:223",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:223",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "padding-inline",
@@ -1341,15 +1341,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:102",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:329"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:102",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:329"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-radius-full",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:224",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:224",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "border-radius",
@@ -1362,17 +1362,17 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:775",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:775",
               "packages/core/src/foundation/tokens/ts/presentation/brand-themes/evnto/index.ts:450",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:46",
-              "packages/core/src/ui/primitives/inputs/Button/contracts/index.ts:629"
+              "packages/core/tests/fixtures/tenants/default/index.css:46",
+              "packages/core/src/components/primitives/inputs/Button/contracts/index.ts:629"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-motion-feedback",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:225",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "transition",
@@ -1385,16 +1385,16 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:103",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:402",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:929"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:103",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:402",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:929"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-fast",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:225",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "transition",
@@ -1407,16 +1407,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:225",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "transition",
@@ -1429,14 +1429,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-feedback",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:225",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "transition",
@@ -1449,16 +1449,16 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:103",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:402",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:929"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:103",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:402",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:929"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-fast",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:225",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "transition",
@@ -1471,16 +1471,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:225",
             "selector": ".rottay-bottom-tab-bar__icon-wrap[data-part='icon-wrap']",
             "states": [],
             "landsOn": "transition",
@@ -1493,14 +1493,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-pill-bg",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:231",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap",
             "states": [
               "selected=true"
@@ -1520,7 +1520,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:231",
             "selector": ".rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='true'] .rottay-bottom-tab-bar__icon-wrap",
             "states": [
               "selected=true"
@@ -1535,17 +1535,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "icon-wrap",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:239",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:239",
             "selector": "@media (hover: hover) >> .rottay-bottom-tab-bar__tab[data-part='tab-button'][data-selected='false']:not(:active):hover .rottay-bottom-tab-bar__icon-wrap",
             "states": [
               "selected=false",
@@ -1565,15 +1565,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-error",
             "part": "badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:268",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:268",
             "selector": ".rottay-bottom-tab-bar__badge[data-part='badge']",
             "states": [],
             "landsOn": "background",
@@ -1586,17 +1586,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "badge",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:269",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:269",
             "selector": ".rottay-bottom-tab-bar__badge[data-part='badge']",
             "states": [],
             "landsOn": "box-shadow",
@@ -1609,8 +1609,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -1619,7 +1619,7 @@
           {
             "variable": "--ds-color-text-on-error",
             "part": "badge-text",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:282",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:282",
             "selector": ".rottay-bottom-tab-bar__badge-text[data-part='badge-text']",
             "states": [],
             "landsOn": "color",
@@ -1637,7 +1637,7 @@
           {
             "variable": "--ds-color-text-on-primary",
             "part": "badge-text",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:282",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:282",
             "selector": ".rottay-bottom-tab-bar__badge-text[data-part='badge-text']",
             "states": [],
             "landsOn": "color",
@@ -1650,8 +1650,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:225",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2132",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:225",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2132",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:474"
             ],
             "declarationSiteCount": 3
@@ -1659,7 +1659,7 @@
           {
             "variable": "--ds-font-size-2xs",
             "part": "badge-text",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:283",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:283",
             "selector": ".rottay-bottom-tab-bar__badge-text[data-part='badge-text']",
             "states": [],
             "landsOn": "font-size",
@@ -1672,14 +1672,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "badge-text",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:283",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:283",
             "selector": ".rottay-bottom-tab-bar__badge-text[data-part='badge-text']",
             "states": [],
             "landsOn": "font-size",
@@ -1692,14 +1692,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-gap",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:292",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:292",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "margin-block-start",
@@ -1712,14 +1712,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:103"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:103"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-size",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:297",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:297",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "font-size",
@@ -1732,14 +1732,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:104"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:104"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-tracking",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:299",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:299",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "letter-spacing",
@@ -1752,14 +1752,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:333"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:333"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-label-leading",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:300",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:300",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "line-height",
@@ -1772,14 +1772,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:107"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:107"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-feedback",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:301",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:301",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "transition",
@@ -1792,16 +1792,16 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:103",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:402",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:929"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:103",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:402",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:929"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-fast",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:301",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:301",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "transition",
@@ -1814,16 +1814,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:301",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:301",
             "selector": ".rottay-bottom-tab-bar__label[data-part='label']",
             "states": [],
             "landsOn": "transition",
@@ -1836,14 +1836,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-bottom-tab-bar-list-measure",
             "part": "list",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:318",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:318",
             "selector": "@container ds-bottom-tab-bar (min-width: 600px) >> .rottay-bottom-tab-bar__list[data-part='list']",
             "states": [
               "@container ds-bottom-tab-bar (min-width: 600px) >> .rottay-bottom-tab-bar__list[data-part='list']"
@@ -1858,18 +1858,18 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css:110"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css:110"
             ],
             "declarationSiteCount": 1
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css": {
               "rows": 109,
               "layer": "engine-agnostic skin"
             },
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css": {
               "rows": 1,
               "layer": "engine-agnostic skin"
             }
@@ -1903,37 +1903,37 @@
             "styleAttribute": 1
           },
           "perFile": {
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/contracts/index.ts": {
+            "packages/core/src/components/structures/shell/bottom-tab-bar/contracts/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 67
             },
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/engines/classic/index.tsx": {
+            "packages/core/src/components/structures/shell/bottom-tab-bar/engines/classic/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/engines/modern/index.tsx": {
+            "packages/core/src/components/structures/shell/bottom-tab-bar/engines/modern/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/engines/rustic/index.tsx": {
+            "packages/core/src/components/structures/shell/bottom-tab-bar/engines/rustic/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/index.ts": {
+            "packages/core/src/components/structures/shell/bottom-tab-bar/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 31
             },
-            "packages/core/src/ui/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx": {
+            "packages/core/src/components/structures/shell/bottom-tab-bar/runtime/rendering/index.tsx": {
               "classNameOccurrences": 8,
               "dataPartOccurrences": 8,
               "styleAttributeOccurrences": 1,
@@ -1989,13 +1989,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-reserved-block-end",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2012,7 +2012,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2037,7 +2037,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2062,7 +2062,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -2094,7 +2094,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.corner",
@@ -2131,7 +2131,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los controles del shell son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2168,13 +2168,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2202,13 +2202,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2228,13 +2228,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2244,13 +2244,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2268,7 +2268,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2282,13 +2282,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2307,7 +2307,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2321,13 +2321,13 @@
         {
           "channelId": "--_ds-bottom-tab-bar-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2345,7 +2345,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.edge",
@@ -2387,7 +2387,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2400,7 +2400,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2439,7 +2439,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2483,13 +2483,13 @@
         {
           "channelId": "--_ds-page-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/bottom-tab-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/bottom-tab-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2509,11 +2509,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

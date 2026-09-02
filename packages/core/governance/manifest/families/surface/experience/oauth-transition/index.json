@@ -8,15 +8,15 @@
     "components": [
       "OAuthTransitionScreen"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/experience",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/experience",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition",
     "publicComponents": [
       "OAuthTransitionScreen"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fe6f5124ef6a5538a086c2f78e9701619e3291a5151decfc252335d925841ccc"
+    "inventoryRowDigest": "5729f9331378f3493d93ba293ba5bdcecdf99d3ac96090d6b3761ae3a5aac846"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/experience/oauth-transition",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+      "packages/core/src/components/surfaces/presentation/pages/experience/oauth-transition",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
     ],
     "stableParts": [
       "background",
@@ -1349,7 +1349,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-background` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:92"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:92"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1358,10 +1358,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-brand` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:270",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:304",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:311",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:317"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:270",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:304",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:311",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:317"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1370,10 +1370,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-brand-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:304",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:311",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:317",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:436"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:304",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:311",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:317",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:436"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1382,10 +1382,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-card` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:179",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:202",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:210",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:216"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:179",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:202",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:210",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:216"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1394,8 +1394,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-copy-column` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:376",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:382"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:376",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:382"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1404,10 +1404,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-flow` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:583",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:591",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:592",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:605"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:583",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:591",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:592",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:605"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1416,9 +1416,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-flow-node` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:591",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:605",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:643"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:591",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:605",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:643"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1427,10 +1427,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-flow-rail` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:615",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:622",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:635",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2188"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:615",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:622",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:635",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2188"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1439,10 +1439,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-flow-tag` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:592",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:610",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:630",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:644"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:592",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:610",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:630",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:644"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1451,10 +1451,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-footer` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:260",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:443",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1179",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2141"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:260",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:443",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1179",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2141"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1463,8 +1463,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-frame` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:169",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2123"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:169",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2123"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1473,10 +1473,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-grid` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:93",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:102",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:109",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2006"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:93",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:102",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:109",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2006"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1485,7 +1485,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-kicker` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:397"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:397"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1494,8 +1494,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-link` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:75",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:86"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:75",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:86"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1504,9 +1504,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-mark` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:277",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:291",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:298"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:277",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:291",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:298"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1515,8 +1515,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-noise` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:95",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:112"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:95",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:112"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1525,10 +1525,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-phase-moment` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:447",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:462",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:466",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:474"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:447",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:462",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:466",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:474"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1537,7 +1537,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-phase-moment-badge` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:474"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:474"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1546,10 +1546,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-phase-moment-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:508",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:514",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:515",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:523"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:508",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:514",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:515",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:523"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1558,10 +1558,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-phase-moment-icon` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:482",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:496",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:503",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:572"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:482",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:496",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:503",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:572"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1570,10 +1570,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-phase-moment-trace` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:529",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:535",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:544",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:554"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:529",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:535",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:544",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:554"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1582,10 +1582,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-powered` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:319",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1168",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1174",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2148"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:319",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1168",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1174",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2148"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1594,10 +1594,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-provider` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:278",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:292",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:305",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:312"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:278",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:292",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:305",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:312"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1606,10 +1606,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-provider-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:305",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:312",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:318",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:437"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:305",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:312",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:318",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:437"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1618,9 +1618,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-provider-icon` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:278",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:292",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:347"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:278",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:292",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:347"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1629,10 +1629,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-bars` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1347",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1378",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1395",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1404"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1347",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1378",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1395",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1404"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1641,7 +1641,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-beam` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1382"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1382"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1650,10 +1650,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-lane` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1338",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1346",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1354",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1360"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1338",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1346",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1354",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1360"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1662,10 +1662,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-node` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1265",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1273",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1278",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1283"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1265",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1273",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1278",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1283"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1674,8 +1674,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-node-icon` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1311",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1717"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1311",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1717"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1684,7 +1684,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-node-label` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1329"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1329"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1693,9 +1693,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-node-mark` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1312",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1323",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1718"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1312",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1323",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1718"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1704,10 +1704,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-quiet-shell` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1237",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1245",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1255",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1699"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1237",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1245",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1255",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1699"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1716,10 +1716,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-root` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:17",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:57",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:63",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:69"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:17",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:57",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:63",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:69"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1728,10 +1728,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-scene` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:386",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:393",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1224",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1233"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:386",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:393",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1224",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1233"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1740,9 +1740,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-scene-column` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:386",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:393",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2230"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:386",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:393",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2230"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1751,9 +1751,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-bracket` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1656",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1665",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1671"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1656",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1665",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1671"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1762,8 +1762,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-caption` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1677",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1806"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1677",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1806"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1772,10 +1772,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-node` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1330",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1590",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1596",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1597"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1330",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1590",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1596",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1597"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1784,8 +1784,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-node-icon` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1596",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1721"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1596",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1721"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1794,7 +1794,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-node-label` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1330"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1330"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1803,9 +1803,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-node-mark` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1597",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1608",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1722"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1597",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1608",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1722"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1814,10 +1814,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-pulse` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1631",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1644",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1651",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1652"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1631",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1644",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1651",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1652"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1826,9 +1826,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-rail` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1614",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1802",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2239"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1614",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1802",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2239"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1837,10 +1837,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-shell` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1239",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1582",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1706",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2234"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1239",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1582",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1706",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2234"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1849,8 +1849,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signal-track` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1619",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1626"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1619",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1626"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1859,10 +1859,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signature` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1183",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1190",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1199",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1204"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1183",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1190",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1199",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1204"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1871,10 +1871,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signature-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1199",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1204",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1210",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1216"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1199",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1204",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1210",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1216"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1883,7 +1883,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-signature-dot` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1190"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1190"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1892,10 +1892,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-frame` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1812",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1819",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1823",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1827"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1812",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1819",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1823",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1827"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1904,10 +1904,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-node` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1331",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1723",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1724",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1933"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1331",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1723",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1724",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1933"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1916,8 +1916,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-node-icon` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1723",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1961"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1723",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1961"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1926,7 +1926,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-node-label` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1331"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1331"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1935,9 +1935,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-node-mark` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1724",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1962",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1973"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1724",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1962",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1973"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1946,10 +1946,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-orbit` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1848",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1853",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1858",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1979"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1848",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1853",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1858",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1979"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1958,10 +1958,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-pulse` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1842",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1916",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1926",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1929"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1842",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1916",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1926",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1929"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1970,10 +1970,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-scan` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1831",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1892",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1900",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1903"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1831",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1892",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1900",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1903"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1982,9 +1982,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-shell` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1240",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1692",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1712"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1240",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1692",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1712"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -1993,8 +1993,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stack-thread` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1837",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1907"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1837",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1907"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2003,9 +2003,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-stage-shell` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:358",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:369",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2134"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:358",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:369",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2134"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2014,10 +2014,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-status` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1130",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1142",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1148",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1157"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1130",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1142",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1148",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1157"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2026,7 +2026,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-status-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1157"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1157"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2035,7 +2035,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-status-dot` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1148"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1148"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2044,10 +2044,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-step` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:649",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:655",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:664",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:673"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:649",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:655",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:664",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:673"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2056,7 +2056,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-step-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:713"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:713"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2065,9 +2065,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-step-dot` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:695",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:704",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:709"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:695",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:704",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:709"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2076,7 +2076,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-step-index` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:688"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:688"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2085,7 +2085,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-steps` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:649"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:649"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2094,9 +2094,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-subtitle` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:418",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:426",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2177"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:418",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:426",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2177"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2105,10 +2105,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-sweep` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:123",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:124",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:131"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:123",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:124",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:131"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2117,9 +2117,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-title` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:404",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:413",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2172"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:404",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:413",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2172"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2128,9 +2128,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-top` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:259",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:442",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2140"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:259",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:442",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2140"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2139,10 +2139,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-bars` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1348",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1405",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1412",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1423"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1348",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1405",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1412",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1423"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2151,9 +2151,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-core` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1497",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1548",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1719"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1497",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1548",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1719"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2162,8 +2162,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-provider` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1510",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1747"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1510",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1747"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2172,9 +2172,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-radar` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1451",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1730",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:2244"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1451",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1730",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:2244"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2183,10 +2183,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-ring` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1466",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1472",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1476",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1480"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1466",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1472",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1476",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1480"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2195,10 +2195,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-shell` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1238",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1432",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1443",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1700"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1238",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1432",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1443",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1700"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2207,8 +2207,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-sweep` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1484",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1553"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1484",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1553"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2217,10 +2217,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-target` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1524",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1533",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1547",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1557"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1524",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1533",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1547",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1557"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2229,10 +2229,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-target-copy` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1557",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1562",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1566",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1742"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1557",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1562",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1566",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1742"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2241,9 +2241,9 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watch-target-mark` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1533",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1547",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:1720"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1533",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1547",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:1720"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -2252,16 +2252,16 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`rottay-transition-watermark` bound by the root pair `.rottay-transition-root`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:96",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:150",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:161",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css:164"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:96",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:150",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css:164"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
       ],
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
         "rootAnchor": ".rottay-transition-root",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -2401,7 +2401,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
@@ -2416,7 +2416,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
@@ -2431,7 +2431,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
@@ -2446,7 +2446,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
@@ -2478,13 +2478,13 @@
         {
           "channelId": "--_ds-oauth-transition-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2504,13 +2504,13 @@
         {
           "channelId": "--_ds-oauth-transition-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2530,13 +2530,13 @@
         {
           "channelId": "--_ds-oauth-transition-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2556,13 +2556,13 @@
         {
           "channelId": "--_ds-oauth-transition-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2582,13 +2582,13 @@
         {
           "channelId": "--_ds-oauth-transition-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2608,13 +2608,13 @@
         {
           "channelId": "--_ds-oauth-transition-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2633,7 +2633,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2646,7 +2646,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o multi-lector; nivel 2/3)": [
             "--ds-shadow-md"
@@ -2666,13 +2666,13 @@
         {
           "channelId": "--_ds-oauth-transition-screen-gradient-mesh",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2691,7 +2691,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2704,7 +2704,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2717,7 +2717,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2731,13 +2731,13 @@
         {
           "channelId": "--_ds-oauth-transition-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/experience/oauth-transition"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/oauth-transition/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2761,7 +2761,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2774,7 +2774,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2813,7 +2813,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2844,7 +2844,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2858,11 +2858,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

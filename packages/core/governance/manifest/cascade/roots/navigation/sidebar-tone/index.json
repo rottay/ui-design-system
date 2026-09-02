@@ -3,6 +3,7 @@
   "rootId": "navigation.sidebar-tone",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-sidebar-bg",
     "emission": [
       {

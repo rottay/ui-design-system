@@ -3,6 +3,7 @@
   "rootId": "typography.scale",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-type-scale",
     "emission": [
       {
@@ -22,7 +23,7 @@
         "kind": "calc-multiply",
         "formula": "rampa de font-size multiplicada por el dial"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "line": 608,
       "state": "LIVE",
       "toIsPattern": true,

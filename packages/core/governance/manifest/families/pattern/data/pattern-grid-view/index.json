@@ -8,15 +8,15 @@
     "components": [
       "PatternGridView"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/grid-view",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/grid-view",
     "publicComponents": [
       "PatternGridView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "74cf6b629cc744f05d77e7823d708c824e7c4a18db413ff193b0a9105e70d8ab"
+    "inventoryRowDigest": "45711548f7dbb48a92105bf3af8ec02b9dc33dafd97f41221cbe5a29d260fcba"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
-      "packages/core/src/ui/patterns/data/grid-view",
-      "packages/core/src/ui/patterns/data/grid-view/contracts/index.ts",
-      "packages/core/src/ui/patterns/data/grid-view/index.ts",
-      "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx",
-      "packages/core/src/ui/patterns/data/grid-view/runtime/item-identity/index.ts"
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
+      "packages/core/src/components/patterns/data/grid-view",
+      "packages/core/src/components/patterns/data/grid-view/contracts/index.ts",
+      "packages/core/src/components/patterns/data/grid-view/index.ts",
+      "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
+      "packages/core/src/components/patterns/data/grid-view/runtime/item-identity/index.ts"
     ],
     "stableParts": [
       "card-shell",
@@ -50,10 +50,10 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:121]",
-      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:88, packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:89]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (7 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:102, packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:114, packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:156, packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:293]",
-      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-label`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:121]"
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:121]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:88, packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:89]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (7 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:102, packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:114, packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:156, packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:293]",
+      "The family sets ARIA state/label attributes in source (1 sites; observed: `aria-label`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:121]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -83,12 +83,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:101",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:5",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:6",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:7",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:8",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:9"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:101",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:5",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:6",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:7",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:8",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:9"
           ],
           "atSiteCount": 7
         },
@@ -97,7 +97,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:341"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:341"
           ]
         },
         {
@@ -105,13 +105,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:113"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:113"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:15",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:16",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:17",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:18"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:15",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:16",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:17",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:18"
           ],
           "anchorStatus": "verified"
         },
@@ -120,10 +120,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:299"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:299"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:82"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:82"
           ],
           "anchorStatus": "verified"
         },
@@ -132,15 +132,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:154",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:291",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:311",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:67",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:69"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:154",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:291",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:311",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:67",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:69"
           ],
           "atSiteCount": 9,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:68"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:68"
           ],
           "anchorStatus": "verified"
         }
@@ -151,7 +151,7 @@
           "scoutAnchorClaim": "class:ds-grid-view__checkbox-control",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:83"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:83"
           ]
         }
       ],
@@ -161,11 +161,11 @@
           "at": [],
           "state": "empty",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:74",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:75",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:76",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:77",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:78"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:74",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:75",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:76",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:77",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:78"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -175,7 +175,7 @@
           "at": [],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:56"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:56"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -185,9 +185,9 @@
           "at": [],
           "state": "selected",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:88",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:89"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:88",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:89"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -197,7 +197,7 @@
           "at": [],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:62"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:62"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -207,10 +207,10 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:89",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:158",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:295",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:315"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:89",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:158",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:295",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:315"
           ],
           "state": "empty"
         },
@@ -219,8 +219,8 @@
           "occurrences": 3,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:65",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:103"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:65",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:103"
           ],
           "state": "selected"
         },
@@ -229,8 +229,8 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:69",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:103"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:69",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:103"
           ],
           "state": "selected"
         },
@@ -239,7 +239,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:77"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:77"
           ],
           "state": "hover"
         }
@@ -250,7 +250,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
               "paintKind": "own"
             }
           ]
@@ -301,7 +301,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:70",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:70",
               "landsOnProperties": [
                 "box-shadow"
               ],
@@ -315,7 +315,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:20",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:20",
               "landsOnProperties": [
                 "background"
               ],
@@ -329,7 +329,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:44",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:44",
               "landsOnProperties": [
                 "background-image"
               ],
@@ -343,7 +343,7 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:45",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:45",
               "landsOnProperties": [
                 "background-image"
               ],
@@ -357,7 +357,7 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:48",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:48",
               "landsOnProperties": [
                 "background-size"
               ],
@@ -371,7 +371,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:78",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:78",
               "landsOnProperties": [
                 "transform"
               ],
@@ -385,7 +385,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:21",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:21",
               "landsOnProperties": [
                 "min-block-size"
               ],
@@ -399,7 +399,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:61",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:61",
               "landsOnProperties": [
                 "background"
               ],
@@ -413,7 +413,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:62",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:62",
               "landsOnProperties": [
                 "background"
               ],
@@ -427,7 +427,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:22",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:22",
               "landsOnProperties": [
                 "transition"
               ],
@@ -441,7 +441,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:256",
+              "firstReadAt": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:256",
               "landsOnProperties": [
                 "padding"
               ],
@@ -454,35 +454,35 @@
           "hardcodedValue": [
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:84",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:84",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:84",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:84",
               "literal": "#fff",
               "property": "background",
               "selector": ".ds-pattern-grid-view .ds-grid-view__checkbox-control.ds-grid-view__checkbox-control.ds-grid-view__checkbox-control",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:84",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:84",
               "line": "background: var(--ds-color-bg-primary, #fff);"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:86",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:86",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:86",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:86",
               "literal": "rgba(0, 0, 0, 0.12)",
               "property": "box-shadow",
               "selector": ".ds-pattern-grid-view .ds-grid-view__checkbox-control.ds-grid-view__checkbox-control.ds-grid-view__checkbox-control",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:86",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:86",
               "line": "box-shadow: var(--ds-elevation-1, 0 1px 3px rgba(0, 0, 0, 0.12));"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:94",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:94",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:94",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:94",
               "literal": "#fff",
               "property": "background",
               "selector": ".ds-pattern-grid-view[data-part='root'][data-part='root'][data-empty='true']",
               "position": "VAR_FALLBACK",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css:94",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css:94",
               "line": "background: var(--ds-listing-grid-empty-bg, var(--ds-collection-card-bg, var(--ds-color-bg-primary, #fff)));"
             }
           ],
@@ -583,7 +583,7 @@
         "variableCensus": [
           {
             "variable": "--ds-collection-card-radius",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 6,
             "part": "card-shell",
             "landsOn": "border-radius",
@@ -601,7 +601,7 @@
           },
           {
             "variable": "--ds-premium-card-radius",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 6,
             "part": "card-shell",
             "landsOn": "border-radius",
@@ -618,7 +618,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 6,
             "part": "card-shell",
             "landsOn": "border-radius",
@@ -634,7 +634,7 @@
           },
           {
             "variable": "--ds-collection-card-glass-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 7,
             "part": "card-shell",
             "landsOn": "background",
@@ -650,7 +650,7 @@
           },
           {
             "variable": "--ds-collection-card-min-height",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 8,
             "part": "card-shell",
             "landsOn": "min-block-size",
@@ -666,7 +666,7 @@
           },
           {
             "variable": "--ds-collection-card-transition",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 9,
             "part": "card-shell",
             "landsOn": "transition",
@@ -682,7 +682,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 9,
             "part": "card-shell",
             "landsOn": "transition",
@@ -698,7 +698,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 9,
             "part": "card-shell",
             "landsOn": "transition",
@@ -714,7 +714,7 @@
           },
           {
             "variable": "--ds-collection-card-grid-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 33,
             "part": "card-shell",
             "landsOn": "background-image",
@@ -730,7 +730,7 @@
           },
           {
             "variable": "--ds-collection-card-grid-line",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 33,
             "part": "card-shell",
             "landsOn": "background-image",
@@ -746,7 +746,7 @@
           },
           {
             "variable": "--ds-collection-card-grid-line",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 33,
             "part": "card-shell",
             "landsOn": "background-image",
@@ -762,7 +762,7 @@
           },
           {
             "variable": "--ds-collection-card-grid-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 35,
             "part": "card-shell",
             "landsOn": "background-size",
@@ -779,7 +779,7 @@
           },
           {
             "variable": "--ds-surface-card-grid-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 35,
             "part": "card-shell",
             "landsOn": "background-size",
@@ -795,7 +795,7 @@
           },
           {
             "variable": "--ds-collection-card-grid-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 35,
             "part": "card-shell",
             "landsOn": "background-size",
@@ -812,7 +812,7 @@
           },
           {
             "variable": "--ds-surface-card-grid-size",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 35,
             "part": "card-shell",
             "landsOn": "background-size",
@@ -828,7 +828,7 @@
           },
           {
             "variable": "--ds-collection-card-overlay",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 48,
             "part": "card-shell",
             "landsOn": "background",
@@ -844,7 +844,7 @@
           },
           {
             "variable": "--ds-collection-card-sheen",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 48,
             "part": "card-shell",
             "landsOn": "background",
@@ -860,7 +860,7 @@
           },
           {
             "variable": "--ds-collection-card-selected-ring",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 52,
             "part": "card-shell",
             "landsOn": "box-shadow",
@@ -877,7 +877,7 @@
           },
           {
             "variable": "--ds-premium-card-selected-ring",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 52,
             "part": "card-shell",
             "landsOn": "box-shadow",
@@ -893,7 +893,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 52,
             "part": "card-shell",
             "landsOn": "box-shadow",
@@ -909,7 +909,7 @@
           },
           {
             "variable": "--ds-collection-card-depth",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 56,
             "part": "card-shell",
             "landsOn": "box-shadow",
@@ -925,7 +925,7 @@
           },
           {
             "variable": "--ds-collection-card-hover-transform",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 62,
             "part": "card-shell",
             "landsOn": "transform",
@@ -943,7 +943,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 68,
             "part": "root",
             "landsOn": "background",
@@ -959,7 +959,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 69,
             "part": "root",
             "landsOn": "border-radius",
@@ -975,7 +975,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 70,
             "part": "root",
             "landsOn": "box-shadow",
@@ -991,7 +991,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 74,
             "part": "root",
             "landsOn": "padding",
@@ -1007,7 +1007,7 @@
           },
           {
             "variable": "--ds-spacing-5",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 74,
             "part": "root",
             "landsOn": "padding",
@@ -1023,7 +1023,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 76,
             "part": "root",
             "landsOn": "border-radius",
@@ -1039,7 +1039,7 @@
           },
           {
             "variable": "--ds-listing-grid-empty-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 77,
             "part": "root",
             "landsOn": "border",
@@ -1056,7 +1056,7 @@
           },
           {
             "variable": "--ds-collection-card-border",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 77,
             "part": "root",
             "landsOn": "border",
@@ -1072,7 +1072,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 77,
             "part": "root",
             "landsOn": "border",
@@ -1088,7 +1088,7 @@
           },
           {
             "variable": "--ds-listing-grid-empty-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 78,
             "part": "root",
             "landsOn": "background",
@@ -1106,7 +1106,7 @@
           },
           {
             "variable": "--ds-collection-card-bg",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 78,
             "part": "root",
             "landsOn": "background",
@@ -1123,7 +1123,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 78,
             "part": "root",
             "landsOn": "background",
@@ -1139,7 +1139,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
             "line": 82,
             "part": "empty-state",
             "landsOn": "color",
@@ -1157,7 +1157,7 @@
         "variableCensusTsx": [
           {
             "variable": "--ds-collection-card-gap",
-            "file": "packages/core/src/ui/patterns/data/grid-view/contracts/index.ts",
+            "file": "packages/core/src/components/patterns/data/grid-view/contracts/index.ts",
             "line": 83,
             "chain": [
               "--ds-collection-card-gap",
@@ -1170,7 +1170,7 @@
           },
           {
             "variable": "--ds-listing-grid-gap",
-            "file": "packages/core/src/ui/patterns/data/grid-view/contracts/index.ts",
+            "file": "packages/core/src/components/patterns/data/grid-view/contracts/index.ts",
             "line": 83,
             "chain": [
               "--ds-listing-grid-gap",
@@ -1182,7 +1182,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/ui/patterns/data/grid-view/contracts/index.ts",
+            "file": "packages/core/src/components/patterns/data/grid-view/contracts/index.ts",
             "line": 83,
             "chain": [
               "--ds-spacing-4"
@@ -1193,7 +1193,7 @@
           },
           {
             "variable": "--ds-listing-grid-gap",
-            "file": "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx",
+            "file": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
             "line": 35,
             "chain": [
               "--ds-listing-grid-gap",
@@ -1205,7 +1205,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "file": "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx",
+            "file": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
             "line": 35,
             "chain": [
               "--ds-spacing-4"
@@ -1216,7 +1216,7 @@
           },
           {
             "variable": "--ds-listing-grid-min-compact-width",
-            "file": "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx",
+            "file": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
             "line": 53,
             "chain": [
               "--ds-listing-grid-min-compact-width"
@@ -1227,7 +1227,7 @@
           },
           {
             "variable": "--ds-collection-card-gap",
-            "file": "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx",
+            "file": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
             "line": 248,
             "chain": [
               "--ds-collection-card-gap"
@@ -1238,7 +1238,7 @@
           },
           {
             "variable": "--ds-listing-grid-bottom-bleed",
-            "file": "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx",
+            "file": "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx",
             "line": 256,
             "chain": [
               "--ds-listing-grid-bottom-bleed"
@@ -1253,20 +1253,20 @@
         "emittedVariables": {},
         "emittedVariablesTsx": {
           "--ds-stagger-index": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:107",
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:345"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:107",
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:345"
           ],
           "--ds-stagger-max": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:264"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:264"
           ],
           "--ds-stagger-step": [
-            "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:263"
+            "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:263"
           ]
         },
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+              "path": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
               "engine": "engine-agnostic",
               "lines": 109,
               "role": "skin-css",
@@ -1281,7 +1281,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/layout/Box",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:17"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:17"
               ],
               "renderSiteCount": 6,
               "engines": [
@@ -1293,7 +1293,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Checkbox",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:18"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:18"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1305,7 +1305,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/layout/Flex",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:19"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:19"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1317,7 +1317,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/navigation/Pagination",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:20"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:20"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1329,7 +1329,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/feedback/Skeleton",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:21"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:21"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1341,7 +1341,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/layout/Stack",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:22"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:22"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1353,7 +1353,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/display/Typography/compound/Text",
               "importSites": [
-                "packages/core/src/ui/patterns/data/grid-view/presentation/grid/index.tsx:23"
+                "packages/core/src/components/patterns/data/grid-view/presentation/grid/index.tsx:23"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -1367,7 +1367,7 @@
         "paintByEngine": {
           "engine-agnostic-presentation": [
             {
-              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+              "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
               "paintKind": "own"
             }
           ]
@@ -1429,13 +1429,13 @@
         {
           "channelId": "--_ds-grid-view-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1445,13 +1445,13 @@
         {
           "channelId": "--_ds-grid-view-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1461,13 +1461,13 @@
         {
           "channelId": "--_ds-collection-card-overlay",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1476,13 +1476,13 @@
         {
           "channelId": "--_ds-collection-card-selected-ring",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1491,13 +1491,13 @@
         {
           "channelId": "--_ds-grid-view-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1507,13 +1507,13 @@
         {
           "channelId": "--_ds-grid-view-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1523,13 +1523,13 @@
         {
           "channelId": "--_ds-grid-view-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1539,13 +1539,13 @@
         {
           "channelId": "--_ds-grid-view-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1566,7 +1566,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
@@ -1581,7 +1581,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
@@ -1596,7 +1596,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
@@ -1611,7 +1611,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
@@ -1643,13 +1643,13 @@
         {
           "channelId": "--_ds-grid-view-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1669,13 +1669,13 @@
         {
           "channelId": "--_ds-grid-view-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1706,13 +1706,13 @@
         {
           "channelId": "--_ds-grid-view-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1731,7 +1731,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1753,13 +1753,13 @@
         {
           "channelId": "--_ds-grid-view-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1769,13 +1769,13 @@
         {
           "channelId": "--_ds-collection-card-grid-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1784,13 +1784,13 @@
         {
           "channelId": "--_ds-collection-card-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1808,7 +1808,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1845,13 +1845,13 @@
         {
           "channelId": "--_ds-grid-view-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1861,13 +1861,13 @@
         {
           "channelId": "--_ds-collection-card-depth",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1955,13 +1955,13 @@
         {
           "channelId": "--_ds-grid-view-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1971,13 +1971,13 @@
         {
           "channelId": "--_ds-collection-card-grid-line",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/pattern-grid-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/grid-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2000,7 +2000,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2056,7 +2056,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2105,11 +2105,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "Tooltip"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Tooltip",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/tooltip",
     "publicComponents": [
       "Tooltip"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "272c6e635365ce5fe8201da3441633a9e6d4f16c17d6c0e3ad81f595e6a7c269"
+    "inventoryRowDigest": "ed5101a4d1ceb383dd78e88848d978f31498875851a732ec0e95fef9a4d15952"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,27 +28,27 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Tooltip/Tooltip.stories.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/index.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.classic.test.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.interactive-keyboard.test.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.modern.test.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.positioning.test.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.premium-ground.test.ts",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.rustic-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.test.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/tests/Tooltip.visual-contract.test.ts",
-      "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/compound/index.ts",
-      "packages/core/src/ui/primitives/display/Tooltip/compound/Trigger/index.tsx",
-      "packages/core/src/ui/primitives/display/Tooltip/compound/Content/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css",
-      "packages/core/src/foundation/tokens/css/runtime/personality.css"
+      "packages/core/src/components/primitives/display/tooltip/tooltip.stories.tsx",
+      "packages/core/src/components/primitives/display/tooltip/index.tsx",
+      "packages/core/src/components/primitives/display/tooltip/contracts/index.ts",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.classic.test.tsx",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.interactive-keyboard.test.tsx",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.modern.test.tsx",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.positioning.test.tsx",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.premium-ground.test.ts",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.rustic-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.test.tsx",
+      "packages/core/src/components/primitives/display/tooltip/tests/tooltip.visual-contract.test.ts",
+      "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/tooltip/compound/index.ts",
+      "packages/core/src/components/primitives/display/tooltip/compound/trigger/index.tsx",
+      "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/personality/index.css"
     ],
     "stableParts": [
       "bubble",
@@ -86,11 +86,11 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The layer role switches with interactivity: role={interactive ? \"dialog\" : \"tooltip\"} at packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:844, with aria-labelledby only in the dialog case at :845.",
-      "A hidden tooltip is removed from both the accessibility tree and hit testing: aria-hidden={!isVisible} at packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:846 and inert={!isVisible ? true : undefined} at :847.",
-      "Direction and language are carried on the layer so a portalled tooltip does not inherit the wrong locale context: dir at packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:849 and lang at :850.",
-      "The arrow is decorative: aria-hidden at packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:908.",
-      "Reduced-motion and forced-colors floors exist in the modern skin: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:691 and :745."
+      "The layer role switches with interactivity: role={interactive ? \"dialog\" : \"tooltip\"} at packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:844, with aria-labelledby only in the dialog case at :845.",
+      "A hidden tooltip is removed from both the accessibility tree and hit testing: aria-hidden={!isVisible} at packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:846 and inert={!isVisible ? true : undefined} at :847.",
+      "Direction and language are carried on the layer so a portalled tooltip does not inherit the wrong locale context: dir at packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:849 and lang at :850.",
+      "The arrow is decorative: aria-hidden at packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:908.",
+      "Reduced-motion and forced-colors floors exist in the modern skin: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:691 and :745."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -113,8 +113,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:852",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:253"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:852",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:253"
           ]
         },
         {
@@ -122,8 +122,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:891",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:261"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:891",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:261"
           ]
         },
         {
@@ -131,8 +131,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:892",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:904"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:892",
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:904"
           ]
         },
         {
@@ -140,8 +140,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:895",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:263"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:895",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:263"
           ]
         },
         {
@@ -149,8 +149,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:897",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:267"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:897",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:267"
           ]
         },
         {
@@ -158,8 +158,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:908",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:278"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:908",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:278"
           ]
         },
         {
@@ -167,8 +167,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:918",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:243"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:918",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:243"
           ]
         }
       ],
@@ -176,23 +176,23 @@
         {
           "token": "focus-within",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:421",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:422",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:423",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:424",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:425"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:421",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:422",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:423",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:424",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:425"
           ],
           "state": "focus-within"
         },
         {
           "token": "disabled",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/contracts/index.ts:197",
-            "packages/core/src/ui/primitives/display/Tooltip/contracts/index.ts:323",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:136",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:213",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:349",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:521"
+            "packages/core/src/components/primitives/display/tooltip/contracts/index.ts:197",
+            "packages/core/src/components/primitives/display/tooltip/contracts/index.ts:323",
+            "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:136",
+            "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:213",
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:349",
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:521"
           ],
           "atSiteCount": 10,
           "state": "disabled"
@@ -200,17 +200,17 @@
         {
           "token": "hidden",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:846",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:908",
-            "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:258",
-            "packages/core/src/ui/primitives/display/Tooltip/compound/Content/index.tsx:118"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:846",
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:908",
+            "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:258",
+            "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx:118"
           ],
           "state": "hidden"
         },
         {
           "token": "inert",
           "at": [
-            "packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:847"
+            "packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:847"
           ],
           "state": "inert"
         },
@@ -280,24 +280,24 @@
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:691",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:692",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:693",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:694",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:695",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:696"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:691",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:692",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:693",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:694",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:695",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:696"
             ],
             "atSiteCount": 10
           },
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:745",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:746",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:747",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:748",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:749",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:750"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:745",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:746",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:747",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:748",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:749",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:750"
             ],
             "atSiteCount": 10
           }
@@ -326,8 +326,8 @@
       },
       "scoutGaps": {
         "assessmentConfidenceGaps": [
-          "packages/core/src/foundation/tokens/css/runtime/personality.css:678-685 applies the entrance animation to .rottay-tooltip, which is the rustic root only (packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:242); the modern root is rottay-tooltip-root (packages/core/src/ui/primitives/display/Tooltip/engines/modern/index.tsx:915). The personality motion channel is therefore bound for rustic and unbound for modern. See unresolved PERSONALITY-TOOLTIP-ENTRANCE-MISSES-MODERN.",
-          "--ds-tooltip-instance-max-width is read at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:107 and :114 but is only ever set inline by the engine, so its value origin is an instance API rather than a stylesheet declaration."
+          "packages/core/src/foundation/tokens/css/runtime/personality/index.css:678-685 applies the entrance animation to .rottay-tooltip, which is the rustic root only (packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:242); the modern root is rottay-tooltip-root (packages/core/src/components/primitives/display/tooltip/engines/modern/index.tsx:915). The personality motion channel is therefore bound for rustic and unbound for modern. See unresolved PERSONALITY-TOOLTIP-ENTRANCE-MISSES-MODERN.",
+          "--ds-tooltip-instance-max-width is read at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:107 and :114 but is only ever set inline by the engine, so its value origin is an instance API rather than a stylesheet declaration."
         ]
       },
       "propertyGroupCensusNote": {
@@ -384,7 +384,7 @@
         "variableCensus": [
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:73",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:73",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -396,7 +396,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:77",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:77",
             "fallback": "monospace",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -408,7 +408,7 @@
           },
           {
             "variable": "--ds-tooltip-max-width",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:101",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:101",
             "fallback": "300px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -420,7 +420,7 @@
           },
           {
             "variable": "--ds-tooltip-primary-bg",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:178",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:178",
             "fallback": "#1677ff",
             "landsOnProperty": "primary",
             "propertyGroup": "layout",
@@ -432,7 +432,7 @@
           },
           {
             "variable": "--ds-tooltip-secondary-bg",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:179",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:179",
             "fallback": "#722ed1",
             "landsOnProperty": "secondary",
             "propertyGroup": "layout",
@@ -444,7 +444,7 @@
           },
           {
             "variable": "--ds-tooltip-success-bg",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:180",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:180",
             "fallback": "#52c41a",
             "landsOnProperty": "success",
             "propertyGroup": "layout",
@@ -456,7 +456,7 @@
           },
           {
             "variable": "--ds-tooltip-warning-bg",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:181",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:181",
             "fallback": "#faad14",
             "landsOnProperty": "warning",
             "propertyGroup": "layout",
@@ -468,7 +468,7 @@
           },
           {
             "variable": "--ds-tooltip-error-bg",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:182",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:182",
             "fallback": "#ff4d4f",
             "landsOnProperty": "error",
             "propertyGroup": "layout",
@@ -480,7 +480,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:71",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:71",
             "fallback": "monospace",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -492,7 +492,7 @@
           },
           {
             "variable": "--ds-tooltip-offset",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:180",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:180",
             "fallback": "6px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -504,7 +504,7 @@
           },
           {
             "variable": "--ds-tooltip-offset",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:183",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:183",
             "fallback": "6px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -516,7 +516,7 @@
           },
           {
             "variable": "--ds-tooltip-offset",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:186",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:186",
             "fallback": "6px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -528,7 +528,7 @@
           },
           {
             "variable": "--ds-tooltip-offset",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:189",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:189",
             "fallback": "6px",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -540,7 +540,7 @@
           },
           {
             "variable": "--ds-tooltip-padding",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:191",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:191",
             "fallback": "0.5rem 0.75rem",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -552,7 +552,7 @@
           },
           {
             "variable": "--ds-tooltip-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:192",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:192",
             "fallback": "0.8125rem",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -564,7 +564,7 @@
           },
           {
             "variable": "--ds-tooltip-max-width",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:193",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:193",
             "fallback": "300px",
             "landsOnProperty": "max-width",
             "propertyGroup": "size",
@@ -576,7 +576,7 @@
           },
           {
             "variable": "--ds-tooltip-z-index",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:194",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:194",
             "fallback": "1070",
             "landsOnProperty": "z-index",
             "propertyGroup": "layout",
@@ -588,7 +588,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:214",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:214",
             "fallback": "6px",
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -600,7 +600,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:215",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:215",
             "fallback": "6px",
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -612,7 +612,7 @@
           },
           {
             "variable": "--ds-tooltip-padding",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/compound/Content/index.tsx:84",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx:84",
             "fallback": "0.5rem 0.75rem",
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -624,7 +624,7 @@
           },
           {
             "variable": "--ds-tooltip-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/compound/Content/index.tsx:85",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx:85",
             "fallback": "0.8125rem",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -636,7 +636,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/compound/Content/index.tsx:101",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx:101",
             "fallback": "6px",
             "landsOnProperty": "width",
             "propertyGroup": "size",
@@ -648,7 +648,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/ui/primitives/display/Tooltip/compound/Content/index.tsx:102",
+            "readAt": "packages/core/src/components/primitives/display/tooltip/compound/content/index.tsx:102",
             "fallback": "6px",
             "landsOnProperty": "height",
             "propertyGroup": "size",
@@ -660,7 +660,7 @@
           },
           {
             "variable": "--ds-surface-overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:25",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:25",
             "fallback": "var(--ds-surface-card)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -671,7 +671,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:25",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:25",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -682,7 +682,7 @@
           },
           {
             "variable": "--ds-material-overlay-foreground",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:30",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:30",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -693,7 +693,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:30",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:30",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -704,7 +704,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:36",
             "fallback": "var(--ds-color-border)",
             "landsOnProperty": "--ds-tooltip-edge",
             "propertyGroup": "layout",
@@ -715,7 +715,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:36",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-edge",
             "propertyGroup": "layout",
@@ -726,7 +726,7 @@
           },
           {
             "variable": "--ds-tooltip-bordered-border-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:39",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:39",
             "fallback": "1px",
             "landsOnProperty": "--ds-tooltip-edge-width",
             "propertyGroup": "layout",
@@ -737,7 +737,7 @@
           },
           {
             "variable": "--ds-elevation-3",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:44",
             "fallback": "var(--ds-shadow-lg)",
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -748,7 +748,7 @@
           },
           {
             "variable": "--ds-shadow-lg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:44",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -759,7 +759,7 @@
           },
           {
             "variable": "--ds-material-overlay-texture",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:49",
             "fallback": "none",
             "landsOnProperty": "--ds-tooltip-texture-current",
             "propertyGroup": "layout",
@@ -770,7 +770,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:69",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:69",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -781,7 +781,7 @@
           },
           {
             "variable": "--ds-tooltip-max-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:73",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-max-width-current",
             "propertyGroup": "layout",
@@ -792,7 +792,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:77",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-arrow-half-size-current",
             "propertyGroup": "layout",
@@ -803,7 +803,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-distance",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:80",
             "fallback": "0.1875rem",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -814,7 +814,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:82",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:82",
             "fallback": "0.97",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -825,7 +825,7 @@
           },
           {
             "variable": "--ds-tooltip-enter-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:85",
             "fallback": "var(--ds-motion-feedback)",
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -836,7 +836,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:85",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -847,7 +847,7 @@
           },
           {
             "variable": "--ds-tooltip-enter-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:86",
             "fallback": "var(--ds-motion-ease-enter)",
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -858,7 +858,7 @@
           },
           {
             "variable": "--ds-motion-ease-enter",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:86",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -869,7 +869,7 @@
           },
           {
             "variable": "--ds-tooltip-enter-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:87",
             "fallback": "var(--ds-motion-feedback)",
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -880,7 +880,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:87",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -891,7 +891,7 @@
           },
           {
             "variable": "--ds-tooltip-enter-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:88",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:88",
             "fallback": "var(--ds-motion-ease-enter)",
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -902,7 +902,7 @@
           },
           {
             "variable": "--ds-motion-ease-enter",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:88",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:88",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-enter-transition-current",
             "propertyGroup": "layout",
@@ -913,7 +913,7 @@
           },
           {
             "variable": "--ds-tooltip-exit-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:92",
             "fallback": "var(--ds-motion-feedback)",
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -924,7 +924,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:92",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -935,7 +935,7 @@
           },
           {
             "variable": "--ds-tooltip-exit-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:93",
             "fallback": "var(--ds-motion-ease-exit)",
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -946,7 +946,7 @@
           },
           {
             "variable": "--ds-motion-ease-exit",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:93",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -957,7 +957,7 @@
           },
           {
             "variable": "--ds-tooltip-exit-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:94",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:94",
             "fallback": "var(--ds-motion-feedback)",
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -968,7 +968,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:94",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:94",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -979,7 +979,7 @@
           },
           {
             "variable": "--ds-tooltip-exit-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:95",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:95",
             "fallback": "var(--ds-motion-ease-exit)",
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -990,7 +990,7 @@
           },
           {
             "variable": "--ds-motion-ease-exit",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:95",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:95",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-exit-transition-current",
             "propertyGroup": "layout",
@@ -1001,7 +1001,7 @@
           },
           {
             "variable": "--ds-z-tooltip",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:102",
             "fallback": "var(--ds-z-index-tooltip)",
             "landsOnProperty": "z-index",
             "propertyGroup": "layout",
@@ -1012,7 +1012,7 @@
           },
           {
             "variable": "--ds-z-index-tooltip",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:102",
             "fallback": null,
             "landsOnProperty": "z-index",
             "propertyGroup": "layout",
@@ -1023,7 +1023,7 @@
           },
           {
             "variable": "--ds-tooltip-instance-max-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:107",
             "fallback": "var(--ds-tooltip-max-width-current)",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1034,7 +1034,7 @@
           },
           {
             "variable": "--ds-tooltip-max-width-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:107",
             "fallback": null,
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1045,7 +1045,7 @@
           },
           {
             "variable": "--ds-tooltip-viewport-gap",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:109",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:109",
             "fallback": "0.5rem",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1056,7 +1056,7 @@
           },
           {
             "variable": "--ds-tooltip-viewport-gap",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:110",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:110",
             "fallback": "0.5rem",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1067,7 +1067,7 @@
           },
           {
             "variable": "--ds-tooltip-instance-max-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:114",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:114",
             "fallback": "var(--ds-tooltip-max-width-current)",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1078,7 +1078,7 @@
           },
           {
             "variable": "--ds-tooltip-max-width-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:114",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:114",
             "fallback": null,
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1089,7 +1089,7 @@
           },
           {
             "variable": "--ds-tooltip-viewport-gap",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:116",
             "fallback": "0.5rem",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1100,7 +1100,7 @@
           },
           {
             "variable": "--ds-tooltip-viewport-gap",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:117",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:117",
             "fallback": "0.5rem",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1111,7 +1111,7 @@
           },
           {
             "variable": "--ds-tooltip-padding-block-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:120",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:120",
             "fallback": null,
             "landsOnProperty": "padding-block",
             "propertyGroup": "spacing",
@@ -1122,7 +1122,7 @@
           },
           {
             "variable": "--ds-tooltip-padding-inline-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:121",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:121",
             "fallback": null,
             "landsOnProperty": "padding-inline",
             "propertyGroup": "spacing",
@@ -1133,7 +1133,7 @@
           },
           {
             "variable": "--ds-tooltip-edge-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:123",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:123",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1144,7 +1144,7 @@
           },
           {
             "variable": "--ds-tooltip-edge",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:123",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:123",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1155,7 +1155,7 @@
           },
           {
             "variable": "--ds-tooltip-radius-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:124",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1166,7 +1166,7 @@
           },
           {
             "variable": "--ds-tooltip-surface",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:125",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:125",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1177,7 +1177,7 @@
           },
           {
             "variable": "--ds-tooltip-shadow-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:126",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:126",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1188,7 +1188,7 @@
           },
           {
             "variable": "--ds-tooltip-ink",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:127",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:127",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1199,7 +1199,7 @@
           },
           {
             "variable": "--ds-font-weight-medium",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:130",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1210,7 +1210,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:130",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1221,7 +1221,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:131",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1232,7 +1232,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:131",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1243,7 +1243,7 @@
           },
           {
             "variable": "--ds-type-caption-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:133",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:133",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -1254,7 +1254,7 @@
           },
           {
             "variable": "--ds-letter-spacing-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:136",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1265,7 +1265,7 @@
           },
           {
             "variable": "--ds-type-caption-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:139",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:139",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -1276,7 +1276,7 @@
           },
           {
             "variable": "--ds-tooltip-closed-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:148",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:148",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1287,7 +1287,7 @@
           },
           {
             "variable": "--ds-tooltip-exit-transition-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:152",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:152",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1298,7 +1298,7 @@
           },
           {
             "variable": "--ds-tooltip-texture-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:164",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:164",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -1309,7 +1309,7 @@
           },
           {
             "variable": "--ds-tooltip-highlight-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:165",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:165",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -1320,7 +1320,7 @@
           },
           {
             "variable": "--ds-tooltip-texture-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:167",
             "fallback": "1",
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -1331,7 +1331,7 @@
           },
           {
             "variable": "--ds-material-overlay-background",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:184",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:184",
             "fallback": "var(--ds-surface-overlay)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1342,7 +1342,7 @@
           },
           {
             "variable": "--ds-surface-overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:184",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:184",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1353,7 +1353,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:188",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:188",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -1364,7 +1364,7 @@
           },
           {
             "variable": "--ds-tooltip-minimal-border",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:190",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:190",
             "fallback": "transparent",
             "landsOnProperty": "--ds-tooltip-edge",
             "propertyGroup": "layout",
@@ -1375,7 +1375,7 @@
           },
           {
             "variable": "--ds-tooltip-minimal-border-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:191",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:191",
             "fallback": "1px",
             "landsOnProperty": "--ds-tooltip-edge-width",
             "propertyGroup": "layout",
@@ -1386,7 +1386,7 @@
           },
           {
             "variable": "--ds-shadow-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:194",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:194",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -1397,7 +1397,7 @@
           },
           {
             "variable": "--ds-tooltip-minimal-texture",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:196",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:196",
             "fallback": "none",
             "landsOnProperty": "--ds-tooltip-texture-current",
             "propertyGroup": "layout",
@@ -1408,7 +1408,7 @@
           },
           {
             "variable": "--ds-tooltip-minimal-highlight",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:197",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:197",
             "fallback": "none",
             "landsOnProperty": "--ds-tooltip-highlight-current",
             "propertyGroup": "layout",
@@ -1419,7 +1419,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:208",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:208",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -1430,7 +1430,7 @@
           },
           {
             "variable": "--ds-tooltip-minimal-max-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:210",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:210",
             "fallback": "16rem",
             "landsOnProperty": "--ds-tooltip-max-width-current",
             "propertyGroup": "layout",
@@ -1441,7 +1441,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:216",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:216",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1452,7 +1452,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:216",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:216",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1463,7 +1463,7 @@
           },
           {
             "variable": "--ds-color-text-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:220",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -1474,7 +1474,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:220",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -1485,7 +1485,7 @@
           },
           {
             "variable": "--ds-tooltip-ink",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:224",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:224",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-edge",
             "propertyGroup": "layout",
@@ -1496,7 +1496,7 @@
           },
           {
             "variable": "--ds-tooltip-inverse-border-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:226",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:226",
             "fallback": "1px",
             "landsOnProperty": "--ds-tooltip-edge-width",
             "propertyGroup": "layout",
@@ -1507,7 +1507,7 @@
           },
           {
             "variable": "--ds-shadow-lg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:229",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:229",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -1518,7 +1518,7 @@
           },
           {
             "variable": "--ds-tooltip-inverse-texture",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:231",
             "fallback": "none",
             "landsOnProperty": "--ds-tooltip-texture-current",
             "propertyGroup": "layout",
@@ -1529,7 +1529,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:250",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:250",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -1540,7 +1540,7 @@
           },
           {
             "variable": "--ds-tooltip-inverse-max-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:252",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:252",
             "fallback": "18rem",
             "landsOnProperty": "--ds-tooltip-max-width-current",
             "propertyGroup": "layout",
@@ -1551,7 +1551,7 @@
           },
           {
             "variable": "--ds-surface-raised",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:260",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:260",
             "fallback": "var(--ds-surface-card)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1562,7 +1562,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:260",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:260",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1573,7 +1573,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:265",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:265",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -1584,7 +1584,7 @@
           },
           {
             "variable": "--ds-material-raised-border",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:269",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:269",
             "fallback": "var(--ds-color-border-secondary)",
             "landsOnProperty": "--ds-tooltip-edge",
             "propertyGroup": "layout",
@@ -1595,7 +1595,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:269",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:269",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-edge",
             "propertyGroup": "layout",
@@ -1606,7 +1606,7 @@
           },
           {
             "variable": "--ds-tooltip-rich-border-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:271",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:271",
             "fallback": "1px",
             "landsOnProperty": "--ds-tooltip-edge-width",
             "propertyGroup": "layout",
@@ -1617,7 +1617,7 @@
           },
           {
             "variable": "--ds-material-raised-shadow",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:274",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:274",
             "fallback": "var(--ds-shadow-xl, var(--ds-elevation-4))",
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -1628,7 +1628,7 @@
           },
           {
             "variable": "--ds-shadow-xl",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:274",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:274",
             "fallback": "var(--ds-elevation-4)",
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -1639,7 +1639,7 @@
           },
           {
             "variable": "--ds-elevation-4",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:274",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:274",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-shadow-current",
             "propertyGroup": "layout",
@@ -1650,7 +1650,7 @@
           },
           {
             "variable": "--ds-material-raised-texture",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:278",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:278",
             "fallback": "none",
             "landsOnProperty": "--ds-tooltip-texture-current",
             "propertyGroup": "layout",
@@ -1661,7 +1661,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:298",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:298",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -1672,7 +1672,7 @@
           },
           {
             "variable": "--ds-tooltip-rich-max-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:300",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:300",
             "fallback": "24rem",
             "landsOnProperty": "--ds-tooltip-max-width-current",
             "propertyGroup": "layout",
@@ -1683,7 +1683,7 @@
           },
           {
             "variable": "--ds-tooltip-rich-type",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:301",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:301",
             "fallback": "var(--ds-type-supporting)",
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1694,7 +1694,7 @@
           },
           {
             "variable": "--ds-type-supporting",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:301",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:301",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1705,7 +1705,7 @@
           },
           {
             "variable": "--ds-type-supporting-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:304",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:304",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1716,7 +1716,7 @@
           },
           {
             "variable": "--ds-tooltip-compact-type",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:320",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:320",
             "fallback": "var(--ds-type-caption)",
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1727,7 +1727,7 @@
           },
           {
             "variable": "--ds-type-caption",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:320",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:320",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1738,7 +1738,7 @@
           },
           {
             "variable": "--ds-tooltip-spacious-type",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:343",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:343",
             "fallback": "var(--ds-type-supporting)",
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1749,7 +1749,7 @@
           },
           {
             "variable": "--ds-type-supporting",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:343",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:343",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1760,7 +1760,7 @@
           },
           {
             "variable": "--ds-tooltip-shadow-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:351",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:351",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1771,7 +1771,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:360",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:360",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -1782,7 +1782,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:364",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:364",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -1793,7 +1793,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:368",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:368",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-radius-current",
             "propertyGroup": "layout",
@@ -1804,7 +1804,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-distance",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:373",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:373",
             "fallback": "0.1875rem",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -1815,7 +1815,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:375",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:375",
             "fallback": "0.97",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -1826,7 +1826,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-distance",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:381",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:381",
             "fallback": "0.1875rem",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -1837,7 +1837,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:383",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:383",
             "fallback": "0.97",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -1848,7 +1848,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-distance",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:389",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:389",
             "fallback": "0.1875rem",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -1859,7 +1859,7 @@
           },
           {
             "variable": "--ds-tooltip-motion-scale",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:391",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:391",
             "fallback": "0.97",
             "landsOnProperty": "--ds-tooltip-closed-transform",
             "propertyGroup": "layout",
@@ -1870,7 +1870,7 @@
           },
           {
             "variable": "--ds-tooltip-enter-transition-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:400",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:400",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1881,7 +1881,7 @@
           },
           {
             "variable": "--ds-tooltip-closed-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:407",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:407",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1892,7 +1892,7 @@
           },
           {
             "variable": "--ds-tooltip-closed-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:417",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:417",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1903,7 +1903,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:422",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:422",
             "fallback": null,
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -1914,7 +1914,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:423",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:423",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -1925,7 +1925,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:423",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:423",
             "fallback": null,
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -1936,7 +1936,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:424",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:424",
             "fallback": null,
             "landsOnProperty": "outline-offset",
             "propertyGroup": "border",
@@ -1947,7 +1947,7 @@
           },
           {
             "variable": "--ds-tooltip-primary-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:430",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:430",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1958,7 +1958,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:430",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:430",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1969,7 +1969,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:433",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:433",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -1980,7 +1980,7 @@
           },
           {
             "variable": "--ds-color-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:444",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:444",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -1991,7 +1991,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:448",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:448",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -2002,7 +2002,7 @@
           },
           {
             "variable": "--ds-tooltip-success-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:457",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:457",
             "fallback": "var(--ds-color-success)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2013,7 +2013,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:457",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:457",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2024,7 +2024,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:460",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:460",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -2035,7 +2035,7 @@
           },
           {
             "variable": "--ds-tooltip-warning-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:469",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:469",
             "fallback": "var(--ds-color-warning)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2046,7 +2046,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:469",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:469",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2057,7 +2057,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:472",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:472",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -2068,7 +2068,7 @@
           },
           {
             "variable": "--ds-tooltip-error-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:481",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:481",
             "fallback": "var(--ds-color-error)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2079,7 +2079,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:481",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:481",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2090,7 +2090,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:484",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:484",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-ink",
             "propertyGroup": "layout",
@@ -2101,7 +2101,7 @@
           },
           {
             "variable": "--ds-tooltip-edge-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:495",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:495",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -2112,7 +2112,7 @@
           },
           {
             "variable": "--ds-tooltip-edge",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:495",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:495",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -2123,7 +2123,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-gap",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:503",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:503",
             "fallback": "var(--ds-spacing-sm)",
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -2134,7 +2134,7 @@
           },
           {
             "variable": "--ds-spacing-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:503",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:503",
             "fallback": null,
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -2145,7 +2145,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-chip-gap",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:517",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:517",
             "fallback": "0.1875rem",
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -2156,7 +2156,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-key-min-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:522",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:522",
             "fallback": "1.35rem",
             "landsOnProperty": "min-inline-size",
             "propertyGroup": "size",
@@ -2167,7 +2167,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-key-padding-block",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:523",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:523",
             "fallback": "0.0625rem",
             "landsOnProperty": "padding-block",
             "propertyGroup": "spacing",
@@ -2178,7 +2178,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-key-padding-inline",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:524",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:524",
             "fallback": "0.3125rem",
             "landsOnProperty": "padding-inline",
             "propertyGroup": "spacing",
@@ -2189,7 +2189,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-key-border-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:525",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:525",
             "fallback": "1px",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -2200,7 +2200,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-key-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:530",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:530",
             "fallback": "var(--ds-radius-sm)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2211,7 +2211,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:530",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:530",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2222,7 +2222,7 @@
           },
           {
             "variable": "--ds-tooltip-shortcut-key-type",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:540",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:540",
             "fallback": "var(--ds-type-code)",
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2233,7 +2233,7 @@
           },
           {
             "variable": "--ds-type-code",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:540",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:540",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2244,7 +2244,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:555",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:555",
             "fallback": null,
             "landsOnProperty": "inline-size",
             "propertyGroup": "size",
@@ -2255,7 +2255,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:556",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:556",
             "fallback": null,
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -2266,7 +2266,7 @@
           },
           {
             "variable": "--ds-tooltip-edge-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:557",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:557",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -2277,7 +2277,7 @@
           },
           {
             "variable": "--ds-tooltip-edge",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:557",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:557",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -2288,7 +2288,7 @@
           },
           {
             "variable": "--ds-tooltip-surface",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:558",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:558",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -2299,7 +2299,7 @@
           },
           {
             "variable": "--ds-tooltip-texture-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:559",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:559",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -2310,7 +2310,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:561",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:561",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2321,7 +2321,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:562",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:562",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2332,7 +2332,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:563",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:563",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2343,7 +2343,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:563",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:563",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2354,7 +2354,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:564",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:564",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2365,7 +2365,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:564",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:564",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2376,7 +2376,7 @@
           },
           {
             "variable": "--ds-motion-feedback",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:565",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:565",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2387,7 +2387,7 @@
           },
           {
             "variable": "--ds-motion-ease-move",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:565",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:565",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -2398,7 +2398,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-safe-min-inline-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:569",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:569",
             "fallback": "2.5rem",
             "landsOnProperty": "min-inline-size",
             "propertyGroup": "size",
@@ -2409,7 +2409,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-tip-length",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:576",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:576",
             "fallback": "0.25rem",
             "landsOnProperty": "inset-block-end",
             "propertyGroup": "spacing",
@@ -2420,7 +2420,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:578",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:578",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2431,7 +2431,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-tip-length",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:587",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:587",
             "fallback": "0.25rem",
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2442,7 +2442,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:589",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:589",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2453,7 +2453,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:596",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:596",
             "fallback": null,
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2464,7 +2464,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-tip-length",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:599",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:599",
             "fallback": "0.25rem",
             "landsOnProperty": "inset-inline-end",
             "propertyGroup": "spacing",
@@ -2475,7 +2475,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:607",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:607",
             "fallback": null,
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2486,7 +2486,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-tip-length",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:610",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:610",
             "fallback": "0.25rem",
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2497,7 +2497,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:620",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:620",
             "fallback": "1rem",
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2508,7 +2508,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:627",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:627",
             "fallback": "1rem",
             "landsOnProperty": "inset-inline",
             "propertyGroup": "spacing",
@@ -2519,7 +2519,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:634",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:634",
             "fallback": "1rem",
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2530,7 +2530,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:641",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:641",
             "fallback": "1rem",
             "landsOnProperty": "inset-block",
             "propertyGroup": "spacing",
@@ -2541,7 +2541,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:652",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:652",
             "fallback": "1rem",
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2552,7 +2552,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-anchor-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:654",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:654",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2563,7 +2563,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:655",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:655",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2574,7 +2574,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:658",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:658",
             "fallback": "1rem",
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2585,7 +2585,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:659",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:659",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2596,7 +2596,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:660",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:660",
             "fallback": null,
             "landsOnProperty": "inset-inline-start",
             "propertyGroup": "spacing",
@@ -2607,7 +2607,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:671",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:671",
             "fallback": "1rem",
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2618,7 +2618,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-anchor-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:673",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:673",
             "fallback": null,
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2629,7 +2629,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:674",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:674",
             "fallback": null,
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2640,7 +2640,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-edge-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:677",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:677",
             "fallback": "1rem",
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2651,7 +2651,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:678",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:678",
             "fallback": null,
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2662,7 +2662,7 @@
           },
           {
             "variable": "--ds-tooltip-arrow-half-size-current",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:679",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:679",
             "fallback": null,
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2673,7 +2673,7 @@
           },
           {
             "variable": "--ds-tooltip-touch-target",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:687",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:687",
             "fallback": "2.75rem",
             "landsOnProperty": "min-block-size",
             "propertyGroup": "size",
@@ -2684,7 +2684,7 @@
           },
           {
             "variable": "--ds-material-overlay-opaque",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:741",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:741",
             "fallback": "var(--ds-surface-card)",
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2695,7 +2695,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:741",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:741",
             "fallback": null,
             "landsOnProperty": "--ds-tooltip-surface",
             "propertyGroup": "layout",
@@ -2706,7 +2706,7 @@
           },
           {
             "variable": "--ds-tooltip-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:30",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:30",
             "fallback": "6px",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2717,7 +2717,7 @@
           },
           {
             "variable": "--ds-tooltip-shadow",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:31",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:31",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -2728,7 +2728,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:36",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2739,7 +2739,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:37",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:37",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2750,7 +2750,7 @@
           },
           {
             "variable": "--ds-tooltip-default-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:40",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:40",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2761,7 +2761,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:40",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:40",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2772,7 +2772,7 @@
           },
           {
             "variable": "--ds-tooltip-default-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:41",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2783,7 +2783,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:41",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:41",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2794,7 +2794,7 @@
           },
           {
             "variable": "--ds-tooltip-primary-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:44",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2805,7 +2805,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:44",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:44",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2816,7 +2816,7 @@
           },
           {
             "variable": "--ds-tooltip-primary-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:45",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:45",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2827,7 +2827,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:45",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:45",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2838,7 +2838,7 @@
           },
           {
             "variable": "--ds-tooltip-secondary-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:48",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2849,7 +2849,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:48",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2860,7 +2860,7 @@
           },
           {
             "variable": "--ds-tooltip-secondary-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:49",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2871,7 +2871,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:49",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2882,7 +2882,7 @@
           },
           {
             "variable": "--ds-tooltip-success-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:52",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2893,7 +2893,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:52",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2904,7 +2904,7 @@
           },
           {
             "variable": "--ds-tooltip-success-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:53",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:53",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2915,7 +2915,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:53",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:53",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2926,7 +2926,7 @@
           },
           {
             "variable": "--ds-tooltip-warning-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:56",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:56",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2937,7 +2937,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:56",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:56",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2948,7 +2948,7 @@
           },
           {
             "variable": "--ds-tooltip-warning-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:57",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2959,7 +2959,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:57",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2970,7 +2970,7 @@
           },
           {
             "variable": "--ds-tooltip-error-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:60",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:60",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2981,7 +2981,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:60",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:60",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -2992,7 +2992,7 @@
           },
           {
             "variable": "--ds-tooltip-error-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:61",
             "fallback": "var(--ds-tooltip-color)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3003,7 +3003,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:61",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3014,7 +3014,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:67",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3025,7 +3025,7 @@
           },
           {
             "variable": "--ds-tooltip-default-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:71",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3036,7 +3036,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:71",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3047,7 +3047,7 @@
           },
           {
             "variable": "--ds-tooltip-primary-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:74",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3058,7 +3058,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:74",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3069,7 +3069,7 @@
           },
           {
             "variable": "--ds-tooltip-secondary-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:77",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3080,7 +3080,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:77",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3091,7 +3091,7 @@
           },
           {
             "variable": "--ds-tooltip-success-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:80",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3102,7 +3102,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:80",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3113,7 +3113,7 @@
           },
           {
             "variable": "--ds-tooltip-warning-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:83",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:83",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3124,7 +3124,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:83",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:83",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3135,7 +3135,7 @@
           },
           {
             "variable": "--ds-tooltip-error-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:86",
             "fallback": "var(--ds-tooltip-bg)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3146,7 +3146,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:86",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3157,7 +3157,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:92",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -3168,7 +3168,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:26",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:26",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3179,7 +3179,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:26",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:26",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3190,7 +3190,7 @@
           },
           {
             "variable": "--ds-tooltip-color",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:27",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:27",
             "fallback": "var(--ds-color-text-inverse)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3201,7 +3201,7 @@
           },
           {
             "variable": "--ds-color-text-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:27",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:27",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3212,7 +3212,7 @@
           },
           {
             "variable": "--ds-tooltip-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:28",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:28",
             "fallback": "0.375rem",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -3223,7 +3223,7 @@
           },
           {
             "variable": "--ds-tooltip-shadow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:29",
             "fallback": "var(--ds-shadow-lg)",
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -3234,7 +3234,7 @@
           },
           {
             "variable": "--ds-shadow-lg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:29",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -3245,7 +3245,7 @@
           },
           {
             "variable": "--ds-tooltip-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:33",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:33",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3256,7 +3256,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css:33",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css:33",
             "fallback": null,
             "landsOnProperty": "background-color",
             "propertyGroup": "color",
@@ -3272,151 +3272,151 @@
           {
             "kind": "spacing",
             "literal": "1px",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:72",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:72",
             "declaration": "padding"
           },
           {
             "kind": "spacing",
             "literal": "5px",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:72",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:72",
             "declaration": "padding"
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 30%, transparent)",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:74",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:74",
             "declaration": "border"
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 12%, transparent)",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:75",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:75",
             "declaration": "background"
           },
           {
             "kind": "color",
             "literal": "#1677ff",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:178",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:178",
             "declaration": "primary"
           },
           {
             "kind": "color",
             "literal": "#722ed1",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:179",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:179",
             "declaration": "secondary"
           },
           {
             "kind": "color",
             "literal": "#52c41a",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:180",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:180",
             "declaration": "success"
           },
           {
             "kind": "color",
             "literal": "#faad14",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:181",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:181",
             "declaration": "warning"
           },
           {
             "kind": "color",
             "literal": "#ff4d4f",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/classic/index.tsx:182",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx:182",
             "declaration": "error"
           },
           {
             "kind": "spacing",
             "literal": "1px",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:69",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:69",
             "declaration": "padding"
           },
           {
             "kind": "spacing",
             "literal": "5px",
-            "at": "packages/core/src/ui/primitives/display/Tooltip/engines/rustic/index.tsx:69",
+            "at": "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx:69",
             "declaration": "padding"
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 5%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:55",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 7%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:236",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:236",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 7%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:284",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:284",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 20%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:437",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:437",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 20%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:452",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:452",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 20%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:464",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:464",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 20%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:476",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:476",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 20%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:488",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:488",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 28%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:528",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:528",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 10%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:533",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:533",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 10%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:537",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:537",
             "declaration": null
           },
           {
             "kind": "shadow",
             "literal": "none",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css:752",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css:752",
             "declaration": "box-shadow"
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 12%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:93",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:93",
             "declaration": "background"
           },
           {
             "kind": "color",
             "literal": "color-mix(in srgb, currentColor 30%, transparent)",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip.css:96",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tooltip/index.css:96",
             "declaration": "border"
           }
         ],
@@ -3438,14 +3438,14 @@
         {
           "channelId": "--_ds-tooltip-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3454,14 +3454,14 @@
         {
           "channelId": "--_ds-tooltip-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3470,13 +3470,13 @@
         {
           "channelId": "--_ds-tooltip-ink",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3485,13 +3485,13 @@
         {
           "channelId": "--_ds-tooltip-surface",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3500,13 +3500,13 @@
         {
           "channelId": "--_ds-tooltip-primary-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3515,13 +3515,13 @@
         {
           "channelId": "--_ds-tooltip-minimal-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3530,13 +3530,13 @@
         {
           "channelId": "--_ds-tooltip-minimal-highlight",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3545,13 +3545,13 @@
         {
           "channelId": "--_ds-tooltip-edge",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3560,13 +3560,13 @@
         {
           "channelId": "--_ds-tooltip-error-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3575,13 +3575,13 @@
         {
           "channelId": "--_ds-tooltip-success-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3590,13 +3590,13 @@
         {
           "channelId": "--_ds-tooltip-warning-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3615,13 +3615,13 @@
         {
           "channelId": "--_ds-tooltip-compact-type",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3630,13 +3630,13 @@
         {
           "channelId": "--_ds-tooltip-rich-type",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3645,13 +3645,13 @@
         {
           "channelId": "--_ds-tooltip-spacious-type",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3660,13 +3660,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-key-type",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3750,13 +3750,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-key-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3792,13 +3792,13 @@
         {
           "channelId": "--_ds-tooltip-max-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3807,13 +3807,13 @@
         {
           "channelId": "--_ds-tooltip-instance-max-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3822,13 +3822,13 @@
         {
           "channelId": "--_ds-tooltip-minimal-max-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3837,13 +3837,13 @@
         {
           "channelId": "--_ds-tooltip-inverse-max-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3852,13 +3852,13 @@
         {
           "channelId": "--_ds-tooltip-rich-max-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3867,13 +3867,13 @@
         {
           "channelId": "--_ds-tooltip-viewport-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3882,13 +3882,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3897,13 +3897,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-chip-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3912,13 +3912,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-key-min-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3927,13 +3927,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-key-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3942,13 +3942,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-key-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3966,7 +3966,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3981,7 +3981,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Canales de motion leidos y NO cubiertos por regla de grupo: --ds-tooltip-enter-duration, --ds-tooltip-exit-duration, --ds-tooltip-enter-easing, --ds-tooltip-exit-easing, --ds-tooltip-closed-transform, --ds-tooltip-motion-distance, --ds-tooltip-motion-scale"
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. Canales de motion leidos y NO cubiertos por regla de grupo: --ds-tooltip-enter-duration, --ds-tooltip-exit-duration, --ds-tooltip-enter-easing, --ds-tooltip-exit-easing, --ds-tooltip-closed-transform, --ds-tooltip-motion-distance, --ds-tooltip-motion-scale"
           }
         ],
         "reviewedFrom": "anatomy"
@@ -4025,14 +4025,14 @@
         {
           "channelId": "--_ds-tooltip-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/tooltip-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4051,7 +4051,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -4100,13 +4100,13 @@
         {
           "channelId": "--_ds-tooltip-edge-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4115,13 +4115,13 @@
         {
           "channelId": "--_ds-tooltip-bordered-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4130,13 +4130,13 @@
         {
           "channelId": "--_ds-tooltip-inverse-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4145,13 +4145,13 @@
         {
           "channelId": "--_ds-tooltip-minimal-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4160,13 +4160,13 @@
         {
           "channelId": "--_ds-tooltip-rich-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4175,13 +4175,13 @@
         {
           "channelId": "--_ds-tooltip-shortcut-key-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/tooltip"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4204,7 +4204,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4260,7 +4260,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4288,7 +4288,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tooltip/index.css"
         ]
       }
     },
@@ -4331,11 +4331,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

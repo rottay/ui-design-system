@@ -8,15 +8,15 @@
     "components": [
       "PatternFilterBuilder"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/forms/filter-builder",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/forms/filter-builder",
     "publicComponents": [
       "PatternFilterBuilder"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "3a08219d117c4d0d4ca52cc14cadfd6cb7ca63ec875646773547453f38457612"
+    "inventoryRowDigest": "e75b790dde9da783ef7bb91a636b9d4b39c35815fd92c210bd34eaf5c5aaa3ce"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css",
-      "packages/core/src/ui/patterns/forms/filter-builder"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css",
+      "packages/core/src/components/patterns/forms/filter-builder"
     ],
     "stableParts": [
       "add-filter-dropdown",
@@ -75,11 +75,11 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (56 emission sites); the part identity is the family public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:146, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:175, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:394, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:404]",
-      "The family assigns explicit ARIA roles in source (3 sites; roles observed: `group`, `listbox`, `option`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:471, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:647, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:661]",
-      "The family sets ARIA state/label attributes in source (20 sites; observed: `aria-label`, `aria-expanded`, `aria-haspopup`, `aria-selected`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:476, packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:526, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:402, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:412]",
-      "The family implements keyboard interaction handlers (2 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:634, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:649]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (56 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:146, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:175, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:394, packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:404]"
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (56 emission sites); the part identity is the family public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:146, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:175, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:394, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:404]",
+      "The family assigns explicit ARIA roles in source (3 sites; roles observed: `group`, `listbox`, `option`); a tenant control must not remove or replace them. [at packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:471, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:647, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:661]",
+      "The family sets ARIA state/label attributes in source (20 sites; observed: `aria-label`, `aria-expanded`, `aria-haspopup`, `aria-selected`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:476, packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:526, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:402, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:412]",
+      "The family implements keyboard interaction handlers (2 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:634, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:649]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (56 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:146, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:175, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:394, packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:404]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -109,9 +109,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:645",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:630",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:179"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:645",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:630",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:179"
           ]
         },
         {
@@ -119,9 +119,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:561",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:524",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:140"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:561",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:524",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:140"
           ]
         },
         {
@@ -129,9 +129,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:505",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:450",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:82"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:505",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:450",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:82"
           ]
         },
         {
@@ -139,11 +139,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:699",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:714",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:695",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:713",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:45"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:699",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:714",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:695",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:713",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:45"
           ]
         },
         {
@@ -151,9 +151,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:567",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:549",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:250"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:567",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:549",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:250"
           ]
         },
         {
@@ -161,9 +161,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:503",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:441",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:71"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:503",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:441",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:71"
           ]
         },
         {
@@ -171,8 +171,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:394",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:115"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:394",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:115"
           ]
         },
         {
@@ -180,8 +180,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:601",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:158"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:601",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:158"
           ]
         },
         {
@@ -189,8 +189,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:565",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:150"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:565",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:150"
           ]
         },
         {
@@ -198,8 +198,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:477",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:76"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:477",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:76"
           ]
         },
         {
@@ -207,11 +207,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:146",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:175",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:658",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:647",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:215"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:146",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:175",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:658",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:647",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:215"
           ]
         },
         {
@@ -219,11 +219,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:537",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:577",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:495",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:564",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:85"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:537",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:577",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:495",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:564",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:85"
           ]
         },
         {
@@ -231,9 +231,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:628",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:620",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:124"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:628",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:620",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:124"
           ]
         },
         {
@@ -241,9 +241,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:614",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:608",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:116"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:614",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:608",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:116"
           ]
         },
         {
@@ -251,9 +251,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:404",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:325",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:125"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:404",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:325",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:125"
           ]
         },
         {
@@ -261,8 +261,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:531",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:99"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:531",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:99"
           ]
         },
         {
@@ -270,9 +270,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:682",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:677",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:146"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:682",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:677",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:146"
           ]
         },
         {
@@ -280,8 +280,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:596",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:63"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:596",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:63"
           ]
         },
         {
@@ -289,8 +289,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:625",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:174"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:625",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:174"
           ]
         },
         {
@@ -298,8 +298,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:535",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:109"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:535",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:109"
           ]
         },
         {
@@ -307,8 +307,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:520",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:95"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:520",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:95"
           ]
         },
         {
@@ -316,8 +316,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:471",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:131"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:471",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:131"
           ]
         },
         {
@@ -325,8 +325,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:397",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:67"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:397",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:67"
           ]
         },
         {
@@ -334,8 +334,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:680",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:166"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:680",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:166"
           ]
         },
         {
@@ -343,12 +343,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:311",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:333",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:354",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:366",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:378",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:407"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:311",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:333",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:354",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:366",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:378",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:407"
           ]
         },
         {
@@ -356,8 +356,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:603",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:598"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:603",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:598"
           ]
         },
         {
@@ -365,7 +365,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:663"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:663"
           ]
         },
         {
@@ -373,7 +373,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:463"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:463"
           ]
         },
         {
@@ -381,7 +381,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:509"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:509"
           ]
         },
         {
@@ -389,7 +389,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:708"
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:708"
           ]
         }
       ],
@@ -399,9 +399,9 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:54",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:700",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:696"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:54",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:700",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:696"
           ],
           "state": "loading"
         },
@@ -410,7 +410,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:140"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:140"
           ],
           "state": "hover"
         },
@@ -419,9 +419,9 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:54",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:700",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:696"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:54",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:700",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:696"
           ],
           "state": "loading"
         },
@@ -430,7 +430,7 @@
           "occurrences": 1,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:140"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:140"
           ],
           "state": "hover"
         }
@@ -441,10 +441,10 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:73",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:531",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:312",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:334"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:73",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:531",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:312",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:334"
           ]
         },
         {
@@ -452,9 +452,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:100",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:568",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:100",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:568",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
           ]
         },
         {
@@ -462,9 +462,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:106",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:568",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:106",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:568",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
           ]
         },
         {
@@ -472,9 +472,9 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:77",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:701",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:714"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:77",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:701",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:714"
           ]
         },
         {
@@ -482,10 +482,10 @@
           "occurrences": 5,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:73",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:531",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:312",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:334"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:73",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:531",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:312",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:334"
           ]
         },
         {
@@ -493,9 +493,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:100",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:568",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:100",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:568",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
           ]
         },
         {
@@ -503,9 +503,9 @@
           "occurrences": 4,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:106",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:568",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:106",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:568",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:550"
           ]
         },
         {
@@ -513,9 +513,9 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:77",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:701",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:714"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:77",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:701",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:714"
           ]
         }
       ],
@@ -525,9 +525,9 @@
           "occurrences": 12,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:139",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:562",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:525"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:139",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:562",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:525"
           ]
         },
         {
@@ -535,9 +535,9 @@
           "occurrences": 12,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:139",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:562",
-            "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:525"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:139",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:562",
+            "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:525"
           ]
         }
       ],
@@ -646,7 +646,7 @@
           }
         },
         "antdImportSites": [
-          "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:23"
+          "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:23"
         ],
         "inlineStyleAttributeSites": 55,
         "templateConstructedVariableNames": [],
@@ -655,21 +655,21 @@
           "classic": {
             "lines": 669,
             "files": [
-              "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx"
+              "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx"
             ],
             "fileCount": 1
           },
           "modern": {
             "lines": 719,
             "files": [
-              "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx"
+              "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx"
             ],
             "fileCount": 1
           },
           "rustic": {
             "lines": 718,
             "files": [
-              "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx"
+              "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx"
             ],
             "fileCount": 1
           }
@@ -681,7 +681,7 @@
             "gap": "CLASSIC_ENGINE_PAINT_NOT_ENUMERABLE",
             "detail": "The classic engine renders Ant Design components whose paint is Ant CSS-in-JS tokens, not --ds-* custom properties, so no --ds-* census can describe it from this repository.",
             "evidence": [
-              "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:23"
+              "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:23"
             ]
           },
           {
@@ -700,7 +700,7 @@
             "gap": "CLASSIC_ENGINE_PAINT_NOT_ENUMERABLE",
             "detail": "The classic engine renders Ant Design components whose paint is Ant CSS-in-JS tokens, not --ds-* custom properties, so no --ds-* census can describe it from this repository.",
             "evidence": [
-              "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:23"
+              "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:23"
             ]
           },
           {
@@ -724,10 +724,10 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 2,
               "noFallbackReadSites": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:94",
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:141"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:94",
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:141"
               ],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:94",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:94",
               "landsOnProperties": [
                 "background"
               ],
@@ -746,7 +746,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:95",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:95",
               "landsOnProperties": [
                 "flex"
               ],
@@ -764,7 +764,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:187",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:187",
               "landsOnProperties": [
                 "max-block-size"
               ],
@@ -782,7 +782,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:185",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:185",
               "landsOnProperties": [
                 "min-inline-size"
               ],
@@ -800,7 +800,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:182",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:182",
               "landsOnProperties": [
                 "z-index"
               ],
@@ -818,7 +818,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:83",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:83",
               "landsOnProperties": [
                 "inline-size"
               ],
@@ -836,7 +836,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:74",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:74",
               "landsOnProperties": [
                 "gap"
               ],
@@ -854,7 +854,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:75",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:75",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -872,7 +872,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:78",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:78",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -890,7 +890,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:250",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:250",
               "landsOnProperties": [
                 "min-block-size"
               ],
@@ -908,7 +908,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:99",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:99",
               "landsOnProperties": [
                 "flex"
               ],
@@ -926,199 +926,199 @@
           "inertFallbackChains": [
             {
               "variable": "--ds-color-bg-muted",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:94",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:94",
               "chainDepth": 1,
               "outerRung": "--ds-color-bg-secondary",
               "property": "background",
               "part": "group",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:138",
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:156"
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
               ]
             },
             {
               "variable": "--ds-color-bg-muted",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:141",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:141",
               "chainDepth": 1,
               "outerRung": "--ds-color-bg-secondary",
               "property": "background",
               "part": "add-filter-option",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:138",
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:156"
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
               ]
             },
             {
               "variable": "--ds-color-bg-primary",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:79",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:79",
               "chainDepth": 1,
               "outerRung": "--ds-color-bg-elevated",
               "property": "background",
               "part": "operator-select",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:29",
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:29",
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140"
               ]
             },
             {
               "variable": "--ds-color-bg-primary",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:131",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:131",
               "chainDepth": 1,
               "outerRung": "--ds-color-bg-elevated",
               "property": "background",
               "part": "add-filter-dropdown",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:29",
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:29",
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140"
               ]
             },
             {
               "variable": "--ds-color-border",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:76",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:76",
               "chainDepth": 1,
               "outerRung": "--ds-color-border-primary",
               "property": "border",
               "part": "operator-select",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
-                "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:315"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
+                "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:315"
               ]
             },
             {
               "variable": "--ds-color-border",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:107",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:107",
               "chainDepth": 1,
               "outerRung": "--ds-color-border-primary",
               "property": "border",
               "part": "logic-toggle",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
-                "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:315"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
+                "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:315"
               ]
             },
             {
               "variable": "--ds-color-border",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:124",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:124",
               "chainDepth": 1,
               "outerRung": "--ds-color-border-primary",
               "property": "border",
               "part": "add-filter-trigger",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
-                "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:315"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
+                "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:315"
               ]
             },
             {
               "variable": "--ds-color-border",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:132",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:132",
               "chainDepth": 1,
               "outerRung": "--ds-color-border-primary",
               "property": "border",
               "part": "add-filter-dropdown",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
-                "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:315"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
+                "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:315"
               ]
             },
             {
               "variable": "--ds-color-border-primary",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:116",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:116",
               "chainDepth": 1,
               "outerRung": "--ds-color-border-secondary",
               "property": "border",
               "part": "add-group-button",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:148",
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:166"
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:148",
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:166"
               ]
             },
             {
               "variable": "--ds-color-border-secondary",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:93",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:93",
               "chainDepth": 1,
               "outerRung": "--ds-color-primary-200",
               "property": "border",
               "part": "group",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/tooling/testing/fixtures/tenants/default.css:10",
-                "packages/core/src/tooling/testing/fixtures/tenants/bithire.css:10"
+                "packages/core/tests/fixtures/tenants/default/index.css:10",
+                "packages/core/tests/fixtures/tenants/bithire/index.css:10"
               ]
             },
             {
               "variable": "--ds-color-danger",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:87",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:87",
               "chainDepth": 1,
               "outerRung": "--ds-color-error",
               "property": "color",
               "part": "remove-button",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
-                "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+                "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106"
               ]
             },
             {
               "variable": "--ds-color-text",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:67",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:67",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-primary",
               "property": "color",
               "part": "boolean-label",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
               ]
             },
             {
               "variable": "--ds-color-text",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:80",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:80",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-primary",
               "property": "color",
               "part": "operator-select",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
               ]
             },
             {
               "variable": "--ds-color-text",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:110",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:110",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-primary",
               "property": "color",
               "part": "logic-toggle",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
               ]
             },
             {
               "variable": "--ds-color-text",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:138",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:138",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-primary",
               "property": "color",
               "part": "add-filter-option",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-                "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+                "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30"
               ]
             },
             {
               "variable": "--ds-color-text-inverse",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:104",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:104",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-on-primary",
               "property": "color",
               "part": "logic-toggle",
               "outerRungRootDeclarationSites": [
-                "packages/core/src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:331",
+                "packages/core/tests/integration/customization-fields/index.test.ts:331",
                 "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:255"
               ]
             },
             {
               "variable": "--ds-color-text-muted",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:61",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:61",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-tertiary",
               "property": "color",
@@ -1130,7 +1130,7 @@
             },
             {
               "variable": "--ds-color-text-muted",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:119",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:119",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-tertiary",
               "property": "color",
@@ -1142,7 +1142,7 @@
             },
             {
               "variable": "--ds-color-text-muted",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:127",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:127",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-tertiary",
               "property": "color",
@@ -1154,7 +1154,7 @@
             },
             {
               "variable": "--ds-color-text-muted",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:148",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:148",
               "chainDepth": 1,
               "outerRung": "--ds-color-text-tertiary",
               "property": "color",
@@ -1168,137 +1168,137 @@
           "hardcodedValue": [
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:77",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:77",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:77",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:77",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='value-input'][data-part='value-input']:not([data-field-type='boo",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:77",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:77",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:88",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:88",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:88",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:88",
               "literal": "3px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='remove-button'][data-part='remove-button']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:88",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:88",
               "line": "border-radius: 3px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:95",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:95",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:95",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:95",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='group']:not([data-root])",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:95",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:95",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:102",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:102",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:102",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:102",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='logic-toggle'][data-logic='and']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:102",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:102",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:108",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:108",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:108",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:108",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='logic-toggle'][data-logic='or']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:108",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:108",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:117",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:117",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:117",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:117",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='add-rule-button'][data-part='add-rule-button'], .ds-pattern-filt",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:117",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:117",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:125",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:125",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:125",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:125",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-trigger'][data-part='add-filter-trigger']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:125",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:125",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_RADIUS",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:133",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:133",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:133",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:133",
               "literal": "4px",
               "property": "border-radius",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-dropdown'][data-part='add-filter-dropdown']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:133",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:133",
               "line": "border-radius: 4px;"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:134",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:134",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:134",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:134",
               "literal": "rgba(0, 0, 0, 0.08)",
               "property": "box-shadow",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-dropdown'][data-part='add-filter-dropdown']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:134",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:134",
               "line": "box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             },
             {
               "kind": "LITERAL_SHADOW",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:134",
-              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:134",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:134",
+              "declarationStartsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:134",
               "literal": "0 4px 12px rgba(0, 0, 0, 0.08)",
               "property": "box-shadow",
               "selector": ".ds-pattern-filter-builder.ds-engine-rustic [data-part='add-filter-dropdown'][data-part='add-filter-dropdown']",
               "position": "DIRECT",
               "atRuleScope": "",
               "classification": "HARDCODED_VALUE",
-              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:134",
+              "declarationEndsAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:134",
               "line": "box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);"
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:494",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:494",
               "literal": "#d6e4ff",
               "property": "borderLeft",
               "selector": "TSX",
@@ -1309,7 +1309,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:498",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:498",
               "literal": "#fafafa",
               "property": "background",
               "selector": "TSX",
@@ -1320,7 +1320,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:584",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:584",
               "literal": "#fff",
               "property": "background",
               "selector": "TSX",
@@ -1331,7 +1331,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:585",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:585",
               "literal": "#d9d9d9",
               "property": "border",
               "selector": "TSX",
@@ -1342,7 +1342,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:587",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:587",
               "literal": "rgba(0,0,0,0.08)",
               "property": "boxShadow",
               "selector": "TSX",
@@ -1353,7 +1353,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:613",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:613",
               "literal": "#f5f5f5",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1364,7 +1364,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/rustic/index.tsx:611",
+              "at": "packages/core/src/components/patterns/forms/filter-builder/engines/rustic/index.tsx:611",
               "literal": "#9633",
               "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
               "selector": "TSX",
@@ -1420,8 +1420,8 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 2,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:94",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:141"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:94",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:141"
             ],
             "partsThatRead": [
               "add-filter-option",
@@ -1439,7 +1439,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:94",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:94",
                 "part": "group",
                 "property": "background",
                 "hasFallback": false,
@@ -1449,7 +1449,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:141",
                 "part": "add-filter-option",
                 "property": "background",
                 "hasFallback": false,
@@ -1489,7 +1489,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:95",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:95",
                 "part": "rule-operator",
                 "property": "flex",
                 "hasFallback": true,
@@ -1527,7 +1527,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:187",
                 "part": "add-filter-dropdown",
                 "property": "max-block-size",
                 "hasFallback": true,
@@ -1565,7 +1565,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:185",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:185",
                 "part": "add-filter-dropdown",
                 "property": "min-inline-size",
                 "hasFallback": true,
@@ -1603,7 +1603,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:182",
                 "part": "add-filter-dropdown",
                 "property": "z-index",
                 "hasFallback": true,
@@ -1641,7 +1641,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:83",
                 "part": "rule-logic-label",
                 "property": "inline-size",
                 "hasFallback": true,
@@ -1679,7 +1679,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:74",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:74",
                 "part": "rule",
                 "property": "gap",
                 "hasFallback": true,
@@ -1717,7 +1717,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:75",
                 "part": "rule",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -1755,7 +1755,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:78",
                 "part": "rule",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -1795,7 +1795,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:250",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:250",
                 "part": "logic-toggle",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -1833,7 +1833,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:99",
                 "part": "rule-value",
                 "property": "flex",
                 "hasFallback": true,
@@ -1848,9 +1848,9 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:29",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158",
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:29",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:188"
             ],
             "declarationSiteCount": 37,
@@ -1870,7 +1870,7 @@
             "readWithFallbackCount": 3,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:191"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:191"
             ],
             "partsThatRead": [
               "UNRESOLVED_TSX_INLINE",
@@ -1891,7 +1891,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:191",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:191",
                 "part": "add-filter-dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -1899,7 +1899,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:79",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:79",
                 "part": "operator-select",
                 "property": "background",
                 "hasFallback": true,
@@ -1907,7 +1907,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:131",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:131",
                 "part": "add-filter-dropdown",
                 "property": "background",
                 "hasFallback": true,
@@ -1915,7 +1915,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:584",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:584",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "background",
                 "hasFallback": true,
@@ -1930,10 +1930,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:49",
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:28",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:137",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:155"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:49",
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:28",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:137",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:155"
             ],
             "declarationSiteCount": 56,
             "declarationForms": [
@@ -1955,8 +1955,8 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 2,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:79",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:131"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:79",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:131"
             ],
             "partsThatRead": [
               "add-filter-dropdown",
@@ -1974,7 +1974,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:79",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:79",
                 "part": "operator-select",
                 "property": "background",
                 "hasFallback": false,
@@ -1984,7 +1984,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:131",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:131",
                 "part": "add-filter-dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -2001,8 +2001,8 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:138",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:156",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:190",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:703"
             ],
@@ -2042,7 +2042,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:94",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:94",
                 "part": "group",
                 "property": "background",
                 "hasFallback": true,
@@ -2050,7 +2050,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:141",
                 "part": "add-filter-option",
                 "property": "background",
                 "hasFallback": true,
@@ -2058,7 +2058,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:498",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:498",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "background",
                 "hasFallback": true,
@@ -2066,7 +2066,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:613",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:613",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "UNRESOLVED_INLINE_STYLE_PROPERTY",
                 "hasFallback": true,
@@ -2081,10 +2081,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:25",
-              "packages/core/src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:147",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:165"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:25",
+              "packages/core/src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:147",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:165"
             ],
             "declarationSiteCount": 38,
             "declarationForms": [
@@ -2104,10 +2104,10 @@
             "readWithFallbackCount": 1,
             "readWithoutFallbackCount": 5,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:211",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:76",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:107",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:124"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:211",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:76",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:107",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:124"
             ],
             "partsThatRead": [
               "UNRESOLVED_TSX_INLINE",
@@ -2130,7 +2130,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:211",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:211",
                 "part": "add-filter-dropdown",
                 "property": "border",
                 "hasFallback": false,
@@ -2138,7 +2138,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:76",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:76",
                 "part": "operator-select",
                 "property": "border",
                 "hasFallback": false,
@@ -2148,7 +2148,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:107",
                 "part": "logic-toggle",
                 "property": "border",
                 "hasFallback": false,
@@ -2158,7 +2158,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:124",
                 "part": "add-filter-trigger",
                 "property": "border",
                 "hasFallback": false,
@@ -2168,7 +2168,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:132",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:132",
                 "part": "add-filter-dropdown",
                 "property": "border",
                 "hasFallback": false,
@@ -2178,7 +2178,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:585",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:585",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "border",
                 "hasFallback": true,
@@ -2193,10 +2193,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:315",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:420",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:530"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:51",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:315",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:420",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:530"
             ],
             "declarationSiteCount": 43,
             "declarationForms": [
@@ -2216,7 +2216,7 @@
             "readWithFallbackCount": 4,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:116"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:116"
             ],
             "partsThatRead": [
               "add-filter-dropdown",
@@ -2237,7 +2237,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:76",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:76",
                 "part": "operator-select",
                 "property": "border",
                 "hasFallback": true,
@@ -2245,7 +2245,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:107",
                 "part": "logic-toggle",
                 "property": "border",
                 "hasFallback": true,
@@ -2253,7 +2253,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:116",
                 "part": "add-group-button",
                 "property": "border",
                 "hasFallback": false,
@@ -2263,7 +2263,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:124",
                 "part": "add-filter-trigger",
                 "property": "border",
                 "hasFallback": true,
@@ -2271,7 +2271,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:132",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:132",
                 "part": "add-filter-dropdown",
                 "property": "border",
                 "hasFallback": true,
@@ -2286,10 +2286,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:148",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:166",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:421"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:148",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:166",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:316",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:421"
             ],
             "declarationSiteCount": 44,
             "declarationForms": [
@@ -2308,7 +2308,7 @@
             "readWithFallbackCount": 1,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:93"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:93"
             ],
             "partsThatRead": [
               "add-group-button",
@@ -2326,7 +2326,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:93",
                 "part": "group",
                 "property": "border",
                 "hasFallback": false,
@@ -2336,7 +2336,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:116",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:116",
                 "part": "add-group-button",
                 "property": "border",
                 "hasFallback": true,
@@ -2353,7 +2353,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:1002",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:2034",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:178",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:178",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1220"
             ],
             "declarationSiteCount": 14,
@@ -2370,7 +2370,7 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:87"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:87"
             ],
             "partsThatRead": [
               "remove-button"
@@ -2387,7 +2387,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:87",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:87",
                 "part": "remove-button",
                 "property": "color",
                 "hasFallback": false,
@@ -2404,10 +2404,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/tooling/testing/integration/capability-propagation/tests/index.test.ts:157",
-              "packages/core/src/tooling/testing/integration/capability-propagation/tests/index.test.ts:287"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/tests/integration/capability-propagation/tests/index.test.ts:157",
+              "packages/core/tests/integration/capability-propagation/tests/index.test.ts:287"
             ],
             "declarationSiteCount": 41,
             "declarationForms": [
@@ -2442,7 +2442,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:87",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:87",
                 "part": "remove-button",
                 "property": "color",
                 "hasFallback": true,
@@ -2457,10 +2457,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:293",
-              "packages/core/src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:305",
-              "packages/core/src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
-              "packages/core/src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359"
+              "packages/core/src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:293",
+              "packages/core/src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:305",
+              "packages/core/src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "packages/core/src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359"
             ],
             "declarationSiteCount": 69,
             "declarationForms": [
@@ -2481,8 +2481,8 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 2,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:101",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:103"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:101",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:103"
             ],
             "partsThatRead": [
               "logic-toggle"
@@ -2501,7 +2501,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:101",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:101",
                 "part": "logic-toggle",
                 "property": "border",
                 "hasFallback": false,
@@ -2509,7 +2509,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:103",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:103",
                 "part": "logic-toggle",
                 "property": "background",
                 "hasFallback": false,
@@ -2524,8 +2524,8 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:10",
-              "packages/core/src/tooling/testing/fixtures/tenants/bithire.css:10",
+              "packages/core/tests/fixtures/tenants/default/index.css:10",
+              "packages/core/tests/fixtures/tenants/bithire/index.css:10",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:224",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:743"
             ],
@@ -2558,7 +2558,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:93",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:93",
                 "part": "group",
                 "property": "border",
                 "hasFallback": true,
@@ -2575,7 +2575,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:907",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:1994",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:158",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:158",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1200"
             ],
             "declarationSiteCount": 14,
@@ -2607,7 +2607,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:494",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:494",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "borderLeft",
                 "hasFallback": true,
@@ -2622,9 +2622,9 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:142",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:160",
-              "packages/core/src/ui/patterns/customization/brand-studio/tests/brand-studio.test.tsx:157",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:142",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:160",
+              "packages/core/src/components/patterns/customization/brand-studio/tests/brand-studio.test.tsx:157",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:966"
             ],
             "declarationSiteCount": 17,
@@ -2643,10 +2643,10 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 4,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:67",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:80",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:110",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:138"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:67",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:80",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:110",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:138"
             ],
             "partsThatRead": [
               "add-filter-option",
@@ -2666,7 +2666,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:67",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:67",
                 "part": "boolean-label",
                 "property": "color",
                 "hasFallback": false,
@@ -2676,7 +2676,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:80",
                 "part": "operator-select",
                 "property": "color",
                 "hasFallback": false,
@@ -2686,7 +2686,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:110",
                 "part": "logic-toggle",
                 "property": "color",
                 "hasFallback": false,
@@ -2696,7 +2696,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:138",
                 "part": "add-filter-option",
                 "property": "color",
                 "hasFallback": false,
@@ -2716,7 +2716,7 @@
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:967",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:2025",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:60",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:226"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:226"
             ],
             "declarationSiteCount": 23,
             "declarationForms": [
@@ -2734,7 +2734,7 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:104"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:104"
             ],
             "partsThatRead": [
               "logic-toggle"
@@ -2751,7 +2751,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:104",
                 "part": "logic-toggle",
                 "property": "color",
                 "hasFallback": false,
@@ -2768,10 +2768,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:31",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:145",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:163",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:308"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:31",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:145",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:163",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:308"
             ],
             "declarationSiteCount": 47,
             "declarationForms": [
@@ -2791,10 +2791,10 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 6,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:53",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:61",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:119",
-              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:127"
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:53",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:61",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:119",
+              "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:127"
             ],
             "partsThatRead": [
               "UNRESOLVED_TSX_INLINE",
@@ -2817,7 +2817,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:53",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:53",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -2825,7 +2825,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:61",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:61",
                 "part": "range-separator",
                 "property": "color",
                 "hasFallback": false,
@@ -2835,7 +2835,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:119",
                 "part": "add-group-button",
                 "property": "color",
                 "hasFallback": false,
@@ -2845,7 +2845,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:127",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:127",
                 "part": "add-filter-trigger",
                 "property": "color",
                 "hasFallback": false,
@@ -2855,7 +2855,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:148",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
@@ -2865,7 +2865,7 @@
                 "outerRungRootDeclaredOnShippedGround": true
               },
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:442",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:442",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "color",
                 "hasFallback": false,
@@ -2880,7 +2880,7 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:331",
+              "packages/core/tests/integration/customization-fields/index.test.ts:331",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:255",
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:781",
               "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:274"
@@ -2917,7 +2917,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:104",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:104",
                 "part": "logic-toggle",
                 "property": "color",
                 "hasFallback": true,
@@ -2932,10 +2932,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:143",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:161"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:30",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:143",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:161"
             ],
             "declarationSiteCount": 56,
             "declarationForms": [
@@ -2956,8 +2956,8 @@
             "readWithFallbackCount": 4,
             "readWithoutFallbackCount": 2,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:49",
-              "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:607"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:49",
+              "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:607"
             ],
             "partsThatRead": [
               "UNRESOLVED_TSX_INLINE",
@@ -2981,7 +2981,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:49",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:49",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -2989,7 +2989,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:67",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:67",
                 "part": "boolean-label",
                 "property": "color",
                 "hasFallback": true,
@@ -2997,7 +2997,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:80",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:80",
                 "part": "operator-select",
                 "property": "color",
                 "hasFallback": true,
@@ -3005,7 +3005,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:110",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:110",
                 "part": "logic-toggle",
                 "property": "color",
                 "hasFallback": true,
@@ -3013,7 +3013,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:138",
                 "part": "add-filter-option",
                 "property": "color",
                 "hasFallback": true,
@@ -3021,7 +3021,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/ui/patterns/forms/filter-builder/engines/classic/index.tsx:607",
+                "at": "packages/core/src/components/patterns/forms/filter-builder/engines/classic/index.tsx:607",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "color",
                 "hasFallback": false,
@@ -3036,10 +3036,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "packages/core/src/ui/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:27",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "packages/core/src/components/patterns/visualization/charts/tests/ChartTheme.root-scope.test.tsx:27",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:144",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "declarationSiteCount": 55,
             "declarationForms": [
@@ -3060,8 +3060,8 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 2,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:89",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:127"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:89",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:127"
             ],
             "partsThatRead": [
               "range-separator",
@@ -3079,7 +3079,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:89",
                 "part": "rule-logic-label",
                 "property": "color",
                 "hasFallback": false,
@@ -3087,7 +3087,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:127",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:127",
                 "part": "range-separator",
                 "property": "color",
                 "hasFallback": false,
@@ -3141,7 +3141,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:61",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:61",
                 "part": "range-separator",
                 "property": "color",
                 "hasFallback": true,
@@ -3149,7 +3149,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:119",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:119",
                 "part": "add-group-button",
                 "property": "color",
                 "hasFallback": true,
@@ -3157,7 +3157,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:127",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:127",
                 "part": "add-filter-trigger",
                 "property": "color",
                 "hasFallback": true,
@@ -3165,7 +3165,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css:148",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": true,
@@ -3182,7 +3182,7 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:1081",
               "packages/core/src/foundation/tokens/css/facade/artifacts/bithire/index.css:350",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:801",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:801",
               "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:969"
             ],
             "declarationSiteCount": 16,
@@ -3202,7 +3202,7 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:193"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:193"
             ],
             "partsThatRead": [
               "add-filter-dropdown"
@@ -3219,7 +3219,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:193",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:193",
                 "part": "add-filter-dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -3234,7 +3234,7 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608",
               "packages/core/src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:117",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1650"
             ],
@@ -3269,7 +3269,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:85",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:85",
                 "part": "rule-logic-label",
                 "property": "font-size",
                 "hasFallback": true,
@@ -3277,7 +3277,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:126",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:126",
                 "part": "range-separator",
                 "property": "font-size",
                 "hasFallback": true,
@@ -3292,7 +3292,7 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:623",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:623",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1665",
               "packages/core/artifacts/generated/css/all-verticals/index.css:1744"
             ],
@@ -3324,7 +3324,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:86",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:86",
                 "part": "rule-logic-label",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -3339,7 +3339,7 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:632",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:632",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1674",
               "packages/core/artifacts/generated/css/all-verticals/index.css:1753"
             ],
@@ -3371,7 +3371,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:87",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:87",
                 "part": "rule-logic-label",
                 "property": "line-height",
                 "hasFallback": true,
@@ -3386,7 +3386,7 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123",
               "packages/core/src/graphics/motion/react/runtime/flip-layout/tests/use-flip-layout.test.tsx:83",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:3385"
             ],
@@ -3420,7 +3420,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:198",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:198",
                 "part": "add-filter-dropdown",
                 "property": "animation",
                 "hasFallback": true,
@@ -3435,9 +3435,9 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:3356"
             ],
             "declarationSiteCount": 19,
@@ -3453,7 +3453,7 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:197"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:197"
             ],
             "partsThatRead": [
               "add-filter-dropdown"
@@ -3470,7 +3470,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:197",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:197",
                 "part": "add-filter-dropdown",
                 "property": "animation",
                 "hasFallback": false,
@@ -3485,10 +3485,10 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:563"
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:351",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:474",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:563"
             ],
             "declarationSiteCount": 13,
             "declarationForms": [
@@ -3521,7 +3521,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:145",
                 "part": "group",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -3529,7 +3529,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:192",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:192",
                 "part": "add-filter-dropdown",
                 "property": "border-radius",
                 "hasFallback": true,
@@ -3544,8 +3544,8 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684",
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:78",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684",
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:78",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:229",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1726"
             ],
@@ -3583,7 +3583,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:75",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:75",
                 "part": "rule",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -3593,7 +3593,7 @@
                 "outerRungRootDeclaredOnShippedGround": false
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:117",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:117",
                 "part": "value-range",
                 "property": "gap",
                 "hasFallback": true,
@@ -3601,7 +3601,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:154",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:154",
                 "part": "group-header",
                 "property": "margin-block-end",
                 "hasFallback": true,
@@ -3609,7 +3609,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:189",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:189",
                 "part": "add-filter-dropdown",
                 "property": "margin-block-start",
                 "hasFallback": true,
@@ -3617,7 +3617,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:190",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:190",
                 "part": "add-filter-dropdown",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -3632,8 +3632,8 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685",
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685",
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:230",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1727"
             ],
@@ -3672,7 +3672,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:74",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:74",
                 "part": "rule",
                 "property": "gap",
                 "hasFallback": true,
@@ -3682,7 +3682,7 @@
                 "outerRungRootDeclaredOnShippedGround": false
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:140",
                 "part": "group",
                 "property": "margin-inline-start",
                 "hasFallback": true,
@@ -3690,7 +3690,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:141",
                 "part": "group",
                 "property": "margin-block-end",
                 "hasFallback": true,
@@ -3698,7 +3698,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:142",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:142",
                 "part": "group",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -3706,7 +3706,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:153",
                 "part": "group-header",
                 "property": "gap",
                 "hasFallback": true,
@@ -3714,7 +3714,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:161",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:161",
                 "part": "group-actions",
                 "property": "gap",
                 "hasFallback": true,
@@ -3722,7 +3722,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:162",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:162",
                 "part": "group-actions",
                 "property": "margin-block-start",
                 "hasFallback": true,
@@ -3737,8 +3737,8 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686",
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686",
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:231",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1728"
             ],
@@ -3772,7 +3772,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:144",
                 "part": "group",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -3780,7 +3780,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:166",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:166",
                 "part": "clear-row",
                 "property": "margin-block-start",
                 "hasFallback": true,
@@ -3795,8 +3795,8 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687",
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:232",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1729"
             ],
@@ -3833,7 +3833,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:65",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:65",
                 "part": "empty",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -3841,7 +3841,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:143",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:143",
                 "part": "group",
                 "property": "padding-inline-start",
                 "hasFallback": true,
@@ -3849,7 +3849,7 @@
                 "chainDepth": 0
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:186",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:186",
                 "part": "add-filter-dropdown",
                 "property": "max-inline-size",
                 "hasFallback": true,
@@ -3866,9 +3866,9 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css+src-ts",
             "declarationSites": [
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:321",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:426",
-              "packages/core/src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:541",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:321",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:426",
+              "packages/core/tests/fixtures/tenants/quality-evidence/index.ts:541",
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:334"
             ],
             "declarationSiteCount": 16,
@@ -3887,7 +3887,7 @@
             "readWithFallbackCount": 0,
             "readWithoutFallbackCount": 1,
             "noFallbackReadSites": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:146"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:146"
             ],
             "partsThatRead": [
               "group"
@@ -3904,7 +3904,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:146",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:146",
                 "part": "group",
                 "property": "background",
                 "hasFallback": false,
@@ -3919,7 +3919,7 @@
             "otherFamilyNamespaceOwner": null,
             "declarationProvenance": "DECLARED_IN_SRC:src-css",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:932",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:932",
               "packages/core/artifacts/generated/css/verticals/rottay/index.css:1974",
               "packages/core/artifacts/generated/css/all-verticals/index.css:2053"
             ],
@@ -3951,7 +3951,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css:182",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css:182",
                 "part": "add-filter-dropdown",
                 "property": "z-index",
                 "hasFallback": true,
@@ -3966,7 +3966,7 @@
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
               "engine": "modern",
               "lines": 272,
               "role": "skin-css",
@@ -3975,7 +3975,7 @@
               ]
             },
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css",
               "engine": "rustic",
               "lines": 150,
               "role": "skin-css",
@@ -3990,7 +3990,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Button/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:48"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:48"
               ],
               "renderSiteCount": 8,
               "engines": [
@@ -4002,7 +4002,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/DatePicker/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:53"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:53"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -4014,7 +4014,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/display/Empty/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:47"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:47"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -4026,7 +4026,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Input/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:49"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:49"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -4038,7 +4038,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/InputNumber/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:50"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:50"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -4050,7 +4050,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Select/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:51"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:51"
               ],
               "renderSiteCount": 4,
               "engines": [
@@ -4062,7 +4062,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/feedback/Spinner/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:46"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:46"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -4074,7 +4074,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/inputs/Switch/engines/modern",
               "importSites": [
-                "packages/core/src/ui/patterns/forms/filter-builder/engines/modern/index.tsx:52"
+                "packages/core/src/components/patterns/forms/filter-builder/engines/modern/index.tsx:52"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -4122,13 +4122,13 @@
         {
           "channelId": "--_ds-filter-builder-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4146,7 +4146,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-font-weight-medium"
@@ -4164,7 +4164,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4206,13 +4206,13 @@
         {
           "channelId": "--_ds-filter-builder-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4240,13 +4240,13 @@
         {
           "channelId": "--_ds-filter-builder-field-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4266,13 +4266,13 @@
         {
           "channelId": "--_ds-filter-builder-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4305,13 +4305,13 @@
         {
           "channelId": "--_ds-filter-builder-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4321,13 +4321,13 @@
         {
           "channelId": "--_ds-filter-builder-control-min",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4336,13 +4336,13 @@
         {
           "channelId": "--_ds-filter-builder-dropdown-max-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4351,13 +4351,13 @@
         {
           "channelId": "--_ds-filter-builder-dropdown-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4366,13 +4366,13 @@
         {
           "channelId": "--_ds-filter-builder-logic-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4381,13 +4381,13 @@
         {
           "channelId": "--_ds-filter-builder-row-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4396,13 +4396,13 @@
         {
           "channelId": "--_ds-filter-builder-row-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4411,13 +4411,13 @@
         {
           "channelId": "--_ds-filter-builder-row-padding-y-compact",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4426,13 +4426,13 @@
         {
           "channelId": "--_ds-filter-builder-value-min",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4451,13 +4451,13 @@
         {
           "channelId": "--_ds-filter-builder-group-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4486,13 +4486,13 @@
         {
           "channelId": "--_ds-form-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4511,7 +4511,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "secciones planas: la escritura manda; la elevacion de estado seria ruido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido (foundation o familia compuesta; nivel 2/3 de la forma canonica)": [
             "--ds-elevation-2"
@@ -4547,7 +4547,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de escritura, no chrome",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -4560,7 +4560,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -4585,13 +4585,13 @@
         {
           "channelId": "--_ds-form-section-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4611,13 +4611,13 @@
         {
           "channelId": "--_ds-filter-builder-field-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4627,13 +4627,13 @@
         {
           "channelId": "--_ds-filter-builder-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4657,7 +4657,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4670,7 +4670,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -4709,7 +4709,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4741,13 +4741,13 @@
         {
           "channelId": "--_ds-form-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/forms/filter-builder"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/filter-builder/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4767,11 +4767,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

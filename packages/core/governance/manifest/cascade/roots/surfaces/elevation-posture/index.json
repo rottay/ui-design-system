@@ -3,6 +3,7 @@
   "rootId": "surfaces.elevation-posture",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-elevation-1",
     "emission": [
       {

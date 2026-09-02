@@ -8,15 +8,15 @@
     "components": [
       "PatternColumnSettings"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/data/column-settings",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/data/column-settings",
     "publicComponents": [
       "PatternColumnSettings"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ac853427cdc7c9cd5fe956251bf3ca0b56453722811cac97fdcbd3b955b492ef"
+    "inventoryRowDigest": "12b3badfd75ebbcf3191f4943de0a16662b22fde20851e513565932d8496b20a"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
-      "packages/core/src/ui/patterns/data/column-settings",
-      "packages/core/src/ui/patterns/data/column-settings/contracts/index.ts",
-      "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/data/column-settings/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/data/column-settings/index.ts"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
+      "packages/core/src/components/patterns/data/column-settings",
+      "packages/core/src/components/patterns/data/column-settings/contracts/index.ts",
+      "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/data/column-settings/index.ts"
     ],
     "stableParts": [
       "counter",
@@ -64,22 +64,22 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "a tenant control must not remove or override the list role contract on these nodes (aria-role: list) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:379]",
-      "a tenant control must not remove or override the listitem role contract on these nodes (aria-role: listitem) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:125]",
-      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:203]",
-      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:138, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:154, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:169, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:194]",
-      "aria-live is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-live) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:353]",
-      "aria-posinset is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-posinset) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:128]",
-      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:192]",
-      "aria-setsize is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-setsize) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:129]",
-      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:156, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:171]",
-      "the live region must remain in the accessibility tree; display:none or visibility:hidden through a tenant control would silence it (live-region: aria-live) [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:353]",
-      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:218, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:219]",
-      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (15 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:122, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:151, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:166, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:178]",
-      "The family assigns explicit ARIA roles in source (2 sites; roles observed: `listitem`, `list`); a tenant control must not remove or replace them. [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:125, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:379]",
-      "The family sets ARIA state/label attributes in source (9 sites; observed: `aria-label`, `aria-posinset`, `aria-setsize`, `aria-pressed`, `aria-hidden`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:128, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:129, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:138, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:154]",
-      "The family implements keyboard interaction handlers (2 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:156, packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:171]",
-      "The family exposes an `aria-live` region (1 sites); status announcements must survive restyling. [at packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:353]"
+      "a tenant control must not remove or override the list role contract on these nodes (aria-role: list) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:379]",
+      "a tenant control must not remove or override the listitem role contract on these nodes (aria-role: listitem) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:125]",
+      "aria-hidden is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-hidden) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:203]",
+      "aria-label is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-label) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:138, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:154, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:169, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:194]",
+      "aria-live is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-live) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:353]",
+      "aria-posinset is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-posinset) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:128]",
+      "aria-pressed is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-pressed) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:192]",
+      "aria-setsize is authored in source; theming must not suppress the state it exposes (aria-attribute: aria-setsize) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:129]",
+      "keyboard operability is implemented in source; no visual control may remove focusability or the key handling it depends on (keyboard-handler: onKeyDown/onKeyUp) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:156, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:171]",
+      "the live region must remain in the accessibility tree; display:none or visibility:hidden through a tenant control would silence it (live-region: aria-live) [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:353]",
+      "literals inside these at-rules are deliberate accessibility guarantees; they are listed, not classified as hardcoded-value defects (accessibility-guarantee-literal: prefers-reduced-motion / forced-colors) [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:218, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:219]",
+      "Every addressable node this family exposes is stamped with a `data-part` attribute in source (15 emission sites); the part identity is the family's public styling contract and a tenant control must not depend on private class names instead. [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:122, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:151, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:166, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:178]",
+      "The family assigns explicit ARIA roles in source (2 sites; roles observed: `listitem`, `list`); a tenant control must not remove or replace them. [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:125, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:379]",
+      "The family sets ARIA state/label attributes in source (9 sites; observed: `aria-label`, `aria-posinset`, `aria-setsize`, `aria-pressed`, `aria-hidden`); a tenant control may restyle these nodes but must not suppress the attributes. [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:128, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:129, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:138, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:154]",
+      "The family implements keyboard interaction handlers (2 sites); keyboard reachability is behavioural and is not reachable by a theme control. [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:156, packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:171]",
+      "The family exposes an `aria-live` region (1 sites); status announcements must survive restyling. [at packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:353]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -109,12 +109,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:362"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:362"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:28",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:29",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:30"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:29",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:30"
           ],
           "anchorStatus": "verified"
         },
@@ -123,11 +123,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:381"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:381"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:155"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:155"
           ],
           "anchorStatus": "verified"
         },
@@ -136,15 +136,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:407"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:407"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:161",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:162",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:164"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:162",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:164"
           ],
           "anchorStatus": "verified"
         },
@@ -154,12 +154,12 @@
           "anchor": "data-part selector in family paint sheet only",
           "at": [],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:80",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:81",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:82",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:83",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:84",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:85"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:80",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:81",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:84",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:85"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -169,15 +169,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:358"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:358"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:13",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:14",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:15",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:16",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:18"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:13",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:14",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:15",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:16",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:18"
           ],
           "anchorStatus": "verified"
         },
@@ -186,15 +186,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:177"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:177"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:119",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:120",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:121",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:122",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:123"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:119",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:120",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:122",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:123"
           ],
           "anchorStatus": "verified"
         },
@@ -203,15 +203,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:379"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:379"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:41",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:42",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:43",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:44",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:45"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:41",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:42",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:43",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:45"
           ],
           "anchorStatus": "verified"
         },
@@ -220,7 +220,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:353"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:353"
           ]
         },
         {
@@ -228,14 +228,14 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:203"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:203"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:145",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:146",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:147",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:148",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:149"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:145",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:147",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:148",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:149"
           ],
           "anchorStatus": "verified"
         },
@@ -244,12 +244,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:188"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:188"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:140",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:227",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:231"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:140",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:231"
           ],
           "anchorStatus": "verified"
         },
@@ -258,11 +258,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:346",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:5",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:6",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:7",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:8"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:5",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:6",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:7",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:8"
           ]
         },
         {
@@ -270,15 +270,15 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:121"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:121"
           ],
           "atSiteCount": 7,
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:51",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:52",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:53",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:54",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:55"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:51",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:53",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:54",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:55"
           ],
           "anchorStatus": "verified"
         },
@@ -287,11 +287,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:368"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:368"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:35",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:36"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:36"
           ],
           "anchorStatus": "verified"
         },
@@ -300,12 +300,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute in source JSX",
           "at": [
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:359"
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:359"
           ],
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:23",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:24",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:25"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:24",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:25"
           ],
           "anchorStatus": "verified"
         }
@@ -316,9 +316,9 @@
           "at": [],
           "state": "active",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:75",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:105"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:75",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:105"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -326,11 +326,11 @@
         {
           "token": "data-visible=false",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:130"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:130"
           ],
           "state": "visible",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:214"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:214"
           ],
           "anchorStatus": "verified"
         },
@@ -339,12 +339,12 @@
           "at": [],
           "state": "disabled",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:99",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:100",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:105",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:113",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:114"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:100",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:105",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:113",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:114"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -354,11 +354,11 @@
           "at": [],
           "state": "focus-visible",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:108",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:110",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:218",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:219"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:110",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:218",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:219"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -368,9 +368,9 @@
           "at": [],
           "state": "hover",
           "citationsUnverified": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:68",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:99",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:100"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:68",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:100"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -380,7 +380,7 @@
           "occurrences": 6,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:120"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:120"
           ],
           "state": "disabled"
         },
@@ -389,7 +389,7 @@
           "occurrences": 5,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:129"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:129"
           ],
           "state": "focus-visible"
         },
@@ -398,7 +398,7 @@
           "occurrences": 3,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:91"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:91"
           ],
           "state": "active"
         },
@@ -407,7 +407,7 @@
           "occurrences": 3,
           "stateReachability": "CSS_PSEUDO_CLASS_ONLY_NOT_A_SOURCE_LEVEL_STATE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:84"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:84"
           ],
           "state": "hover"
         },
@@ -416,8 +416,8 @@
           "occurrences": 2,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:151",
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:123"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:151",
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:123"
           ],
           "state": "visible"
         }
@@ -428,31 +428,31 @@
           "occurrences": 1,
           "stateReachability": "SOURCE_EMITTED_ATTRIBUTE",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:163",
-            "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:124"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:163",
+            "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:124"
           ]
         }
       ],
       "engineDivergence": {
         "engineDivergence": {
-          "engineSiblingDirectory": "packages/core/src/ui/patterns/data/column-settings/engines",
+          "engineSiblingDirectory": "packages/core/src/components/patterns/data/column-settings/engines",
           "engines": {
             "classic": {
-              "path": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
               "lines": 342,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "modern": {
-              "path": "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx",
+              "path": "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx",
               "lines": 420,
               "reExportsSibling": null,
               "delegatesToSharedImplementation": false,
               "addsScopeClass": []
             },
             "rustic": {
-              "path": "packages/core/src/ui/patterns/data/column-settings/engines/rustic/index.tsx",
+              "path": "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx",
               "lines": 10,
               "reExportsSibling": "../classic",
               "delegatesToSharedImplementation": true,
@@ -462,7 +462,7 @@
           "paintByEngine": {
             "modern": [
               {
-                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+                "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
                 "paintKind": "own"
               }
             ]
@@ -472,21 +472,21 @@
             "classic": {
               "lines": 342,
               "files": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx"
               ],
               "fileCount": 1
             },
             "modern": {
               "lines": 420,
               "files": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx"
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx"
               ],
               "fileCount": 1
             },
             "rustic": {
               "lines": 10,
               "files": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/rustic/index.tsx"
+                "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx"
               ],
               "fileCount": 1
             }
@@ -540,21 +540,21 @@
         },
         "engines": {
           "classic": {
-            "path": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "lines": 342,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "modern": {
-            "path": "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx",
+            "path": "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx",
             "lines": 420,
             "reExportsSibling": null,
             "delegatesToSharedImplementation": false,
             "addsScopeClass": []
           },
           "rustic": {
-            "path": "packages/core/src/ui/patterns/data/column-settings/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/patterns/data/column-settings/engines/rustic/index.tsx",
             "lines": 10,
             "reExportsSibling": "../classic",
             "delegatesToSharedImplementation": true,
@@ -582,7 +582,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:178",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:178",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -596,7 +596,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:179",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:179",
               "landsOnProperties": [
                 "padding-inline"
               ],
@@ -610,7 +610,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:186",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:186",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -624,7 +624,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:187",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:187",
               "landsOnProperties": [
                 "padding-inline"
               ],
@@ -638,7 +638,7 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:40",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:40",
               "landsOnProperties": [
                 "border-block-end",
                 "border-block-start"
@@ -654,7 +654,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:37",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:37",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -668,7 +668,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:38",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:38",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -682,7 +682,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:39",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:39",
               "landsOnProperties": [
                 "padding-inline"
               ],
@@ -696,7 +696,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:145",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:145",
               "landsOnProperties": [
                 "font-size"
               ],
@@ -710,7 +710,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:61",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:61",
               "landsOnProperties": [
                 "max-block-size"
               ],
@@ -724,7 +724,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:62",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:62",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -738,7 +738,7 @@
               "readSiteCount": 5,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:78",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:78",
               "landsOnProperties": [
                 "transition"
               ],
@@ -754,7 +754,7 @@
               "readSiteCount": 5,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:79",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:79",
               "landsOnProperties": [
                 "transition"
               ],
@@ -770,7 +770,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:170",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:170",
               "landsOnProperties": [
                 "font-size"
               ],
@@ -784,7 +784,7 @@
               "readSiteCount": 2,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:86",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:86",
               "landsOnProperties": [
                 "background"
               ],
@@ -798,7 +798,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:73",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:73",
               "landsOnProperties": [
                 "gap"
               ],
@@ -812,7 +812,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:74",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:74",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -826,7 +826,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:75",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:75",
               "landsOnProperties": [
                 "padding-inline"
               ],
@@ -840,7 +840,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:76",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:76",
               "landsOnProperties": [
                 "border-radius"
               ],
@@ -854,7 +854,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:55",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:55",
               "landsOnProperties": [
                 "padding-block"
               ],
@@ -868,7 +868,7 @@
               "readSiteCount": 1,
               "readWithoutFallbackCount": 0,
               "noFallbackReadSites": [],
-              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:56",
+              "firstReadAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:56",
               "landsOnProperties": [
                 "padding-inline"
               ],
@@ -881,7 +881,7 @@
           "hardcodedValue": [
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:242",
+              "at": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:242",
               "literal": "rgba(0,0,0,0.06)",
               "property": "borderBottom",
               "selector": "TSX",
@@ -890,7 +890,7 @@
             },
             {
               "kind": "LITERAL_COLOR",
-              "at": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:321",
+              "at": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:321",
               "literal": "rgba(0,0,0,0.06)",
               "property": "borderTop",
               "selector": "TSX",
@@ -1020,7 +1020,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 8,
             "part": "root",
             "landsOn": "color",
@@ -1036,7 +1036,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 16,
             "part": "header",
             "landsOn": "gap",
@@ -1052,7 +1052,7 @@
           },
           {
             "variable": "--ds-column-settings-header-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 18,
             "part": "header",
             "landsOn": "padding-block",
@@ -1068,7 +1068,7 @@
           },
           {
             "variable": "--ds-column-settings-header-padding-block-end",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 18,
             "part": "header",
             "landsOn": "padding-block",
@@ -1084,7 +1084,7 @@
           },
           {
             "variable": "--ds-column-settings-header-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 19,
             "part": "header",
             "landsOn": "padding-inline",
@@ -1100,7 +1100,7 @@
           },
           {
             "variable": "--ds-column-settings-hairline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 20,
             "part": "header",
             "landsOn": "border-block-end",
@@ -1117,7 +1117,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 20,
             "part": "header",
             "landsOn": "border-block-end",
@@ -1133,7 +1133,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 23,
             "part": "title",
             "landsOn": "color",
@@ -1149,7 +1149,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 24,
             "part": "title",
             "landsOn": "font-size",
@@ -1165,7 +1165,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 25,
             "part": "title",
             "landsOn": "font-weight",
@@ -1181,7 +1181,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 28,
             "part": "counter",
             "landsOn": "color",
@@ -1197,7 +1197,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 29,
             "part": "counter",
             "landsOn": "font-size",
@@ -1213,7 +1213,7 @@
           },
           {
             "variable": "--ds-column-settings-search-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 35,
             "part": "search",
             "landsOn": "padding-block",
@@ -1229,7 +1229,7 @@
           },
           {
             "variable": "--ds-column-settings-search-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 36,
             "part": "search",
             "landsOn": "padding-inline",
@@ -1245,7 +1245,7 @@
           },
           {
             "variable": "--ds-column-settings-list-max-block-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 41,
             "part": "list",
             "landsOn": "max-block-size",
@@ -1261,7 +1261,7 @@
           },
           {
             "variable": "--ds-column-settings-list-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 42,
             "part": "list",
             "landsOn": "padding-block",
@@ -1277,7 +1277,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 45,
             "part": "list",
             "landsOn": "scrollbar-color",
@@ -1293,7 +1293,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 45,
             "part": "list",
             "landsOn": "scrollbar-color",
@@ -1309,7 +1309,7 @@
           },
           {
             "variable": "--ds-column-settings-row-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 53,
             "part": "row",
             "landsOn": "gap",
@@ -1326,7 +1326,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 53,
             "part": "row",
             "landsOn": "gap",
@@ -1342,7 +1342,7 @@
           },
           {
             "variable": "--ds-column-settings-row-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 54,
             "part": "row",
             "landsOn": "padding-block",
@@ -1358,7 +1358,7 @@
           },
           {
             "variable": "--ds-column-settings-row-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 55,
             "part": "row",
             "landsOn": "padding-inline",
@@ -1374,7 +1374,7 @@
           },
           {
             "variable": "--ds-column-settings-row-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 56,
             "part": "row",
             "landsOn": "border-radius",
@@ -1391,7 +1391,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 56,
             "part": "row",
             "landsOn": "border-radius",
@@ -1407,7 +1407,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1424,7 +1424,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1440,7 +1440,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1457,7 +1457,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1473,7 +1473,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1490,7 +1490,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1506,7 +1506,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1523,7 +1523,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 61,
             "part": "row",
             "landsOn": "transition",
@@ -1539,7 +1539,7 @@
           },
           {
             "variable": "--ds-column-settings-row-bg-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 68,
             "part": "row",
             "landsOn": "background",
@@ -1557,7 +1557,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 68,
             "part": "row",
             "landsOn": "background",
@@ -1575,7 +1575,7 @@
           },
           {
             "variable": "--ds-column-settings-row-bg-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 75,
             "part": "row",
             "landsOn": "background",
@@ -1591,7 +1591,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 75,
             "part": "row",
             "landsOn": "background",
@@ -1607,7 +1607,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 86,
             "part": "grip",
             "landsOn": "border-radius",
@@ -1623,7 +1623,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 88,
             "part": "grip",
             "landsOn": "color",
@@ -1639,7 +1639,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1656,7 +1656,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1672,7 +1672,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1689,7 +1689,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1705,7 +1705,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1722,7 +1722,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1738,7 +1738,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1755,7 +1755,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 95,
             "part": "grip",
             "landsOn": "transition",
@@ -1771,7 +1771,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 99,
             "part": "grip",
             "landsOn": "color",
@@ -1789,7 +1789,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 104,
             "part": "grip",
             "landsOn": "color",
@@ -1805,7 +1805,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 108,
             "part": "grip",
             "landsOn": "outline",
@@ -1821,7 +1821,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 108,
             "part": "grip",
             "landsOn": "outline",
@@ -1838,7 +1838,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 108,
             "part": "grip",
             "landsOn": "outline",
@@ -1854,7 +1854,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 109,
             "part": "grip",
             "landsOn": "outline-offset",
@@ -1870,7 +1870,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 122,
             "part": "label",
             "landsOn": "color",
@@ -1886,7 +1886,7 @@
           },
           {
             "variable": "--ds-column-settings-label-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 123,
             "part": "label",
             "landsOn": "font-size",
@@ -1903,7 +1903,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 123,
             "part": "label",
             "landsOn": "font-size",
@@ -1919,7 +1919,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 127,
             "part": "label",
             "landsOn": "transition",
@@ -1936,7 +1936,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 127,
             "part": "label",
             "landsOn": "transition",
@@ -1952,7 +1952,7 @@
           },
           {
             "variable": "--ds-column-settings-motion-timing",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 127,
             "part": "label",
             "landsOn": "transition",
@@ -1969,7 +1969,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 127,
             "part": "label",
             "landsOn": "transition",
@@ -1985,7 +1985,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 130,
             "part": "label",
             "landsOn": "color",
@@ -2001,7 +2001,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 140,
             "part": "pin-toggle",
             "landsOn": "--ds-button-ghost-color",
@@ -2017,7 +2017,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 145,
             "part": "pin-side",
             "landsOn": "color",
@@ -2033,7 +2033,7 @@
           },
           {
             "variable": "--ds-column-settings-pin-side-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 146,
             "part": "pin-side",
             "landsOn": "font-size",
@@ -2049,7 +2049,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 147,
             "part": "pin-side",
             "landsOn": "font-weight",
@@ -2065,7 +2065,7 @@
           },
           {
             "variable": "--ds-letter-spacing-wide",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 148,
             "part": "pin-side",
             "landsOn": "letter-spacing",
@@ -2081,7 +2081,7 @@
           },
           {
             "variable": "--ds-column-settings-empty-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 154,
             "part": "empty",
             "landsOn": "padding-block",
@@ -2097,7 +2097,7 @@
           },
           {
             "variable": "--ds-column-settings-empty-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 155,
             "part": "empty",
             "landsOn": "padding-inline",
@@ -2113,7 +2113,7 @@
           },
           {
             "variable": "--ds-column-settings-footer-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 162,
             "part": "footer",
             "landsOn": "padding-block",
@@ -2129,7 +2129,7 @@
           },
           {
             "variable": "--ds-column-settings-footer-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 163,
             "part": "footer",
             "landsOn": "padding-inline",
@@ -2145,7 +2145,7 @@
           },
           {
             "variable": "--ds-column-settings-hairline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 164,
             "part": "footer",
             "landsOn": "border-block-start",
@@ -2162,7 +2162,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 164,
             "part": "footer",
             "landsOn": "border-block-start",
@@ -2178,7 +2178,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 169,
             "part": "footer",
             "landsOn": "color",
@@ -2194,7 +2194,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 170,
             "part": "footer",
             "landsOn": "font-size",
@@ -2210,7 +2210,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 227,
             "part": "pin-toggle",
             "landsOn": "min-block-size",
@@ -2228,7 +2228,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
             "line": 231,
             "part": "pin-toggle",
             "landsOn": "min-inline-size",
@@ -2248,7 +2248,7 @@
         "variableCensusTsx": [
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 106,
             "chain": [
               "--ds-color-text-muted"
@@ -2259,7 +2259,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 122,
             "chain": [
               "--ds-color-text-primary"
@@ -2270,7 +2270,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 123,
             "chain": [
               "--ds-color-text-muted"
@@ -2281,7 +2281,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 147,
             "chain": [
               "--ds-color-primary"
@@ -2292,7 +2292,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 148,
             "chain": [
               "--ds-color-text-muted"
@@ -2303,7 +2303,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 161,
             "chain": [
               "--ds-color-primary"
@@ -2314,7 +2314,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 249,
             "chain": [
               "--ds-color-text-primary"
@@ -2325,7 +2325,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 257,
             "chain": [
               "--ds-color-text-muted"
@@ -2336,7 +2336,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 274,
             "chain": [
               "--ds-color-text-muted"
@@ -2347,7 +2347,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 295,
             "chain": [
               "--ds-color-text-muted"
@@ -2358,7 +2358,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx",
             "line": 333,
             "chain": [
               "--ds-color-text-muted"
@@ -2372,14 +2372,14 @@
         "readSiteCount": 86,
         "emittedVariables": {
           "--ds-button-ghost-color": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css:140"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css:140"
           ]
         },
         "emittedVariablesTsx": {},
         "paintOwnership": {
           "ownCssFiles": [
             {
-              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+              "path": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
               "engine": "modern",
               "lines": 266,
               "role": "skin-css",
@@ -2394,7 +2394,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16"
               ],
               "renderSiteCount": 5,
               "engines": [
@@ -2406,8 +2406,8 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16",
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:28"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16",
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:28"
               ],
               "renderSiteCount": 6,
               "engines": [
@@ -2420,8 +2420,8 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16",
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:28"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16",
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:28"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -2434,7 +2434,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:28"
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:28"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -2446,7 +2446,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -2458,8 +2458,8 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16",
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:28"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16",
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:28"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -2472,7 +2472,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16"
               ],
               "renderSiteCount": 5,
               "engines": [
@@ -2484,8 +2484,8 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/classic/index.tsx:16",
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:28"
+                "packages/core/src/components/patterns/data/column-settings/engines/classic/index.tsx:16",
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:28"
               ],
               "renderSiteCount": 2,
               "engines": [
@@ -2498,7 +2498,7 @@
               "tier": "primitive",
               "importedFrom": "../../../../../primitives/foundation/VisuallyHidden",
               "importSites": [
-                "packages/core/src/ui/patterns/data/column-settings/engines/modern/index.tsx:35"
+                "packages/core/src/components/patterns/data/column-settings/engines/modern/index.tsx:35"
               ],
               "renderSiteCount": 1,
               "engines": [
@@ -2512,7 +2512,7 @@
         "paintByEngine": {
           "modern": [
             {
-              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+              "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
               "paintKind": "own"
             }
           ]
@@ -2568,13 +2568,13 @@
         {
           "channelId": "--_ds-column-settings-selection-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2584,13 +2584,13 @@
         {
           "channelId": "--_ds-column-settings-selection-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2600,13 +2600,13 @@
         {
           "channelId": "--_ds-column-settings-cell-success-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2616,13 +2616,13 @@
         {
           "channelId": "--_ds-column-settings-cell-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2632,13 +2632,13 @@
         {
           "channelId": "--_ds-column-settings-cell-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2648,13 +2648,13 @@
         {
           "channelId": "--_ds-column-settings-cell-info-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2687,7 +2687,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
@@ -2702,7 +2702,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
@@ -2717,7 +2717,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
@@ -2732,7 +2732,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
@@ -2756,13 +2756,13 @@
         {
           "channelId": "--_ds-column-settings-numeric-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2791,13 +2791,13 @@
         {
           "channelId": "--_ds-column-settings-cell-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2807,13 +2807,13 @@
         {
           "channelId": "--_ds-column-settings-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2822,13 +2822,13 @@
         {
           "channelId": "--_ds-column-settings-pin-side-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2855,13 +2855,13 @@
         {
           "channelId": "--_ds-column-settings-container-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2871,13 +2871,13 @@
         {
           "channelId": "--_ds-column-settings-row-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2895,7 +2895,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones de toolbar del pattern son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2909,13 +2909,13 @@
         {
           "channelId": "--_ds-column-settings-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2925,13 +2925,13 @@
         {
           "channelId": "--_ds-column-settings-empty-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2940,13 +2940,13 @@
         {
           "channelId": "--_ds-column-settings-empty-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2955,13 +2955,13 @@
         {
           "channelId": "--_ds-column-settings-footer-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2970,13 +2970,13 @@
         {
           "channelId": "--_ds-column-settings-footer-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2985,13 +2985,13 @@
         {
           "channelId": "--_ds-column-settings-header-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3000,13 +3000,13 @@
         {
           "channelId": "--_ds-column-settings-header-padding-block-end",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3015,13 +3015,13 @@
         {
           "channelId": "--_ds-column-settings-header-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3030,13 +3030,13 @@
         {
           "channelId": "--_ds-column-settings-list-max-block-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3045,13 +3045,13 @@
         {
           "channelId": "--_ds-column-settings-list-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3060,13 +3060,13 @@
         {
           "channelId": "--_ds-column-settings-row-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3075,13 +3075,13 @@
         {
           "channelId": "--_ds-column-settings-row-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3090,13 +3090,13 @@
         {
           "channelId": "--_ds-column-settings-row-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3105,13 +3105,13 @@
         {
           "channelId": "--_ds-column-settings-search-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3120,13 +3120,13 @@
         {
           "channelId": "--_ds-column-settings-search-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3144,7 +3144,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior del pattern de datos es el pixel de density (filas, celdas, toolbar); los gaps de seccion pertenecen al shell que lo aloja",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3181,13 +3181,13 @@
         {
           "channelId": "--_ds-column-settings-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3285,13 +3285,13 @@
         {
           "channelId": "--_ds-column-settings-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3301,13 +3301,13 @@
         {
           "channelId": "--_ds-column-settings-hairline",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/data/column-settings"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/column-settings/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3330,7 +3330,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3386,7 +3386,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3435,11 +3435,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

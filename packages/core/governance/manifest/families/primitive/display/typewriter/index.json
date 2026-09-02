@@ -8,15 +8,15 @@
     "components": [
       "Typewriter"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Typewriter",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/typewriter",
     "publicComponents": [
       "Typewriter"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2bcf3eb85ddc5be82e47cdb9b40db49d8efb53b4a02b6c710d9123066649a329"
+    "inventoryRowDigest": "fe87d701baf76f2db3c1853232c8c3989b5628f0007569fb9376ff814091a627"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Typewriter/index.tsx",
-      "packages/core/src/ui/primitives/display/Typewriter/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css"
+      "packages/core/src/components/primitives/display/typewriter/index.tsx",
+      "packages/core/src/components/primitives/display/typewriter/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css"
     ],
     "stableParts": [
       "root",
@@ -44,11 +44,11 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The complete text is always present for assistive technology, independent of the animation: a permanent visually-hidden span holding the full text at packages/core/src/ui/primitives/display/Typewriter/index.tsx:107, while the animated glyph layer is aria-hidden=\"true\" at :108.",
-      "First paint is the final text, so SSR and no-JS render the real content: useState(text) at packages/core/src/ui/primitives/display/Typewriter/index.tsx:68 with the source rationale at :66-67.",
-      "Reduced motion collapses to the final text with no animation: the !animate branch at packages/core/src/ui/primitives/display/Typewriter/index.tsx:73-76, driven by useReveal (:65).",
-      "The cadence has a hard floor: Math.max(1, ...) at packages/core/src/ui/primitives/display/Typewriter/index.tsx:82, and readCadenceTimeMs rejects non-finite or non-positive values at :32.",
-      "Forced-colors is handled in the family paint: packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css:32."
+      "The complete text is always present for assistive technology, independent of the animation: a permanent visually-hidden span holding the full text at packages/core/src/components/primitives/display/typewriter/index.tsx:107, while the animated glyph layer is aria-hidden=\"true\" at :108.",
+      "First paint is the final text, so SSR and no-JS render the real content: useState(text) at packages/core/src/components/primitives/display/typewriter/index.tsx:68 with the source rationale at :66-67.",
+      "Reduced motion collapses to the final text with no animation: the !animate branch at packages/core/src/components/primitives/display/typewriter/index.tsx:73-76, driven by useReveal (:65).",
+      "The cadence has a hard floor: Math.max(1, ...) at packages/core/src/components/primitives/display/typewriter/index.tsx:82, and readCadenceTimeMs rejects non-finite or non-positive values at :32.",
+      "Forced-colors is handled in the family paint: packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css:32."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -71,7 +71,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Typewriter/index.tsx:106"
+            "packages/core/src/components/primitives/display/typewriter/index.tsx:106"
           ]
         },
         {
@@ -79,7 +79,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Typewriter/index.tsx:108"
+            "packages/core/src/components/primitives/display/typewriter/index.tsx:108"
           ]
         }
       ],
@@ -87,7 +87,7 @@
         {
           "token": "hidden",
           "at": [
-            "packages/core/src/ui/primitives/display/Typewriter/index.tsx:108"
+            "packages/core/src/components/primitives/display/typewriter/index.tsx:108"
           ],
           "state": "hidden"
         }
@@ -103,8 +103,8 @@
             "token": "prefers-reduced-motion",
             "at": [],
             "citationsUnverified": [
-              "packages/core/src/ui/primitives/display/Typewriter/index.tsx:6",
-              "packages/core/src/ui/primitives/display/Typewriter/index.tsx:65"
+              "packages/core/src/components/primitives/display/typewriter/index.tsx:6",
+              "packages/core/src/components/primitives/display/typewriter/index.tsx:65"
             ],
             "anchorStatus": "name-kept-anchor-dropped",
             "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -112,10 +112,10 @@
         ],
         "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
       },
-      "engineDivergence": "No engine siblings. One implementation at packages/core/src/ui/primitives/display/Typewriter/index.tsx serves every engine.",
+      "engineDivergence": "No engine siblings. One implementation at packages/core/src/components/primitives/display/typewriter/index.tsx serves every engine.",
       "scoutGaps": {
         "assessmentConfidenceGaps": [
-          "The family governs exactly one channel, --_ds-typewriter-cadence, and it is invisible to a static census: the read at packages/core/src/ui/primitives/display/Typewriter/index.tsx:26 passes the module constant CADENCE_AXIS (:17) instead of a literal. The row was injected by hand and is marked readKind computed-style-read. Nothing declares the variable anywhere. See unresolved TYPEWRITER-PRIVATE-SOCKET-HAS-NO-DECLARATION-AND-NO-EXIT."
+          "The family governs exactly one channel, --_ds-typewriter-cadence, and it is invisible to a static census: the read at packages/core/src/components/primitives/display/typewriter/index.tsx:26 passes the module constant CADENCE_AXIS (:17) instead of a literal. The row was injected by hand and is marked readKind computed-style-read. Nothing declares the variable anywhere. See unresolved TYPEWRITER-PRIVATE-SOCKET-HAS-NO-DECLARATION-AND-NO-EXIT."
         ]
       },
       "propertyGroupCensusNote": {
@@ -135,7 +135,7 @@
         "variableCensus": [
           {
             "variable": "--ds-surface-fg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css:12",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css:12",
             "fallback": "currentColor",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -146,7 +146,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css:45",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css:45",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -157,15 +157,15 @@
           },
           {
             "variable": "--_ds-typewriter-cadence",
-            "readAt": "packages/core/src/ui/primitives/display/Typewriter/index.tsx:26",
-            "fallback": "DEFAULT_SPEED_MS = 28 (constant at packages/core/src/ui/primitives/display/Typewriter/index.tsx:16, not a token)",
+            "readAt": "packages/core/src/components/primitives/display/typewriter/index.tsx:26",
+            "fallback": "DEFAULT_SPEED_MS = 28 (constant at packages/core/src/components/primitives/display/typewriter/index.tsx:16, not a token)",
             "landsOnProperty": "setTimeout delay (milliseconds per character), not a CSS property",
             "propertyGroup": "motion",
             "part": "root",
             "selector": null,
             "atRuleScope": null,
             "readKind": "computed-style-read",
-            "note": "getComputedStyle(node).getPropertyValue(axis) where axis is the module constant CADENCE_AXIS = \"--_ds-typewriter-cadence\" at packages/core/src/ui/primitives/display/Typewriter/index.tsx:17, applied to the effective cadence at packages/core/src/ui/primitives/display/Typewriter/index.tsx:82. The variable name never appears as a literal at the read call, so a static var()/getPropertyValue(\"--x\") scan cannot see it; it is recorded here by hand from the two constant sites."
+            "note": "getComputedStyle(node).getPropertyValue(axis) where axis is the module constant CADENCE_AXIS = \"--_ds-typewriter-cadence\" at packages/core/src/components/primitives/display/typewriter/index.tsx:17, applied to the effective cadence at packages/core/src/components/primitives/display/typewriter/index.tsx:82. The variable name never appears as a literal at the read call, so a static var()/getPropertyValue(\"--x\") scan cannot see it; it is recorded here by hand from the two constant sites."
           }
         ],
         "variableCensusDistinctCount": 3,
@@ -198,13 +198,13 @@
         {
           "channelId": "--_ds-typewriter-cursor-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/typewriter"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -384,7 +384,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -399,7 +399,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. La velocidad del typewriter es plano de datos (props del componente), no canal CSS; nada que cubrir"
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped. La velocidad del typewriter es plano de datos (props del componente), no canal CSS; nada que cubrir"
           }
         ],
         "reviewedFrom": "anatomy"
@@ -443,13 +443,13 @@
         {
           "channelId": "--_ds-typewriter-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/typewriter"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/typewriter/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -468,7 +468,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -548,7 +548,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -604,7 +604,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -664,11 +664,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

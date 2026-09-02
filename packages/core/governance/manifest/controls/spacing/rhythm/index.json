@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Layout rhythm",
   "valueType": "enum",
@@ -39,11 +39,11 @@
   "dependsOn": [],
   "compatibility": "additive, unset-to-rollback. ORTHOGONAL to density.mode by construction and never a second spelling of it: density scales control SIZES through --ds-density-effective-scale, rhythm scales the LAYOUT RELATIONSHIPS between controls (gap, layout padding) through --ds-rhythm-effective-scale. A chain carrying both factors is correct rather than double-scaled — the control keeps its density size while the room around it breathes. Rhythm is applied at the PRESET rungs, never at a consume site, so a consumer numeric gap stays exact geometry exactly as it does under density; and it never reaches a control height, touch target or icon box, which is what keeps the coarse-pointer touch floors intact by construction rather than by clamping. The 0.8-1.25 envelope is enforced in the derived channel, so it binds the compiler artifact, the BrandTheme lowering and a raw tokenOverride alike.",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+    "consumer": "src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
     "symbol": "var(--ds-rhythm-effective-scale"
   },
   "calibration": {
-    "assessmentState": "COMPUTED_VERIFIED",
+    "assessmentState": "IMPLEMENTED",
     "normalizedStops": [
       {
         "id": "tight",
@@ -63,22 +63,12 @@
       "bounds": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_RHYTHM_SCALE_BOUNDS",
       "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "dbLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts",
-      "effectiveClamp": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
-      "computedMounts": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+      "effectiveClamp": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "computedMounts": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
       "existingFivePlaneHarness": "packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts"
     },
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/flex-tight.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/grid-tight.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/space-tight.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/stack-tight.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/flex-airy.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/grid-airy.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/space-airy.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db/stack-airy.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "numeric instance gaps remain exact",
       "control height remains fixed",
@@ -127,12 +117,12 @@
       {
         "question": "Add a fail-closed census that rejects every block-size, height, touch-target and icon-size read of the effective rhythm channel.",
         "outcome": "Discharged and widened. The census also watches the unclamped --ds-rhythm-scale spelling, classifies physical inline sides as forbidden, and closes over transitive var() carriers so a single rename cannot launder a forbidden read.",
-        "evidence": "packages/core/scripts/foundation/tokens/contracts/spacing-rhythm/index.mjs plus 28 mutation drills in its sibling test"
+        "evidence": "packages/core/scripts/check/tokens/contracts/spacing-rhythm/index.mjs plus 28 mutation drills in its sibling test"
       },
       {
         "question": "Adjudicate whether border-radius is inside the declared 'border remains fixed' negative control. Rhythm reaches border-radius in eight declarations through the nested-radius idiom (--ds-card-padding-current to --_ds-card-nest-radius and --_surface-radius-current) in runtime/engines/modern/skin/card.css, presentation/components/semantic-surface.css and presentation/components/skin/card-compounds.css. A nested radius derived from padding arguably must move with padding to stay concentric; the contract arguably says it must not move at all. The gate records these as indirectUnclassified and stays green pending the ruling.",
         "outcome": "Discharged by owner ruling, then RE-ADJUDICATED when the first encoding was found to license the ruling's own counterexample. spacing.rhythm does not govern visual/outer radius. It may affect ONLY an INTERNAL DESCENDANT radius whose sole purpose is concentric geometry inside a parent with rhythm-scaled padding. It must not affect a component's own/outer border-radius, EVEN WHEN THAT COMPONENT CAN BE NESTED. A direct rhythm radius, a generic carrier and an outer-radius change all fail. The gate no longer records an unblocking indirectUnclassified bucket -- that bucket now fails the gate.",
-        "evidence": "packages/core/scripts/foundation/tokens/contracts/spacing-rhythm/index.mjs classifies DERIVED_CONCENTRIC_GEOMETRY structurally in SIX clauses and discovers the concentric channel set from the corpus rather than naming it: (a) internal/private channel, (b) radius-semantic, (c) derives-not-scales, (d) demonstrably contained -- the SELECTOR must prove the subject sits inside another element through a descendant or child combinator, so a bare compound leaning on inheritance and a sibling combinator both fail, (e) not the subject's own root -- the subject compound must carry no [data-part='root'] marker and must not repeat an ancestor's class, and (f) publishes for descendants not for self -- a private channel loses the allowance when a border-radius under the SAME selector drinks from it. 49 mutation drills in the sibling test, including inner/outer mutation PAIRS for (d), (e) and (f) and a counterfactual control on the exact fixture whose verdict the ruling flipped.",
+        "evidence": "packages/core/scripts/check/tokens/contracts/spacing-rhythm/index.mjs classifies DERIVED_CONCENTRIC_GEOMETRY structurally in SIX clauses and discovers the concentric channel set from the corpus rather than naming it: (a) internal/private channel, (b) radius-semantic, (c) derives-not-scales, (d) demonstrably contained -- the SELECTOR must prove the subject sits inside another element through a descendant or child combinator, so a bare compound leaning on inheritance and a sibling combinator both fail, (e) not the subject's own root -- the subject compound must carry no [data-part='root'] marker and must not repeat an ancestor's class, and (f) publishes for descendants not for self -- a private channel loses the allowance when a border-radius under the SAME selector drinks from it. 49 mutation drills in the sibling test, including inner/outer mutation PAIRS for (d), (e) and (f) and a counterfactual control on the exact fixture whose verdict the ruling flipped.",
         "mechanizedRuling": {
           "licensedToday": 3,
           "concentricChannels": [
@@ -151,9 +141,9 @@
         }
       },
       {
-        "question": "Confirm which existing harness the causal calibration generalizes. The calibration sourceBindings name packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts as the existing five-plane harness, while the causal baseline-mutation-removal work extends packages/core/src/tooling/resolution-probe instead. Both are existing instruments, so neither is a second authority harness, but only one may own this control's computed receipts.",
-        "outcome": "Discharged in favour of packages/core/src/tooling/resolution-probe. It owns this control's computed receipts. The density-authority-matrix Playwright spec remains a valid instrument for its own lane and was NOT extended or replaced; no second harness was created.",
-        "evidence": "round R2 receipts under artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db (8 artifacts + 8 receipts, round R2, all validated by scripts/tooling/quality/evidence/framework/receipts/index.mjs)"
+        "question": "Confirm which existing harness the causal calibration generalizes. The calibration sourceBindings name packages/showroom/e2e/whitelabel/density-authority-matrix.spec.ts as the existing five-plane harness, while the causal baseline-mutation-removal work extends packages/core/scripts/check/tokens/cascade/probe instead. Both are existing instruments, so neither is a second authority harness, but only one may own this control's computed receipts.",
+        "outcome": "Discharged in favour of packages/core/scripts/check/tokens/cascade/probe. It owns this control's computed receipts. The density-authority-matrix Playwright spec remains a valid instrument for its own lane and was NOT extended or replaced; no second harness was created.",
+        "evidence": "round R2 receipts under artifacts/quality/programs/modern-rescue/cascade-proofs/controls/spacing-rhythm/computed-static-db (8 artifacts + 8 receipts, round R2, all validated by scripts/check/evidence/framework/receipts/index.mjs)"
       },
       {
         "question": "Prove the computed 0.85/1/1.2 gap deltas, monotonicity and exact restore in a browser. Every result so far is authored-source and compiler-output evidence only.",
@@ -170,7 +160,7 @@
     "redTestClassificationsScopeNote": "Records the red tests THIS calibration lane actually observed while running its focal suites. It is not a repair queue, not a program-wide red-test registry, and not a second WO status -- the validator's own contract refuses that reading. Two facts are recorded because both are load-bearing: (1) five of the six failures the R1 cohort receipt attributed as INHERITED are GREEN when re-run against the current tree, so they must NOT be carried forward as red; (2) four failures in EmbeddedCssRecovery.contract.test.ts ARE red and are disjoint from every path this lane edited. Re-measured on the current working tree, base HEAD 68f258690f39100c91f981735b51bfb47dc16f09. Verified green on re-run and therefore deliberately NOT classified below: Spinner.modern-engine/Spinner tests (75 passed), premium-regression.test.ts, sidebar-group-channels.test.ts.",
     "redTestClassifications": [
       {
-        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins all six audited stylesheets byte-for-byte",
+        "testRef": "packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins all six audited stylesheets byte-for-byte",
         "class": "UNVERIFIED",
         "allowedAction": "NONE",
         "authorityRef": "WO-SKIN-06 embedded CSS recovery. That authority pins the AUDITED bytes; it does not certify the bytes the stylesheet carries today, so no authority currently covers the observed value.",
@@ -180,7 +170,7 @@
         "notCausedByThisLane": "This lane edited semantic-surface.css, card.css, card-compounds.css and the layout skin. data-table-interactions.css is in none of those sets."
       },
       {
-        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#accounts for every classified declaration across the audited and relocated owners",
+        "testRef": "packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts#accounts for every classified declaration across the audited and relocated owners",
         "class": "UNVERIFIED",
         "allowedAction": "NONE",
         "authorityRef": "WO-SKIN-06 embedded CSS recovery declaration census. No authority certifies the current per-owner declaration counts.",
@@ -190,7 +180,7 @@
         "notCausedByThisLane": "Disjoint from this packet's edit set."
       },
       {
-        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins every DataTable interaction selector and animation body",
+        "testRef": "packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins every DataTable interaction selector and animation body",
         "class": "UNVERIFIED",
         "allowedAction": "NONE",
         "authorityRef": "WO-SKIN-06 DataTable interaction pin. The authority names the selectors; it does not certify the current declaration set.",
@@ -200,7 +190,7 @@
         "notCausedByThisLane": "Disjoint from this packet's edit set."
       },
       {
-        "testRef": "packages/core/src/ui/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins the independent Input and Select placeholder contracts",
+        "testRef": "packages/core/src/components/primitives/tests/EmbeddedCssRecovery.contract.test.ts#pins the independent Input and Select placeholder contracts",
         "class": "UNVERIFIED",
         "allowedAction": "NONE",
         "authorityRef": "WO-SKIN-06 independent placeholder contract for Input and Select. No authority certifies removing the modern Input placeholder rule.",
@@ -210,7 +200,7 @@
         "notCausedByThisLane": "Disjoint from this packet's edit set."
       }
     ],
-    "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE. The computed half is done and receipted; nothing further is measurable by this instrument. spacing.rhythm stays COMPUTED_VERIFIED (rank 3) until a sighted reviewer accepts it; SIGHTED_ACCEPTED is not claimable from a computed run.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "channels": [
       "--ds-rhythm-scale",
       "--ds-rhythm-effective-scale"

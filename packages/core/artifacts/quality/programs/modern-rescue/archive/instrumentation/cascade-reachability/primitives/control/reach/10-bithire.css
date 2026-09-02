@@ -1,7 +1,0 @@
-/* bithire is LIGHT-FIRST: unconditional base + an explicit dark block. */
-:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire'])) {
-  --ds-surface-control: #101014;
-}
-:is(html[data-tenant='bithire'], :where([data-ds-root][data-vertical='bithire']))[data-theme='dark'] {
-  --ds-surface-control: #06060a;
-}

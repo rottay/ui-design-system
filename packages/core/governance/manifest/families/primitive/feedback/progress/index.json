@@ -8,15 +8,15 @@
     "components": [
       "Progress"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/feedback/Progress",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/feedback/progress",
     "publicComponents": [
       "Progress"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ae82c247a0b74a8330d34921f81fa957adf1cf524c49b6d102c34279a197dc0f"
+    "inventoryRowDigest": "20f24d3fba9d1a2911d5be76bc47bf7e1d0dabfafc6418b9093e05d068393824"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,16 +28,16 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/feedback/Progress/compound/Circle/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Progress/compound/Line/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Progress/compound/index.ts",
-      "packages/core/src/ui/primitives/feedback/Progress/contracts/index.ts",
-      "packages/core/src/ui/primitives/feedback/Progress/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Progress/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Progress/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds.css"
+      "packages/core/src/components/primitives/feedback/progress/compound/circle/index.tsx",
+      "packages/core/src/components/primitives/feedback/progress/compound/line/index.tsx",
+      "packages/core/src/components/primitives/feedback/progress/compound/index.ts",
+      "packages/core/src/components/primitives/feedback/progress/contracts/index.ts",
+      "packages/core/src/components/primitives/feedback/progress/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/feedback/progress/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/feedback/progress/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/feedback/progress/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds/index.css"
     ],
     "stableParts": [
       "fill",
@@ -59,12 +59,12 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "role-attribute [at src/ui/primitives/feedback/Progress/engines/modern/index.tsx:216, src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:192]",
-      "aria-label-or-labelledby [at src/ui/primitives/feedback/Progress/engines/modern/index.tsx:219, src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:195]",
-      "aria-valuenow [at src/ui/primitives/feedback/Progress/engines/modern/index.tsx:217, src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:193]",
-      "aria-hidden [at src/ui/primitives/feedback/Progress/engines/modern/index.tsx:143]",
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:25, src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:156, src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:191]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:301, src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:305]"
+      "role-attribute [at src/components/primitives/feedback/progress/engines/modern/index.tsx:216, src/components/primitives/feedback/progress/engines/rustic/index.tsx:192]",
+      "aria-label-or-labelledby [at src/components/primitives/feedback/progress/engines/modern/index.tsx:219, src/components/primitives/feedback/progress/engines/rustic/index.tsx:195]",
+      "aria-valuenow [at src/components/primitives/feedback/progress/engines/modern/index.tsx:217, src/components/primitives/feedback/progress/engines/rustic/index.tsx:193]",
+      "aria-hidden [at src/components/primitives/feedback/progress/engines/modern/index.tsx:143]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:25, src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:156, src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:191]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:301, src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:305]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -86,12 +86,12 @@
           "part": "fill",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Progress/compound/Circle/index.tsx:263",
-            "src/ui/primitives/feedback/Progress/compound/Line/index.tsx:275",
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:258",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:231",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:316",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:84"
+            "src/components/primitives/feedback/progress/compound/circle/index.tsx:263",
+            "src/components/primitives/feedback/progress/compound/line/index.tsx:275",
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:258",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:231",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:316",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:84"
           ],
           "atSiteCount": 11
         },
@@ -99,12 +99,12 @@
           "part": "indeterminate",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:272",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:183",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:184",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:185",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:186",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:187"
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:272",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:183",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:184",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:185",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:186",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:187"
           ],
           "atSiteCount": 7
         },
@@ -112,12 +112,12 @@
           "part": "label",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Progress/compound/Circle/index.tsx:280",
-            "src/ui/primitives/feedback/Progress/compound/Line/index.tsx:286",
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:228",
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:279",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:248",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:321"
+            "src/components/primitives/feedback/progress/compound/circle/index.tsx:280",
+            "src/components/primitives/feedback/progress/compound/line/index.tsx:286",
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:228",
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:279",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:248",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:321"
           ],
           "atSiteCount": 12
         },
@@ -125,12 +125,12 @@
           "part": "status-icon",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:143",
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:150",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:222",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:223",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:224",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:225"
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:143",
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:150",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:222",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:223",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:224",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:225"
           ],
           "atSiteCount": 7
         },
@@ -138,12 +138,12 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Progress/compound/Circle/index.tsx:244",
-            "src/ui/primitives/feedback/Progress/compound/Line/index.tsx:250",
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:208",
-            "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:243",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:187",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:308"
+            "src/components/primitives/feedback/progress/compound/circle/index.tsx:244",
+            "src/components/primitives/feedback/progress/compound/line/index.tsx:250",
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:208",
+            "src/components/primitives/feedback/progress/engines/modern/index.tsx:243",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:187",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:308"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         },
@@ -151,58 +151,58 @@
           "part": "track",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Progress/compound/Circle/index.tsx:252",
-            "src/ui/primitives/feedback/Progress/compound/Line/index.tsx:266",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:217",
-            "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:315"
+            "src/components/primitives/feedback/progress/compound/circle/index.tsx:252",
+            "src/components/primitives/feedback/progress/compound/line/index.tsx:266",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:217",
+            "src/components/primitives/feedback/progress/engines/rustic/index.tsx:315"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:55, src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:58, src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:61]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:55, src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:58, src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:61]"
         ]
       },
       "stateAnchors": [
         {
           "token": "data-status=normal",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:55"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:55"
           ],
           "state": "normal"
         },
         {
           "token": "data-status=success",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:58"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:58"
           ],
           "state": "success"
         },
         {
           "token": "data-status=error",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:61"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:61"
           ],
           "state": "error"
         },
         {
           "token": "data-status=active",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:64",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:130",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:139",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:140"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:64",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:130",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:139",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:140"
           ],
           "state": "active"
         },
         {
           "token": "data-indeterminate=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:78",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:79",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:274",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:295"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:78",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:79",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:274",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:295"
           ],
           "state": "indeterminate"
         }
@@ -211,17 +211,17 @@
         {
           "token": "data-type=line",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:73",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:74",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:78",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:79"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:73",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:74",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:78",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:79"
           ]
         },
         {
           "token": "data-type=circle",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:258",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:259"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:258",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:259"
           ]
         }
       ],
@@ -349,15 +349,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:169",
-              "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:182",
-              "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:274"
+              "src/components/primitives/feedback/progress/engines/modern/index.tsx:169",
+              "src/components/primitives/feedback/progress/engines/rustic/index.tsx:182",
+              "src/components/primitives/feedback/progress/engines/rustic/index.tsx:274"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -365,7 +365,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:58",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:58",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -373,7 +373,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:61",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:61",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -381,7 +381,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -409,17 +409,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:156"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -427,7 +427,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -435,7 +435,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:101",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:101",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background",
@@ -443,7 +443,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:114",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:114",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background",
@@ -451,7 +451,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:130",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:130",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-color",
@@ -459,7 +459,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:143",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:143",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-color",
@@ -467,7 +467,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:188",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:188",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "background",
@@ -475,7 +475,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:225",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:225",
                 "readIn": "modern-skin-css",
                 "part": "status-icon",
                 "landsOn": "color",
@@ -483,7 +483,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:264",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:264",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-fill",
@@ -504,17 +504,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:46",
-              "src/ui/patterns/customization/brand-studio/index.tsx:102",
-              "src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:132"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:46",
+              "src/components/patterns/customization/brand-studio/index.tsx:102",
+              "tests/integration/customization-fields/index.test.ts:132"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:175"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:175"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:58",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:58",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -535,17 +535,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
-              "src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:157"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+              "src/components/patterns/customization/brand-studio/index.tsx:106",
+              "tests/integration/capability-propagation/tests/index.test.ts:157"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:177"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:177"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:61",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:61",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--ds-progress-resolved-fill",
@@ -568,16 +568,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css:96",
-              "src/foundation/tokens/css/foundation/themes/default.css:1740"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css:96",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1740"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1740"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1740"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:79",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:79",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "border-radius",
@@ -585,7 +585,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:91",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:91",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "border-radius",
@@ -593,7 +593,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:187",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:187",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "border-radius",
@@ -616,17 +616,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/inputs/Upload/engines/modern/index.tsx:321",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css:95",
-              "src/foundation/tokens/css/foundation/themes/default.css:1738"
+              "src/components/primitives/inputs/Upload/engines/modern/index.tsx:321",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css:95",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1738"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1738"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1738"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:86",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:86",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "height",
@@ -634,7 +634,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:186",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:186",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "block-size",
@@ -657,17 +657,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard.css:97",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/step-wizard/index.css:97",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1634",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2589"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1739"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1739"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:89",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:89",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background",
@@ -675,7 +675,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:96",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:96",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background",
@@ -683,7 +683,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:265",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:265",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-track",
@@ -710,15 +710,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:55",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:58",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:61"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:55",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:58",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:61"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:101",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:101",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background",
@@ -726,7 +726,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:114",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:114",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background",
@@ -734,7 +734,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:130",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:130",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-color",
@@ -742,7 +742,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:143",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:143",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-color",
@@ -750,7 +750,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:188",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:188",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "background",
@@ -758,7 +758,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:225",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:225",
                 "readIn": "modern-skin-css",
                 "part": "status-icon",
                 "landsOn": "color",
@@ -766,7 +766,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:264",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:264",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-fill",
@@ -789,7 +789,7 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:930",
+              "src/foundation/tokens/css/runtime/personality/index.css:930",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:390",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:678"
             ],
@@ -797,7 +797,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "transition",
@@ -805,7 +805,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "transition",
@@ -813,7 +813,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:248",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:248",
                 "readIn": "modern-skin-css",
                 "part": "status-icon",
                 "landsOn": "animation",
@@ -836,15 +836,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:926",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              "src/foundation/tokens/css/runtime/personality/index.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "transition",
@@ -852,7 +852,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "transition",
@@ -860,7 +860,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:248",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:248",
                 "readIn": "modern-skin-css",
                 "part": "status-icon",
                 "landsOn": "animation",
@@ -883,13 +883,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "transition",
@@ -897,7 +897,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "transition",
@@ -905,7 +905,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:249",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:249",
                 "readIn": "modern-skin-css",
                 "part": "status-icon",
                 "landsOn": "animation",
@@ -928,16 +928,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687",
-              "src/foundation/tokens/css/foundation/base/density.css:81"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "src/foundation/tokens/css/foundation/base/density/index.css:81"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:140",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:140",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-size",
@@ -945,7 +945,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:140",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:140",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-size",
@@ -953,7 +953,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:153",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:153",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-size",
@@ -961,7 +961,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:153",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:153",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "background-size",
@@ -969,7 +969,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:177",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:177",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "background-position",
@@ -992,15 +992,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/overlay/ConfirmDialog/tests/ConfirmDialog.modern-engine-advanced.test.tsx:18",
-              "src/foundation/tokens/css/runtime/personality.css:928",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:97"
+              "src/components/primitives/overlay/ConfirmDialog/tests/ConfirmDialog.modern-engine-advanced.test.tsx:18",
+              "src/foundation/tokens/css/runtime/personality/index.css:928",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:97"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:161",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:161",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "animation",
@@ -1008,7 +1008,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "animation",
@@ -1016,7 +1016,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:274",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:274",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "animation",
@@ -1024,7 +1024,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:211",
+                "at": "src/components/primitives/feedback/progress/engines/rustic/index.tsx:211",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "animation",
@@ -1032,7 +1032,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:298",
+                "at": "src/components/primitives/feedback/progress/engines/rustic/index.tsx:298",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "animation",
@@ -1055,7 +1055,7 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:98",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:98",
               "src/infrastructure/compilers/kernel/runtime/brand-theme/tests/theme-iso.test.ts:415",
               "src/infrastructure/compilers/kernel/runtime/appearance/tests/appearance.test.ts:244"
             ],
@@ -1063,7 +1063,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:161",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:161",
                 "readIn": "modern-skin-css",
                 "part": "fill",
                 "landsOn": "animation",
@@ -1071,7 +1071,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "animation",
@@ -1079,7 +1079,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:274",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:274",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "animation",
@@ -1100,13 +1100,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:124"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:124"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:195",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:195",
                 "readIn": "modern-skin-css",
                 "part": "indeterminate",
                 "landsOn": "animation",
@@ -1114,7 +1114,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:298",
+                "at": "src/components/primitives/feedback/progress/engines/rustic/index.tsx:298",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "animation",
@@ -1135,16 +1135,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:684",
-              "src/foundation/tokens/css/foundation/base/density.css:78"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684",
+              "src/foundation/tokens/css/foundation/base/density/index.css:78"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:684"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:211",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:211",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "gap",
@@ -1169,7 +1169,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:212",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:212",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "margin-block-start",
@@ -1190,17 +1190,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:124",
-              "src/tooling/testing/fixtures/tenants/default.css:35",
-              "src/foundation/tokens/css/foundation/themes/default.css:702"
+              "tests/integration/theming-precedence/index.test.ts:124",
+              "tests/fixtures/tenants/default/index.css:35",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:702"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:702"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:702"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:212",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:212",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "margin-block-start",
@@ -1221,18 +1221,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:218",
-              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:213",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:213",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "color",
@@ -1253,17 +1253,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:30",
-              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:609"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:214",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:214",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -1292,7 +1292,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:237",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:237",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -1313,13 +1313,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/feedback/Progress/engines/modern/index.tsx:187"
+              "src/components/primitives/feedback/progress/engines/modern/index.tsx:187"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:258",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:258",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-value",
@@ -1344,7 +1344,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:259",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:259",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-size",
@@ -1369,7 +1369,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:260",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:260",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-thickness",
@@ -1392,15 +1392,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:259",
-              "src/foundation/tokens/css/presentation/components/meter.css:190",
-              "src/foundation/tokens/css/presentation/components/arc.css:28"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:259",
+              "src/foundation/tokens/css/presentation/components/meter/index.css:190",
+              "src/foundation/tokens/css/presentation/components/arc/index.css:28"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:262",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:262",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "--_ds-arc-thickness",
@@ -1408,7 +1408,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:285",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:285",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -1429,18 +1429,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
-              "src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:217",
-              "src/foundation/tokens/css/foundation/themes/default.css:2128"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:283",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:283",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "color",
@@ -1461,17 +1461,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:458",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:464"
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
+              "src/components/primitives/display/typography/typography.stories.tsx:458",
+              "src/components/primitives/display/typography/typography.stories.tsx:464"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:507"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:507"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:284",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:284",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-family",
@@ -1492,17 +1492,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:284",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:284",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-family",
@@ -1523,15 +1523,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress.css:287",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css:287",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-weight",
@@ -1550,17 +1550,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
-              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:552",
-              "src/tooling/testing/system/tests/theming.test.ts:254"
+              "src/components/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
+              "tests/integration/capability-propagation/tests/index.test.ts:552",
+              "tests/system/theming/index.test.ts:254"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:30"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:30"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/feedback/Progress/compound/Circle/index.tsx:216",
+                "at": "src/components/primitives/feedback/progress/compound/circle/index.tsx:216",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1568,7 +1568,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Progress/compound/Line/index.tsx:229",
+                "at": "src/components/primitives/feedback/progress/compound/line/index.tsx:229",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1587,18 +1587,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:26",
+              "tests/fixtures/tenants/default/index.css:26",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:730",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:922"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:55",
-              "src/foundation/tokens/css/foundation/themes/default.css:2145"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:55",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2145"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/feedback/Progress/compound/Circle/index.tsx:217",
+                "at": "src/components/primitives/feedback/progress/compound/circle/index.tsx:217",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1606,7 +1606,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Progress/compound/Line/index.tsx:230",
+                "at": "src/components/primitives/feedback/progress/compound/line/index.tsx:230",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1629,7 +1629,7 @@
             "adjudicationClass": "FROZEN_ENGINE_SCOPED",
             "reads": [
               {
-                "at": "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:222",
+                "at": "src/components/primitives/feedback/progress/engines/rustic/index.tsx:222",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1648,18 +1648,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/index.tsx:138",
-              "src/ui/patterns/customization/brand-studio/index.tsx:156",
+              "src/components/patterns/customization/brand-studio/index.tsx:138",
+              "src/components/patterns/customization/brand-studio/index.tsx:156",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:190"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:199",
-              "src/foundation/tokens/css/foundation/themes/default.css:2121"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2121"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:222",
+                "at": "src/components/primitives/feedback/progress/engines/rustic/index.tsx:222",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1678,18 +1678,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:25",
+              "tests/fixtures/tenants/default/index.css:25",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:729",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:921"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:54",
-              "src/foundation/tokens/css/foundation/themes/default.css:2144"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:54",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2144"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/feedback/Progress/engines/rustic/index.tsx:222",
+                "at": "src/components/primitives/feedback/progress/engines/rustic/index.tsx:222",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1742,13 +1742,13 @@
         {
           "channelId": "--_ds-progress-arc-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/progress"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1757,14 +1757,14 @@
         {
           "channelId": "--_ds-progress-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/progress"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1781,7 +1781,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -1805,7 +1805,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -1855,14 +1855,14 @@
         {
           "channelId": "--_ds-progress-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/progress"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/progress-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1880,7 +1880,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones dentro de alert/toast son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -1901,13 +1901,13 @@
         {
           "channelId": "--_ds-progress-circle-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/progress"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1916,13 +1916,13 @@
         {
           "channelId": "--_ds-progress-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/progress"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1931,13 +1931,13 @@
         {
           "channelId": "--_ds-progress-label-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/progress"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1955,7 +1955,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -2047,7 +2047,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2131,7 +2131,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2188,7 +2188,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2217,7 +2217,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/progress/index.css"
         ]
       }
     },
@@ -2250,11 +2250,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

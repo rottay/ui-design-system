@@ -9,8 +9,8 @@
       "PatternTreeView",
       "TreeViewConnector"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization/tree-view",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/visualization/tree-view",
     "publicComponents": [
       "PatternTreeView",
       "TreeViewConnector"
@@ -18,7 +18,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "e53ba6ee342dd03f17fbdedd23628b3f2f17c26b722d11de6aa145fd1e1c6a92"
+    "inventoryRowDigest": "8e31346c561fb964621d2110da0cb51a116dfe4cf613e4c7e00b1176c8c39c84"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -30,17 +30,17 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/visualization/tree-view/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/tree-view/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/tree-view/index.ts",
-      "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx",
-      "packages/core/src/ui/patterns/visualization/tree-view/presentation/interactive/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css"
+      "packages/core/src/components/patterns/visualization/tree-view/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/tree-view/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/visualization/tree-view/index.ts",
+      "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx",
+      "packages/core/src/components/patterns/visualization/tree-view/presentation/interactive/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css"
     ],
     "stableParts": [
       "body",
@@ -77,8 +77,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the ONLY colour literals in the cohort are here, all three in var() fallback position on the rustic skin [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:5, packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:15, packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:28]",
-      "the family spans two namespaces: the engine legs use ds-pattern-tree-view, the engine-independent TreeViewConnector uses rt-tree-view [at packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:48, packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx, packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css]"
+      "the ONLY colour literals in the cohort are here, all three in var() fallback position on the rustic skin [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:5, packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:15, packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:28]",
+      "the family spans two namespaces: the engine legs use ds-pattern-tree-view, the engine-independent TreeViewConnector uses rt-tree-view [at packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:48, packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx, packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -101,9 +101,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:246",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:277",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:31"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:246",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:277",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:31"
           ]
         },
         {
@@ -111,8 +111,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:40"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:40"
           ]
         },
         {
@@ -120,7 +120,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:35"
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:35"
           ]
         },
         {
@@ -128,8 +128,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:216",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:45"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:45"
           ]
         },
         {
@@ -137,8 +137,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:312",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:74"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:312",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:74"
           ]
         },
         {
@@ -146,7 +146,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:51"
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:51"
           ]
         },
         {
@@ -154,7 +154,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:32"
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:32"
           ]
         },
         {
@@ -162,7 +162,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:40"
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:40"
           ]
         },
         {
@@ -170,7 +170,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:42"
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:42"
           ]
         },
         {
@@ -178,7 +178,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:178"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:178"
           ]
         },
         {
@@ -186,9 +186,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:187",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:20",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:27"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:187",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:20",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:27"
           ]
         },
         {
@@ -196,12 +196,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:240",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:271",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:230",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:240",
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:92",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css:20"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:240",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:271",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:230",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:240",
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css:20"
           ],
           "atSiteCount": 22
         },
@@ -210,7 +210,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/presentation/connector/index.tsx:33"
+            "packages/core/src/components/patterns/visualization/tree-view/presentation/connector/index.tsx:33"
           ]
         },
         {
@@ -218,8 +218,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:243",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:11"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:243",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:11"
           ]
         },
         {
@@ -227,9 +227,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:248",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:279",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:37"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:248",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:279",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:37"
           ]
         },
         {
@@ -237,7 +237,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:303"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:303"
           ]
         },
         {
@@ -245,12 +245,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:52",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:59",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:69"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:69"
           ],
           "atSiteCount": 7
         },
@@ -259,8 +259,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:259",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:43"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:259",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:43"
           ]
         },
         {
@@ -268,8 +268,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:196",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:33"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:33"
           ]
         },
         {
@@ -277,7 +277,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:252"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:252"
           ]
         }
       ],
@@ -285,48 +285,48 @@
         {
           "token": "checked",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:182"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:182"
           ],
           "state": "checked"
         },
         {
           "token": "disabled",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:183",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:189"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:183",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:189"
           ],
           "state": "disabled"
         },
         {
           "token": "expanded",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:180",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:198"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:180",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:198"
           ],
           "state": "expanded"
         },
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:240",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:272",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:230",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:240"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:240",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:272",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:230",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:240"
           ],
           "state": "loading"
         },
         {
           "token": "selected",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:181",
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:188"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:181",
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:188"
           ],
           "state": "selected"
         },
         {
           "token": "visible",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:197"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:197"
           ],
           "state": "visible"
         }
@@ -335,7 +335,7 @@
         {
           "token": "depth",
           "at": [
-            "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:179"
+            "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:179"
           ]
         }
       ],
@@ -344,8 +344,8 @@
           {
             "token": "empty",
             "at": [
-              "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:273",
-              "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:240"
+              "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:273",
+              "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:240"
             ]
           }
         ],
@@ -362,15 +362,15 @@
           "rootAnchor": {
             "modern": {
               "class": "ds-pattern-tree-view ds-engine-modern",
-              "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/modern/index.tsx:48"
+              "at": "packages/core/src/components/patterns/visualization/tree-view/engines/modern/index.tsx:48"
             },
             "rustic": {
               "class": "ds-pattern-tree-view ds-engine-rustic",
-              "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:25"
+              "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:25"
             },
             "classic": {
               "class": null,
-              "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/classic/index.tsx:105",
+              "at": "packages/core/src/components/patterns/visualization/tree-view/engines/classic/index.tsx:105",
               "note": "<Card className={className} style={style}> - AntD Card, no DS anchor"
             }
           },
@@ -390,7 +390,7 @@
       "scoutGaps": {
         "assessmentGaps": [
           "16 of 44 reads carry no part binding (tree-view-connector.css is class-keyed)",
-          "--_ds-tree-view-row-rhythm is read at packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:26 and declared by nothing in any of the three detector forms"
+          "--_ds-tree-view-row-rhythm is read at packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:26 and declared by nothing in any of the three detector forms"
         ]
       },
       "propertyGroupCensusNote": {
@@ -438,7 +438,7 @@
         "dsVariableReads": [
           {
             "variable": "--ds-font-family-base",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:53",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:53",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -459,7 +459,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:59",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:59",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -483,7 +483,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:71",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:71",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -507,7 +507,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:94",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:94",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -531,7 +531,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css:21",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']",
@@ -552,7 +552,7 @@
           },
           {
             "variable": "--ds-tree-view-body-padding",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:32",
             "part": "body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] > [data-part='body']",
@@ -574,7 +574,7 @@
           },
           {
             "variable": "--ds-tree-view-search-margin-block-end",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:38",
             "part": "search-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']   .ds-tree-view-modern__search-row[data-part='search-row']",
@@ -596,7 +596,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-gap",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:45",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:45",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -618,7 +618,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-padding",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:46",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -640,7 +640,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-duration",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:48",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -662,7 +662,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:49",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:49",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -683,7 +683,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-row-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:53",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
@@ -704,7 +704,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:54",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
@@ -725,7 +725,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:55",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
@@ -746,7 +746,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:77",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='empty']",
@@ -767,7 +767,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:4",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -788,7 +788,7 @@
           },
           {
             "variable": "--ds-color-neutral-0",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:5",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:5",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -809,7 +809,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:6",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:6",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -830,7 +830,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:7",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:7",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -851,7 +851,7 @@
           },
           {
             "variable": "--ds-color-neutral-300",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:12",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:12",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -872,7 +872,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:13",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:13",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -893,7 +893,7 @@
           },
           {
             "variable": "--ds-color-neutral-0",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:15",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:15",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -914,7 +914,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:16",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:16",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -935,7 +935,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:21",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
@@ -956,7 +956,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:23",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
@@ -977,7 +977,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:28",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:28",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
@@ -998,7 +998,7 @@
           },
           {
             "variable": "--ds-color-primary-700",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:29",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:29",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
@@ -1019,7 +1019,7 @@
           },
           {
             "variable": "--ds-color-neutral-500",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:36",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:36",
             "part": "toggle",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__toggle[data-part='toggle']",
@@ -1040,7 +1040,7 @@
           },
           {
             "variable": "--ds-color-primary-600",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:41",
             "part": "checkbox",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__checkbox[data-part='checkbox']",
@@ -1061,7 +1061,7 @@
           },
           {
             "variable": "--ds-color-neutral-300",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:46",
             "part": "drag-handle",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__drag-handle[data-part='drag-handle']",
@@ -1082,7 +1082,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:51",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:51",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
@@ -1103,7 +1103,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:52",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:52",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
@@ -1124,7 +1124,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:22",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:22",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -1145,7 +1145,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:23",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:23",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -1166,7 +1166,7 @@
           },
           {
             "variable": "--_ds-tree-view-row-rhythm",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:26",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:26",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -1187,7 +1187,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:27",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:27",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -1208,7 +1208,7 @@
           },
           {
             "variable": "--ds-color-hairline-strong",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:42",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:42",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__connector",
@@ -1229,7 +1229,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:59",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:59",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__label",
@@ -1250,7 +1250,7 @@
           },
           {
             "variable": "--ds-color-hairline",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:68",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:68",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link",
@@ -1271,7 +1271,7 @@
           },
           {
             "variable": "--ds-duration-fast",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:71",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link",
@@ -1292,7 +1292,7 @@
           },
           {
             "variable": "--ds-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:71",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link",
@@ -1313,7 +1313,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:76",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:76",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link:hover",
@@ -1336,7 +1336,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:83",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link:focus-visible",
@@ -1357,7 +1357,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:83",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link:focus-visible",
@@ -1412,7 +1412,7 @@
         "variableCensus": [
           {
             "variable": "--ds-font-family-base",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:53",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:53",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -1433,7 +1433,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:59",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:59",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -1457,7 +1457,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:71",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:71",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -1481,7 +1481,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/tree-view/engines/rustic/index.tsx:94",
+            "at": "packages/core/src/components/patterns/visualization/tree-view/engines/rustic/index.tsx:94",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -1505,7 +1505,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css:21",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']",
@@ -1526,7 +1526,7 @@
           },
           {
             "variable": "--ds-tree-view-body-padding",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:32",
             "part": "body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] > [data-part='body']",
@@ -1548,7 +1548,7 @@
           },
           {
             "variable": "--ds-tree-view-search-margin-block-end",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:38",
             "part": "search-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root']   .ds-tree-view-modern__search-row[data-part='search-row']",
@@ -1570,7 +1570,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-gap",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:45",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:45",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -1592,7 +1592,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-padding",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:46",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -1614,7 +1614,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-duration",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:48",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -1636,7 +1636,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:49",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:49",
             "part": "skeleton-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton-list']",
@@ -1657,7 +1657,7 @@
           },
           {
             "variable": "--ds-tree-view-skeleton-row-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:53",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
@@ -1678,7 +1678,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:54",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
@@ -1699,7 +1699,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:55",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='skeleton']",
@@ -1720,7 +1720,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css:77",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-modern[data-part='root'] [data-part='empty']",
@@ -1741,7 +1741,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:4",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -1762,7 +1762,7 @@
           },
           {
             "variable": "--ds-color-neutral-0",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:5",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:5",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -1783,7 +1783,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:6",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:6",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -1804,7 +1804,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:7",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:7",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root'][data-part='root']",
@@ -1825,7 +1825,7 @@
           },
           {
             "variable": "--ds-color-neutral-300",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:12",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:12",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -1846,7 +1846,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:13",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:13",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -1867,7 +1867,7 @@
           },
           {
             "variable": "--ds-color-neutral-0",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:15",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:15",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -1888,7 +1888,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:16",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:16",
             "part": "search-input",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__search-input[data-part='search-input'][data-part='search-input']",
@@ -1909,7 +1909,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:21",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
@@ -1930,7 +1930,7 @@
           },
           {
             "variable": "--ds-color-neutral-900",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:23",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row']",
@@ -1951,7 +1951,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:28",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:28",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
@@ -1972,7 +1972,7 @@
           },
           {
             "variable": "--ds-color-primary-700",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:29",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:29",
             "part": "node-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__node-row[data-part='node-row'][data-selected='true']",
@@ -1993,7 +1993,7 @@
           },
           {
             "variable": "--ds-color-neutral-500",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:36",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:36",
             "part": "toggle",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__toggle[data-part='toggle']",
@@ -2014,7 +2014,7 @@
           },
           {
             "variable": "--ds-color-primary-600",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:41",
             "part": "checkbox",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__checkbox[data-part='checkbox']",
@@ -2035,7 +2035,7 @@
           },
           {
             "variable": "--ds-color-neutral-300",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:46",
             "part": "drag-handle",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   .ds-tree-view-rustic__drag-handle[data-part='drag-handle']",
@@ -2056,7 +2056,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:51",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:51",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
@@ -2077,7 +2077,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view.css:52",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-tree-view/index.css:52",
             "part": "skeleton",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-tree-view.ds-engine-rustic[data-part='root']   > .ds-tree-view-rustic__skeleton[data-part='skeleton']",
@@ -2098,7 +2098,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:22",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:22",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -2119,7 +2119,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:23",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:23",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -2140,7 +2140,7 @@
           },
           {
             "variable": "--_ds-tree-view-row-rhythm",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:26",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:26",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -2161,7 +2161,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:27",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:27",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view",
@@ -2182,7 +2182,7 @@
           },
           {
             "variable": "--ds-color-hairline-strong",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:42",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:42",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__connector",
@@ -2203,7 +2203,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:59",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:59",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__label",
@@ -2224,7 +2224,7 @@
           },
           {
             "variable": "--ds-color-hairline",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:68",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:68",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link",
@@ -2245,7 +2245,7 @@
           },
           {
             "variable": "--ds-duration-fast",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:71",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link",
@@ -2266,7 +2266,7 @@
           },
           {
             "variable": "--ds-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:71",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:71",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link",
@@ -2287,7 +2287,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:76",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:76",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link:hover",
@@ -2310,7 +2310,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:83",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link:focus-visible",
@@ -2331,7 +2331,7 @@
           },
           {
             "variable": "--ds-surface-fg",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css:83",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css:83",
             "part": null,
             "partResolution": "ROOT_SCOPE",
             "selector": ".rt-tree-view__link:focus-visible",
@@ -2401,7 +2401,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2432,7 +2432,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2478,15 +2478,15 @@
         {
           "channelId": "--_ds-pattern-tree-view-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2504,7 +2504,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2540,7 +2540,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2581,13 +2581,13 @@
         {
           "channelId": "--_ds-tree-view-body-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2596,13 +2596,13 @@
         {
           "channelId": "--_ds-tree-view-skeleton-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2611,13 +2611,13 @@
         {
           "channelId": "--_ds-tree-view-skeleton-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2626,13 +2626,13 @@
         {
           "channelId": "--_ds-tree-view-skeleton-row-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2662,13 +2662,13 @@
         {
           "channelId": "--_ds-tree-view-search-margin-block-end",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2699,15 +2699,15 @@
         {
           "channelId": "--_ds-kanban-line-cadence",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2717,13 +2717,13 @@
         {
           "channelId": "--_ds-duration-fast",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/tree-view-connector/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2732,13 +2732,13 @@
         {
           "channelId": "--_ds-tree-view-skeleton-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-tree-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/tree-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2756,7 +2756,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -2781,7 +2781,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de lectura/trabajo como charts: acabado cero",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -2801,7 +2801,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2821,7 +2821,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -2841,7 +2841,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia dentro del plano de visualizacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -2860,7 +2860,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2897,7 +2897,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2910,7 +2910,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -2956,7 +2956,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2981,7 +2981,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -3002,11 +3002,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

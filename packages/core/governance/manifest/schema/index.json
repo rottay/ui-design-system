@@ -4,7 +4,7 @@
   "title": "Modern Rescue segmented customization manifest",
   "schemaVersion": 1,
   "authorityLaw": "Controls own public semantics, groups own closed recipe vocabularies, families own applicability edges, and the generated index owns rollups. No edge is hand-authored in two segments.",
-  "vocabularySourceLaw": "applicableFamilyFields, internalChannelFields and controlDispositions are mirrors of customization-model/index.json#controlImpactContract. This file documents exactly what scripts/foundation/tokens/manifest/rules.mjs enforces; generator.test.mjs fails when the model, this schema and the generator's Sets disagree.",
+  "vocabularySourceLaw": "applicableFamilyFields, internalChannelFields and controlDispositions are mirrors of customization-model/index.json#controlImpactContract. This file documents exactly what scripts/libraries/manifest/rules/index.mjs enforces; generator.test.mjs fails when the model, this schema and the generator's Sets disagree.",
   "segments": {
     "control": {
       "required": [
@@ -20,7 +20,7 @@
         "independentSemanticInvariant",
         "retiredAliases"
       ],
-      "forbiddenLaw": "Mirrors customization-model/index.json#controlImpactContract.forbiddenControlSegmentFields and scripts/foundation/tokens/manifest/rules.mjs#FORBIDDEN_CONTROL_FAMILY_EDGE_FIELDS. Checked RECURSIVELY: a top-level-only check let `representativeFamilyIds` and `mountClassIds` hide inside `calibration`.",
+      "forbiddenLaw": "Mirrors customization-model/index.json#controlImpactContract.forbiddenControlSegmentFields and scripts/libraries/manifest/rules/index.mjs#FORBIDDEN_CONTROL_FAMILY_EDGE_FIELDS. Checked RECURSIVELY: a top-level-only check let `representativeFamilyIds` and `mountClassIds` hide inside `calibration`.",
       "forbidden": [
         "consumerFamilyIds",
         "families",
@@ -156,6 +156,10 @@
       "--_ds-",
       "data-"
     ],
+    "rootChannelAuthorities": [
+      "tenant-seed",
+      "floor-arbitrated"
+    ],
     "channelReplacementStates": [
       "LIVE",
       "REQUIRED_ADDITION",
@@ -211,7 +215,7 @@
       "enum-map",
       "axis-enum-map"
     ],
-    "domainKindsLaw": "Lista CERRADA de domain.kind (decision delegada FAM-KINDS). Espejo exacto de scripts/foundation/tokens/manifest/rules.mjs DOMAIN_KINDS; index.mjs cobra ambos lados y el kind de cada control. Un kind fuera de la lista es defecto de manifiesto y pone el gate en rojo."
+    "domainKindsLaw": "Lista CERRADA de domain.kind (decision delegada FAM-KINDS). Espejo exacto de scripts/libraries/manifest/rules/index.mjs DOMAIN_KINDS; index.mjs cobra ambos lados y el kind de cada control. Un kind fuera de la lista es defecto de manifiesto y pone el gate en rojo."
   },
   "sourceBindingLaw": {
     "form": "<repository-relative path> or <repository-relative path>#<Symbol>",
@@ -304,7 +308,7 @@
   "evidenceLaw": {
     "resolvedBy": "content",
     "root": "evidence-contract/index.json#root",
-    "validator": "packages/core/scripts/tooling/quality/evidence/framework/receipts/index.mjs#validateReceipt",
+    "validator": "packages/core/scripts/check/evidence/framework/receipts/index.mjs#validateReceipt",
     "reusesExistingContract": [
       "receiptRequiredFields",
       "artifactSha256 matches artifact bytes",
@@ -363,7 +367,7 @@
     "unknownBlocksCertification": true,
     "premiumProposalCountsAsCapability": false,
     "rollupsAreGeneratedOnly": true,
-    "acceptanceAuthority": "Kimi K3 final sighted acceptance after the governed Fable 5 and Codex independent audits",
+    "acceptanceAuthority": "design authority final sighted acceptance after the governed independent audit 5 and independent code audit independent audits",
     "structuralCheckAllowsUnknown": true,
     "certificationRequiresUnknownZero": true,
     "bootstrapNeverOverwrites": true,

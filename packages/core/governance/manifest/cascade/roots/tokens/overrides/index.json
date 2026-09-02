@@ -3,6 +3,7 @@
   "rootId": "token-overrides",
   "tier": "pro",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-color-error",
     "emission": [
       {

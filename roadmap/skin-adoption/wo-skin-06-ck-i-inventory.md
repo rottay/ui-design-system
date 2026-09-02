@@ -1,7 +1,7 @@
 # WO-SKIN-06 CK-I paint inventory (read-only) — the long tail
 
 Scope per the brief's grep: `fleet.inlinePaint.(surfaces/pages|patterns/data/(stats-grid|cell-renderers|grid-view|gallery-view|bulk-select-toggle)|surfaces/(foundation|layout))`.
-**47 files, 466 sites** — machine-reproduced from `node scripts/infrastructure/engine-token-audit.mjs`, re-verified
+**47 files, 466 sites** — machine-reproduced from `node scripts/check/engine-token-audit.mjs`, re-verified
 line-by-line against the current (just-patched) `countArc09PaintInFile` with a script that
 self-checks its own total against the real exported function on every file (all 47: `MATCH`, zero
 drift). The brief's cited "439 sites / ~46 files" is stale — it predates this morning's lexer fix

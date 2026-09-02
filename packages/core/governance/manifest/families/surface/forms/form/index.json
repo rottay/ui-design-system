@@ -8,15 +8,15 @@
     "components": [
       "FormSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/forms",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/forms/form",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/forms",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/forms/form",
     "publicComponents": [
       "FormSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "b84d436a02eeecbf70867486fba196a650d906a7cd80488c528ab806ffde800a"
+    "inventoryRowDigest": "e6827ed13110943a9675c8d1a9b541acb0fded88806123f7056ee3c3d5a3b0e8"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/forms/form",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+      "packages/core/src/components/surfaces/presentation/pages/forms/form",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
     ],
     "stableParts": [
       "root",
@@ -98,8 +98,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-form__aside-card` bound by the root pair `.ds-surface.ds-form`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:30",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:61"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css:30",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css:61"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -108,8 +108,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-form__error-card` bound by the root pair `.ds-surface.ds-form`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:23",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css:56"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css:23",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css:56"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -1030,7 +1030,7 @@
         "reason": "RULING R-8 excludes state and modifier classes from part admission. These are measured and recorded so the evidence survives, but they are NOT parts and are NOT written into the enforced `states` or `variantAxes` arrays: R-5 classifies data-attribute tokens, and the owner has not extended it to BEM modifier classes. Under-claiming is the safe error."
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
         "rootAnchor": ".ds-surface.ds-form",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -1082,7 +1082,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
@@ -1097,7 +1097,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
@@ -1112,7 +1112,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
@@ -1127,7 +1127,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
@@ -1159,13 +1159,13 @@
         {
           "channelId": "--_ds-form-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1185,13 +1185,13 @@
         {
           "channelId": "--_ds-form-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1211,13 +1211,13 @@
         {
           "channelId": "--_ds-form-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1237,13 +1237,13 @@
         {
           "channelId": "--_ds-form-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1261,7 +1261,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "CONSUMO, no propio (test de duplicado): namespace de otra familia - ownedBy primitive/inputs/form.json": [
             "--ds-form-action-dock-reserved-space"
@@ -1299,13 +1299,13 @@
         {
           "channelId": "--_ds-form-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1324,7 +1324,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1337,7 +1337,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1350,7 +1350,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1363,7 +1363,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1376,7 +1376,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1389,7 +1389,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1403,13 +1403,13 @@
         {
           "channelId": "--_ds-form-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/forms/form"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/form-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1433,7 +1433,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1446,7 +1446,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1485,7 +1485,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1522,7 +1522,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1536,11 +1536,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

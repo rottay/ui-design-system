@@ -245,7 +245,7 @@ falsable** (A-3/A-5) con su regla de fallo en §11.
 ACCEPT**, y se asienta en el libro mayor tras el postaudit:
 
 > **A partir del cierre de T-1a/T-1b, la aceptación de K4 y de K5 se compara contra la baseline
-> RE-ANCLADA registrada en el libro mayor del DT (`docs/ROADMAP-EJECUCION-2026-08-19.md`), que
+> RE-ANCLADA registrada en el libro mayor del DT (`docs/history/programs/architecture-refactor/2026-08/execution/index.md`), que
 > SUPERSEDE el literal `1717/13` de los briefs pinneados. Los briefs históricos NO se editan.**
 
 Condiciones exactas, no negociables después:

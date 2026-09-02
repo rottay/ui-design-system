@@ -5,11 +5,11 @@
   "implementationState": "OPERATIONAL_SOURCE_BOUND",
   "sourceBindings": [
     {
-      "path": "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
+      "path": "packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
       "symbol": "CollectionViewMode"
     },
     {
-      "path": "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "path": "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
       "symbol": "effectiveViewMode"
     }
   ],

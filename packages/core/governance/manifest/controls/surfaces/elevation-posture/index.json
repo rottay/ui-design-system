@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Elevation posture",
   "valueType": "enum",
@@ -37,11 +37,11 @@
   "dependsOn": [],
   "compatibility": "additive, unset-to-rollback",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
     "symbol": "var(--ds-elevation"
   },
   "calibration": {
-    "assessmentState": "COMPUTED_VERIFIED",
+    "assessmentState": "IMPLEMENTED",
     "assessmentStateNote": "Reaches COMPUTED_VERIFIED (rank 3), not capped at SOURCE_BOUND the way shape.button-style was: the family-cell ceiling is satisfied here because `primitive/display/card`'s own `themeControls` cell for this control now carries a non-empty `stableParts`/`propertyGroups`/`computedProperties` naming a painted delta this family DOES have -- `box-shadow` on `card-modern-md/root` measured moving, byte-identical between both ingress arms, on every receipted scenario (rottay flat/elevated, evnto flat/elevated, bithire elevated). This is the opposite finding from shape.button-style's DECLARED_CHANNEL_DOES_NOT_PAINT: here the declared channels (`--ds-elevation-1/2/3`) and the painted consequence are the SAME causal chain, not two disconnected ones -- `card.css`'s `box-shadow: var(--ds-card-shadow, var(--ds-elevation-1))` reads the declared channel directly (one hop, a documented fallback, not a rewritten sibling).",
     "normalizedStops": [
       {
@@ -62,17 +62,10 @@
     "stopDiscriminationException": {
       "armId": "db-tenant-theme",
       "reason": "bithire/db-tenant-theme has only one usable witness stop, not two. `soft` is universally excluded on this arm for every vertical (see the `soft` stop law above -- the empty preset patches nothing, so there is no `surfaces.elevation` write to lower). `flat` is ADDITIONALLY excluded on bithire specifically: bithire's `experienceProfile` is `rottay/bithire-technical@1`, whose `elevation` axis is `hairline-lift`, and `ELEVATION_PROFILE_FIELDS['hairline-lift'] = 'flat'` -- the tenant's own baseline IS `flat` before any posture write, so the DB document patch for the `flat` stop is a no-op relative to that baseline and the compiler emits nothing to lower, the same `StopExclusionError` class as `soft`, not a broken door. Measured directly: `causal --stop elevated --vertical bithire` reports `db-tenant-theme lowered 1 witness stop(s)... Excluded: flat, soft`, matching this exactly. Only `elevated` survives as a witness on this arm. bithire's `static-brand-theme` arm does NOT need this exception -- measured separately (`causal --stop elevated --vertical bithire --arm static-brand-theme` and `--stop flat ... --arm static-brand-theme`): `flat` is a real, non-excluded witness there (moved=0, a genuine non-mover matching the same profile coincidence, not a structural exclusion) and `elevated` moves 6 channels, giving 2 witnesses with a discriminating pair on that arm alone.",
-      "adjudicatedBy": "Kimi K3 (DT), 2026-08-24 — RATIFIED (clase pre-ratificada; aplicacion escrita con la medicion)"
+      "adjudicatedBy": "design authority (DT), 2026-08-24 — RATIFIED (clase pre-ratificada; aplicacion escrita con la medicion)"
     },
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-elevation-posture/computed-static-db/rottay-flat.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-elevation-posture/computed-static-db/evnto-flat.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-elevation-posture/computed-static-db/rottay-elevated.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-elevation-posture/computed-static-db/evnto-elevated.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-elevation-posture/computed-static-db/bithire-elevated.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
       "font metrics remain fixed",
@@ -86,12 +79,12 @@
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
-      "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
-      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+      "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
+      "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"
     ],
     "measuredResult": {
-      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, Node 22.17.0.",
+      "instrument": "packages/core/scripts/check/tokens/cascade/probe (causal command), Chromium, --bundle fresh, Node 22.17.0.",
       "authorityFix": "ONE ingress field. capabilities/index.ts's brandThemePath read `surfaces.shadows.*`, a keypath nothing in the compiler ever wrote (the real field is `surfaces.elevation`, singular, distinct from the unrelated authored ladder `surfaces.elevations`, plural -- BrandSurfaces.elevation at themes/index.ts:601). Fixed to `surfaces.elevation`. The manifest is generated from that registry (generator/index.mjs --sync); regeneration touched all 20 control manifests' semanticOwner.registryDigest plus governance/manifest/index.json's derived digests and NOTHING ELSE semantic.",
       "harnessExtension": "--ds-elevation-1/2/3 carried no direct-read fixture: directControlFixtureIds requires a fixture target whose declared properties include every channel the control declares, and token-readout's tokens target did not track these three. Same precedented one-property-family addition as every prior F4B control (rhythm, effect-intensity, experience.profile, density.mode, shape.button-style), per fixtures.json's own dated 'Extended...' provenance trail.",
       "productDefectFoundAndFixedUpstream": "E-1 (found during this packet's own preflight, fixed by a separate DT-directed packet before this evidence was gathered, NOT touched by this control's write-set): rottay's db-tenant-theme arm compiled `appearance.general.surfaces.elevation` to a completely empty CSS block for all three stops -- the normalized value reached `normalizedAppearance` correctly but zero variables were written. Re-measured directly post-fix (`compileTenantThemeConfig` via `dist/server.js`, and via the causal instrument): rottay's db arm now moves the same 3 channels the static arm moves, byte-identical between arms, ingress equivalence `identical (0 differing rows)`, on both flat and elevated.",
@@ -108,7 +101,7 @@
       "Only card-modern-md's fixture was measured. --ds-elevation-1/2/3's other declared consumer relationships (`--_ds-card-*-shadow` internal channels catalogued in the card family manifest) were not individually exercised beyond what box-shadow's own resolution already proves.",
       "Responsive divergence (one viewport, 1280x800 dpr1) was not measured."
     ],
-    "nextAction": "OBTAIN_SIGHTED_ACCEPTANCE. Computed half done: flat and elevated on rottay and evnto (both doors), elevated on bithire (both doors, db-tenant-theme under its ratified exception). E-1 (the rottay db-arm defect) is resolved and re-measured directly, not merely assumed fixed by a separate packet's own report.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "channels": [
       "--ds-elevation-1",
       "--ds-elevation-2",

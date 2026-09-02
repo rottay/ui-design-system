@@ -3,6 +3,7 @@
   "rootId": "experience.profile",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-experience-profile",
     "emission": [
       {

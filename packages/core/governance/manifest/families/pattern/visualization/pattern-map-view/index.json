@@ -8,15 +8,15 @@
     "components": [
       "PatternMapView"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization/map-view",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/visualization/map-view",
     "publicComponents": [
       "PatternMapView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "802e91735253996fa50cd9bcbbec48dd18a5f3e9ac16ba53495896502c774e1f"
+    "inventoryRowDigest": "fb6e4531cf4bc6991e0201e6f957e373f4e0bde57a21d57c0308d421897d5290"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/visualization/map-view/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/map-view/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
+      "packages/core/src/components/patterns/visualization/map-view/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/visualization/map-view/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css"
     ],
     "stableParts": [
       "content",
@@ -63,8 +63,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "zero colour literals; 3 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:71, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:130, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:142]",
-      "classic paints entirely from inline style objects; no classic paint file exists [at packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:52]"
+      "zero colour literals; 3 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:71, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:130, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:142]",
+      "classic paints entirely from inline style objects; no classic paint file exists [at packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx:52]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -87,12 +87,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:115",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:61",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:50",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:15",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:23"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:115",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:61",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:50",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:15",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:23"
           ],
           "atSiteCount": 12
         },
@@ -101,10 +101,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:195",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:151",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:166",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:69"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:195",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:151",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:166",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:69"
           ]
         },
         {
@@ -112,10 +112,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:155",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:101",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:90",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:155",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:101",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:9"
           ]
         },
         {
@@ -123,10 +123,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:118",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:65",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:56",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:118",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:9"
           ]
         },
         {
@@ -134,12 +134,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:131",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:74",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:15"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:131",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:74",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:9",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:15"
           ]
         },
         {
@@ -147,10 +147,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:187",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:53"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:187",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:53"
           ]
         },
         {
@@ -158,11 +158,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:192",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:147",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:160",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:61"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:192",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:147",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:160",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:61"
           ]
         },
         {
@@ -170,12 +170,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:159",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:107",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:97",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:23",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:31"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:159",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:107",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:23",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:31"
           ],
           "atSiteCount": 11
         },
@@ -184,12 +184,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:170",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:108",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:114",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:126",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:133"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:170",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:108",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:114",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:133"
           ],
           "atSiteCount": 16
         },
@@ -198,8 +198,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:183",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:145"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:145"
           ]
         },
         {
@@ -207,8 +207,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:191",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:156"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:191",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:156"
           ]
         },
         {
@@ -216,10 +216,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:136",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:83",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:73",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:9"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:136",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:73",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:9"
           ]
         },
         {
@@ -227,12 +227,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:137",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:140",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:144",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:84",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:87",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:93"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:137",
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:140",
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:144",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:84",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:87",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:93"
           ],
           "atSiteCount": 10
         },
@@ -241,9 +241,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:208",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:173"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:208",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:173"
           ]
         },
         {
@@ -251,12 +251,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:102",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:52",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:40",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:64",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:97",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:108"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:102",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:52",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:64",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:108"
           ],
           "atSiteCount": 16
         },
@@ -265,9 +265,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:111",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:59",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:46"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:111",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:59",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:46"
           ]
         },
         {
@@ -275,7 +275,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:121"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:121"
           ]
         }
       ],
@@ -283,16 +283,16 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:103",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:53"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:103",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:53"
           ],
           "state": "loading"
         },
         {
           "token": "selected",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:171",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:118"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:171",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:118"
           ],
           "state": "selected"
         }
@@ -301,12 +301,12 @@
         {
           "token": "detail",
           "at": [
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:137",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:140",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:144",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:84",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:87",
-            "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:93"
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:137",
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:140",
+            "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:144",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:84",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:87",
+            "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:93"
           ]
         }
       ],
@@ -315,15 +315,15 @@
           {
             "token": "empty",
             "at": [
-              "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:104",
-              "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:54"
+              "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:104",
+              "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:54"
             ]
           },
           {
             "token": "last",
             "at": [
-              "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:172",
-              "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:119"
+              "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:172",
+              "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:119"
             ]
           }
         ],
@@ -340,15 +340,15 @@
           "rootAnchor": {
             "modern": {
               "class": "ds-pattern-map-view ds-engine-modern",
-              "at": "packages/core/src/ui/patterns/visualization/map-view/engines/modern/index.tsx:52"
+              "at": "packages/core/src/components/patterns/visualization/map-view/engines/modern/index.tsx:52"
             },
             "rustic": {
               "class": "ds-pattern-map-view ds-engine-rustic",
-              "at": "packages/core/src/ui/patterns/visualization/map-view/engines/rustic/index.tsx:21"
+              "at": "packages/core/src/components/patterns/visualization/map-view/engines/rustic/index.tsx:21"
             },
             "classic": {
               "class": null,
-              "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:52",
+              "at": "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx:52",
               "note": "<div className={className} style={{display:'flex',gap:16,...style}}> - inline layout literals, no DS anchor"
             }
           },
@@ -408,7 +408,7 @@
         "dsVariableReads": [
           {
             "variable": "--ds-color-info-bg",
-            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:64",
+            "at": "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx:64",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -432,7 +432,7 @@
           },
           {
             "variable": "--ds-color-info-bg",
-            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:102",
+            "at": "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx:102",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -456,7 +456,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:42",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root']",
@@ -477,7 +477,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:68",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:68",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -498,7 +498,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:69",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:69",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -519,7 +519,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:70",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:70",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -540,7 +540,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:71",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:71",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -561,7 +561,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:77",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
@@ -582,7 +582,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:78",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:78",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
@@ -603,7 +603,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:82",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:82",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location'], .ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='count']",
@@ -624,7 +624,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:85",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:85",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location']",
@@ -645,7 +645,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:93",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:93",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='empty']",
@@ -666,7 +666,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:99",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:99",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
@@ -687,7 +687,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:100",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
@@ -708,7 +708,7 @@
           },
           {
             "variable": "--_ds-map-view-list-max-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:105",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
@@ -729,7 +729,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:109",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:109",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true'])",
@@ -750,7 +750,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:117",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:117",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -771,7 +771,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:120",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:120",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -792,7 +792,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:124",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -813,7 +813,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:124",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -834,7 +834,7 @@
           },
           {
             "variable": "--ds-shadow-focus-ring",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:128",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:128",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:focus-visible",
@@ -855,7 +855,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:134",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:134",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:active",
@@ -876,7 +876,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:138",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:138",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:hover:not([data-selected='true'])",
@@ -899,7 +899,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:142",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:142",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true']",
@@ -920,7 +920,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:148",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:148",
             "part": "marker-row-main",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row-main']",
@@ -941,7 +941,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:154",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:154",
             "part": "marker-color",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-color']",
@@ -962,7 +962,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:161",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:161",
             "part": "marker-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-label']",
@@ -983,7 +983,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:164",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:164",
             "part": "marker-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] [data-part='marker-label']",
@@ -1004,7 +1004,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:167",
             "part": "coordinates",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
@@ -1025,7 +1025,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:168",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:168",
             "part": "coordinates",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
@@ -1046,7 +1046,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:175",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:175",
             "part": "popup",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
@@ -1067,7 +1067,7 @@
           },
           {
             "variable": "--ds-spacing-5",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:176",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:176",
             "part": "popup",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
@@ -1088,7 +1088,7 @@
           },
           {
             "variable": "--ds-map-view-touch-target-min",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:192",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -1112,7 +1112,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:10",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:10",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='loading'], .ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder']   > [data-part='placeholder-content']   > [data-part='placeholder-label'], .ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='empty']",
@@ -1134,7 +1134,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:16",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:16",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
@@ -1155,7 +1155,7 @@
           },
           {
             "variable": "--ds-color-bg-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:17",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:17",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
@@ -1177,7 +1177,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:18",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:18",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
@@ -1199,7 +1199,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:24",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:24",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
@@ -1221,7 +1221,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:25",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:25",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
@@ -1242,7 +1242,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:32",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='false']",
@@ -1264,7 +1264,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:39",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='true']",
@@ -1286,7 +1286,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:46",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-last='false']",
@@ -1308,7 +1308,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:62",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:62",
             "part": "marker-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='marker-label']",
@@ -1330,7 +1330,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:70",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:70",
             "part": "coordinates",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='coordinates']",
@@ -1381,7 +1381,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-info-bg",
-            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:64",
+            "at": "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx:64",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -1405,7 +1405,7 @@
           },
           {
             "variable": "--ds-color-info-bg",
-            "at": "packages/core/src/ui/patterns/visualization/map-view/engines/classic/index.tsx:102",
+            "at": "packages/core/src/components/patterns/visualization/map-view/engines/classic/index.tsx:102",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -1429,7 +1429,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:42",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root']",
@@ -1450,7 +1450,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:68",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:68",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -1471,7 +1471,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:69",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:69",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -1492,7 +1492,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:70",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:70",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -1513,7 +1513,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:71",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:71",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='map-placeholder']",
@@ -1534,7 +1534,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:77",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
@@ -1555,7 +1555,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:78",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:78",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label']",
@@ -1576,7 +1576,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:82",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:82",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location'], .ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='count']",
@@ -1597,7 +1597,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:85",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:85",
             "part": "placeholder-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='placeholder-label'][data-detail='location']",
@@ -1618,7 +1618,7 @@
           },
           {
             "variable": "--ds-spacing-8",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:93",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:93",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='empty']",
@@ -1639,7 +1639,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:99",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:99",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
@@ -1660,7 +1660,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:100",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
@@ -1681,7 +1681,7 @@
           },
           {
             "variable": "--_ds-map-view-list-max-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:105",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-list']",
@@ -1702,7 +1702,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:109",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:109",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern[data-part='root'] [data-part='marker-row']:not([data-last='true'])",
@@ -1723,7 +1723,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:117",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:117",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -1744,7 +1744,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:120",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:120",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -1765,7 +1765,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:124",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -1786,7 +1786,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:124",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -1807,7 +1807,7 @@
           },
           {
             "variable": "--ds-shadow-focus-ring",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:128",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:128",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:focus-visible",
@@ -1828,7 +1828,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:134",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:134",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:active",
@@ -1849,7 +1849,7 @@
           },
           {
             "variable": "--ds-surface-highlight",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:138",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:138",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']:hover:not([data-selected='true'])",
@@ -1872,7 +1872,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:142",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:142",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true']",
@@ -1893,7 +1893,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:148",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:148",
             "part": "marker-row-main",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row-main']",
@@ -1914,7 +1914,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:154",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:154",
             "part": "marker-color",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-color']",
@@ -1935,7 +1935,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:161",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:161",
             "part": "marker-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-label']",
@@ -1956,7 +1956,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:164",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:164",
             "part": "marker-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row'][data-selected='true'] [data-part='marker-label']",
@@ -1977,7 +1977,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:167",
             "part": "coordinates",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
@@ -1998,7 +1998,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:168",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:168",
             "part": "coordinates",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='coordinates']",
@@ -2019,7 +2019,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:175",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:175",
             "part": "popup",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
@@ -2040,7 +2040,7 @@
           },
           {
             "variable": "--ds-spacing-5",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:176",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:176",
             "part": "popup",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='popup']",
@@ -2061,7 +2061,7 @@
           },
           {
             "variable": "--ds-map-view-touch-target-min",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css:192",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-modern [data-part='marker-row']",
@@ -2085,7 +2085,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:10",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:10",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='loading'], .ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder']   > [data-part='placeholder-content']   > [data-part='placeholder-label'], .ds-pattern-map-view.ds-engine-rustic[data-part='root'] > [data-part='content'] > [data-part='empty']",
@@ -2107,7 +2107,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:16",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:16",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
@@ -2128,7 +2128,7 @@
           },
           {
             "variable": "--ds-color-bg-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:17",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:17",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
@@ -2150,7 +2150,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:18",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:18",
             "part": "map-placeholder",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='map-placeholder'][data-part='map-placeholder']",
@@ -2172,7 +2172,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:24",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:24",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
@@ -2194,7 +2194,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:25",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:25",
             "part": "marker-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list'][data-part='marker-list']",
@@ -2215,7 +2215,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:32",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='false']",
@@ -2237,7 +2237,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:39",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-selected='true']",
@@ -2259,7 +2259,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:46",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:46",
             "part": "marker-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row'][data-last='false']",
@@ -2281,7 +2281,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:62",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:62",
             "part": "marker-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='marker-label']",
@@ -2303,7 +2303,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view.css:70",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-map-view/index.css:70",
             "part": "coordinates",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-map-view.ds-engine-rustic[data-part='root']   > [data-part='content']   > [data-part='marker-list']   > [data-part='marker-row']   [data-part='coordinates']",
@@ -2373,7 +2373,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2409,7 +2409,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2451,13 +2451,13 @@
         {
           "channelId": "--_ds-pattern-map-view-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-map-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-map-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2475,7 +2475,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2512,7 +2512,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2543,7 +2543,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2581,7 +2581,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -2611,7 +2611,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-ascii-diagram-line-cadence",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -2637,7 +2637,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -2657,7 +2657,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de lectura/trabajo como charts: acabado cero",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -2682,7 +2682,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2702,7 +2702,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -2722,7 +2722,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia dentro del plano de visualizacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -2741,7 +2741,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2778,7 +2778,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2791,7 +2791,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -2837,7 +2837,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2879,7 +2879,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -2900,11 +2900,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

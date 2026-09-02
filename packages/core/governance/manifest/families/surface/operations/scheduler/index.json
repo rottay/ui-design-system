@@ -8,15 +8,15 @@
     "components": [
       "SchedulerSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/operations",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/operations/scheduler",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/operations",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/operations/scheduler",
     "publicComponents": [
       "SchedulerSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "cc378e7165005219dc23ee7f7b04d3c0c6b409a87e6ba9c0570c8d3e5617ddab"
+    "inventoryRowDigest": "2a594e257c0eaae0ec6b5c28d947d2dcc290cc3c61ef6c3c12b2a880bf6e13b3"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/operations/scheduler",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+      "packages/core/src/components/surfaces/presentation/pages/operations/scheduler",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
     ],
     "stableParts": [
       "agenda-event",
@@ -130,10 +130,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-scheduler__agenda` bound by the root pair `.ds-surface.ds-scheduler`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css:14",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css:26",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css:66"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css:14",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css:26",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css:66"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -142,7 +142,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-scheduler__data-warning` bound by the root pair `.ds-surface.ds-scheduler`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css:36"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css:36"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -1167,7 +1167,7 @@
         }
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
         "rootAnchor": ".ds-surface.ds-scheduler",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -1225,7 +1225,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
@@ -1240,7 +1240,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
@@ -1255,7 +1255,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
@@ -1270,7 +1270,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
@@ -1302,13 +1302,13 @@
         {
           "channelId": "--_ds-scheduler-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1336,13 +1336,13 @@
         {
           "channelId": "--_ds-scheduler-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1370,13 +1370,13 @@
         {
           "channelId": "--_ds-scheduler-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1396,13 +1396,13 @@
         {
           "channelId": "--_ds-scheduler-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1430,13 +1430,13 @@
         {
           "channelId": "--_ds-scheduler-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1456,13 +1456,13 @@
         {
           "channelId": "--_ds-scheduler-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1481,7 +1481,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido foundation (nivel 2/3)": [
             "--ds-motion-ease-in-out",
@@ -1501,7 +1501,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1514,7 +1514,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1527,7 +1527,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1540,7 +1540,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1553,7 +1553,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1577,13 +1577,13 @@
         {
           "channelId": "--_ds-scheduler-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/operations/scheduler"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/scheduler-surface/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1607,7 +1607,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1620,7 +1620,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1659,7 +1659,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1696,7 +1696,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1710,11 +1710,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

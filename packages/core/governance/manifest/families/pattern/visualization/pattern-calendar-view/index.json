@@ -8,15 +8,15 @@
     "components": [
       "PatternCalendarView"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization/calendar-view",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/visualization/calendar-view",
     "publicComponents": [
       "PatternCalendarView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "7777ea49f1ffb7761725a480c5fd6c72dea620296a2ff655742189307b873ee6"
+    "inventoryRowDigest": "ceb2a037ed5f9d810051416d40aab6bbba37a94ed6a3329bb660d92421b70a69"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/visualization/calendar-view/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/calendar-view/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+      "packages/core/src/components/patterns/visualization/calendar-view/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/visualization/calendar-view/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
     ],
     "stableParts": [
       "date-label",
@@ -65,7 +65,7 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "zero colour literals; the single colour computation is token-composed [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:192]",
+      "zero colour literals; the single colour computation is token-composed [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:192]",
       "every one of the 90 reads is DS-namespaced; no supplier or product-prefixed variable appears"
     ],
     "sourceEvidence": {
@@ -89,12 +89,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:520",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:184",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:199",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:208",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:343",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:65"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:520",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:199",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:343",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:65"
           ],
           "atSiteCount": 7
         },
@@ -103,12 +103,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:322",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:469",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:170",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:138",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:155"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:322",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:469",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:155"
           ],
           "atSiteCount": 37
         },
@@ -117,12 +117,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:305",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:527",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:196",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:219",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:236",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:243"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:305",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:527",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:196",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:219",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:236",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:243"
           ],
           "atSiteCount": 11
         },
@@ -131,12 +131,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:18",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:442",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:156",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:114",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:121"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:18",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:442",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:114",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:121"
           ],
           "atSiteCount": 41
         },
@@ -145,10 +145,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:434",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:152",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:72",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:22"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:434",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:152",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:72",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:22"
           ]
         },
         {
@@ -156,10 +156,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:388",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:131",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:92",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:18"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:388",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:131",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:92",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:18"
           ]
         },
         {
@@ -167,9 +167,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:129",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:87"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:87"
           ]
         },
         {
@@ -177,11 +177,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:558",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:214",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:256",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:384",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:87"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:558",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:214",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:256",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:87"
           ]
         },
         {
@@ -189,12 +189,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:363",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:72",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:79",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:87",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:92"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:363",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:72",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:92"
           ],
           "atSiteCount": 50
         },
@@ -203,7 +203,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:435"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:435"
           ]
         },
         {
@@ -211,12 +211,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:374",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:128",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:79",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:87",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:297",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:9"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:374",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:128",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:79",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:297",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:9"
           ],
           "atSiteCount": 7
         },
@@ -225,12 +225,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:379",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:394",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:406",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:130",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:134",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:137"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:379",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:394",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:406",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:130",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:134",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:137"
           ],
           "atSiteCount": 8
         },
@@ -239,10 +239,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:402",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:87",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:9"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:402",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:9"
           ]
         },
         {
@@ -250,10 +250,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:414",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:139",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:99",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:9"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:414",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:99",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:9"
           ]
         },
         {
@@ -261,8 +261,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:461",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:114"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:461",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:114"
           ]
         },
         {
@@ -270,12 +270,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:452",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:121",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:327",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:336",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:33"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:452",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:121",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:327",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:336",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:33"
           ]
         },
         {
@@ -283,8 +283,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:450",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:114"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:450",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:114"
           ]
         }
       ],
@@ -292,24 +292,24 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:364",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:118"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:364",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:118"
           ],
           "state": "loading"
         },
         {
           "token": "selected",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:472"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:472"
           ],
           "state": "selected"
         },
         {
           "token": "today",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:471",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:520",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:172"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:471",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:520",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:172"
           ],
           "state": "today"
         }
@@ -318,19 +318,19 @@
         {
           "token": "action",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:380",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:395",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:407",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:130",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:134",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:137"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:380",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:395",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:407",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:130",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:134",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:137"
           ]
         },
         {
           "token": "view-mode",
           "at": [
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:366",
-            "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:119"
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:366",
+            "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:119"
           ]
         }
       ],
@@ -339,15 +339,15 @@
           {
             "token": "empty",
             "at": [
-              "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:470",
-              "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:171"
+              "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:470",
+              "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:171"
             ]
           },
           {
             "token": "last-column",
             "at": [
-              "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:473",
-              "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:173"
+              "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:473",
+              "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:173"
             ]
           }
         ],
@@ -364,15 +364,15 @@
           "rootAnchor": {
             "modern": {
               "class": "ds-pattern-calendar-view ds-engine-modern",
-              "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/modern/index.tsx:52"
+              "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/modern/index.tsx:52"
             },
             "rustic": {
               "class": "ds-pattern-calendar-view ds-engine-rustic",
-              "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:23"
+              "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:23"
             },
             "classic": {
               "class": null,
-              "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:107",
+              "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:107",
               "note": "<div className={className} style={style}> - no DS class and no data-part; the only anchor is caller-supplied"
             }
           },
@@ -442,7 +442,7 @@
         "dsVariableReads": [
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:136",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:136",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -466,7 +466,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -490,7 +490,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -514,7 +514,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:157",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:157",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -538,7 +538,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:158",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:158",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -562,7 +562,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -586,7 +586,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -610,7 +610,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:168",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:168",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -634,7 +634,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:185",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:185",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -658,7 +658,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:186",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:186",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -682,7 +682,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:203",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:203",
             "part": "event",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -706,7 +706,7 @@
           },
           {
             "variable": "--ds-spacing-12",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:75",
             "part": "loading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='loading']",
@@ -727,7 +727,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:83",
             "part": "toolbar",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar']",
@@ -748,7 +748,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:84",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:84",
             "part": "toolbar",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar']",
@@ -769,7 +769,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:90",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:90",
             "part": "view-controls",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] [data-part='navigation'], .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] [data-part='view-controls']",
@@ -790,7 +790,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:94",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:94",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -811,7 +811,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:95",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -832,7 +832,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:96",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:96",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -853,7 +853,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:97",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:97",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -874,7 +874,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:107",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:107",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid']",
@@ -895,7 +895,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:108",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:108",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid']",
@@ -916,7 +916,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:122",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:122",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -937,7 +937,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:123",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:123",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -958,7 +958,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:124",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -979,7 +979,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:125",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:125",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -1000,7 +1000,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:126",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:126",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -1021,7 +1021,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:132",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -1042,7 +1042,7 @@
           },
           {
             "variable": "--ds-calendar-view-cell-min-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:139",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:139",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -1063,7 +1063,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:140",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:140",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -1084,7 +1084,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:145",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:145",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -1105,7 +1105,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:146",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:146",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -1126,7 +1126,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:156",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:156",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']",
@@ -1147,7 +1147,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:158",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:158",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']",
@@ -1168,7 +1168,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:158",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:158",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']",
@@ -1189,7 +1189,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:164",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:164",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell'][data-empty='false']:hover",
@@ -1212,7 +1212,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:170",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:170",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:active",
@@ -1233,7 +1233,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:175",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:175",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='true']",
@@ -1254,7 +1254,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:182",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:182",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:focus-visible",
@@ -1275,7 +1275,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:182",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:182",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:focus-visible",
@@ -1297,7 +1297,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:183",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:183",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:focus-visible",
@@ -1318,7 +1318,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:191",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:191",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-selected='true']",
@@ -1339,7 +1339,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:192",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-selected='true']",
@@ -1360,7 +1360,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:200",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label']",
@@ -1381,7 +1381,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:201",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:201",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label']",
@@ -1402,7 +1402,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:209",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:209",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -1423,7 +1423,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:210",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:210",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -1444,7 +1444,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:211",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:211",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -1465,7 +1465,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:212",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -1486,7 +1486,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:221",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1507,7 +1507,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:226",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:226",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1528,7 +1528,7 @@
           },
           {
             "variable": "--ds-calendar-event-accent",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:227",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1550,7 +1550,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:228",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1571,7 +1571,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:229",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:229",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1592,7 +1592,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:230",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:230",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1613,7 +1613,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:230",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:230",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -1634,7 +1634,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:250",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:250",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']:focus-visible",
@@ -1655,7 +1655,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:250",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:250",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']:focus-visible",
@@ -1677,7 +1677,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:251",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:251",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']:focus-visible",
@@ -1698,7 +1698,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:257",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:257",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='overflow-count']",
@@ -1719,7 +1719,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:258",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:258",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='overflow-count']",
@@ -1740,7 +1740,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:259",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:259",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='overflow-count']",
@@ -1761,7 +1761,7 @@
           },
           {
             "variable": "--ds-calendar-view-cell-min-height-compact",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:275",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:275",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']",
@@ -1784,7 +1784,7 @@
           },
           {
             "variable": "--_ds-calendar-view-dot-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:282",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:282",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1807,7 +1807,7 @@
           },
           {
             "variable": "--_ds-calendar-view-dot-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:283",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:283",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1830,7 +1830,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:285",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:285",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1853,7 +1853,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:286",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:286",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1876,7 +1876,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:287",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:287",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1899,7 +1899,7 @@
           },
           {
             "variable": "--ds-calendar-view-touch-target",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:298",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:298",
             "part": "toolbar-action",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='toolbar']     [data-part='toolbar-action']",
@@ -1922,7 +1922,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:368",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:368",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1945,7 +1945,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:370",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:370",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -1968,7 +1968,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:394",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:394",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern [data-part='day-cell']",
@@ -1991,7 +1991,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:10",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:10",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -2013,7 +2013,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:11",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:11",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -2034,7 +2034,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:12",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:12",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -2056,7 +2056,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:13",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:13",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -2078,7 +2078,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:19",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:19",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='month-title']",
@@ -2100,7 +2100,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:23",
             "part": "loading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='loading']",
@@ -2122,7 +2122,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:27",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:27",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='grid'][data-part='grid']",
@@ -2144,7 +2144,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:28",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:28",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='grid'][data-part='grid']",
@@ -2165,7 +2165,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:34",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:34",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='weekday'][data-part='weekday']",
@@ -2187,7 +2187,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:35",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:35",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='weekday'][data-part='weekday']",
@@ -2209,7 +2209,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:41",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-part='day-cell']",
@@ -2231,7 +2231,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:47",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-last-column='false']",
@@ -2253,7 +2253,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:53",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-empty='false']",
@@ -2275,7 +2275,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:59",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-empty='true']",
@@ -2297,7 +2297,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:66",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   > [data-part='date-label']",
@@ -2319,7 +2319,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:73",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:73",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-today='true']   > [data-part='date-label']",
@@ -2340,7 +2340,7 @@
           },
           {
             "variable": "--ds-radius-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:80",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:80",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   [data-part='event']",
@@ -2361,7 +2361,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:81",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:81",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   [data-part='event']",
@@ -2383,7 +2383,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:88",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:88",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   > [data-part='overflow-count']",
@@ -2436,7 +2436,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:136",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:136",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2460,7 +2460,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2484,7 +2484,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:138",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2508,7 +2508,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:157",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:157",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2532,7 +2532,7 @@
           },
           {
             "variable": "--ds-color-border-subtle",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:158",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:158",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2556,7 +2556,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2580,7 +2580,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:159",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2604,7 +2604,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:168",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:168",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2628,7 +2628,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:185",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:185",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2652,7 +2652,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/classic/index.tsx:186",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/classic/index.tsx:186",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2676,7 +2676,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/calendar-view/engines/rustic/index.tsx:203",
+            "at": "packages/core/src/components/patterns/visualization/calendar-view/engines/rustic/index.tsx:203",
             "part": "event",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2700,7 +2700,7 @@
           },
           {
             "variable": "--ds-spacing-12",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:75",
             "part": "loading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='loading']",
@@ -2721,7 +2721,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:83",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:83",
             "part": "toolbar",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar']",
@@ -2742,7 +2742,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:84",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:84",
             "part": "toolbar",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar']",
@@ -2763,7 +2763,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:90",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:90",
             "part": "view-controls",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] [data-part='navigation'], .ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='toolbar'] [data-part='view-controls']",
@@ -2784,7 +2784,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:94",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:94",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -2805,7 +2805,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:95",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -2826,7 +2826,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:96",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:96",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -2847,7 +2847,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:97",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:97",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] [data-part='month-title']",
@@ -2868,7 +2868,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:107",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:107",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid']",
@@ -2889,7 +2889,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:108",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:108",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root'] > [data-part='grid']",
@@ -2910,7 +2910,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:122",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:122",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -2931,7 +2931,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:123",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:123",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -2952,7 +2952,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:124",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -2973,7 +2973,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:125",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:125",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -2994,7 +2994,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:126",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:126",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -3015,7 +3015,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:132",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='weekday']",
@@ -3036,7 +3036,7 @@
           },
           {
             "variable": "--ds-calendar-view-cell-min-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:139",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:139",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -3057,7 +3057,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:140",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:140",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -3078,7 +3078,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:145",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:145",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -3099,7 +3099,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:146",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:146",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']",
@@ -3120,7 +3120,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:156",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:156",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']",
@@ -3141,7 +3141,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:158",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:158",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']",
@@ -3162,7 +3162,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:158",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:158",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']",
@@ -3183,7 +3183,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:164",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:164",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell'][data-empty='false']:hover",
@@ -3206,7 +3206,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:170",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:170",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:active",
@@ -3227,7 +3227,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:175",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:175",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='true']",
@@ -3248,7 +3248,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:182",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:182",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:focus-visible",
@@ -3269,7 +3269,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:182",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:182",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:focus-visible",
@@ -3291,7 +3291,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:183",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:183",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-empty='false']:focus-visible",
@@ -3312,7 +3312,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:191",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:191",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-selected='true']",
@@ -3333,7 +3333,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:192",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell'][data-selected='true']",
@@ -3354,7 +3354,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:200",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label']",
@@ -3375,7 +3375,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:201",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:201",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label']",
@@ -3396,7 +3396,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:209",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:209",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -3417,7 +3417,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:210",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:210",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -3438,7 +3438,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:211",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:211",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -3459,7 +3459,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:212",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   > [data-part='date-label'][data-today='true']",
@@ -3480,7 +3480,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:221",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3501,7 +3501,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:226",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:226",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3522,7 +3522,7 @@
           },
           {
             "variable": "--ds-calendar-event-accent",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:227",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3544,7 +3544,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:228",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3565,7 +3565,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:229",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:229",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3586,7 +3586,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:230",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:230",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3607,7 +3607,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:230",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:230",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']",
@@ -3628,7 +3628,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:250",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:250",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']:focus-visible",
@@ -3649,7 +3649,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:250",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:250",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']:focus-visible",
@@ -3671,7 +3671,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:251",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:251",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='event']:focus-visible",
@@ -3692,7 +3692,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:257",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:257",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='overflow-count']",
@@ -3713,7 +3713,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:258",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:258",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='overflow-count']",
@@ -3734,7 +3734,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:259",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:259",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']   > [data-part='grid']   [data-part='day-cell']   [data-part='overflow-count']",
@@ -3755,7 +3755,7 @@
           },
           {
             "variable": "--ds-calendar-view-cell-min-height-compact",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:275",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:275",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']",
@@ -3778,7 +3778,7 @@
           },
           {
             "variable": "--_ds-calendar-view-dot-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:282",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:282",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3801,7 +3801,7 @@
           },
           {
             "variable": "--_ds-calendar-view-dot-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:283",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:283",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3824,7 +3824,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:285",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:285",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3847,7 +3847,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:286",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:286",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3870,7 +3870,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:287",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:287",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3893,7 +3893,7 @@
           },
           {
             "variable": "--ds-calendar-view-touch-target",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:298",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:298",
             "part": "toolbar-action",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='toolbar']     [data-part='toolbar-action']",
@@ -3916,7 +3916,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:368",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:368",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3939,7 +3939,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:370",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:370",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern[data-part='root']     > [data-part='grid']     [data-part='day-cell']     [data-part='event']",
@@ -3962,7 +3962,7 @@
           },
           {
             "variable": "--ds-touch-target-min",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css:394",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css:394",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-modern [data-part='day-cell']",
@@ -3985,7 +3985,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:10",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:10",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -4007,7 +4007,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:11",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:11",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -4028,7 +4028,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:12",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:12",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -4050,7 +4050,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:13",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:13",
             "part": "view-select",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='toolbar-action'][data-part='toolbar-action'], .ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   > [data-part='view-controls']   > [data-part='view-select'][data-part='view-select']",
@@ -4072,7 +4072,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:19",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:19",
             "part": "month-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='toolbar']   [data-part='month-title']",
@@ -4094,7 +4094,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:23",
             "part": "loading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='loading']",
@@ -4116,7 +4116,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:27",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:27",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='grid'][data-part='grid']",
@@ -4138,7 +4138,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:28",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:28",
             "part": "grid",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root'] > [data-part='grid'][data-part='grid']",
@@ -4159,7 +4159,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:34",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:34",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='weekday'][data-part='weekday']",
@@ -4181,7 +4181,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:35",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:35",
             "part": "weekday",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='weekday'][data-part='weekday']",
@@ -4203,7 +4203,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:41",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-part='day-cell']",
@@ -4225,7 +4225,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:47",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-last-column='false']",
@@ -4247,7 +4247,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:53",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-empty='false']",
@@ -4269,7 +4269,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:59",
             "part": "day-cell",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-empty='true']",
@@ -4291,7 +4291,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:66",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   > [data-part='date-label']",
@@ -4313,7 +4313,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:73",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:73",
             "part": "date-label",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell'][data-today='true']   > [data-part='date-label']",
@@ -4334,7 +4334,7 @@
           },
           {
             "variable": "--ds-radius-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:80",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:80",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   [data-part='event']",
@@ -4355,7 +4355,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:81",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:81",
             "part": "event",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   [data-part='event']",
@@ -4377,7 +4377,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view.css:88",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-calendar-view/index.css:88",
             "part": "overflow-count",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-calendar-view.ds-engine-rustic[data-part='root']   > [data-part='grid']   > [data-part='day-cell']   > [data-part='overflow-count']",
@@ -4431,13 +4431,13 @@
         {
           "channelId": "--_ds-calendar-event-accent",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-calendar-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4454,7 +4454,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4490,7 +4490,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4537,13 +4537,13 @@
         {
           "channelId": "--_ds-pattern-calendar-view-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-calendar-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4561,7 +4561,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4601,13 +4601,13 @@
         {
           "channelId": "--_ds-calendar-view-nav-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-calendar-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4639,13 +4639,13 @@
         {
           "channelId": "--_ds-calendar-view-cell-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-calendar-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4654,13 +4654,13 @@
         {
           "channelId": "--_ds-calendar-view-cell-min-height-compact",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-calendar-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4678,7 +4678,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -4708,7 +4708,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-ascii-diagram-line-cadence",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -4734,7 +4734,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -4754,7 +4754,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de lectura/trabajo como charts: acabado cero",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -4774,7 +4774,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -4794,7 +4794,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -4814,7 +4814,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia dentro del plano de visualizacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -4843,13 +4843,13 @@
         {
           "channelId": "--_ds-calendar-view-frame-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-calendar-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-calendar-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4873,7 +4873,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4886,7 +4886,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -4932,7 +4932,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4957,7 +4957,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -4978,11 +4978,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

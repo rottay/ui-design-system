@@ -28,7 +28,7 @@ charts family that was expected to dominate is 113 sites (3.2% of WO-06).
 ### Confidence
 
 This is a **census, not an extrapolation**. Every one of the 3582 sites was classified
-mechanically (a lexer that reproduces `scripts/tooling/libraries/inline-paint-counter.mjs` exactly — it
+mechanically (a lexer that reproduces `scripts/libraries/inline-paint-counter.mjs` exactly — it
 re-derives 3582 on the nose), and all 200 sites the machine could not resolve were then read
 by hand and reclassified. So:
 
@@ -299,7 +299,7 @@ each one. This is the single most likely source of a non-obvious visual regressi
 
 ## 9. Method
 
-- Site enumeration re-implements `packages/core/scripts/tooling/libraries/inline-paint-counter.mjs` exactly
+- Site enumeration re-implements `packages/core/scripts/libraries/inline-paint-counter.mjs` exactly
   (same bracket-stack lexer, same `ARC09_PAINT_KEY_RE`, same exemptions) and reproduces its
   3582 total on the census file list (`roadmap/skin-census.json`, `patterns|structures|surfaces`,
   `classic` excluded by construction).

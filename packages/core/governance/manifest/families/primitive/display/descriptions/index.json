@@ -8,15 +8,15 @@
     "components": [
       "Descriptions"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Descriptions",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/descriptions",
     "publicComponents": [
       "Descriptions"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "bd0c757be0418a0266be41176ca07e7951ebca64c08addbb01da007fbc53b7e1"
+    "inventoryRowDigest": "b9aac92fc6b1d1e472cb2b2ebfe1c9bcf1eada220fe3ab044b86b28b5cc1adbc"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,15 +28,15 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Descriptions/index.tsx",
-      "packages/core/src/ui/primitives/display/Descriptions/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Descriptions/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/Descriptions/compound/Item/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/display/descriptions/index.tsx",
+      "packages/core/src/components/primitives/display/descriptions/contracts/index.ts",
+      "packages/core/src/components/primitives/display/descriptions/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/descriptions/compound/item/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root",
@@ -56,9 +56,9 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "The root is a landmark region and the rows keep list/listitem semantics, so a control may not flatten the structure into anonymous boxes. [at packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:169, packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:192, packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:203]",
-      "An empty content cell still renders a visible placeholder rather than collapsing. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:296]",
-      "Header and row hover washes re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:425, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:426]"
+      "The root is a landmark region and the rows keep list/listitem semantics, so a control may not flatten the structure into anonymous boxes. [at packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:169, packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:192, packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:203]",
+      "An empty content cell still renders a visible placeholder rather than collapsing. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:296]",
+      "Header and row hover washes re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:425, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:426]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -81,10 +81,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='region' + 9 data-* axes",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:159",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:160",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:169",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:204"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:159",
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:160",
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:169",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:204"
           ]
         },
         {
@@ -92,9 +92,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:174",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:213",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:84"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:174",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:84"
           ]
         },
         {
@@ -102,8 +102,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:176",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:214"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:176",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:214"
           ]
         },
         {
@@ -111,8 +111,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:180",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:215"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:180",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:215"
           ]
         },
         {
@@ -120,8 +120,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:185",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:220"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:185",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:220"
           ]
         },
         {
@@ -129,9 +129,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='list'",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:192",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:235",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:122"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:192",
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:235",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:122"
           ]
         },
         {
@@ -139,10 +139,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='listitem' + data-index/data-span axes",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:203",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:243",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:130",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:232"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:203",
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:243",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:232"
           ]
         },
         {
@@ -150,9 +150,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:213",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:250",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:137"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:213",
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:250",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:137"
           ]
         },
         {
@@ -160,10 +160,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-empty axis",
           "at": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:221",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/modern/index.tsx:258",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:141",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:296"
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:221",
+            "packages/core/src/components/primitives/display/descriptions/engines/modern/index.tsx:258",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:141",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:296"
           ]
         }
       ],
@@ -172,8 +172,8 @@
           "token": "hovered",
           "note": "header and row, hover-capable-gated",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:84",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:232"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:84",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:232"
           ],
           "state": "hover"
         },
@@ -181,7 +181,7 @@
           "token": "pressed",
           "note": "row only; the coarse-pointer equivalent of the row hover wash",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:251"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:251"
           ],
           "state": "active-pressed"
         }
@@ -191,13 +191,13 @@
           {
             "token": "prefers-reduced-motion: reduce",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:412"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:412"
             ]
           },
           {
             "token": "forced-colors: active",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:424"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:424"
             ]
           }
         ],
@@ -209,7 +209,7 @@
             "token": "empty content",
             "note": "data-empty='true' renders a ::before placeholder",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:296"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:296"
             ]
           }
         ],
@@ -218,7 +218,7 @@
       "engineDivergence": {
         "classic": {
           "dataPartEmissions": 0,
-          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1578-1599"
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1578-1599"
         },
         "modern": {
           "dataPartEmissions": 9,
@@ -228,14 +228,14 @@
           "dataPartEmissions": 9,
           "note": "same nine part names; dimensions are inline literal style objects rather than token reads",
           "anchors": [
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:137",
-            "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:141"
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:137",
+            "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:141"
           ]
         }
       },
       "scoutGaps": {
         "notes": [
-          "The responsive column axis is carried by the undeclared private sockets --_ds-descriptions-columns-{xs,sm,md,lg,xl,xxl} in packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css; the breakpoints themselves are literal pixel values (see failureClasses.HARDCODED_VALUE)."
+          "The responsive column axis is carried by the undeclared private sockets --_ds-descriptions-columns-{xs,sm,md,lg,xl,xxl} in packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css; the breakpoints themselves are literal pixel values (see failureClasses.HARDCODED_VALUE)."
         ]
       },
       "variableReadCensus": {
@@ -244,7 +244,7 @@
           {
             "variable": "--ds-descriptions-font-size-default",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:35",
+            "at": "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:35",
             "landsOn": "default",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -261,7 +261,7 @@
           {
             "variable": "--ds-descriptions-font-size-small",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:36",
+            "at": "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:36",
             "landsOn": "small",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -278,7 +278,7 @@
           {
             "variable": "--ds-descriptions-font-size-default",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:37",
+            "at": "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:37",
             "landsOn": "middle",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -295,7 +295,7 @@
           {
             "variable": "--ds-descriptions-title-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:86",
+            "at": "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:86",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -312,7 +312,7 @@
           {
             "variable": "--ds-descriptions-label-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Descriptions/engines/rustic/index.tsx:108",
+            "at": "packages/core/src/components/primitives/display/descriptions/engines/rustic/index.tsx:108",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -329,7 +329,7 @@
           {
             "variable": "--ds-descriptions-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:37",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -346,7 +346,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:37",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:37",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -363,7 +363,7 @@
           {
             "variable": "--ds-motion-calm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:40",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:40",
             "landsOn": "animation",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -380,7 +380,7 @@
           {
             "variable": "--ds-motion-reveal",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:40",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:40",
             "landsOn": "animation",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -399,7 +399,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:41",
             "landsOn": "animation",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -416,7 +416,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:51",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:51",
             "landsOn": "row-gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -433,7 +433,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:52",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:52",
             "landsOn": "column-gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -450,7 +450,7 @@
           {
             "variable": "--ds-descriptions-header-min-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:55",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:55",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -467,7 +467,7 @@
           {
             "variable": "--ds-descriptions-section-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:56",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:56",
             "landsOn": "margin",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -484,7 +484,7 @@
           {
             "variable": "--ds-descriptions-header-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:57",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:57",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -501,7 +501,7 @@
           {
             "variable": "--ds-descriptions-header-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:59",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -518,7 +518,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:59",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -535,7 +535,7 @@
           {
             "variable": "--ds-descriptions-header-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:60",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:60",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -552,7 +552,7 @@
           {
             "variable": "--ds-radius-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:60",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:60",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -569,7 +569,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:65",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:65",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -586,7 +586,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:65",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:65",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -603,7 +603,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:66",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:66",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -620,7 +620,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:67",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -637,7 +637,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:67",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -654,7 +654,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:72",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:72",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -671,7 +671,7 @@
           {
             "variable": "--ds-descriptions-header-shadow",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:73",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:73",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -688,7 +688,7 @@
           {
             "variable": "--ds-elevation-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:73",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:73",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -705,7 +705,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:75",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -722,7 +722,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:75",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -739,7 +739,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:76",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -756,7 +756,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:76",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -773,7 +773,7 @@
           {
             "variable": "--ds-motion-deliberate",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:79",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:79",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -790,7 +790,7 @@
           {
             "variable": "--ds-motion-slow",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:79",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:79",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -809,7 +809,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:80",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:80",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -826,7 +826,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:88",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:88",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -843,7 +843,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:88",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:88",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -860,7 +860,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:91",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:91",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -877,7 +877,7 @@
           {
             "variable": "--ds-descriptions-header-shadow-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:92",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:92",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -894,7 +894,7 @@
           {
             "variable": "--ds-elevation-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:92",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:92",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -911,7 +911,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:97",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:97",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -928,7 +928,7 @@
           {
             "variable": "--ds-descriptions-title-font-family",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:103",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:103",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -945,7 +945,7 @@
           {
             "variable": "--ds-font-family-heading",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:103",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:103",
             "landsOn": "font-family",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -962,7 +962,7 @@
           {
             "variable": "--ds-descriptions-title-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:104",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:104",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -979,7 +979,7 @@
           {
             "variable": "--ds-font-size-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:104",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:104",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -996,7 +996,7 @@
           {
             "variable": "--ds-descriptions-title-font-weight",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:105",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1013,7 +1013,7 @@
           {
             "variable": "--ds-font-weight-semibold",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:105",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1030,7 +1030,7 @@
           {
             "variable": "--ds-descriptions-title-line-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:106",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:106",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1047,7 +1047,7 @@
           {
             "variable": "--ds-descriptions-title-letter-spacing",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:107",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:107",
             "landsOn": "letter-spacing",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1064,7 +1064,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:114",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:114",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1081,7 +1081,7 @@
           {
             "variable": "--ds-descriptions-extra-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:117",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:117",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1098,7 +1098,7 @@
           {
             "variable": "--ds-descriptions-extra-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:119",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:119",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1115,7 +1115,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:119",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:119",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1132,7 +1132,7 @@
           {
             "variable": "--ds-descriptions-extra-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:120",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:120",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1149,7 +1149,7 @@
           {
             "variable": "--ds-radius-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:120",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:120",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1166,7 +1166,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:121",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:121",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1183,7 +1183,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:123",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:123",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1200,7 +1200,7 @@
           {
             "variable": "--ds-descriptions-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:129",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:129",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1217,7 +1217,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:129",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:129",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1236,7 +1236,7 @@
           {
             "variable": "--ds-descriptions-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:130",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:130",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1253,7 +1253,7 @@
           {
             "variable": "--ds-radius-xl",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:130",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:130",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1270,7 +1270,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:135",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:135",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1287,7 +1287,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:136",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:136",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1304,7 +1304,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:136",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:136",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1321,7 +1321,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:140",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:140",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1338,7 +1338,7 @@
           {
             "variable": "--ds-descriptions-shadow",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:141",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:141",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1355,7 +1355,7 @@
           {
             "variable": "--ds-elevation-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:141",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:141",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1372,7 +1372,7 @@
           {
             "variable": "--ds-descriptions-row-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:144",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:144",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1389,7 +1389,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:144",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:144",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1406,7 +1406,7 @@
           {
             "variable": "--ds-descriptions-column-count",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:152",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:152",
             "landsOn": "grid-template-columns",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1423,7 +1423,7 @@
           {
             "variable": "--ds-descriptions-grid-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:155",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:155",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1440,7 +1440,7 @@
           {
             "variable": "--ds-descriptions-grid-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:156",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:156",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1457,7 +1457,7 @@
           {
             "variable": "--_ds-descriptions-columns-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:185",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:185",
             "landsOn": "--ds-descriptions-column-count",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1474,7 +1474,7 @@
           {
             "variable": "--_ds-descriptions-columns-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:189",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:189",
             "landsOn": "--ds-descriptions-column-count",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1491,7 +1491,7 @@
           {
             "variable": "--_ds-descriptions-columns-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:194",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:194",
             "landsOn": "--ds-descriptions-column-count",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1508,7 +1508,7 @@
           {
             "variable": "--_ds-descriptions-columns-lg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:199",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:199",
             "landsOn": "--ds-descriptions-column-count",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1525,7 +1525,7 @@
           {
             "variable": "--_ds-descriptions-columns-xl",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:204",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:204",
             "landsOn": "--ds-descriptions-column-count",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1542,7 +1542,7 @@
           {
             "variable": "--_ds-descriptions-columns-xxl",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:209",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:209",
             "landsOn": "--ds-descriptions-column-count",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -1559,7 +1559,7 @@
           {
             "variable": "--ds-descriptions-item-span",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:215",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:215",
             "landsOn": "grid-column",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1576,7 +1576,7 @@
           {
             "variable": "--ds-descriptions-row-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:216",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:216",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1593,7 +1593,7 @@
           {
             "variable": "--ds-descriptions-row-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:217",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:217",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1610,7 +1610,7 @@
           {
             "variable": "--ds-radius-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:217",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:217",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1627,7 +1627,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:220",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:220",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1644,7 +1644,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:223",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:223",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1661,7 +1661,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:225",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:225",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1678,7 +1678,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:225",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:225",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1695,7 +1695,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:226",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:226",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1712,7 +1712,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:226",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:226",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1729,7 +1729,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:227",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1746,7 +1746,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:227",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1763,7 +1763,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:228",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1780,7 +1780,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:228",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1797,7 +1797,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:236",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:236",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1814,7 +1814,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:236",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:236",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1831,7 +1831,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:240",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:240",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1848,7 +1848,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:240",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:240",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1865,7 +1865,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:243",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:243",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1882,7 +1882,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:244",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:244",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1899,7 +1899,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:255",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:255",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1916,7 +1916,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:255",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:255",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1933,7 +1933,7 @@
           {
             "variable": "--ds-descriptions-label-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:261",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:261",
             "landsOn": "margin",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1950,7 +1950,7 @@
           {
             "variable": "--ds-descriptions-label-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:272",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:272",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1967,7 +1967,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:272",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:272",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1986,7 +1986,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:273",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:273",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2003,7 +2003,7 @@
           {
             "variable": "--ds-descriptions-label-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:276",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:276",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2020,7 +2020,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:276",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:276",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2037,7 +2037,7 @@
           {
             "variable": "--ds-descriptions-label-font-weight",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:277",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:277",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2054,7 +2054,7 @@
           {
             "variable": "--ds-font-weight-medium",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:277",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:277",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2071,7 +2071,7 @@
           {
             "variable": "--ds-descriptions-label-line-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:278",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:278",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2088,7 +2088,7 @@
           {
             "variable": "--ds-descriptions-label-letter-spacing",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:279",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:279",
             "landsOn": "letter-spacing",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2105,7 +2105,7 @@
           {
             "variable": "--ds-descriptions-label-transform",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:280",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:280",
             "landsOn": "text-transform",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2122,7 +2122,7 @@
           {
             "variable": "--ds-descriptions-content-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:288",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:288",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2139,7 +2139,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:288",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:288",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2158,7 +2158,7 @@
           {
             "variable": "--ds-descriptions-content-font-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:289",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:289",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2175,7 +2175,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:289",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:289",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2192,7 +2192,7 @@
           {
             "variable": "--ds-descriptions-content-font-weight",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:290",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:290",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2209,7 +2209,7 @@
           {
             "variable": "--ds-font-weight-medium",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:290",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:290",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2226,7 +2226,7 @@
           {
             "variable": "--ds-descriptions-content-line-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:291",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2243,7 +2243,7 @@
           {
             "variable": "--ds-color-text-muted",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:298",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:298",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2260,7 +2260,7 @@
           {
             "variable": "--ds-font-weight-regular",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:299",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:299",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2277,7 +2277,7 @@
           {
             "variable": "--ds-descriptions-grid-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:305",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:305",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2294,7 +2294,7 @@
           {
             "variable": "--ds-descriptions-grid-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:306",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:306",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2311,7 +2311,7 @@
           {
             "variable": "--ds-descriptions-column-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:315",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:315",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2328,7 +2328,7 @@
           {
             "variable": "--ds-descriptions-column-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:340",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:340",
             "landsOn": "column-gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2345,7 +2345,7 @@
           {
             "variable": "--ds-descriptions-row-padding-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:360",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:360",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2362,7 +2362,7 @@
           {
             "variable": "--ds-descriptions-row-padding-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:363",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:363",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2379,7 +2379,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:392",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:392",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2396,7 +2396,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:397",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:397",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2413,7 +2413,7 @@
           {
             "variable": "--ds-descriptions-title-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:36",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:36",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2430,7 +2430,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:36",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:36",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2447,7 +2447,7 @@
           {
             "variable": "--ds-descriptions-border-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:41",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2464,7 +2464,7 @@
           {
             "variable": "--ds-descriptions-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:42",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2481,7 +2481,7 @@
           {
             "variable": "--ds-descriptions-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:43",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:43",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2498,7 +2498,7 @@
           {
             "variable": "--ds-descriptions-item-border-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:53",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:53",
             "landsOn": "border-bottom",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2515,7 +2515,7 @@
           {
             "variable": "--ds-descriptions-label-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:61",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:61",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2532,7 +2532,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:61",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:61",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2551,7 +2551,7 @@
           {
             "variable": "--ds-descriptions-content-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:64",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:64",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2568,7 +2568,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions.css:64",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/descriptions/index.css:64",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -2587,7 +2587,7 @@
           {
             "variable": "--ds-descriptions-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1578",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1578",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2604,7 +2604,7 @@
           {
             "variable": "--ds-descriptions-label-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1582",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1582",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2621,7 +2621,7 @@
           {
             "variable": "--ds-descriptions-label-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1586",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1586",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2638,7 +2638,7 @@
           {
             "variable": "--ds-descriptions-label-font-weight",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1587",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1587",
             "landsOn": "font-weight",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2655,7 +2655,7 @@
           {
             "variable": "--ds-descriptions-content-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1593",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1593",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2672,7 +2672,7 @@
           {
             "variable": "--ds-descriptions-padding",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1598",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1598",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2689,7 +2689,7 @@
           {
             "variable": "--ds-descriptions-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1599",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1599",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -2754,7 +2754,7 @@
         "channelRedeclarations": [
           {
             "channel": "--ds-descriptions-column-count",
-            "firstAnchor": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css:185"
+            "firstAnchor": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css:185"
           }
         ],
         "cssCustomPropertyReadsRemovedAsCommentText": 0,
@@ -2792,13 +2792,13 @@
         {
           "channelId": "--_ds-descriptions-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2807,13 +2807,13 @@
         {
           "channelId": "--_ds-descriptions-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2822,13 +2822,13 @@
         {
           "channelId": "--_ds-descriptions-content-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2837,13 +2837,13 @@
         {
           "channelId": "--_ds-descriptions-extra-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2852,13 +2852,13 @@
         {
           "channelId": "--_ds-descriptions-header-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2867,13 +2867,13 @@
         {
           "channelId": "--_ds-descriptions-label-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2882,13 +2882,13 @@
         {
           "channelId": "--_ds-descriptions-row-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2965,13 +2965,13 @@
         {
           "channelId": "--_ds-descriptions-content-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2980,13 +2980,13 @@
         {
           "channelId": "--_ds-descriptions-content-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2995,13 +2995,13 @@
         {
           "channelId": "--_ds-descriptions-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3010,13 +3010,13 @@
         {
           "channelId": "--_ds-descriptions-label-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3025,13 +3025,13 @@
         {
           "channelId": "--_ds-descriptions-title-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3040,13 +3040,13 @@
         {
           "channelId": "--_ds-descriptions-title-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3075,13 +3075,13 @@
         {
           "channelId": "--_ds-descriptions-extra-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3090,13 +3090,13 @@
         {
           "channelId": "--_ds-descriptions-header-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3105,13 +3105,13 @@
         {
           "channelId": "--_ds-descriptions-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3120,13 +3120,13 @@
         {
           "channelId": "--_ds-descriptions-row-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3163,13 +3163,13 @@
         {
           "channelId": "--_ds-descriptions-column-count",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3178,13 +3178,13 @@
         {
           "channelId": "--_ds-descriptions-column-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3193,13 +3193,13 @@
         {
           "channelId": "--_ds-descriptions-extra-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3208,13 +3208,13 @@
         {
           "channelId": "--_ds-descriptions-grid-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3223,13 +3223,13 @@
         {
           "channelId": "--_ds-descriptions-grid-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3238,13 +3238,13 @@
         {
           "channelId": "--_ds-descriptions-header-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3253,13 +3253,13 @@
         {
           "channelId": "--_ds-descriptions-header-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3268,13 +3268,13 @@
         {
           "channelId": "--_ds-descriptions-item-span",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3283,13 +3283,13 @@
         {
           "channelId": "--_ds-descriptions-label-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3298,13 +3298,13 @@
         {
           "channelId": "--_ds-descriptions-row-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3313,13 +3313,13 @@
         {
           "channelId": "--_ds-descriptions-row-padding-md",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3328,13 +3328,13 @@
         {
           "channelId": "--_ds-descriptions-row-padding-sm",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3362,13 +3362,13 @@
         {
           "channelId": "--_ds-descriptions-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3400,13 +3400,13 @@
         {
           "channelId": "--_ds-descriptions-label-transform",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3434,13 +3434,13 @@
         {
           "channelId": "--_ds-descriptions-header-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3449,13 +3449,13 @@
         {
           "channelId": "--_ds-descriptions-header-shadow-hover",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3464,13 +3464,13 @@
         {
           "channelId": "--_ds-descriptions-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/descriptions"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/descriptions/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3488,7 +3488,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -3508,7 +3508,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -3587,7 +3587,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3644,7 +3644,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3694,11 +3694,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -3,6 +3,7 @@
   "rootId": "density.mode",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-density-mode-factor",
     "emission": [
       {
@@ -21,7 +22,7 @@
         "kind": "clamp",
         "formula": "clamp(.., density-scale x mode-factor, 3)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/base/density/index.css",
       "line": 66,
       "state": "LIVE"
     },
@@ -32,7 +33,7 @@
         "kind": "clamp",
         "formula": "clamp(0.5, global x local-factor, 3)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/base/density.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/base/density/index.css",
       "line": 69,
       "state": "LIVE",
       "note": "EL canal que los componentes leen; jamas se autora a mano (derivado con clamp propio)"

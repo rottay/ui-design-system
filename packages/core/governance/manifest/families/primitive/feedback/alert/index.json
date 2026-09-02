@@ -8,15 +8,15 @@
     "components": [
       "Alert"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/feedback/Alert",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/feedback/alert",
     "publicComponents": [
       "Alert"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "19ad6945f254fd49af6b2f93d274617e729263ba02a1df2b679ea474bc509cd7"
+    "inventoryRowDigest": "6763005eeef0d75bb7cbd765901ed8db821ead33c5a695e7702777191c3a83cd"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,15 +28,15 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/feedback/Alert/compound/Description/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Alert/compound/index.ts",
-      "packages/core/src/ui/primitives/feedback/Alert/contracts/index.ts",
-      "packages/core/src/ui/primitives/feedback/Alert/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Alert/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/feedback/Alert/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/alert-compounds.css"
+      "packages/core/src/components/primitives/feedback/alert/compound/description/index.tsx",
+      "packages/core/src/components/primitives/feedback/alert/compound/index.ts",
+      "packages/core/src/components/primitives/feedback/alert/contracts/index.ts",
+      "packages/core/src/components/primitives/feedback/alert/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/feedback/alert/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/feedback/alert/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/feedback/alert/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/alert-compounds/index.css"
     ],
     "stableParts": [
       "root",
@@ -57,14 +57,14 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "role-attribute [at src/ui/primitives/feedback/Alert/engines/modern/index.tsx:300, src/ui/primitives/feedback/Alert/engines/rustic/index.tsx:312]",
-      "aria-label-or-labelledby [at src/ui/primitives/feedback/Alert/engines/modern/index.tsx:323]",
-      "aria-describedby [at src/ui/primitives/feedback/Alert/engines/modern/index.tsx:326]",
-      "focus-without-scroll [at src/ui/primitives/feedback/Alert/engines/modern/index.tsx:267]",
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:235]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:250]",
-      "focus-visible-outline [at src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:230, src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:270]",
-      "high-contrast-forced-color-adjust [at src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:252]"
+      "role-attribute [at src/components/primitives/feedback/alert/engines/modern/index.tsx:300, src/components/primitives/feedback/alert/engines/rustic/index.tsx:312]",
+      "aria-label-or-labelledby [at src/components/primitives/feedback/alert/engines/modern/index.tsx:323]",
+      "aria-describedby [at src/components/primitives/feedback/alert/engines/modern/index.tsx:326]",
+      "focus-without-scroll [at src/components/primitives/feedback/alert/engines/modern/index.tsx:267]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:235]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:250]",
+      "focus-visible-outline [at src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:230, src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:270]",
+      "high-contrast-forced-color-adjust [at src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:252]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -86,12 +86,12 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:292",
-            "src/ui/primitives/feedback/Alert/engines/rustic/index.tsx:312",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:26",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:27",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:28",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:29"
+            "src/components/primitives/feedback/alert/engines/modern/index.tsx:292",
+            "src/components/primitives/feedback/alert/engines/rustic/index.tsx:312",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:26",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:27",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:28",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:29"
           ],
           "atSiteCount": 8
         },
@@ -99,12 +99,12 @@
           "part": "icon",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:304",
-            "src/ui/primitives/feedback/Alert/engines/rustic/index.tsx:315",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:111",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:112",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:113",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:114"
+            "src/components/primitives/feedback/alert/engines/modern/index.tsx:304",
+            "src/components/primitives/feedback/alert/engines/rustic/index.tsx:315",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:111",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:112",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:113",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:114"
           ],
           "atSiteCount": 8
         },
@@ -112,24 +112,24 @@
           "part": "content",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:307",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:136",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:137",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:138",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:139",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:140"
+            "src/components/primitives/feedback/alert/engines/modern/index.tsx:307",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:136",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:137",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:138",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:139",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:140"
           ]
         },
         {
           "part": "label",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:308",
-            "src/ui/primitives/feedback/Alert/engines/rustic/index.tsx:322",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:144",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:145",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:146",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:147"
+            "src/components/primitives/feedback/alert/engines/modern/index.tsx:308",
+            "src/components/primitives/feedback/alert/engines/rustic/index.tsx:322",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:144",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:145",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:146",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:147"
           ],
           "atSiteCount": 8
         },
@@ -137,12 +137,12 @@
           "part": "description",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Alert/compound/Description/index.tsx:159",
-            "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:309",
-            "src/ui/primitives/feedback/Alert/engines/rustic/index.tsx:323",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:164",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:165",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:166"
+            "src/components/primitives/feedback/alert/compound/description/index.tsx:159",
+            "src/components/primitives/feedback/alert/engines/modern/index.tsx:309",
+            "src/components/primitives/feedback/alert/engines/rustic/index.tsx:323",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:164",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:165",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:166"
           ],
           "atSiteCount": 9
         },
@@ -150,47 +150,47 @@
           "part": "action",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:321",
-            "src/ui/primitives/feedback/Alert/engines/rustic/index.tsx:328",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:181",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:182",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:183",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:184"
+            "src/components/primitives/feedback/alert/engines/modern/index.tsx:321",
+            "src/components/primitives/feedback/alert/engines/rustic/index.tsx:328",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:181",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:182",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:183",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:184"
           ],
           "atSiteCount": 8
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:15, src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:17, src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:20]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:15, src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:17, src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:20]"
         ]
       },
       "stateAnchors": [
         {
           "token": ":hover",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:204",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:205",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:206",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:243"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:204",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:205",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:206",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:243"
           ],
           "state": "hover"
         },
         {
           "token": ":active",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:211",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:243"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:211",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:243"
           ],
           "state": "active"
         },
         {
           "token": ":focus-visible",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:231",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:232",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:271",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:272"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:231",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:232",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:271",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:272"
           ],
           "state": "focus-visible"
         }
@@ -199,55 +199,55 @@
         {
           "token": "data-compact=true",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:64",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:65",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:130",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:131"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:64",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:65",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:130",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:131"
           ]
         },
         {
           "token": "data-tone=info",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:83",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:84",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:85",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:86"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:83",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:84",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:85",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:86"
           ]
         },
         {
           "token": "data-tone=success",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:90",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:91",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:92",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:93"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:90",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:91",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:92",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:93"
           ]
         },
         {
           "token": "data-tone=warning",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:97",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:98",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:99",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:100"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:97",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:98",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:99",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:100"
           ]
         },
         {
           "token": "data-tone=error",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:104",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:105",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:106",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:107"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:104",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:105",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:106",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:107"
           ]
         },
         {
           "token": "data-tone",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:204",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:205",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:206",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:211"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:204",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:205",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:206",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:211"
           ]
         }
       ],
@@ -402,13 +402,13 @@
             "declarationSites": [
               "src/foundation/tokens/css/foundation/base/tests/property-registration-drift.test.ts:121",
               "src/foundation/tokens/css/foundation/base/tests/property-registration-drift.test.ts:179",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:138"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:138"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:16",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:16",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -437,7 +437,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:16",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:16",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -445,7 +445,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:17",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:17",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -470,7 +470,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:31",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:31",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "gap",
@@ -493,17 +493,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:125",
-              "src/tooling/testing/fixtures/tenants/default.css:36",
-              "src/foundation/tokens/css/foundation/themes/default.css:703"
+              "tests/integration/theming-precedence/index.test.ts:125",
+              "tests/fixtures/tenants/default/index.css:36",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:703"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:703"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:703"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:31",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:31",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "gap",
@@ -511,7 +511,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:64",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:64",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "gap",
@@ -519,7 +519,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:65",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:65",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -527,7 +527,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:207",
+                "at": "src/components/primitives/feedback/alert/engines/modern/index.tsx:207",
                 "readIn": "modern",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -550,17 +550,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:126",
-              "src/tooling/testing/fixtures/tenants/default.css:37",
-              "src/foundation/tokens/css/foundation/themes/default.css:704"
+              "tests/integration/theming-precedence/index.test.ts:126",
+              "tests/fixtures/tenants/default/index.css:37",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:704"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:704"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:704"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:31",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:31",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "gap",
@@ -568,7 +568,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:38",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:38",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -576,7 +576,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:65",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:65",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -584,7 +584,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:207",
+                "at": "src/components/primitives/feedback/alert/engines/modern/index.tsx:207",
                 "readIn": "modern",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -609,7 +609,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:36",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:36",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -631,15 +631,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1218"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1218"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1218"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1218"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:38",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:38",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -647,7 +647,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:208",
+                "at": "src/components/primitives/feedback/alert/engines/modern/index.tsx:208",
                 "readIn": "modern",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -668,17 +668,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:127",
-              "src/tooling/testing/fixtures/tenants/default.css:38",
-              "src/foundation/tokens/css/foundation/themes/default.css:705"
+              "tests/integration/theming-precedence/index.test.ts:127",
+              "tests/fixtures/tenants/default/index.css:38",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:705"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:705"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:705"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:38",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:38",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -703,7 +703,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:40",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:40",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border",
@@ -725,16 +725,16 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:347",
-              "src/foundation/tokens/css/foundation/themes/default.css:728",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:728",
               "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:212"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:728"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:728"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:40",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:40",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border",
@@ -755,16 +755,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:735",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:735",
               "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:237"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:735"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:735"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:40",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:40",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border",
@@ -793,15 +793,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:83",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:90",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:97"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:83",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:90",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:97"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:40",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:40",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border",
@@ -809,7 +809,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:84",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:84",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -817,7 +817,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:85",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:85",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -825,7 +825,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:86",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:86",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -833,7 +833,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:91",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:91",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -841,7 +841,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:92",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:92",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -849,7 +849,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -857,7 +857,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:98",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:98",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -865,7 +865,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -873,7 +873,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:100",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:100",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -881,7 +881,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:105",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:105",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -889,7 +889,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:106",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:106",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -897,7 +897,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:107",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:107",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -905,7 +905,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:116",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:116",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border",
@@ -913,7 +913,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:122",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:122",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "background",
@@ -921,7 +921,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:126",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:126",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -929,7 +929,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:187",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:187",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "border",
@@ -937,7 +937,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:204",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:204",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "border-color",
@@ -961,18 +961,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
-              "src/ui/patterns/customization/brand-studio/index.tsx:147",
-              "src/ui/patterns/customization/brand-studio/index.tsx:165"
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:50",
+              "src/components/patterns/customization/brand-studio/index.tsx:147",
+              "src/components/patterns/customization/brand-studio/index.tsx:165"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:229",
-              "src/foundation/tokens/css/foundation/themes/default.css:2111"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2111"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:40",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:40",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border",
@@ -980,7 +980,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:116",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:116",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border",
@@ -988,7 +988,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:187",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:187",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "border",
@@ -996,7 +996,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:204",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:204",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "border-color",
@@ -1017,15 +1017,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1219"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1219"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1219"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1219"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:41",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:41",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border-radius",
@@ -1046,17 +1046,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:44",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+              "tests/fixtures/tenants/default/index.css:44",
+              "tests/fixtures/tenants/quality-evidence/index.ts:351",
+              "tests/fixtures/tenants/quality-evidence/index.ts:474"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:771"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:771"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:41",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:41",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "border-radius",
@@ -1077,15 +1077,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:85",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:92",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:99"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:85",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:92",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:99"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:42",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:42",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "background-color",
@@ -1114,7 +1114,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:43",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:43",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "background-image",
@@ -1141,13 +1141,13 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:274"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:225",
-              "src/foundation/tokens/css/foundation/themes/default.css:2132"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:225",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2132"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:48",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:48",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "box-shadow",
@@ -1155,7 +1155,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:123",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:123",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "box-shadow",
@@ -1177,15 +1177,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+              "tests/fixtures/tenants/quality-evidence/index.ts:358",
+              "tests/fixtures/tenants/quality-evidence/index.ts:481",
+              "tests/fixtures/tenants/quality-evidence/index.ts:570"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:48",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:48",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "box-shadow",
@@ -1193,7 +1193,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:123",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:123",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "box-shadow",
@@ -1218,7 +1218,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:49",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:49",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "box-shadow",
@@ -1239,17 +1239,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:353",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:476",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:565"
+              "tests/fixtures/tenants/quality-evidence/index.ts:353",
+              "tests/fixtures/tenants/quality-evidence/index.ts:476",
+              "tests/fixtures/tenants/quality-evidence/index.ts:565"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:830"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:830"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:49",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:49",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "box-shadow",
@@ -1272,18 +1272,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
-              "src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:217",
-              "src/foundation/tokens/css/foundation/themes/default.css:2128"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:50",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:50",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "color",
@@ -1291,7 +1291,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:144",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:144",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "color",
@@ -1299,7 +1299,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:206",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:206",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "color",
@@ -1320,15 +1320,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:404",
-              "src/ui/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:77",
-              "src/ui/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:296"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:404",
+              "src/components/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:77",
+              "src/components/patterns/customization/tenant-preview/tests/tenant-preview.test.tsx:296"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:51",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:51",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "animation",
@@ -1349,15 +1349,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:926",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              "src/foundation/tokens/css/runtime/personality/index.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:51",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:51",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "animation",
@@ -1388,7 +1388,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:51",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:51",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "animation",
@@ -1396,7 +1396,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:53",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:53",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1404,7 +1404,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:54",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:54",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1412,7 +1412,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1420,7 +1420,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1428,7 +1428,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:195",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:195",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1436,7 +1436,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:196",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:196",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1444,7 +1444,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:197",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:197",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1467,13 +1467,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:51",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:51",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "animation",
@@ -1481,7 +1481,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:53",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:53",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1489,7 +1489,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:54",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:54",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1497,7 +1497,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1505,7 +1505,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1513,7 +1513,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:195",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:195",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1521,7 +1521,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:196",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:196",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1529,7 +1529,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:197",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:197",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1551,7 +1551,7 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:922",
+              "src/foundation/tokens/css/runtime/personality/index.css:922",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:386",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:674"
             ],
@@ -1559,7 +1559,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:53",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:53",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1567,7 +1567,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:54",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:54",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1575,7 +1575,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "transition",
@@ -1583,7 +1583,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1591,7 +1591,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:195",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:195",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1599,7 +1599,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:196",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:196",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1607,7 +1607,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:197",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:197",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transition",
@@ -1633,7 +1633,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:65",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:65",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "padding",
@@ -1641,7 +1641,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/feedback/Alert/engines/modern/index.tsx:207",
+                "at": "src/components/primitives/feedback/alert/engines/modern/index.tsx:207",
                 "readIn": "modern",
                 "part": null,
                 "landsOn": "(unresolved)",
@@ -1662,17 +1662,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/index.tsx:108",
-              "src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:135",
+              "src/components/patterns/customization/brand-studio/index.tsx:108",
+              "tests/integration/customization-fields/index.test.ts:135",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:207"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:179"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:179"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:83",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:83",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--ds-alert-tone",
@@ -1694,16 +1694,16 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1740",
-              "src/foundation/tokens/css/foundation/themes/default.css:473",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:473",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:79"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:473"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:473"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:84",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:84",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -1733,7 +1733,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:85",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:85",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -1741,7 +1741,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:86",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:86",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -1763,18 +1763,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:51",
-              "src/ui/patterns/customization/brand-studio/index.tsx:149",
-              "src/ui/patterns/customization/brand-studio/index.tsx:167"
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:51",
+              "src/components/patterns/customization/brand-studio/index.tsx:149",
+              "src/components/patterns/customization/brand-studio/index.tsx:167"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:236",
-              "src/foundation/tokens/css/foundation/themes/default.css:2125"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:236",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2125"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:85",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:85",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -1782,7 +1782,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:86",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:86",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -1790,7 +1790,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:92",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:92",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -1798,7 +1798,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -1806,7 +1806,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -1814,7 +1814,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:100",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:100",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -1822,7 +1822,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:106",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:106",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -1830,7 +1830,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:107",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:107",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -1851,17 +1851,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:46",
-              "src/ui/patterns/customization/brand-studio/index.tsx:102",
-              "src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:132"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:46",
+              "src/components/patterns/customization/brand-studio/index.tsx:102",
+              "tests/integration/customization-fields/index.test.ts:132"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:175"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:175"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:90",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:90",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--ds-alert-tone",
@@ -1882,17 +1882,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:476",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:476",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:82",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:88"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:476"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:476"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:91",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:91",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -1922,7 +1922,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:92",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:92",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -1930,7 +1930,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -1951,17 +1951,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:45",
-              "src/ui/patterns/customization/brand-studio/index.tsx:104",
-              "src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:133"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:45",
+              "src/components/patterns/customization/brand-studio/index.tsx:104",
+              "tests/integration/customization-fields/index.test.ts:133"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:176"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:176"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:97",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:97",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--ds-alert-tone",
@@ -1982,17 +1982,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:474",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:474",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:80",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:86"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:474"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:474"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:98",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:98",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -2022,7 +2022,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -2030,7 +2030,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:100",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:100",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -2051,17 +2051,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
-              "src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:157"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+              "src/components/patterns/customization/brand-studio/index.tsx:106",
+              "tests/integration/capability-propagation/tests/index.test.ts:157"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:177"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:177"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:104",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:104",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--ds-alert-tone",
@@ -2082,17 +2082,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:475",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:475",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:81",
               "src/foundation/tokens/css/foundation/themes/tests/tone-ink-authority.test.ts:87"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:475"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:475"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:105",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:105",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-tone-ink",
@@ -2122,7 +2122,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:106",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:106",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-wash",
@@ -2130,7 +2130,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:107",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:107",
                 "readIn": "modern-skin-css",
                 "part": "root",
                 "landsOn": "--_ds-alert-action-wash-hover",
@@ -2156,7 +2156,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:112",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:112",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "inline-size",
@@ -2164,7 +2164,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:113",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:113",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "block-size",
@@ -2186,16 +2186,16 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:346",
-              "src/foundation/tokens/css/foundation/themes/default.css:727",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:727",
               "src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:211"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:727"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:727"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:116",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:116",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border",
@@ -2220,7 +2220,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:117",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:117",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border-radius",
@@ -2242,17 +2242,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:123",
-              "src/tooling/testing/fixtures/tenants/default.css:43",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:350"
+              "tests/integration/theming-precedence/index.test.ts:123",
+              "tests/fixtures/tenants/default/index.css:43",
+              "tests/fixtures/tenants/quality-evidence/index.ts:350"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:770"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:770"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:117",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:117",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border-radius",
@@ -2260,7 +2260,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:188",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:188",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "border-radius",
@@ -2268,7 +2268,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:226",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:226",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "border-radius",
@@ -2290,18 +2290,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "src/ui/patterns/customization/brand-studio/index.tsx:158",
+              "src/components/patterns/customization/brand-studio/index.tsx:140",
+              "src/components/patterns/customization/brand-studio/index.tsx:158",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:188"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:209",
-              "src/foundation/tokens/css/foundation/themes/default.css:2123"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2123"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:122",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:122",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "background",
@@ -2309,7 +2309,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:189",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:189",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "background",
@@ -2330,15 +2330,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:84",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:91",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:98"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:84",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:91",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:98"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:126",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:126",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -2359,17 +2359,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:122",
-              "src/tooling/testing/fixtures/tenants/default.css:42",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:349"
+              "tests/integration/theming-precedence/index.test.ts:122",
+              "tests/fixtures/tenants/default/index.css:42",
+              "tests/fixtures/tenants/quality-evidence/index.ts:349"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:769"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:769"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:132",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:132",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border-radius",
@@ -2390,17 +2390,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/integration/theming-precedence/tests/index.test.ts:124",
-              "src/tooling/testing/fixtures/tenants/default.css:35",
-              "src/foundation/tokens/css/foundation/themes/default.css:702"
+              "tests/integration/theming-precedence/index.test.ts:124",
+              "tests/fixtures/tenants/default/index.css:35",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:702"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:702"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:702"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:139",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:139",
                 "readIn": "modern-skin-css",
                 "part": "content",
                 "landsOn": "gap",
@@ -2421,17 +2421,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:458",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:464"
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
+              "src/components/primitives/display/typography/typography.stories.tsx:458",
+              "src/components/primitives/display/typography/typography.stories.tsx:464"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:507"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:507"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:145",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:145",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-family",
@@ -2453,17 +2453,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:145",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:145",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-family",
@@ -2471,7 +2471,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:166",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:166",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "font-family",
@@ -2496,7 +2496,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:146",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:146",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -2518,17 +2518,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:30",
-              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:609"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:146",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:146",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-size",
@@ -2536,7 +2536,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:167",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:167",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "font-size",
@@ -2557,15 +2557,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:147",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:147",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-weight",
@@ -2594,7 +2594,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:148",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:148",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "letter-spacing",
@@ -2620,12 +2620,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:208"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:631"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:631"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:149",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:149",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "line-height",
@@ -2646,15 +2646,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:625"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:625"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:625"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:625"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:160",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:160",
                 "readIn": "modern-skin-css",
                 "part": "label",
                 "landsOn": "font-weight",
@@ -2679,7 +2679,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:164",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:164",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "max-inline-size",
@@ -2701,18 +2701,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:218",
-              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:165",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:165",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "color",
@@ -2720,7 +2720,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:190",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:190",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "color",
@@ -2745,7 +2745,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:167",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:167",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "font-size",
@@ -2771,12 +2771,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:207"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:634"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:634"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:168",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:168",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "line-height",
@@ -2802,7 +2802,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:182",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:182",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "inline-size",
@@ -2810,7 +2810,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:183",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:183",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "block-size",
@@ -2833,15 +2833,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1088",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2083",
-              "src/foundation/tokens/css/foundation/themes/default.css:829"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:829"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:829"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:829"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:192",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:192",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "box-shadow",
@@ -2862,15 +2862,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:86",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:93",
-              "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:100"
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:86",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:93",
+              "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:100"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:205",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:205",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "background",
@@ -2895,7 +2895,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:211",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:211",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "transform",
@@ -2916,17 +2916,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/quality/touch-target/tests/touch-target-census.test.ts:161",
-              "src/foundation/tokens/css/foundation/themes/default.css:921",
+              "scripts/check/touch-targets/tests/touch-target-census.test.ts:161",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:921",
               "src/foundation/tokens/css/foundation/base/tests/a11y-floors-contract.test.ts:23"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:921"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:921"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:225",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:225",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "inset",
@@ -2951,7 +2951,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:232",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:232",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "box-shadow",
@@ -2972,16 +2972,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/primitives/inputs/Button/tests/Button.contrast-focus-ring.test.tsx:87",
-              "src/foundation/tokens/css/foundation/themes/default.css:880"
+              "src/components/primitives/inputs/button/tests/button.contrast-focus-ring.test.tsx:87",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:880"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:882"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:882"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert.css:232",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css:232",
                 "readIn": "modern-skin-css",
                 "part": "action",
                 "landsOn": "box-shadow",
@@ -3041,13 +3041,13 @@
         {
           "channelId": "--_ds-alert-tone",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3064,7 +3064,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -3092,7 +3092,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -3131,14 +3131,14 @@
         {
           "channelId": "--_ds-alert-description-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/alert-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/alert-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3147,13 +3147,13 @@
         {
           "channelId": "--_ds-alert-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3182,13 +3182,13 @@
         {
           "channelId": "--_ds-alert-icon-well-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3197,13 +3197,13 @@
         {
           "channelId": "--_ds-alert-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3221,7 +3221,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los botones dentro de alert/toast son Button primitivos: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -3257,13 +3257,13 @@
         {
           "channelId": "--_ds-alert-compact-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3272,14 +3272,14 @@
         {
           "channelId": "--_ds-alert-description-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/alert-compounds.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/alert-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3288,13 +3288,13 @@
         {
           "channelId": "--_ds-alert-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3303,13 +3303,13 @@
         {
           "channelId": "--_ds-alert-icon-well-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3318,13 +3318,13 @@
         {
           "channelId": "--_ds-alert-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3342,7 +3342,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -3367,24 +3367,11 @@
       "disposition": "UNKNOWN",
       "verificationState": "SOURCE_BOUND",
       "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive on both declared channels (12 receipted scenarios: 4 stops x 3 verticals, both ingress arms -- F4B-13, 2026-08-25). The identity stop is NOT among these: a single-arm run structurally cannot pass this evidence kind (ingressEquivalenceHeld requires 2 comparable arms), so identity is a directly-compiled fact on the control's own calibration, not a receipt -- same precedent as palette.seeds' own identity stop, which likewise carries zero receipts. NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now, the same program-wide propertyGroups-vocabulary blocker F4B-11 and F4B-12 already documented (`anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). `--ds-motion-intensity` moves from `targetBinding.uncoveredByDesign` into `internalChannels` below: it was previously classified as a shared foundation arm this family only reads, but alert.css is in fact this control's own productiveConsumerWitness (skin/alert.css:16-17, `var(--ds-motion-intensity, 1)` multiplying the action-press transform directly) -- the file OTHER skin files' own comments cite as the reference idiom (menu.css:46, '(alert.css idiom)'). `--ds-motion-duration-scale` stays a genuine uncovered shared arm: alert.css does not read it at all (grep-confirmed) -- its real, direct consumer is foundation/animations/transitions.css, which derives --ds-motion-reveal/--ds-motion-attention from it two hops upstream of what button.css and others then read, and that file belongs to no UI-component family.",
-      "evidenceIds": [
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-intensity-low.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-intensity-high.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/bithire-intensity-low.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/bithire-intensity-high.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/evnto-intensity-low.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/evnto-intensity-high.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-duration-scale-low.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/rottay-duration-scale-high.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/bithire-duration-scale-low.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/bithire-duration-scale-high.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/evnto-duration-scale-low.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/motion-dial/computed-static-db/evnto-duration-scale-high.json.receipt.json"
-      ],
+      "evidenceIds": [],
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
-        "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
+        "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
         "packages/core/governance/manifest/controls/motion/dial/index.json"
@@ -3423,13 +3410,13 @@
         {
           "channelId": "--_ds-alert-action-active-transform",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3438,13 +3425,13 @@
         {
           "channelId": "--ds-motion-intensity",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3472,13 +3459,13 @@
         {
           "channelId": "--_ds-alert-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3526,7 +3513,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "feedback no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -3592,13 +3579,13 @@
         {
           "channelId": "--_ds-alert-action-focus-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3607,13 +3594,13 @@
         {
           "channelId": "--_ds-alert-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/feedback/alert"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3642,7 +3629,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3699,7 +3686,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3727,7 +3714,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/alert/index.css"
         ]
       }
     },
@@ -3760,11 +3747,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "ActiveFiltersBar"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/active-filters-bar",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/active-filters-bar",
     "publicComponents": [
       "ActiveFiltersBar"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "c0a1447355f946de2278738c576a9b69f5e561f1b50227bf3d7bcb81d1c984c4"
+    "inventoryRowDigest": "522fef4c275d0e4db5bed569210288b9ed4d3b9a30d192087b05aff0df608471"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/workspace/active-filters-bar",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+      "packages/core/src/components/structures/workspace/active-filters-bar",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
     ],
     "stableParts": [
       "root",
@@ -58,11 +58,11 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:337]",
-      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:350, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:351, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:354]",
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:282, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:286, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:289]",
-      "the family stamps role='region' [at packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:152]",
-      "the family stamps role='toolbar' [at packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:162]"
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:337]",
+      "the family carries a forced-colors (high contrast) branch [at packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:350, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:351, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:354]",
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:282, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:286, packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:289]",
+      "the family stamps role='region' [at packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:152]",
+      "the family stamps role='toolbar' [at packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:162]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -89,67 +89,67 @@
         {
           "part": "root",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:149"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:149"
         },
         {
           "part": "rail",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:155"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:155"
         },
         {
           "part": "chips-region",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:156"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:156"
         },
         {
           "part": "chips",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:161"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:161"
         },
         {
           "part": "pill",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:166"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:166"
         },
         {
           "part": "chip",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:193"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:193"
         },
         {
           "part": "chip-label",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:211"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:211"
         },
         {
           "part": "chip-value",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:216"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:216"
         },
         {
           "part": "more-toggle",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:244"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:244"
         },
         {
           "part": "less-toggle",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:257"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:257"
         },
         {
           "part": "actions",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:271"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:271"
         },
         {
           "part": "clear-all",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:280"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:280"
         },
         {
           "part": "add-filter",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:291"
+          "anchor": "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:291"
         }
       ],
       "partCensus": {
@@ -166,7 +166,7 @@
           "token": "state",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:383"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:383"
           ],
           "state": "state"
         },
@@ -174,9 +174,9 @@
           "token": "state=draft",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:247",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:248",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:249"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:247",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:248",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:249"
           ],
           "state": "draft"
         },
@@ -184,9 +184,9 @@
           "token": "state=invalid",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:256",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:257",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:258"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:256",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:257",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:258"
           ],
           "state": "invalid"
         },
@@ -194,7 +194,7 @@
           "token": "data-state",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:194"
+            "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:194"
           ],
           "state": "state"
         },
@@ -202,7 +202,7 @@
           "token": "aria-expanded",
           "axis": "aria-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:245"
+            "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:245"
           ],
           "state": "aria-expanded"
         }
@@ -212,23 +212,23 @@
           "token": "embedded=false",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:107",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:350"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:107",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:350"
           ]
         },
         {
           "token": "embedded=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:136"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:136"
           ]
         },
         {
           "token": "data-embedded",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:150"
+            "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:150"
           ]
         }
       ],
@@ -238,68 +238,68 @@
             "token": "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"actions\"] > [data-part=\"clear-all\"], .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"actions\"] > [data-part=\"add-filter\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:319"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:319"
             ]
           },
           {
             "token": "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"actions\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:311"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:311"
             ]
           },
           {
             "token": "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:306"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:306"
             ]
           },
           {
             "token": "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:301",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:302",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:303"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:301",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:302",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:303"
             ]
           },
           {
             "token": "@container ds-active-filters-bar (max-width: 48rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"actions\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:289",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:290"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:289",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:290"
             ]
           },
           {
             "token": "@container ds-active-filters-bar (max-width: 48rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chips-region\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:286"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:286"
             ]
           },
           {
             "token": "@container ds-active-filters-bar (max-width: 48rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"rail\"]",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:282"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:282"
             ]
           },
           {
             "token": "@media(forced-colors: active)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:350",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:351",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:354"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:350",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:351",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:354"
             ]
           },
           {
             "token": "@media(prefers-reduced-motion: reduce)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:337"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:337"
             ]
           }
         ],
@@ -311,8 +311,8 @@
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:153",
-              "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:163"
+              "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:153",
+              "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx:163"
             ]
           }
         ],
@@ -321,7 +321,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css": {
             "rows": 95,
             "layer": "engine-agnostic skin"
           }
@@ -427,7 +427,7 @@
           {
             "variable": "--ds-toolbar-gap",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:81",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:81",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-section-gap",
@@ -447,7 +447,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:81",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:81",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-section-gap",
@@ -460,15 +460,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-list-shell-section-gap",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:85",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-row-gap",
@@ -488,7 +488,7 @@
           {
             "variable": "--ds-spacing-2",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:85",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-row-gap",
@@ -501,15 +501,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:79",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:79",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-toolbar-divider",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:89",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:89",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-leader",
@@ -530,7 +530,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:89",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:89",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-leader",
@@ -544,16 +544,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-border",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:89",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:89",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-leader",
@@ -567,16 +567,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:62",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:229",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2111",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:28"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:229",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2111",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:28"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-control-size-sm",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:93",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-chip-target",
@@ -594,7 +594,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:93",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "--_ds-active-filters-bar-chip-target",
@@ -607,15 +607,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:69",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:69",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:656"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-active-filters-bar-padding-block",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:100",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:100",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "padding-block",
@@ -633,7 +633,7 @@
           {
             "variable": "--ds-active-filters-bar-padding-inline",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:101",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:101",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "padding-inline",
@@ -651,7 +651,7 @@
           {
             "variable": "--ds-active-filters-bar-motion-duration",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:102",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "animation",
@@ -669,7 +669,7 @@
           {
             "variable": "--ds-motion-normal",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:102",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "animation",
@@ -682,16 +682,16 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:399",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:399",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:926"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:102",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"]",
             "states": [],
             "landsOn": "animation",
@@ -704,14 +704,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-active-filters-bar-border",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:107",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -731,7 +731,7 @@
           {
             "variable": "--ds-toolbar-border-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:107",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -754,7 +754,7 @@
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:107",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -770,16 +770,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-active-filters-bar-background",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -799,7 +799,7 @@
           {
             "variable": "--ds-toolbar-bg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -822,7 +822,7 @@
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -838,14 +838,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -860,8 +860,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -870,7 +870,7 @@
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -886,14 +886,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"false\"]",
             "states": [
               "embedded=false"
@@ -908,8 +908,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -918,7 +918,7 @@
           {
             "variable": "--ds-active-filters-bar-embedded-padding-block",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:136",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"][data-embedded=\"true\"]",
             "states": [
               "embedded=true"
@@ -938,7 +938,7 @@
           {
             "variable": "--ds-active-filters-bar-chips-basis",
             "part": "chips-region",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:142",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:142",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chips-region\"]",
             "states": [],
             "landsOn": "flex",
@@ -956,7 +956,7 @@
           {
             "variable": "--_ds-active-filters-bar-section-gap",
             "part": "actions",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:147",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:147",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"actions\"]",
             "states": [],
             "landsOn": "padding-inline-start",
@@ -969,14 +969,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:81"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:81"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-active-filters-bar-count-block-size",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:158",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:158",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "min-block-size",
@@ -994,7 +994,7 @@
           {
             "variable": "--_ds-active-filters-bar-section-gap",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:160",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:160",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "padding-inline",
@@ -1007,14 +1007,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:81"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:81"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-active-filters-bar-leader",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:161",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "border-inline-end",
@@ -1027,14 +1027,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:89"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:89"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-2xs",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:162",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "font-size",
@@ -1047,14 +1047,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:162",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:162",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "font-size",
@@ -1067,14 +1067,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-active-filters-bar-count-color",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:167",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "color",
@@ -1092,7 +1092,7 @@
           {
             "variable": "--ds-color-text-muted",
             "part": "pill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:167",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"pill\"]",
             "states": [],
             "landsOn": "color",
@@ -1107,15 +1107,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--_ds-active-filters-bar-row-gap",
             "part": "chips",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:173",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chips\"]",
             "states": [],
             "landsOn": "row-gap",
@@ -1128,14 +1128,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:85"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:85"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--_ds-active-filters-bar-chip-target",
             "part": "chip",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:176",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:176",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"]",
             "states": [],
             "landsOn": "min-block-size",
@@ -1148,14 +1148,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:93"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:93"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-type-supporting-font-size",
             "part": "more-toggle",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:184",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:184",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"more-toggle\"], .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"less-toggle\"]",
             "states": [],
             "landsOn": "font-size",
@@ -1168,14 +1168,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:542"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:542"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "chip-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:202",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:202",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"] [data-part=\"chip-label\"]",
             "states": [],
             "landsOn": "color",
@@ -1190,15 +1190,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-font-size-2xs",
             "part": "chip-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:203",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:203",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"] [data-part=\"chip-label\"]",
             "states": [],
             "landsOn": "font-size",
@@ -1211,14 +1211,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "chip-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:203",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:203",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"] [data-part=\"chip-label\"]",
             "states": [],
             "landsOn": "font-size",
@@ -1231,14 +1231,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:219",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:219",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"] [data-part=\"chip-value\"]",
             "states": [],
             "landsOn": "color",
@@ -1252,16 +1252,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:220",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"] [data-part=\"chip-value\"]",
             "states": [],
             "landsOn": "font-size",
@@ -1274,14 +1274,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-spacing-1",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:228",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:228",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"] [data-part=\"chip-value\"]",
             "states": [],
             "landsOn": "margin-inline-start",
@@ -1294,15 +1294,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:78",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:78",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-text-secondary",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:247",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"draft\"] [data-part=\"chip-value\"]",
             "states": [
               "state=draft"
@@ -1319,15 +1319,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:57",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:218",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:250",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:250",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"draft\"] [data-part=\"chip-value\"]",
             "states": [
               "state=draft"
@@ -1344,15 +1344,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-error",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:256",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:256",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"invalid\"] [data-part=\"chip-value\"]",
             "states": [
               "state=invalid"
@@ -1367,17 +1367,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-error",
             "part": "chip-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:257",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:257",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"invalid\"] [data-part=\"chip-value\"]",
             "states": [
               "state=invalid"
@@ -1392,17 +1392,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-error",
             "part": "chip-label",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:263",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"invalid\"] [data-part=\"chip-label\"]",
             "states": [
               "state=invalid"
@@ -1417,17 +1417,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:268",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:268",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"draft\"] [data-part=\"icon\"]",
             "states": [
               "state=draft"
@@ -1444,15 +1444,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-color-error",
             "part": "icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:273",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:273",
             "selector": ".ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"][data-state=\"invalid\"] [data-part=\"icon\"]",
             "states": [
               "state=invalid"
@@ -1467,17 +1467,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:177",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:177",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:129",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "packages/core/src/ui/primitives/feedback/Alert/engines/modern/index.tsx:32"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106",
+              "packages/core/src/components/primitives/feedback/Alert/engines/modern/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--_ds-active-filters-bar-row-gap",
             "part": "rail",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:282",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:282",
             "selector": "@container ds-active-filters-bar (max-width: 48rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"rail\"]",
             "states": [
               "@container ds-active-filters-bar (max-width: 48rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"rail\"]"
@@ -1492,14 +1492,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:85"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:85"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-control-size-md",
             "part": "chip",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:306",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:306",
             "selector": "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"]",
             "states": [
               "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"]"
@@ -1519,7 +1519,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "part": "chip",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:306",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:306",
             "selector": "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"]",
             "states": [
               "@container ds-active-filters-bar (max-width: 30rem) >> .ds-structure.ds-active-filters-bar[data-part=\"root\"] [data-part=\"chip\"]"
@@ -1534,8 +1534,8 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:69",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:69",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:656"
             ],
             "declarationSiteCount": 2
           }
@@ -1552,7 +1552,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:81",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:81",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-section-gap",
                   "fallbackPresent": true,
@@ -1572,7 +1572,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:83",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:83",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-section-gap",
                   "fallbackPresent": true,
@@ -1582,7 +1582,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             },
             {
               "variable": "--ds-list-shell-section-gap",
@@ -1592,7 +1592,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:85",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:85",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-row-gap",
                   "fallbackPresent": true,
@@ -1612,7 +1612,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:87",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:87",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-row-gap",
                   "fallbackPresent": true,
@@ -1622,7 +1622,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
             },
             {
               "variable": "--ds-toolbar-divider",
@@ -1632,7 +1632,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:89",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:89",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-leader",
                   "fallbackPresent": true,
@@ -1652,7 +1652,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:91",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:91",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-leader",
                   "fallbackPresent": true,
@@ -1661,7 +1661,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:112",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:112",
                   "part": "root",
                   "landsOn": "border-bottom",
                   "fallbackPresent": false,
@@ -1681,7 +1681,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:91",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:91",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-leader",
                   "fallbackPresent": false,
@@ -1691,7 +1691,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:147"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:147"
             },
             {
               "variable": "--ds-control-size-sm",
@@ -1701,7 +1701,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:94",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:94",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-chip-target",
                   "fallbackPresent": true,
@@ -1722,7 +1722,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:94",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:94",
                   "part": "root",
                   "landsOn": "--_ds-active-filters-bar-chip-target",
                   "fallbackPresent": true,
@@ -1731,7 +1731,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:307",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:307",
                   "part": "chip",
                   "landsOn": "min-block-size",
                   "fallbackPresent": true,
@@ -1741,7 +1741,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:656"
             },
             {
               "variable": "--ds-active-filters-bar-padding-block",
@@ -1751,7 +1751,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:100",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:100",
                   "part": "root",
                   "landsOn": "padding-block",
                   "fallbackPresent": true,
@@ -1771,7 +1771,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:101",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:101",
                   "part": "root",
                   "landsOn": "padding-inline",
                   "fallbackPresent": true,
@@ -1791,7 +1791,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:103",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:103",
                   "part": "root",
                   "landsOn": "animation",
                   "fallbackPresent": true,
@@ -1811,7 +1811,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:103",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:103",
                   "part": "root",
                   "landsOn": "animation",
                   "fallbackPresent": false,
@@ -1821,7 +1821,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:926"
             },
             {
               "variable": "--ds-motion-ease-out",
@@ -1831,7 +1831,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:104",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:104",
                   "part": "root",
                   "landsOn": "animation",
                   "fallbackPresent": true,
@@ -1841,7 +1841,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             },
             {
               "variable": "--ds-active-filters-bar-border",
@@ -1851,7 +1851,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:107",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:107",
                   "part": "root",
                   "landsOn": "border-bottom",
                   "fallbackPresent": true,
@@ -1871,7 +1871,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:110",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:110",
                   "part": "root",
                   "landsOn": "border-bottom",
                   "fallbackPresent": true,
@@ -1891,7 +1891,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -1911,7 +1911,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:117",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:117",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -1931,7 +1931,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:123",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:123",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1940,7 +1940,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:128",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:128",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1950,7 +1950,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             },
             {
               "variable": "--ds-color-bg-primary",
@@ -1960,7 +1960,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:124",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:124",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1969,7 +1969,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:129",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:129",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1979,7 +1979,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:137"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:137"
             },
             {
               "variable": "--ds-active-filters-bar-embedded-padding-block",
@@ -1989,7 +1989,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:136",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:136",
                   "part": "root",
                   "landsOn": "padding-block",
                   "fallbackPresent": true,
@@ -2009,7 +2009,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:142",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:142",
                   "part": "chips-region",
                   "landsOn": "flex",
                   "fallbackPresent": true,
@@ -2030,7 +2030,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:147",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:147",
                   "part": "actions",
                   "landsOn": "padding-inline-start",
                   "fallbackPresent": false,
@@ -2039,7 +2039,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:160",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:160",
                   "part": "pill",
                   "landsOn": "padding-inline",
                   "fallbackPresent": false,
@@ -2059,7 +2059,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:158",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:158",
                   "part": "pill",
                   "landsOn": "min-block-size",
                   "fallbackPresent": true,
@@ -2079,7 +2079,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:161",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:161",
                   "part": "pill",
                   "landsOn": "border-inline-end",
                   "fallbackPresent": false,
@@ -2100,7 +2100,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:162",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:162",
                   "part": "pill",
                   "landsOn": "font-size",
                   "fallbackPresent": true,
@@ -2109,7 +2109,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:203",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:203",
                   "part": "chip-label",
                   "landsOn": "font-size",
                   "fallbackPresent": true,
@@ -2119,7 +2119,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
             },
             {
               "variable": "--ds-font-size-xs",
@@ -2131,7 +2131,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:162",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:162",
                   "part": "pill",
                   "landsOn": "font-size",
                   "fallbackPresent": false,
@@ -2140,7 +2140,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:203",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:203",
                   "part": "chip-label",
                   "landsOn": "font-size",
                   "fallbackPresent": false,
@@ -2149,7 +2149,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:220",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:220",
                   "part": "chip-value",
                   "landsOn": "font-size",
                   "fallbackPresent": false,
@@ -2159,7 +2159,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             },
             {
               "variable": "--ds-active-filters-bar-count-color",
@@ -2169,7 +2169,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:167",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:167",
                   "part": "pill",
                   "landsOn": "color",
                   "fallbackPresent": true,
@@ -2192,7 +2192,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:167",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:167",
                   "part": "pill",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2201,7 +2201,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:202",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:202",
                   "part": "chip-label",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2210,7 +2210,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:250",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:250",
                   "part": "chip-value",
                   "landsOn": "text-decoration-color",
                   "fallbackPresent": false,
@@ -2219,7 +2219,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:268",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:268",
                   "part": "icon",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2229,7 +2229,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:145"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:145"
             },
             {
               "variable": "--_ds-active-filters-bar-row-gap",
@@ -2240,7 +2240,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:173",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:173",
                   "part": "chips",
                   "landsOn": "row-gap",
                   "fallbackPresent": false,
@@ -2249,7 +2249,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:282",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:282",
                   "part": "rail",
                   "landsOn": "row-gap",
                   "fallbackPresent": false,
@@ -2269,7 +2269,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:176",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:176",
                   "part": "chip",
                   "landsOn": "min-block-size",
                   "fallbackPresent": false,
@@ -2289,7 +2289,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:184",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:184",
                   "part": "less-toggle",
                   "landsOn": "font-size",
                   "fallbackPresent": true,
@@ -2299,7 +2299,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:542"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:542"
             },
             {
               "variable": "--ds-color-text-primary",
@@ -2309,7 +2309,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:219",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:219",
                   "part": "chip-value",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2319,7 +2319,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:143"
             },
             {
               "variable": "--ds-spacing-1",
@@ -2329,7 +2329,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:228",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:228",
                   "part": "chip-value",
                   "landsOn": "margin-inline-start",
                   "fallbackPresent": true,
@@ -2339,7 +2339,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684"
             },
             {
               "variable": "--ds-color-text-secondary",
@@ -2349,7 +2349,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:247",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:247",
                   "part": "chip-value",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2359,7 +2359,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:144"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:144"
             },
             {
               "variable": "--ds-color-error",
@@ -2371,7 +2371,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:256",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:256",
                   "part": "chip-value",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2380,7 +2380,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:257",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:257",
                   "part": "chip-value",
                   "landsOn": "text-decoration",
                   "fallbackPresent": false,
@@ -2389,7 +2389,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:263",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:263",
                   "part": "chip-label",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2398,7 +2398,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:273",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:273",
                   "part": "icon",
                   "landsOn": "color",
                   "fallbackPresent": false,
@@ -2408,7 +2408,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:106"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:106"
             },
             {
               "variable": "--ds-control-size-md",
@@ -2418,7 +2418,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:307",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:307",
                   "part": "chip",
                   "landsOn": "min-block-size",
                   "fallbackPresent": true,
@@ -2436,7 +2436,7 @@
           {
             "variable": "--ds-control-size-sm",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:94",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:94",
             "fallbackPresent": true,
             "fallback": "2rem",
             "landsOn": "--_ds-active-filters-bar-chip-target"
@@ -2444,7 +2444,7 @@
           {
             "variable": "--ds-active-filters-bar-padding-block",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:100",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:100",
             "fallbackPresent": true,
             "fallback": "10px 12px",
             "landsOn": "padding-block"
@@ -2452,7 +2452,7 @@
           {
             "variable": "--ds-active-filters-bar-padding-inline",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:101",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:101",
             "fallbackPresent": true,
             "fallback": "16px",
             "landsOn": "padding-inline"
@@ -2460,7 +2460,7 @@
           {
             "variable": "--ds-active-filters-bar-motion-duration",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:103",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:103",
             "fallbackPresent": true,
             "fallback": "var(--ds-motion-normal)",
             "landsOn": "animation"
@@ -2468,7 +2468,7 @@
           {
             "variable": "--ds-active-filters-bar-border",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:107",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:107",
             "fallbackPresent": true,
             "fallback": "1px solid\n      var(\n        --ds-toolbar-border-bottom,\n        color-mix(in srgb, var(--ds-color-border-subtle) 88%, transparent)\n      )",
             "landsOn": "border-bottom"
@@ -2476,7 +2476,7 @@
           {
             "variable": "--ds-active-filters-bar-background",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:115",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:115",
             "fallbackPresent": true,
             "fallback": "var(\n      --ds-toolbar-bg,\n      linear-gradient(\n        180deg,\n        color-mix(\n          in srgb,\n          var(--ds-surface-card) 94%,\n          var(--ds-color-bg-primary) 6%\n        ),\n        color-mix(\n          in srgb,\n          var(--ds-surface-card) 90%,\n          var(--ds-color-bg-primary) 10%\n        )\n      )\n    )",
             "landsOn": "background"
@@ -2484,7 +2484,7 @@
           {
             "variable": "--ds-active-filters-bar-embedded-padding-block",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:136",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:136",
             "fallbackPresent": true,
             "fallback": "6px 10px",
             "landsOn": "padding-block"
@@ -2492,7 +2492,7 @@
           {
             "variable": "--ds-active-filters-bar-chips-basis",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:142",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:142",
             "fallbackPresent": true,
             "fallback": "560px",
             "landsOn": "flex"
@@ -2500,7 +2500,7 @@
           {
             "variable": "--ds-active-filters-bar-count-block-size",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:158",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:158",
             "fallbackPresent": true,
             "fallback": "24px",
             "landsOn": "min-block-size"
@@ -2508,7 +2508,7 @@
           {
             "variable": "--ds-active-filters-bar-count-color",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:167",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:167",
             "fallbackPresent": true,
             "fallback": "var(--ds-color-text-muted)",
             "landsOn": "color"
@@ -2516,7 +2516,7 @@
           {
             "variable": "--ds-control-size-md",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:307",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:307",
             "fallbackPresent": true,
             "fallback": "2.5rem",
             "landsOn": "min-block-size"
@@ -2525,69 +2525,69 @@
         "inertFallbackChainSample": [
           {
             "name": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:83",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:83",
             "fallback": "0.75rem",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
           },
           {
             "name": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:87",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:87",
             "fallback": "0.5rem",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:685"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:685"
           },
           {
             "name": "--ds-color-border-subtle",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:91",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:91",
             "fallback": "var(--ds-color-border)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232"
           },
           {
             "name": "--ds-density-effective-scale",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:94",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:94",
             "fallback": "1",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:656"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:104",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:104",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           },
           {
             "name": "--ds-font-size-2xs",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:162",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:162",
             "fallback": "var(--ds-font-size-xs)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
           },
           {
             "name": "--ds-type-supporting-font-size",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:184",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:184",
             "fallback": "0.8125rem",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:542"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:542"
           },
           {
             "name": "--ds-font-size-2xs",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:203",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:203",
             "fallback": "var(--ds-font-size-xs)",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:62"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:62"
           },
           {
             "name": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:228",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:228",
             "fallback": "0.25rem",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:684"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:684"
           },
           {
             "name": "--ds-density-effective-scale",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css:307",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css:307",
             "fallback": "1",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:656"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:656"
           }
         ],
         "inertFallbackChainSites": 10,
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 161,
             "property": "border-inline-end",
             "literal": "1px",
@@ -2595,7 +2595,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 164,
             "property": "letter-spacing",
             "literal": "0.11em",
@@ -2603,7 +2603,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 187,
             "property": "text-underline-offset",
             "literal": "0.25em",
@@ -2611,7 +2611,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 205,
             "property": "letter-spacing",
             "literal": "0.08em",
@@ -2619,7 +2619,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 210,
             "property": "max-inline-size",
             "literal": "24ch",
@@ -2627,7 +2627,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 225,
             "property": "max-inline-size",
             "literal": "40ch",
@@ -2635,7 +2635,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 251,
             "property": "text-underline-offset",
             "literal": "0.2em",
@@ -2643,7 +2643,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 258,
             "property": "text-underline-offset",
             "literal": "0.2em",
@@ -2651,7 +2651,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
             "line": 327,
             "property": "transform",
             "literal": "4px",
@@ -2661,7 +2661,7 @@
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css": {
               "rows": 95,
               "layer": "engine-agnostic skin"
             }
@@ -2682,7 +2682,7 @@
               "token": "ds-sr-only",
               "reason": "every paint row for this token lives in a global engine theme.css, not a component skin",
               "paintFiles": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css"
               ],
               "rowCount": 9
             }
@@ -2699,19 +2699,19 @@
             "styleAttribute": 0
           },
           "perFile": {
-            "packages/core/src/ui/structures/workspace/active-filters-bar/contracts/index.ts": {
+            "packages/core/src/components/structures/workspace/active-filters-bar/contracts/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 34
             },
-            "packages/core/src/ui/structures/workspace/active-filters-bar/index.ts": {
+            "packages/core/src/components/structures/workspace/active-filters-bar/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 25
             },
-            "packages/core/src/ui/structures/workspace/active-filters-bar/runtime/rendering/index.tsx": {
+            "packages/core/src/components/structures/workspace/active-filters-bar/runtime/rendering/index.tsx": {
               "classNameOccurrences": 2,
               "dataPartOccurrences": 13,
               "styleAttributeOccurrences": 0,
@@ -2761,13 +2761,13 @@
         {
           "channelId": "--_ds-active-filters-bar-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2777,13 +2777,13 @@
         {
           "channelId": "--_ds-active-filters-bar-chips-basis",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2792,13 +2792,13 @@
         {
           "channelId": "--_ds-active-filters-bar-count-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2815,7 +2815,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2840,7 +2840,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2865,7 +2865,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -2902,13 +2902,13 @@
         {
           "channelId": "--_ds-active-filters-bar-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2928,13 +2928,13 @@
         {
           "channelId": "--_ds-active-filters-bar-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2962,13 +2962,13 @@
         {
           "channelId": "--_ds-active-filters-bar-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2978,13 +2978,13 @@
         {
           "channelId": "--_ds-active-filters-bar-count-block-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2993,13 +2993,13 @@
         {
           "channelId": "--_ds-active-filters-bar-embedded-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3008,13 +3008,13 @@
         {
           "channelId": "--_ds-active-filters-bar-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3023,13 +3023,13 @@
         {
           "channelId": "--_ds-active-filters-bar-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3048,13 +3048,13 @@
         {
           "channelId": "--_ds-active-filters-bar-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3082,13 +3082,13 @@
         {
           "channelId": "--_ds-active-filters-bar-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3098,13 +3098,13 @@
         {
           "channelId": "--_ds-active-filters-bar-motion-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3122,7 +3122,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo plano; lo flotante usa sockets overlay",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3152,7 +3152,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3183,13 +3183,13 @@
         {
           "channelId": "--_ds-active-filters-bar-panel-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3209,13 +3209,13 @@
         {
           "channelId": "--_ds-active-filters-bar-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3239,7 +3239,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3295,7 +3295,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3339,13 +3339,13 @@
         {
           "channelId": "--_ds-active-filters-bar-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/active-filters-bar"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/active-filters-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3365,11 +3365,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json",
+        "adjudicatedFrom": "controls/responsive/posture/index.json",
         "uncoveredByDesign": {
           "CONTROL CORRECTO = responsive.posture (taxonomia A)": [
             "--ds-control-size-md"

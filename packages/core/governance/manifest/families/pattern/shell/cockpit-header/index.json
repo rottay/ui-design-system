@@ -8,15 +8,15 @@
     "components": [
       "PatternCockpitHeader"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/shell/cockpit-header",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/shell/cockpit-header",
     "publicComponents": [
       "PatternCockpitHeader"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "0a98556df8fe966e01ba2dc409ce52b639731d3980234042a7bfc1945cefa5a1"
+    "inventoryRowDigest": "fb832492ae6b2bd311bbb380cf92958686f03dd95ba9473a0d30f417f2203333"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,11 +28,11 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/shell/cockpit-header/index.ts",
-      "packages/core/src/ui/patterns/shell/cockpit-header/contracts/index.ts",
-      "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+      "packages/core/src/components/patterns/shell/cockpit-header/index.ts",
+      "packages/core/src/components/patterns/shell/cockpit-header/contracts/index.ts",
+      "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
     ],
     "stableParts": [
       "actions",
@@ -96,230 +96,230 @@
           "part": "actions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:355",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:234",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:350",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:475",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:480",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:550"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:355",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:350",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:475",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:480",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:550"
           ]
         },
         {
           "part": "back",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:102",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:180",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:183",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:184",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:358",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:362"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:180",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:183",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:358",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:362"
           ]
         },
         {
           "part": "breadcrumb",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:276",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:255",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:283",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:384",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:548"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:276",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:255",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:384",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:548"
           ]
         },
         {
           "part": "crumb",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:69",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:82",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:115",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:129",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:132",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:135"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:69",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:82",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:135"
           ]
         },
         {
           "part": "crumb-item",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:287",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:275"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:287",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:275"
           ]
         },
         {
           "part": "crumb-list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:283",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:266"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:283",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:266"
           ]
         },
         {
           "part": "eyebrow",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:322",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:165"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:322",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:165"
           ]
         },
         {
           "part": "header-icon",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:315",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:146",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:161",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:528",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:549",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:558"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:315",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:146",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:161",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:528",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:549",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:558"
           ]
         },
         {
           "part": "lead",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:311",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:324"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:311",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:324"
           ]
         },
         {
           "part": "main-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:309",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:317",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:470"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:309",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:317",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:470"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:206",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:262",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:44",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:90",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:98"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:206",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:262",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:44",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:98"
           ]
         },
         {
           "part": "separator",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:290",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:140",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:310"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:290",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:140",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:310"
           ]
         },
         {
           "part": "skeleton",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:220",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:227",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:233",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:234",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:235",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:242"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:220",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:227",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:233",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:234",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:235",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:242"
           ]
         },
         {
           "part": "skeleton-actions",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:240",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:435"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:240",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:435"
           ]
         },
         {
           "part": "skeleton-column",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:232",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:429"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:429"
           ]
         },
         {
           "part": "skeleton-lead",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:224",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:423"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:224",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:423"
           ]
         },
         {
           "part": "skeleton-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:223",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:416"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:223",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:416"
           ]
         },
         {
           "part": "skeleton-stack",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:217",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:410"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:217",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:410"
           ]
         },
         {
           "part": "status",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:130",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:192",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:195",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:200",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:210"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:130",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:192",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:195",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:210"
           ]
         },
         {
           "part": "status-list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:336",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:344"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:336",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:344"
           ]
         },
         {
           "part": "subtitle",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:346",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:228",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:388"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:388"
           ]
         },
         {
           "part": "title",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:328",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:222",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:368",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:378",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:559"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:328",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:222",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:368",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:378",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:559"
           ]
         },
         {
           "part": "title-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:323",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:337"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:323",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:337"
           ]
         },
         {
           "part": "titles",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:321",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:332"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:321",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:332"
           ]
         }
       ],
@@ -327,14 +327,14 @@
         {
           "token": "loading=false",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:263"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:263"
           ],
           "state": "loading"
         },
         {
           "token": "loading=true",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:207"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:207"
           ],
           "state": "loading"
         }
@@ -343,159 +343,159 @@
         {
           "token": "compact=isCompact ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:211",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:265"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:211",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:265"
           ]
         },
         {
           "token": "compact=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:90",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:378",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:384"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:90",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:378",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:384"
           ]
         },
         {
           "token": "has-actions=actions ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:213",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:267"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:213",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:267"
           ]
         },
         {
           "token": "has-icon=icon ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:212",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:266"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:212",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:266"
           ]
         },
         {
           "token": "interactive=false",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:83",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:132",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:135"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:83",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:132",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:135"
           ]
         },
         {
           "token": "interactive=true",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:70",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:115",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:129",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:292",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:301",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:532"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:70",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:115",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:129",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:292",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:532"
           ]
         },
         {
           "token": "size=action",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:243",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:248",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:464"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:243",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:248",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:464"
           ]
         },
         {
           "token": "size=crumb",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:220",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:444"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:220",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:444"
           ]
         },
         {
           "token": "size=icon",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:228",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:449"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:228",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:449"
           ]
         },
         {
           "token": "size=subtitle",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:235",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:459"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:235",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:459"
           ]
         },
         {
           "token": "size=title",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:234",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:454"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:454"
           ]
         },
         {
           "token": "sticky",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:98",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:492",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:500",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:506",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:547"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:98",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:492",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:500",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:506",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:547"
           ]
         },
         {
           "token": "sticky=sticky ? 'true' : 'false'",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:210",
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:264"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:210",
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:264"
           ]
         },
         {
           "token": "sticky=true",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:109"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:109"
           ]
         },
         {
           "token": "tenant",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:14"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:14"
           ]
         },
         {
           "token": "theme",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:14"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:14"
           ]
         },
         {
           "token": "variant=default",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:215"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:215"
           ]
         },
         {
           "token": "variant=error",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:205"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:205"
           ]
         },
         {
           "token": "variant=info",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:210"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:210"
           ]
         },
         {
           "token": "variant=status.variant",
           "at": [
-            "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:131"
+            "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:131"
           ]
         },
         {
           "token": "variant=success",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:195"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:195"
           ]
         },
         {
           "token": "variant=warning",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:200"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:200"
           ]
         }
       ],
@@ -504,21 +504,21 @@
           {
             "token": "last=false",
             "at": [
-              "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:71",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:135"
+              "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:71",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:135"
             ]
           },
           {
             "token": "last=isLast ? 'true' : 'false'",
             "at": [
-              "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx:84"
+              "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx:84"
             ]
           },
           {
             "token": "last=true",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:132",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:306"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:132",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:306"
             ]
           }
         ],
@@ -528,13 +528,13 @@
         {
           "token": "anatomy-layout=flat",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:500"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:500"
           ]
         },
         {
           "token": "anatomy-layout=floating",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css:506"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css:506"
           ]
         }
       ],
@@ -542,12 +542,12 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "lines": 223
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",
             "lines": 362
           }
         ]
@@ -562,7 +562,7 @@
         "variableCensus": [
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "16px",
@@ -578,7 +578,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "24px",
@@ -594,7 +594,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "1",
@@ -610,7 +610,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "12px",
@@ -626,7 +626,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 53,
             "fallback": true,
             "fallbackValue": "1",
@@ -642,7 +642,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "16px",
@@ -658,7 +658,7 @@
           },
           {
             "name": "--ds-spacing-6",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "24px",
@@ -674,7 +674,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 54,
             "fallback": true,
             "fallbackValue": "1",
@@ -690,7 +690,7 @@
           },
           {
             "name": "--ds-spacing-4",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 55,
             "fallback": true,
             "fallbackValue": "16px",
@@ -706,7 +706,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 55,
             "fallback": true,
             "fallbackValue": "1",
@@ -722,7 +722,7 @@
           },
           {
             "name": "--ds-workspace-card-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))",
@@ -739,7 +739,7 @@
           },
           {
             "name": "--ds-spacing-3",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "12px",
@@ -756,7 +756,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 56,
             "fallback": true,
             "fallbackValue": "1",
@@ -773,7 +773,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 57,
             "fallback": true,
             "fallbackValue": "8px",
@@ -789,7 +789,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 57,
             "fallback": true,
             "fallbackValue": "1",
@@ -805,7 +805,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 65,
             "fallback": false,
             "fallbackValue": null,
@@ -818,7 +818,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 65,
             "fallback": false,
             "fallbackValue": null,
@@ -831,7 +831,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 66,
             "fallback": false,
             "fallbackValue": null,
@@ -844,7 +844,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 67,
             "fallback": false,
             "fallbackValue": null,
@@ -857,7 +857,7 @@
           },
           {
             "name": "--ds-workspace-card-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 73,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-lg)",
@@ -870,7 +870,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 73,
             "fallback": false,
             "fallbackValue": null,
@@ -883,7 +883,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -896,7 +896,7 @@
           },
           {
             "name": "--ds-workspace-card-shadow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 76,
             "fallback": true,
             "fallbackValue": "var(--ds-elevation-1)",
@@ -909,7 +909,7 @@
           },
           {
             "name": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 76,
             "fallback": false,
             "fallbackValue": null,
@@ -922,7 +922,7 @@
           },
           {
             "name": "--ds-motion-calm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 77,
             "fallback": false,
             "fallbackValue": null,
@@ -935,7 +935,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 78,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -948,7 +948,7 @@
           },
           {
             "name": "--ds-cockpit-header-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 83,
             "fallback": false,
             "fallbackValue": null,
@@ -962,7 +962,7 @@
           },
           {
             "name": "--ds-motion-slow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 85,
             "fallback": true,
             "fallbackValue": "320ms",
@@ -975,7 +975,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 85,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -988,7 +988,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 86,
             "fallback": false,
             "fallbackValue": null,
@@ -1001,7 +1001,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 86,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -1014,7 +1014,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -1027,7 +1027,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -1040,7 +1040,7 @@
           },
           {
             "name": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -1053,7 +1053,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 88,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -1066,7 +1066,7 @@
           },
           {
             "name": "--ds-cockpit-header-padding-compact",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 91,
             "fallback": false,
             "fallbackValue": null,
@@ -1080,7 +1080,7 @@
           },
           {
             "name": "--ds-cockpit-header-sticky-top",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 95,
             "fallback": true,
             "fallbackValue": "env(safe-area-inset-top, 0px)",
@@ -1093,7 +1093,7 @@
           },
           {
             "name": "--ds-cockpit-header-sticky-z",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 96,
             "fallback": true,
             "fallbackValue": "100",
@@ -1106,7 +1106,7 @@
           },
           {
             "name": "--ds-workspace-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 99,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-subtle)",
@@ -1119,7 +1119,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 99,
             "fallback": false,
             "fallbackValue": null,
@@ -1132,7 +1132,7 @@
           },
           {
             "name": "--ds-workspace-card-border-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 103,
             "fallback": true,
             "fallbackValue": "var(--ds-workspace-card-border, var(--ds-color-border-subtle))",
@@ -1145,7 +1145,7 @@
           },
           {
             "name": "--ds-workspace-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 103,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-subtle)",
@@ -1158,7 +1158,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 103,
             "fallback": false,
             "fallbackValue": null,
@@ -1171,7 +1171,7 @@
           },
           {
             "name": "--ds-workspace-card-shadow-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 104,
             "fallback": true,
             "fallbackValue": "var(--ds-elevation-2)",
@@ -1184,7 +1184,7 @@
           },
           {
             "name": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 104,
             "fallback": false,
             "fallbackValue": null,
@@ -1197,7 +1197,7 @@
           },
           {
             "name": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 110,
             "fallback": false,
             "fallbackValue": null,
@@ -1210,7 +1210,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 116,
             "fallback": false,
             "fallbackValue": null,
@@ -1223,7 +1223,7 @@
           },
           {
             "name": "--ds-breadcrumb-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 123,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-subtle)",
@@ -1236,7 +1236,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 123,
             "fallback": false,
             "fallbackValue": null,
@@ -1249,7 +1249,7 @@
           },
           {
             "name": "--ds-radius-full",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 124,
             "fallback": false,
             "fallbackValue": null,
@@ -1262,7 +1262,7 @@
           },
           {
             "name": "--ds-breadcrumb-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 125,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-primary) 4%, var(--ds-surface-card))",
@@ -1275,7 +1275,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 125,
             "fallback": false,
             "fallbackValue": null,
@@ -1288,7 +1288,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 125,
             "fallback": false,
             "fallbackValue": null,
@@ -1301,7 +1301,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 126,
             "fallback": false,
             "fallbackValue": null,
@@ -1314,7 +1314,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 130,
             "fallback": false,
             "fallbackValue": null,
@@ -1327,7 +1327,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 133,
             "fallback": false,
             "fallbackValue": null,
@@ -1340,7 +1340,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 136,
             "fallback": false,
             "fallbackValue": null,
@@ -1353,7 +1353,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 143,
             "fallback": false,
             "fallbackValue": null,
@@ -1366,7 +1366,7 @@
           },
           {
             "name": "--ds-cockpit-header-icon-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 149,
             "fallback": true,
             "fallbackValue": "40px",
@@ -1379,7 +1379,7 @@
           },
           {
             "name": "--ds-cockpit-header-icon-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 150,
             "fallback": true,
             "fallbackValue": "40px",
@@ -1392,7 +1392,7 @@
           },
           {
             "name": "--ds-workspace-card-icon-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 152,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1405,7 +1405,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 152,
             "fallback": false,
             "fallbackValue": null,
@@ -1418,7 +1418,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 153,
             "fallback": false,
             "fallbackValue": null,
@@ -1431,7 +1431,7 @@
           },
           {
             "name": "--ds-workspace-card-icon-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 154,
             "fallback": true,
             "fallbackValue": "var(--ds-surface-card)",
@@ -1444,7 +1444,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 154,
             "fallback": false,
             "fallbackValue": null,
@@ -1457,7 +1457,7 @@
           },
           {
             "name": "--ds-workspace-card-icon-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 155,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1470,7 +1470,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 155,
             "fallback": false,
             "fallbackValue": null,
@@ -1483,7 +1483,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 157,
             "fallback": false,
             "fallbackValue": null,
@@ -1496,7 +1496,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 159,
             "fallback": false,
             "fallbackValue": null,
@@ -1509,7 +1509,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 159,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -1522,7 +1522,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 167,
             "fallback": false,
             "fallbackValue": null,
@@ -1535,7 +1535,7 @@
           },
           {
             "name": "--ds-font-family-mono",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 168,
             "fallback": true,
             "fallbackValue": "ui-monospace, monospace",
@@ -1548,7 +1548,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 169,
             "fallback": true,
             "fallbackValue": "var(--ds-font-size-xs)",
@@ -1561,7 +1561,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 169,
             "fallback": false,
             "fallbackValue": null,
@@ -1574,7 +1574,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 170,
             "fallback": true,
             "fallbackValue": "600",
@@ -1587,7 +1587,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 181,
             "fallback": false,
             "fallbackValue": null,
@@ -1600,7 +1600,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 185,
             "fallback": false,
             "fallbackValue": null,
@@ -1613,7 +1613,7 @@
           },
           {
             "name": "--ds-color-neutral-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 186,
             "fallback": false,
             "fallbackValue": null,
@@ -1626,7 +1626,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 187,
             "fallback": false,
             "fallbackValue": null,
@@ -1639,7 +1639,7 @@
           },
           {
             "name": "--ds-radius-full",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 193,
             "fallback": false,
             "fallbackValue": null,
@@ -1652,7 +1652,7 @@
           },
           {
             "name": "--ds-color-success-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 196,
             "fallback": false,
             "fallbackValue": null,
@@ -1665,7 +1665,7 @@
           },
           {
             "name": "--ds-color-success-700",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 197,
             "fallback": false,
             "fallbackValue": null,
@@ -1678,7 +1678,7 @@
           },
           {
             "name": "--ds-color-success-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 198,
             "fallback": false,
             "fallbackValue": null,
@@ -1691,7 +1691,7 @@
           },
           {
             "name": "--ds-color-warning-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 201,
             "fallback": false,
             "fallbackValue": null,
@@ -1704,7 +1704,7 @@
           },
           {
             "name": "--ds-color-warning-700",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 202,
             "fallback": false,
             "fallbackValue": null,
@@ -1717,7 +1717,7 @@
           },
           {
             "name": "--ds-color-warning-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 203,
             "fallback": false,
             "fallbackValue": null,
@@ -1730,7 +1730,7 @@
           },
           {
             "name": "--ds-color-error-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 206,
             "fallback": false,
             "fallbackValue": null,
@@ -1743,7 +1743,7 @@
           },
           {
             "name": "--ds-color-error-700",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 207,
             "fallback": false,
             "fallbackValue": null,
@@ -1756,7 +1756,7 @@
           },
           {
             "name": "--ds-color-error-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 208,
             "fallback": false,
             "fallbackValue": null,
@@ -1769,7 +1769,7 @@
           },
           {
             "name": "--ds-color-info-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 211,
             "fallback": false,
             "fallbackValue": null,
@@ -1782,7 +1782,7 @@
           },
           {
             "name": "--ds-color-info-700",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 212,
             "fallback": false,
             "fallbackValue": null,
@@ -1795,7 +1795,7 @@
           },
           {
             "name": "--ds-color-info-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 213,
             "fallback": false,
             "fallbackValue": null,
@@ -1808,7 +1808,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 216,
             "fallback": false,
             "fallbackValue": null,
@@ -1821,7 +1821,7 @@
           },
           {
             "name": "--ds-color-neutral-700",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 217,
             "fallback": false,
             "fallbackValue": null,
@@ -1834,7 +1834,7 @@
           },
           {
             "name": "--ds-color-neutral-200",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 218,
             "fallback": false,
             "fallbackValue": null,
@@ -1847,7 +1847,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 223,
             "fallback": false,
             "fallbackValue": null,
@@ -1860,7 +1860,7 @@
           },
           {
             "name": "--ds-font-family-heading",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 225,
             "fallback": true,
             "fallbackValue": "var(--ds-font-family-base)",
@@ -1873,7 +1873,7 @@
           },
           {
             "name": "--ds-font-family-base",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 225,
             "fallback": false,
             "fallbackValue": null,
@@ -1886,7 +1886,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 229,
             "fallback": false,
             "fallbackValue": null,
@@ -1899,7 +1899,7 @@
           },
           {
             "name": "--ds-control-height-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 235,
             "fallback": true,
             "fallbackValue": "32px",
@@ -1912,7 +1912,7 @@
           },
           {
             "name": "--ds-toolbar-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 237,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-primary)",
@@ -1925,7 +1925,7 @@
           },
           {
             "name": "--ds-color-border-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 237,
             "fallback": false,
             "fallbackValue": null,
@@ -1938,7 +1938,7 @@
           },
           {
             "name": "--ds-toolbar-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 238,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-lg)",
@@ -1951,7 +1951,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 238,
             "fallback": false,
             "fallbackValue": null,
@@ -1964,7 +1964,7 @@
           },
           {
             "name": "--ds-toolbar-control-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 239,
             "fallback": true,
             "fallbackValue": "var(--ds-surface-card)",
@@ -1977,7 +1977,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 239,
             "fallback": false,
             "fallbackValue": null,
@@ -1990,7 +1990,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 240,
             "fallback": false,
             "fallbackValue": null,
@@ -2003,7 +2003,7 @@
           },
           {
             "name": "--ds-cockpit-header-actions-backdrop",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 243,
             "fallback": true,
             "fallbackValue": "none",
@@ -2016,7 +2016,7 @@
           },
           {
             "name": "--ds-cockpit-header-skeleton-radius",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 249,
             "fallback": true,
             "fallbackValue": "var(--ds-radius-sm)",
@@ -2030,7 +2030,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 249,
             "fallback": false,
             "fallbackValue": null,
@@ -2043,7 +2043,7 @@
           },
           {
             "name": "--ds-color-neutral-100",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 250,
             "fallback": false,
             "fallbackValue": null,
@@ -2056,7 +2056,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 258,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2069,7 +2069,7 @@
           },
           {
             "name": "--ds-cockpit-header-item-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 259,
             "fallback": false,
             "fallbackValue": null,
@@ -2083,7 +2083,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 260,
             "fallback": false,
             "fallbackValue": null,
@@ -2096,7 +2096,7 @@
           },
           {
             "name": "--ds-line-height-body",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 261,
             "fallback": false,
             "fallbackValue": null,
@@ -2109,7 +2109,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 269,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2122,7 +2122,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 278,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2135,7 +2135,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 284,
             "fallback": true,
             "fallbackValue": "2px",
@@ -2148,7 +2148,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 284,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -2161,7 +2161,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 284,
             "fallback": false,
             "fallbackValue": null,
@@ -2174,7 +2174,7 @@
           },
           {
             "name": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 285,
             "fallback": true,
             "fallbackValue": "2px",
@@ -2187,7 +2187,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 295,
             "fallback": false,
             "fallbackValue": null,
@@ -2200,7 +2200,7 @@
           },
           {
             "name": "--ds-motion-fast",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 296,
             "fallback": false,
             "fallbackValue": null,
@@ -2213,7 +2213,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 296,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -2226,7 +2226,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 302,
             "fallback": true,
             "fallbackValue": "2px",
@@ -2239,7 +2239,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 302,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -2252,7 +2252,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 302,
             "fallback": false,
             "fallbackValue": null,
@@ -2265,7 +2265,7 @@
           },
           {
             "name": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 303,
             "fallback": true,
             "fallbackValue": "2px",
@@ -2278,7 +2278,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 311,
             "fallback": false,
             "fallbackValue": null,
@@ -2291,7 +2291,7 @@
           },
           {
             "name": "--ds-cockpit-header-section-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 321,
             "fallback": false,
             "fallbackValue": null,
@@ -2305,7 +2305,7 @@
           },
           {
             "name": "--ds-cockpit-header-item-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 328,
             "fallback": false,
             "fallbackValue": null,
@@ -2319,7 +2319,7 @@
           },
           {
             "name": "--ds-cockpit-header-item-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 341,
             "fallback": false,
             "fallbackValue": null,
@@ -2333,7 +2333,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 347,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2346,7 +2346,7 @@
           },
           {
             "name": "--ds-cockpit-header-action-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 354,
             "fallback": false,
             "fallbackValue": null,
@@ -2360,7 +2360,7 @@
           },
           {
             "name": "--ds-font-size-2xl",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 370,
             "fallback": false,
             "fallbackValue": null,
@@ -2373,7 +2373,7 @@
           },
           {
             "name": "--ds-font-weight-bold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 371,
             "fallback": false,
             "fallbackValue": null,
@@ -2386,7 +2386,7 @@
           },
           {
             "name": "--ds-letter-spacing-heading",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 372,
             "fallback": false,
             "fallbackValue": null,
@@ -2399,7 +2399,7 @@
           },
           {
             "name": "--ds-line-height-heading",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 373,
             "fallback": false,
             "fallbackValue": null,
@@ -2412,7 +2412,7 @@
           },
           {
             "name": "--ds-motion-normal",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 375,
             "fallback": false,
             "fallbackValue": null,
@@ -2425,7 +2425,7 @@
           },
           {
             "name": "--ds-motion-ease-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 375,
             "fallback": true,
             "fallbackValue": "ease-out",
@@ -2438,7 +2438,7 @@
           },
           {
             "name": "--ds-font-size-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 379,
             "fallback": false,
             "fallbackValue": null,
@@ -2451,7 +2451,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 385,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2464,7 +2464,7 @@
           },
           {
             "name": "--ds-rhythm-effective-scale",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 385,
             "fallback": true,
             "fallbackValue": "1",
@@ -2477,7 +2477,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 390,
             "fallback": false,
             "fallbackValue": null,
@@ -2490,7 +2490,7 @@
           },
           {
             "name": "--ds-line-height-body",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 391,
             "fallback": false,
             "fallbackValue": null,
@@ -2503,7 +2503,7 @@
           },
           {
             "name": "--ds-badge-padding-y",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 399,
             "fallback": true,
             "fallbackValue": "0",
@@ -2516,7 +2516,7 @@
           },
           {
             "name": "--ds-badge-padding-x",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 399,
             "fallback": true,
             "fallbackValue": "0.375rem",
@@ -2529,7 +2529,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 400,
             "fallback": false,
             "fallbackValue": null,
@@ -2542,7 +2542,7 @@
           },
           {
             "name": "--ds-font-weight-semibold",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 401,
             "fallback": false,
             "fallbackValue": null,
@@ -2555,7 +2555,7 @@
           },
           {
             "name": "--ds-line-height-body",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 403,
             "fallback": false,
             "fallbackValue": null,
@@ -2568,7 +2568,7 @@
           },
           {
             "name": "--ds-cockpit-header-item-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 413,
             "fallback": false,
             "fallbackValue": null,
@@ -2582,7 +2582,7 @@
           },
           {
             "name": "--ds-cockpit-header-section-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 420,
             "fallback": false,
             "fallbackValue": null,
@@ -2596,7 +2596,7 @@
           },
           {
             "name": "--ds-cockpit-header-item-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 426,
             "fallback": false,
             "fallbackValue": null,
@@ -2610,7 +2610,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 432,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2623,7 +2623,7 @@
           },
           {
             "name": "--ds-cockpit-header-action-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 437,
             "fallback": false,
             "fallbackValue": null,
@@ -2637,7 +2637,7 @@
           },
           {
             "name": "--ds-motion-attention",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 441,
             "fallback": true,
             "fallbackValue": "1.5s",
@@ -2650,7 +2650,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 441,
             "fallback": true,
             "fallbackValue": "ease-in-out",
@@ -2663,7 +2663,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 508,
             "fallback": true,
             "fallbackValue": "12px",
@@ -2676,7 +2676,7 @@
           },
           {
             "name": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 509,
             "fallback": false,
             "fallbackValue": null,
@@ -2689,7 +2689,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 510,
             "fallback": true,
             "fallbackValue": "8px",
@@ -2702,7 +2702,7 @@
           },
           {
             "name": "--ds-workspace-card-border-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 524,
             "fallback": true,
             "fallbackValue": "var(--ds-workspace-card-border, var(--ds-color-border-subtle))",
@@ -2715,7 +2715,7 @@
           },
           {
             "name": "--ds-workspace-card-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 524,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border-subtle)",
@@ -2728,7 +2728,7 @@
           },
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 524,
             "fallback": false,
             "fallbackValue": null,
@@ -2741,7 +2741,7 @@
           },
           {
             "name": "--ds-workspace-card-shadow-hover",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 525,
             "fallback": true,
             "fallbackValue": "var(--ds-elevation-2)",
@@ -2754,7 +2754,7 @@
           },
           {
             "name": "--ds-elevation-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 525,
             "fallback": false,
             "fallbackValue": null,
@@ -2767,7 +2767,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 533,
             "fallback": false,
             "fallbackValue": null,
@@ -2780,7 +2780,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 537,
             "fallback": false,
             "fallbackValue": null,
@@ -2793,7 +2793,7 @@
           },
           {
             "name": "--ds-color-neutral-50",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 538,
             "fallback": false,
             "fallbackValue": null,
@@ -2806,7 +2806,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 539,
             "fallback": false,
             "fallbackValue": null,
@@ -2819,7 +2819,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 574,
             "fallback": true,
             "fallbackValue": "44px",
@@ -2832,7 +2832,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 578,
             "fallback": true,
             "fallbackValue": "44px",
@@ -2845,7 +2845,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 579,
             "fallback": true,
             "fallbackValue": "44px",
@@ -2858,7 +2858,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 73,
             "fallback": false,
             "fallbackValue": null,
@@ -2871,7 +2871,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 75,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -2884,7 +2884,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -2897,7 +2897,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 80,
             "fallback": false,
             "fallbackValue": null,
@@ -2910,7 +2910,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 81,
             "fallback": false,
             "fallbackValue": null,
@@ -2923,7 +2923,7 @@
           },
           {
             "name": "--ds-color-bg-secondary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 82,
             "fallback": false,
             "fallbackValue": null,
@@ -2936,7 +2936,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 97,
             "fallback": false,
             "fallbackValue": null,
@@ -2949,7 +2949,7 @@
           },
           {
             "name": "--ds-color-bg-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -2962,7 +2962,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 111,
             "fallback": true,
             "fallbackValue": "color-mix(in srgb, var(--ds-color-text-primary) 8%, transparent)",
@@ -2975,7 +2975,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 111,
             "fallback": false,
             "fallbackValue": null,
@@ -2988,7 +2988,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 122,
             "fallback": false,
             "fallbackValue": null,
@@ -3001,7 +3001,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 129,
             "fallback": false,
             "fallbackValue": null,
@@ -3014,7 +3014,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 141,
             "fallback": false,
             "fallbackValue": null,
@@ -3027,7 +3027,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 167,
             "fallback": false,
             "fallbackValue": null,
@@ -3040,7 +3040,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 180,
             "fallback": false,
             "fallbackValue": null,
@@ -3053,7 +3053,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/classic/index.tsx",
             "line": 204,
             "fallback": false,
             "fallbackValue": null,
@@ -3066,7 +3066,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",
             "line": 229,
             "fallback": false,
             "fallbackValue": null,
@@ -3079,7 +3079,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",
             "line": 244,
             "fallback": false,
             "fallbackValue": null,
@@ -3092,7 +3092,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/ui/patterns/shell/cockpit-header/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/shell/cockpit-header/engines/modern/index.tsx",
             "line": 249,
             "fallback": false,
             "fallbackValue": null,
@@ -3106,409 +3106,409 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 51,
             "literal": "16px",
             "text": "--ds-cockpit-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 51,
             "literal": "24px",
             "text": "--ds-cockpit-header-padding: calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 53,
             "literal": "12px",
             "text": "calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1))"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 54,
             "literal": "16px",
             "text": "calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 54,
             "literal": "24px",
             "text": "calc(clamp(var(--ds-spacing-4, 16px), 2vw, var(--ds-spacing-6, 24px)) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 55,
             "literal": "16px",
             "text": "--ds-cockpit-header-section-gap: calc(var(--ds-spacing-4, 16px) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 56,
             "literal": "12px",
             "text": "--ds-cockpit-header-item-gap: var(--ds-workspace-card-gap, calc(var(--ds-spacing-3, 12px) * var(--ds-rhythm-effective-scale, 1)));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 57,
             "literal": "8px",
             "text": "--ds-cockpit-header-action-gap: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 75,
             "literal": "1px",
             "text": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent),"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 85,
             "literal": "320ms",
             "text": "background-position var(--ds-motion-slow, 320ms) var(--ds-motion-ease-out, ease-out),"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 95,
             "literal": "0px",
             "text": "top: var(--ds-cockpit-header-sticky-top, env(safe-area-inset-top, 0px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 99,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-workspace-card-border, var(--ds-color-border-subtle));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 121,
             "literal": "4px",
             "text": "padding: 4px 9px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 121,
             "literal": "9px",
             "text": "padding: 4px 9px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 123,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-breadcrumb-border, var(--ds-color-border-subtle));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 126,
             "literal": "1px",
             "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 86%, transparent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 149,
             "literal": "40px",
             "text": "width: var(--ds-cockpit-header-icon-size, 40px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 150,
             "literal": "40px",
             "text": "height: var(--ds-cockpit-header-icon-size, 40px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 152,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-workspace-card-icon-border, var(--ds-color-border-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 157,
             "literal": "1px",
             "text": "inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 90%, transparent),"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 158,
             "literal": "8px",
             "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 158,
             "literal": "18px",
             "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 158,
             "literal": "14px",
             "text": "0 8px 18px -14px color-mix(in srgb, currentColor 58%, transparent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 162,
             "literal": "1px",
             "text": "transform: translateY(-1px) scale(1.025);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 166,
             "literal": "4px",
             "text": "margin-bottom: 4px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 171,
             "literal": "0.11em",
             "text": "letter-spacing: 0.11em;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 198,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-success-200);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 203,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-warning-200);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 208,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-error-200);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 213,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-info-200);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 218,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-neutral-200);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 235,
             "literal": "32px",
             "text": "min-height: calc(var(--ds-control-height-sm, 32px) + 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 235,
             "literal": "8px",
             "text": "min-height: calc(var(--ds-control-height-sm, 32px) + 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 236,
             "literal": "3px",
             "text": "padding: 3px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 237,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-toolbar-border, var(--ds-color-border-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 240,
             "literal": "1px",
             "text": "box-shadow: inset 0 1px 0 color-mix(in srgb, var(--ds-color-bg-elevated) 88%, transparent);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 258,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 269,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 278,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 284,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 285,
             "literal": "2px",
             "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 302,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 303,
             "literal": "2px",
             "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 347,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 385,
             "literal": "8px",
             "text": "margin-block-end: calc(var(--ds-spacing-2, 8px) * var(--ds-rhythm-effective-scale, 1));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 389,
             "literal": "4px",
             "text": "margin: 4px 0 0;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 399,
             "literal": "0.375rem",
             "text": "padding: var(--ds-badge-padding-y, 0) var(--ds-badge-padding-x, 0.375rem);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 402,
             "literal": "0.01em",
             "text": "letter-spacing: 0.01em;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 432,
             "literal": "8px",
             "text": "gap: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 441,
             "literal": "1.5s",
             "text": "animation: ds-foundation-pulse var(--ds-motion-attention, 1.5s) var(--ds-motion-ease-in-out, ease-in-out) infinite;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 445,
             "literal": "160px",
             "text": "width: 160px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 446,
             "literal": "12px",
             "text": "height: 12px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 450,
             "literal": "34px",
             "text": "width: 34px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 451,
             "literal": "34px",
             "text": "height: 34px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 455,
             "literal": "260px",
             "text": "width: 260px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 456,
             "literal": "24px",
             "text": "height: 24px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 460,
             "literal": "180px",
             "text": "width: 180px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 461,
             "literal": "14px",
             "text": "height: 14px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 465,
             "literal": "80px",
             "text": "width: 80px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 466,
             "literal": "34px",
             "text": "height: 34px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 469,
             "literal": "640px",
             "text": "@container ds-cockpit-header (max-width: 640px) {"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 508,
             "literal": "12px",
             "text": "border-radius: var(--ds-radius-lg, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 510,
             "literal": "8px",
             "text": "margin: var(--ds-spacing-2, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 514,
             "literal": "8px",
             "text": "from { opacity: 0; transform: translateY(8px) scale(0.995); }"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 529,
             "literal": "1px",
             "text": "transform: translateY(-1px) scale(1.025);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 574,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 578,
             "literal": "44px",
             "text": "min-block-size: var(--ds-touch-target-min, 44px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
             "line": 579,
             "literal": "44px",
             "text": "min-inline-size: var(--ds-touch-target-min, 44px);"
@@ -3574,13 +3574,13 @@
         {
           "channelId": "--_ds-cockpit-header-actions-backdrop",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3597,7 +3597,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -3630,7 +3630,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -3663,7 +3663,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -3717,13 +3717,13 @@
         {
           "channelId": "--_ds-cockpit-header-skeleton-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3741,7 +3741,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los controles del shell (header actions) son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3754,7 +3754,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el shell es chrome de composicion, no superficie de filas; lo que densifica es su contenido (tablas/listas) por sus propios sockets",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -3788,13 +3788,13 @@
         {
           "channelId": "--_ds-cockpit-header-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3827,13 +3827,13 @@
         {
           "channelId": "--_ds-page-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3864,13 +3864,13 @@
         {
           "channelId": "--_ds-cockpit-header-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3889,7 +3889,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome de shell mate; el glass vive en los scrims de overlay, no en la paleta",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3903,13 +3903,13 @@
         {
           "channelId": "--_ds-cockpit-header-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3928,7 +3928,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3950,13 +3950,13 @@
         {
           "channelId": "--_ds-cockpit-header-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3974,7 +3974,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.edge",
@@ -4005,13 +4005,13 @@
         {
           "channelId": "--_ds-page-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/page-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4035,7 +4035,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4048,7 +4048,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -4087,7 +4087,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4141,13 +4141,13 @@
         {
           "channelId": "--_ds-cockpit-header-icon-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/shell/cockpit-header"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cockpit-header/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4166,11 +4166,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

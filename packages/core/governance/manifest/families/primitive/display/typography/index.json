@@ -8,15 +8,15 @@
     "components": [
       "Typography"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Typography",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/typography",
     "publicComponents": [
       "Typography"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "be0731d12a8769e621e2110e13e989248e47f9c1778e2b9f90cfad368c6e7cd0"
+    "inventoryRowDigest": "837152f00c56762fd750efe9d9bd41b937a285dc22e191355ecf3b4b849cd893"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,28 +28,28 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Typography/Typography.stories.tsx",
-      "packages/core/src/ui/primitives/display/Typography/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Typography/runtime/index.ts",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.integration.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.modern-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.premium-contract.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.responsive.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.rustic-engine-advanced.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/tests/Typography.type-roles.test.tsx",
-      "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/compound/index.ts",
-      "packages/core/src/ui/primitives/display/Typography/compound/Paragraph/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/compound/Heading/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/compound/Link/index.tsx",
-      "packages/core/src/ui/primitives/display/Typography/compound/Text/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css",
-      "packages/core/src/foundation/tokens/css/foundation/base/typography.css"
+      "packages/core/src/components/primitives/display/typography/typography.stories.tsx",
+      "packages/core/src/components/primitives/display/typography/index.tsx",
+      "packages/core/src/components/primitives/display/typography/contracts/index.ts",
+      "packages/core/src/components/primitives/display/typography/runtime/index.ts",
+      "packages/core/src/components/primitives/display/typography/tests/typography.integration.test.tsx",
+      "packages/core/src/components/primitives/display/typography/tests/typography.modern-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/typography/tests/typography.premium-contract.test.tsx",
+      "packages/core/src/components/primitives/display/typography/tests/typography.responsive.test.tsx",
+      "packages/core/src/components/primitives/display/typography/tests/typography.rustic-engine-advanced.test.tsx",
+      "packages/core/src/components/primitives/display/typography/tests/typography.test.tsx",
+      "packages/core/src/components/primitives/display/typography/tests/typography.type-roles.test.tsx",
+      "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/typography/compound/index.ts",
+      "packages/core/src/components/primitives/display/typography/compound/paragraph/index.tsx",
+      "packages/core/src/components/primitives/display/typography/compound/heading/index.tsx",
+      "packages/core/src/components/primitives/display/typography/compound/link/index.tsx",
+      "packages/core/src/components/primitives/display/typography/compound/text/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css",
+      "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css"
     ],
     "stableParts": [
       "root"
@@ -66,9 +66,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "A disabled link is exposed as disabled, not merely dimmed: aria-disabled at packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:873, packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:675 and packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:607.",
-      "The rendered element is caller-chosen, so heading order stays a caller responsibility the family must not override; the modern engine renders the element it is told to and only stamps presentation axes (packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:866-873).",
-      "Reduced-motion and forced-colors floors exist in the modern skin and in the base layer: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:343, :321, :336 and packages/core/src/foundation/tokens/css/foundation/base/typography.css:421."
+      "A disabled link is exposed as disabled, not merely dimmed: aria-disabled at packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:873, packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:675 and packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:607.",
+      "The rendered element is caller-chosen, so heading order stays a caller responsibility the family must not override; the modern engine renders the element it is told to and only stamps presentation axes (packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:866-873).",
+      "Reduced-motion and forced-colors floors exist in the modern skin and in the base layer: packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:343, :321, :336 and packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:421."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -91,12 +91,12 @@
           "anchorKind": "ds-class-pair",
           "anchor": "family identity pair rottay-typography + rottay-typography--{engine}; the root is addressed by the component-identity class itself",
           "at": [
-            "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:223",
-            "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:251",
-            "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:399",
-            "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:432",
-            "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:541",
-            "packages/core/src/ui/primitives/display/Typography/engines/classic/index.tsx:671"
+            "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:223",
+            "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:251",
+            "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:399",
+            "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:432",
+            "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:541",
+            "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx:671"
           ],
           "atSiteCount": 12
         }
@@ -105,34 +105,34 @@
         {
           "token": "focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:244",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:245",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:246",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:247",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:248",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:249"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:244",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:245",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:246",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:247",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:248",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:249"
           ],
           "state": "focus-visible"
         },
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:251",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:252",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:253",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:254"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:251",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:252",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:254"
           ],
           "state": "active"
         },
         {
           "token": "disabled",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:251",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:252",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:253",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:254",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:337",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:338"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:251",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:252",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:254",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:337",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:338"
           ],
           "atSiteCount": 10,
           "state": "disabled"
@@ -158,24 +158,24 @@
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:321",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:324",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:325",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:326",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:327",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:328"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:321",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:324",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:325",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:326",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:327",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:328"
             ],
             "atSiteCount": 10
           },
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:343",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:344",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:345",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:346",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:347",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:348"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:343",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:344",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:345",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:346",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:347",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:348"
             ],
             "atSiteCount": 10
           }
@@ -205,7 +205,7 @@
       "scoutGaps": {
         "assessmentConfidenceGaps": [
           "The family has no family-owned part anatomy: all three engines write data-part={dataPart ?? \"root\"}, so the single part is a caller-overridable default. See unresolved TYPOGRAPHY-HAS-NO-FAMILY-OWNED-PART-ANATOMY.",
-          "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:288-296 builds seven --ds-type-${roleKey}-* names by interpolation, so the census under-reports the role-scoped channels and 24 of the reported UNREAD EMISSION findings are flagged templateResolvableRead. See unresolved TEMPLATE-BUILT-CHANNEL-NAMES."
+          "packages/core/src/components/primitives/display/typography/runtime/index.ts:288-296 builds seven --ds-type-${roleKey}-* names by interpolation, so the census under-reports the role-scoped channels and 24 of the reported UNREAD EMISSION findings are flagged templateResolvableRead. See unresolved TEMPLATE-BUILT-CHANNEL-NAMES."
         ]
       },
       "propertyGroupCensusNote": {
@@ -233,7 +233,7 @@
         "variableCensus": [
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:579",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:579",
             "fallback": "0.9375rem",
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -245,7 +245,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:580",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:580",
             "fallback": "1.125rem",
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -257,7 +257,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:581",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:581",
             "fallback": "1.25rem",
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -269,7 +269,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:582",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:582",
             "fallback": "1.5rem",
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -281,7 +281,7 @@
           },
           {
             "variable": "--ds-font-size-4xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:583",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:583",
             "fallback": "2rem",
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -293,7 +293,7 @@
           },
           {
             "variable": "--ds-font-size-5xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:584",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:584",
             "fallback": "2.5rem",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -305,7 +305,7 @@
           },
           {
             "variable": "--ds-font-size-6xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:585",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:585",
             "fallback": "3rem",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -317,7 +317,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:592",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:592",
             "fallback": "0.75rem",
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -329,7 +329,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:593",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:593",
             "fallback": "0.875rem",
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -341,7 +341,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:594",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:594",
             "fallback": "0.9375rem",
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -353,7 +353,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:595",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:595",
             "fallback": "1rem",
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -365,7 +365,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:596",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:596",
             "fallback": "1.125rem",
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -377,7 +377,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:597",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:597",
             "fallback": "1.25rem",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -389,7 +389,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:598",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:598",
             "fallback": "1.5rem",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -401,7 +401,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:629",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:629",
             "fallback": null,
             "landsOnProperty": "default",
             "propertyGroup": "layout",
@@ -413,7 +413,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:631",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:631",
             "fallback": null,
             "landsOnProperty": "secondary",
             "propertyGroup": "layout",
@@ -425,7 +425,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:633",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:633",
             "fallback": null,
             "landsOnProperty": "tertiary",
             "propertyGroup": "layout",
@@ -437,7 +437,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:635",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:635",
             "fallback": null,
             "landsOnProperty": "muted",
             "propertyGroup": "layout",
@@ -449,7 +449,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:637",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:637",
             "fallback": null,
             "landsOnProperty": "subtle",
             "propertyGroup": "layout",
@@ -461,7 +461,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:641",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:641",
             "fallback": null,
             "landsOnProperty": "primary",
             "propertyGroup": "layout",
@@ -473,7 +473,7 @@
           },
           {
             "variable": "--ds-color-success-500",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:643",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:643",
             "fallback": null,
             "landsOnProperty": "success",
             "propertyGroup": "layout",
@@ -485,7 +485,7 @@
           },
           {
             "variable": "--ds-color-warning-500",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:645",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:645",
             "fallback": null,
             "landsOnProperty": "warning",
             "propertyGroup": "layout",
@@ -497,7 +497,7 @@
           },
           {
             "variable": "--ds-color-error-500",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/contracts/index.ts:647",
+            "readAt": "packages/core/src/components/primitives/display/typography/contracts/index.ts:647",
             "fallback": null,
             "landsOnProperty": "error",
             "propertyGroup": "layout",
@@ -509,7 +509,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:28",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:28",
             "fallback": null,
             "landsOnProperty": "body",
             "propertyGroup": "layout",
@@ -521,7 +521,7 @@
           },
           {
             "variable": "--ds-font-family-heading",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:29",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:29",
             "fallback": "var(--ds-font-family-base)",
             "landsOnProperty": "heading",
             "propertyGroup": "layout",
@@ -533,7 +533,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:29",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:29",
             "fallback": null,
             "landsOnProperty": "heading",
             "propertyGroup": "layout",
@@ -545,7 +545,7 @@
           },
           {
             "variable": "--ds-font-family-display",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:30",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:30",
             "fallback": "var(--ds-font-family-heading)",
             "landsOnProperty": "display",
             "propertyGroup": "layout",
@@ -557,7 +557,7 @@
           },
           {
             "variable": "--ds-font-family-heading",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:30",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:30",
             "fallback": null,
             "landsOnProperty": "display",
             "propertyGroup": "layout",
@@ -569,7 +569,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:32",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:32",
             "fallback": null,
             "landsOnProperty": "mono",
             "propertyGroup": "layout",
@@ -581,7 +581,7 @@
           },
           {
             "variable": "--ds-line-height-none",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:37",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:37",
             "fallback": null,
             "landsOnProperty": "none",
             "propertyGroup": "layout",
@@ -593,7 +593,7 @@
           },
           {
             "variable": "--ds-line-height-tight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:38",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:38",
             "fallback": null,
             "landsOnProperty": "tight",
             "propertyGroup": "layout",
@@ -605,7 +605,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:39",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:39",
             "fallback": null,
             "landsOnProperty": "snug",
             "propertyGroup": "layout",
@@ -617,7 +617,7 @@
           },
           {
             "variable": "--ds-line-height-normal",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:40",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:40",
             "fallback": null,
             "landsOnProperty": "normal",
             "propertyGroup": "layout",
@@ -629,7 +629,7 @@
           },
           {
             "variable": "--ds-line-height-relaxed",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:41",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:41",
             "fallback": null,
             "landsOnProperty": "relaxed",
             "propertyGroup": "layout",
@@ -641,7 +641,7 @@
           },
           {
             "variable": "--ds-line-height-loose",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:42",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:42",
             "fallback": null,
             "landsOnProperty": "loose",
             "propertyGroup": "layout",
@@ -653,7 +653,7 @@
           },
           {
             "variable": "--ds-letter-spacing-tighter",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:46",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:46",
             "fallback": null,
             "landsOnProperty": "tighter",
             "propertyGroup": "layout",
@@ -665,7 +665,7 @@
           },
           {
             "variable": "--ds-letter-spacing-tight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:47",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:47",
             "fallback": null,
             "landsOnProperty": "tight",
             "propertyGroup": "layout",
@@ -677,7 +677,7 @@
           },
           {
             "variable": "--ds-letter-spacing-normal",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:48",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:48",
             "fallback": null,
             "landsOnProperty": "normal",
             "propertyGroup": "layout",
@@ -689,7 +689,7 @@
           },
           {
             "variable": "--ds-letter-spacing-wide",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:49",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:49",
             "fallback": null,
             "landsOnProperty": "wide",
             "propertyGroup": "layout",
@@ -701,7 +701,7 @@
           },
           {
             "variable": "--ds-letter-spacing-wider",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:50",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:50",
             "fallback": null,
             "landsOnProperty": "wider",
             "propertyGroup": "layout",
@@ -713,7 +713,7 @@
           },
           {
             "variable": "--ds-letter-spacing-widest",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:51",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:51",
             "fallback": null,
             "landsOnProperty": "widest",
             "propertyGroup": "layout",
@@ -725,7 +725,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:55",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:55",
             "fallback": "var(--ds-font-size-xs)",
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -737,7 +737,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:55",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:55",
             "fallback": null,
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -749,7 +749,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:56",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:56",
             "fallback": "var(--ds-font-size-sm)",
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -761,7 +761,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:56",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:56",
             "fallback": null,
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -773,7 +773,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:57",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:57",
             "fallback": "var(--ds-font-size-base)",
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -785,7 +785,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:57",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:57",
             "fallback": null,
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -797,7 +797,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:58",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:58",
             "fallback": "var(--ds-font-size-lg)",
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -809,7 +809,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:58",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:58",
             "fallback": null,
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -821,7 +821,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:59",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:59",
             "fallback": "var(--ds-font-size-xl)",
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -833,7 +833,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:59",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:59",
             "fallback": null,
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -845,7 +845,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:60",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:60",
             "fallback": "var(--ds-font-size-2xl)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -857,7 +857,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:60",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:60",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -869,7 +869,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:61",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:61",
             "fallback": "var(--ds-font-size-3xl)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -881,7 +881,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:61",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:61",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -893,7 +893,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:65",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:65",
             "fallback": "var(--ds-font-size-base)",
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -905,7 +905,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:65",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:65",
             "fallback": null,
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -917,7 +917,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:66",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:66",
             "fallback": "var(--ds-font-size-lg)",
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -929,7 +929,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:66",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:66",
             "fallback": null,
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -941,7 +941,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:67",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:67",
             "fallback": "var(--ds-font-size-xl)",
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -953,7 +953,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:67",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:67",
             "fallback": null,
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -965,7 +965,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:68",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:68",
             "fallback": "var(--ds-font-size-2xl)",
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -977,7 +977,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:68",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:68",
             "fallback": null,
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -989,7 +989,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:69",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:69",
             "fallback": "var(--ds-font-size-3xl)",
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -1001,7 +1001,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:69",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:69",
             "fallback": null,
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -1013,7 +1013,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-4xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:70",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:70",
             "fallback": "var(--ds-font-size-4xl)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1025,7 +1025,7 @@
           },
           {
             "variable": "--ds-font-size-4xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:70",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:70",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1037,7 +1037,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-5xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:71",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:71",
             "fallback": "var(--ds-font-size-5xl)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1049,7 +1049,7 @@
           },
           {
             "variable": "--ds-font-size-5xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:71",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:71",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1061,7 +1061,7 @@
           },
           {
             "variable": "--ds-type-display-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:165",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:165",
             "fallback": null,
             "landsOnProperty": "weight",
             "propertyGroup": "layout",
@@ -1073,7 +1073,7 @@
           },
           {
             "variable": "--ds-type-display-line-height",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:166",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:166",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1085,7 +1085,7 @@
           },
           {
             "variable": "--ds-type-section-title-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:169",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:169",
             "fallback": null,
             "landsOnProperty": "weight",
             "propertyGroup": "layout",
@@ -1097,7 +1097,7 @@
           },
           {
             "variable": "--ds-type-body-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:173",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:173",
             "fallback": null,
             "landsOnProperty": "weight",
             "propertyGroup": "layout",
@@ -1109,7 +1109,7 @@
           },
           {
             "variable": "--ds-type-supporting-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:177",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:177",
             "fallback": null,
             "landsOnProperty": "weight",
             "propertyGroup": "layout",
@@ -1121,7 +1121,7 @@
           },
           {
             "variable": "--ds-type-supporting-line-height",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:178",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:178",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1133,7 +1133,7 @@
           },
           {
             "variable": "--ds-type-caption-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:181",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:181",
             "fallback": null,
             "landsOnProperty": "weight",
             "propertyGroup": "layout",
@@ -1145,7 +1145,7 @@
           },
           {
             "variable": "--ds-type-caption-line-height",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:182",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:182",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1157,7 +1157,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-font-family",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:288",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:288",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1169,7 +1169,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-font-size",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:289",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:289",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1181,7 +1181,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-font-weight",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:290",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:290",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1193,7 +1193,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-line-height",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:291",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:291",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1205,7 +1205,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-letter-spacing",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:294",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:294",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1217,7 +1217,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-text-transform",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:295",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:295",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -1229,7 +1229,7 @@
           },
           {
             "variable": "--ds-type-${roleKey}-font-variant-numeric",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:296",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:296",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -1241,7 +1241,7 @@
           },
           {
             "variable": "--ds-type-optical-sizing",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:318",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:318",
             "fallback": null,
             "landsOnProperty": "font-optical-sizing",
             "propertyGroup": "typography",
@@ -1253,7 +1253,7 @@
           },
           {
             "variable": "--ds-type-font-synthesis",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:319",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:319",
             "fallback": null,
             "landsOnProperty": "font-synthesis",
             "propertyGroup": "layout",
@@ -1265,7 +1265,7 @@
           },
           {
             "variable": "--ds-type-font-variation-settings",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/runtime/index.ts:320",
+            "readAt": "packages/core/src/components/primitives/display/typography/runtime/index.ts:320",
             "fallback": null,
             "landsOnProperty": "font-variation-settings",
             "propertyGroup": "typography",
@@ -1277,7 +1277,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:76",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:76",
             "fallback": null,
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -1289,7 +1289,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:77",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:77",
             "fallback": null,
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -1301,7 +1301,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:78",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:78",
             "fallback": null,
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -1313,7 +1313,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:79",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:79",
             "fallback": null,
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -1325,7 +1325,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:80",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:80",
             "fallback": null,
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -1337,7 +1337,7 @@
           },
           {
             "variable": "--ds-font-size-4xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:81",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:81",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1349,7 +1349,7 @@
           },
           {
             "variable": "--ds-font-size-5xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:82",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:82",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1361,7 +1361,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:146",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:146",
             "fallback": null,
             "landsOnProperty": "xs",
             "propertyGroup": "layout",
@@ -1373,7 +1373,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:147",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:147",
             "fallback": null,
             "landsOnProperty": "sm",
             "propertyGroup": "layout",
@@ -1385,7 +1385,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:148",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:148",
             "fallback": null,
             "landsOnProperty": "md",
             "propertyGroup": "layout",
@@ -1397,7 +1397,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:149",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:149",
             "fallback": null,
             "landsOnProperty": "lg",
             "propertyGroup": "layout",
@@ -1409,7 +1409,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:150",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:150",
             "fallback": null,
             "landsOnProperty": "xl",
             "propertyGroup": "layout",
@@ -1421,7 +1421,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:151",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:151",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1433,7 +1433,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/modern/index.tsx:152",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/modern/index.tsx:152",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1445,7 +1445,7 @@
           },
           {
             "variable": "--ds-font-mono",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:312",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:312",
             "fallback": "monospace",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1457,7 +1457,7 @@
           },
           {
             "variable": "--ds-line-height-relaxed",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:433",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:433",
             "fallback": "1.625",
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1469,7 +1469,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:563",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:563",
             "fallback": "160ms",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1481,7 +1481,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:563",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:563",
             "fallback": "ease",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1493,7 +1493,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:563",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:563",
             "fallback": "160ms",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1505,7 +1505,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:563",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:563",
             "fallback": "ease",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -1517,7 +1517,7 @@
           },
           {
             "variable": "--ds-type-decoration-thickness",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:564",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:564",
             "fallback": "0.08em",
             "landsOnProperty": "text-decoration-thickness",
             "propertyGroup": "typography",
@@ -1529,7 +1529,7 @@
           },
           {
             "variable": "--ds-type-decoration-offset",
-            "readAt": "packages/core/src/ui/primitives/display/Typography/engines/rustic/index.tsx:565",
+            "readAt": "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx:565",
             "fallback": "0.18em",
             "landsOnProperty": "text-underline-offset",
             "propertyGroup": "typography",
@@ -1541,7 +1541,7 @@
           },
           {
             "variable": "--ds-type-color-default",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:29",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1552,7 +1552,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:29",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1563,7 +1563,7 @@
           },
           {
             "variable": "--ds-type-optical-sizing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:31",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:31",
             "fallback": null,
             "landsOnProperty": "font-optical-sizing",
             "propertyGroup": "typography",
@@ -1574,7 +1574,7 @@
           },
           {
             "variable": "--ds-type-font-synthesis",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:32",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:32",
             "fallback": null,
             "landsOnProperty": "font-synthesis",
             "propertyGroup": "layout",
@@ -1585,7 +1585,7 @@
           },
           {
             "variable": "--ds-type-font-variation-settings",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:33",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:33",
             "fallback": null,
             "landsOnProperty": "font-variation-settings",
             "propertyGroup": "typography",
@@ -1596,7 +1596,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:39",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:39",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1607,7 +1607,7 @@
           },
           {
             "variable": "--ds-font-family-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:42",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:42",
             "fallback": "var(--ds-font-family-base)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1618,7 +1618,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:42",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:42",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1629,7 +1629,7 @@
           },
           {
             "variable": "--ds-font-family-display",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:45",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:45",
             "fallback": "var(--ds-font-family-heading)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1640,7 +1640,7 @@
           },
           {
             "variable": "--ds-font-family-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:45",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:45",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1651,7 +1651,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:48",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1662,7 +1662,7 @@
           },
           {
             "variable": "--ds-type-color-strong",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:55",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1673,7 +1673,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:55",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1684,7 +1684,7 @@
           },
           {
             "variable": "--ds-type-color-default",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:58",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:58",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1695,7 +1695,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:58",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:58",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1706,7 +1706,7 @@
           },
           {
             "variable": "--ds-type-color-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:61",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1717,7 +1717,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:61",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1728,7 +1728,7 @@
           },
           {
             "variable": "--ds-type-color-subtle",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:64",
             "fallback": "var(--ds-color-text-tertiary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1739,7 +1739,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:64",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1750,7 +1750,7 @@
           },
           {
             "variable": "--ds-type-color-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:67",
             "fallback": "var(--ds-color-text-inverse)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1761,7 +1761,7 @@
           },
           {
             "variable": "--ds-color-text-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:67",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1772,7 +1772,7 @@
           },
           {
             "variable": "--ds-type-body-font-family",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:71",
             "fallback": "var(--ds-font-family-base)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1783,7 +1783,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:71",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -1794,7 +1794,7 @@
           },
           {
             "variable": "--ds-type-body-font-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:72",
             "fallback": "var(--ds-font-size-base)",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1805,7 +1805,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:72",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1816,7 +1816,7 @@
           },
           {
             "variable": "--ds-type-body-font-weight",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:73",
             "fallback": "var(--ds-font-weight-normal)",
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1827,7 +1827,7 @@
           },
           {
             "variable": "--ds-font-weight-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:73",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1838,7 +1838,7 @@
           },
           {
             "variable": "--ds-type-body-line-height",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:74",
             "fallback": "var(--ds-line-height-normal)",
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1849,7 +1849,7 @@
           },
           {
             "variable": "--ds-line-height-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:74",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1860,7 +1860,7 @@
           },
           {
             "variable": "--ds-type-body-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:75",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:75",
             "fallback": "var(--ds-letter-spacing-normal)",
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1871,7 +1871,7 @@
           },
           {
             "variable": "--ds-letter-spacing-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:75",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:75",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1882,7 +1882,7 @@
           },
           {
             "variable": "--ds-type-display",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:78",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:78",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1893,7 +1893,7 @@
           },
           {
             "variable": "--ds-type-display-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:79",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:79",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1904,7 +1904,7 @@
           },
           {
             "variable": "--ds-type-display-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:80",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -1915,7 +1915,7 @@
           },
           {
             "variable": "--ds-type-display-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:81",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:81",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -1926,7 +1926,7 @@
           },
           {
             "variable": "--ds-type-page-title",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:84",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:84",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1937,7 +1937,7 @@
           },
           {
             "variable": "--ds-type-page-title-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:85",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1948,7 +1948,7 @@
           },
           {
             "variable": "--ds-type-page-title-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:86",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -1959,7 +1959,7 @@
           },
           {
             "variable": "--ds-type-page-title-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:87",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -1970,7 +1970,7 @@
           },
           {
             "variable": "--ds-type-section-title",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:90",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -1981,7 +1981,7 @@
           },
           {
             "variable": "--ds-type-section-title-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:91",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:91",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -1992,7 +1992,7 @@
           },
           {
             "variable": "--ds-type-section-title-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:92",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2003,7 +2003,7 @@
           },
           {
             "variable": "--ds-type-section-title-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:93",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:93",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2014,7 +2014,7 @@
           },
           {
             "variable": "--ds-type-body",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:96",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:96",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2025,7 +2025,7 @@
           },
           {
             "variable": "--ds-type-body-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:97",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:97",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -2036,7 +2036,7 @@
           },
           {
             "variable": "--ds-type-body-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:98",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:98",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2047,7 +2047,7 @@
           },
           {
             "variable": "--ds-type-body-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:99",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2058,7 +2058,7 @@
           },
           {
             "variable": "--ds-type-supporting",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:102",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2069,7 +2069,7 @@
           },
           {
             "variable": "--ds-type-supporting-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:103",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:103",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -2080,7 +2080,7 @@
           },
           {
             "variable": "--ds-type-supporting-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:104",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2091,7 +2091,7 @@
           },
           {
             "variable": "--ds-type-supporting-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:105",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:105",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2102,7 +2102,7 @@
           },
           {
             "variable": "--ds-type-label",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:108",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:108",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2113,7 +2113,7 @@
           },
           {
             "variable": "--ds-type-label-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:109",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:109",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -2124,7 +2124,7 @@
           },
           {
             "variable": "--ds-type-label-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:110",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:110",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2135,7 +2135,7 @@
           },
           {
             "variable": "--ds-type-label-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:111",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:111",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2146,7 +2146,7 @@
           },
           {
             "variable": "--ds-type-caption",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:114",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:114",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2157,7 +2157,7 @@
           },
           {
             "variable": "--ds-type-caption-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:115",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:115",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -2168,7 +2168,7 @@
           },
           {
             "variable": "--ds-type-caption-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:116",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2179,7 +2179,7 @@
           },
           {
             "variable": "--ds-type-caption-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:117",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:117",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2190,7 +2190,7 @@
           },
           {
             "variable": "--ds-type-code",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:120",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:120",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2201,7 +2201,7 @@
           },
           {
             "variable": "--ds-type-code-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:121",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:121",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -2212,7 +2212,7 @@
           },
           {
             "variable": "--ds-type-code-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:122",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:122",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2223,7 +2223,7 @@
           },
           {
             "variable": "--ds-type-code-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:123",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:123",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2234,7 +2234,7 @@
           },
           {
             "variable": "--ds-type-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:126",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:126",
             "fallback": null,
             "landsOnProperty": "font",
             "propertyGroup": "typography",
@@ -2245,7 +2245,7 @@
           },
           {
             "variable": "--ds-type-numeric-letter-spacing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:127",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:127",
             "fallback": null,
             "landsOnProperty": "letter-spacing",
             "propertyGroup": "typography",
@@ -2256,7 +2256,7 @@
           },
           {
             "variable": "--ds-type-numeric-text-transform",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:128",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:128",
             "fallback": null,
             "landsOnProperty": "text-transform",
             "propertyGroup": "typography",
@@ -2267,7 +2267,7 @@
           },
           {
             "variable": "--ds-type-numeric-font-variant-numeric",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:129",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:129",
             "fallback": null,
             "landsOnProperty": "font-variant-numeric",
             "propertyGroup": "typography",
@@ -2278,7 +2278,7 @@
           },
           {
             "variable": "--ds-font-size-fluid-5xl",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:133",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:133",
             "fallback": "var(--ds-font-size-5xl)",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -2289,7 +2289,7 @@
           },
           {
             "variable": "--ds-font-size-5xl",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:133",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:133",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -2300,7 +2300,7 @@
           },
           {
             "variable": "--ds-type-line-clamp",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:156",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:156",
             "fallback": "attr(data-line-clamp type(<integer>))",
             "landsOnProperty": "-webkit-line-clamp",
             "propertyGroup": "typography",
@@ -2311,7 +2311,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:160",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:160",
             "fallback": "var(--ds-motion-calm)",
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -2322,7 +2322,7 @@
           },
           {
             "variable": "--ds-motion-calm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:160",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:160",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -2333,7 +2333,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:161",
             "fallback": "var(--ds-motion-ease-enter)",
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -2344,7 +2344,7 @@
           },
           {
             "variable": "--ds-motion-ease-enter",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:161",
             "fallback": null,
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -2355,7 +2355,7 @@
           },
           {
             "variable": "--ds-type-motion-distance",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:165",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:165",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -2366,7 +2366,7 @@
           },
           {
             "variable": "--ds-font-family-display",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:175",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:175",
             "fallback": "var(--ds-font-family-base)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -2377,7 +2377,7 @@
           },
           {
             "variable": "--ds-font-family-base",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:175",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:175",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -2388,7 +2388,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:182",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:182",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -2399,7 +2399,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:187",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:187",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2410,7 +2410,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:190",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:190",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2421,7 +2421,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:193",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:193",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2432,7 +2432,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:196",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:196",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2443,7 +2443,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:199",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:199",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2454,7 +2454,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:205",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:205",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2465,7 +2465,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:208",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:208",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2476,7 +2476,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:211",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:211",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2487,7 +2487,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:214",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:214",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2498,7 +2498,7 @@
           },
           {
             "variable": "--ds-type-color-strong",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:225",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2509,7 +2509,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:225",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:225",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2520,7 +2520,7 @@
           },
           {
             "variable": "--ds-type-color-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:228",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:228",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2531,7 +2531,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:228",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:228",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2542,7 +2542,7 @@
           },
           {
             "variable": "--ds-type-color-subtle",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:231",
             "fallback": "var(--ds-color-text-tertiary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2553,7 +2553,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:231",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2564,7 +2564,7 @@
           },
           {
             "variable": "--ds-type-color-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:234",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:234",
             "fallback": "var(--ds-color-text-inverse)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2575,7 +2575,7 @@
           },
           {
             "variable": "--ds-color-text-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:234",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:234",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2586,7 +2586,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:245",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:245",
             "fallback": null,
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -2597,7 +2597,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:246",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:246",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -2608,7 +2608,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:246",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:246",
             "fallback": null,
             "landsOnProperty": "outline",
             "propertyGroup": "border",
@@ -2619,7 +2619,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:247",
             "fallback": null,
             "landsOnProperty": "outline-offset",
             "propertyGroup": "border",
@@ -2630,7 +2630,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:248",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:248",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2641,7 +2641,7 @@
           },
           {
             "variable": "--ds-type-decoration-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:253",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:253",
             "fallback": null,
             "landsOnProperty": "text-decoration-thickness",
             "propertyGroup": "typography",
@@ -2652,7 +2652,7 @@
           },
           {
             "variable": "--ds-type-code-inline-padding",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:262",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:262",
             "fallback": "0.25em",
             "landsOnProperty": "padding-inline",
             "propertyGroup": "spacing",
@@ -2663,7 +2663,7 @@
           },
           {
             "variable": "--ds-type-code-inline-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:263",
             "fallback": "var(--ds-radius-sm)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2674,7 +2674,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:263",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2685,7 +2685,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:266",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:266",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -2696,7 +2696,7 @@
           },
           {
             "variable": "--ds-type-code-font-family",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:268",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:268",
             "fallback": "var(--ds-font-family-mono)",
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -2707,7 +2707,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:268",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:268",
             "fallback": null,
             "landsOnProperty": "font-family",
             "propertyGroup": "typography",
@@ -2718,7 +2718,7 @@
           },
           {
             "variable": "--ds-type-code-inline-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:269",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:269",
             "fallback": "0.92em",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -2729,7 +2729,7 @@
           },
           {
             "variable": "--ds-type-mark-padding",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:275",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:275",
             "fallback": "0.125em",
             "landsOnProperty": "padding-inline",
             "propertyGroup": "spacing",
@@ -2740,7 +2740,7 @@
           },
           {
             "variable": "--ds-type-mark-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:276",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:276",
             "fallback": "var(--ds-radius-xs)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2751,7 +2751,7 @@
           },
           {
             "variable": "--ds-radius-xs",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:276",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:276",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -2762,7 +2762,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:279",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:279",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -2773,7 +2773,7 @@
           },
           {
             "variable": "--_ds-type-sub-sup-size",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:292",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:292",
             "fallback": "0.75em",
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -2784,7 +2784,7 @@
           },
           {
             "variable": "--_ds-type-sup-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:296",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:296",
             "fallback": "0.45em",
             "landsOnProperty": "inset-block-end",
             "propertyGroup": "spacing",
@@ -2795,7 +2795,7 @@
           },
           {
             "variable": "--_ds-type-sub-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:299",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:299",
             "fallback": "0.25em",
             "landsOnProperty": "inset-block-start",
             "propertyGroup": "spacing",
@@ -2806,7 +2806,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:310",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:310",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -2817,7 +2817,7 @@
           },
           {
             "variable": "--ds-type-selection-color",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:312",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:312",
             "fallback": "inherit",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2828,7 +2828,7 @@
           },
           {
             "variable": "--ds-type-paragraph-measure",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css:318",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css:318",
             "fallback": "68ch",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -2839,7 +2839,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:33",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:33",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2850,7 +2850,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:36",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2861,7 +2861,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:40",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:40",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2872,7 +2872,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:43",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:43",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2883,7 +2883,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:46",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2894,7 +2894,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:49",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2905,7 +2905,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:52",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:52",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2916,7 +2916,7 @@
           },
           {
             "variable": "--ds-color-primary-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:58",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:58",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2927,7 +2927,7 @@
           },
           {
             "variable": "--ds-color-success-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:61",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:61",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2938,7 +2938,7 @@
           },
           {
             "variable": "--ds-color-warning-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:64",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:64",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2949,7 +2949,7 @@
           },
           {
             "variable": "--ds-color-error-500",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:67",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2960,7 +2960,7 @@
           },
           {
             "variable": "--ds-type-color-strong",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:71",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2971,7 +2971,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:71",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2982,7 +2982,7 @@
           },
           {
             "variable": "--ds-type-color-default",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:74",
             "fallback": "var(--ds-color-text-primary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -2993,7 +2993,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:74",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3004,7 +3004,7 @@
           },
           {
             "variable": "--ds-type-color-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:77",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3015,7 +3015,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:77",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3026,7 +3026,7 @@
           },
           {
             "variable": "--ds-type-color-subtle",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:80",
             "fallback": "var(--ds-color-text-tertiary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3037,7 +3037,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:80",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:80",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3048,7 +3048,7 @@
           },
           {
             "variable": "--ds-type-color-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:83",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:83",
             "fallback": "var(--ds-color-text-inverse)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3059,7 +3059,7 @@
           },
           {
             "variable": "--ds-color-text-inverse",
-            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography.css:83",
+            "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css:83",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -3070,7 +3070,7 @@
           },
           {
             "variable": "--ds-type-optical-sizing",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:390",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:390",
             "fallback": "auto",
             "landsOnProperty": "font-optical-sizing",
             "propertyGroup": "typography",
@@ -3081,7 +3081,7 @@
           },
           {
             "variable": "--ds-type-font-synthesis",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:391",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:391",
             "fallback": "none",
             "landsOnProperty": "font-synthesis",
             "propertyGroup": "layout",
@@ -3092,7 +3092,7 @@
           },
           {
             "variable": "--ds-type-font-variation-settings",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:392",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:392",
             "fallback": "normal",
             "landsOnProperty": "font-variation-settings",
             "propertyGroup": "typography",
@@ -3103,7 +3103,7 @@
           },
           {
             "variable": "--ds-type-rendering",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:393",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:393",
             "fallback": "optimizeLegibility",
             "landsOnProperty": "text-rendering",
             "propertyGroup": "typography",
@@ -3114,7 +3114,7 @@
           },
           {
             "variable": "--ds-type-decoration-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:394",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:394",
             "fallback": "0.08em",
             "landsOnProperty": "text-decoration-thickness",
             "propertyGroup": "typography",
@@ -3125,7 +3125,7 @@
           },
           {
             "variable": "--ds-type-decoration-offset",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:395",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:395",
             "fallback": "0.18em",
             "landsOnProperty": "text-underline-offset",
             "propertyGroup": "typography",
@@ -3136,7 +3136,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:397",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:397",
             "fallback": "180ms",
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -3147,7 +3147,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:398",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:398",
             "fallback": "ease",
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -3158,7 +3158,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:399",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:399",
             "fallback": "180ms",
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -3169,7 +3169,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:400",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:400",
             "fallback": "ease",
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -3180,7 +3180,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:401",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:401",
             "fallback": "180ms",
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -3191,7 +3191,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:402",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:402",
             "fallback": "ease",
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -3202,7 +3202,7 @@
           },
           {
             "variable": "--ds-type-motion-duration",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:406",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:406",
             "fallback": "180ms",
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -3213,7 +3213,7 @@
           },
           {
             "variable": "--ds-type-motion-easing",
-            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography.css:407",
+            "readAt": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css:407",
             "fallback": "ease",
             "landsOnProperty": "animation",
             "propertyGroup": "motion",
@@ -3289,23 +3289,11 @@
       "controlId": "typography.pairing",
       "disposition": "UNKNOWN",
       "verificationState": "SOURCE_BOUND",
-      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. The causal measurement is complete and positive on this family: `--ds-font-family-base`/`--ds-font-family-heading` are read directly by this family's own skin (typography.css:39,42,45,71,174-175,182,268 -- var(--ds-font-family...)), and both channels move on both ingress arms, all 3 verticals, all 4 stops (see the control's own calibration.measuredResult and evidenceIds below; F4B-11, 2026-08-24). NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now (see `anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). This is not specific to this family: every `MUST_REACH` family for `typography.pairing` has the identical empty `anatomy.propertyGroups`, so no seat for this control can currently pass IMPLEMENTED's ownership check. Declaring `propertyGroups` here anyway (skipping the family's own anatomy) is exactly the fabrication `validateInternalChannels`'s cardinality law and the ownership check in `scripts/foundation/tokens/manifest/rules/index.mjs` exist to block. `stableParts`/`propertyGroups`/`computedProperties` stay unset on this cell for that reason; `internalChannels` is populated below (optional but fully validated at any state, same shape as shape.button-style's own home-family cell).",
-      "evidenceIds": [
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-sober.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-editorial.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-geometric.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/rottay-technical.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/bithire-editorial.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/bithire-geometric.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/bithire-technical.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-sober.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-editorial.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-geometric.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-pairing/computed-static-db/evnto-technical.json.receipt.json"
-      ],
+      "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. The causal measurement is complete and positive on this family: `--ds-font-family-base`/`--ds-font-family-heading` are read directly by this family's own skin (typography.css:39,42,45,71,174-175,182,268 -- var(--ds-font-family...)), and both channels move on both ingress arms, all 3 verticals, all 4 stops (see the control's own calibration.measuredResult and evidenceIds below; F4B-11, 2026-08-24). NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now (see `anatomy.sourceEvidence.propertyGroupCensusNote.status`: 'UNRATIFIED OBSERVATION... blocked on the propertyGroup vocabulary ratification'). This is not specific to this family: every `MUST_REACH` family for `typography.pairing` has the identical empty `anatomy.propertyGroups`, so no seat for this control can currently pass IMPLEMENTED's ownership check. Declaring `propertyGroups` here anyway (skipping the family's own anatomy) is exactly the fabrication `validateInternalChannels`'s cardinality law and the ownership check in `scripts/libraries/manifest/rules/index.mjs` exist to block. `stableParts`/`propertyGroups`/`computedProperties` stay unset on this cell for that reason; `internalChannels` is populated below (optional but fully validated at any state, same shape as shape.button-style's own home-family cell).",
+      "evidenceIds": [],
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/foundation/tokens/ts/presentation/typography/pairings/index.ts",
@@ -3331,13 +3319,13 @@
         {
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/typography"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3346,13 +3334,13 @@
         {
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/typography"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3386,24 +3374,11 @@
       "disposition": "UNKNOWN",
       "verificationState": "SOURCE_BOUND",
       "unknownReason": "NOT_ASSESSED_PAST_SOURCE_BOUND. Causal measurement complete and positive on both declared-channel roles with a DB door (12 receipted scenarios: 4 stops x 3 verticals, all both ingress arms; F4B-14, 2026-08-25). mono/display are static-only by construction (no DB door at all, TenantAppearanceGeneral.typography only carries base/heading) and identity for base/heading is static-only by the F4B-8/W-A/W-B law -- both documented on the control's own calibration as directly-compiled facts, not receipts (single-arm runs cannot pass this evidence kind). A compound scenario (typePairing + explicit family in ONE document) previously closed E-2 (WO-CRA-23 preaudit) and was receipted separately; that receipt is now SUPERSEDED_BY_LIVE_FENCE (F4B-16 close, see `supersededEvidence` below) -- the law it measured is cerca viva in CI, so it no longer needs its own re-verifiable receipt. NOT raised to IMPLEMENTED here: that rank requires non-empty `stableParts`/`propertyGroups`/`computedProperties`, and every `propertyGroups` entry must be OWNED by this family's own `anatomy.propertyGroups` -- which is `[]` right now, the same program-wide propertyGroups-vocabulary blocker F4B-11/F4B-12/F4B-13 already documented.",
-      "evidenceIds": [
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-base-quoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-base-unquoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/bithire-base-quoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/bithire-base-unquoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/evnto-base-quoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/evnto-base-unquoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-heading-quoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/rottay-heading-unquoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/bithire-heading-quoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/bithire-heading-unquoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/evnto-heading-quoted.json.receipt.json",
-        "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/typography-families/computed-static-db/evnto-heading-unquoted.json.receipt.json"
-      ],
-      "supersededEvidence": "SUPERSEDED_BY_LIVE_FENCE (DT adjudication, F4B-16 close, 2026-08-25): compound-editorial-plus-explicit-heading.json.receipt.json retired from evidenceIds above -- historical reference, not live evidence. Its producer ad-hoc (/tmp/f4b14-compound-case.mjs) no longer exists, so its freshness is not re-verifiable by construction. The law it measured (explicit family wins over the pairing expansion in the compound case, both halves, both doors) is cerca viva by TWO live fences: capability-propagation/index.test.ts:573 (\"does not let one capability move another capability's exclusive channel\", green in CI, same BASE_DOC shape :141-146) AND e2-composed-pairing.test.ts (9 drills, both doors -- STATIC :58 and DB :74 -- covering the exact composed shape, including (iii) F4B-11 preserved and the negative \"a pairing with NO explicit family still lowers the pairing\"), and was independently verified twice in F4B-14 (Fable ACCEPT postaudit). The artifact and its receipt stay on disk; evidence is re-classified, not deleted.",
+      "evidenceIds": [],
+      "supersededEvidence": "SUPERSEDED_BY_LIVE_FENCE (DT adjudication, F4B-16 close, 2026-08-25): compound-editorial-plus-explicit-heading.json.receipt.json retired from evidenceIds above -- historical reference, not live evidence. Its producer ad-hoc (/tmp/f4b14-compound-case.mjs) no longer exists, so its freshness is not re-verifiable by construction. The law it measured (explicit family wins over the pairing expansion in the compound case, both halves, both doors) is cerca viva by TWO live fences: capability-propagation/index.test.ts:573 (\"does not let one capability move another capability's exclusive channel\", green in CI, same BASE_DOC shape :141-146) AND e2-composed-pairing.test.ts (9 drills, both doors -- STATIC :58 and DB :74 -- covering the exact composed shape, including (iii) F4B-11 preserved and the negative \"a pairing with NO explicit family still lowers the pairing\"), and was independently verified twice in F4B-14 (independent audit ACCEPT postaudit). The artifact and its receipt stay on disk; evidence is re-classified, not deleted.",
       "nextAction": "PROPERTY_GROUPS_VOCABULARY_RATIFICATION_THEN_IMPLEMENTED",
       "sourceBindings": [
-        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+        "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
         "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
         "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
         "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
@@ -3421,7 +3396,7 @@
         "COMPOUND case (typePairing + explicit family in the SAME document) was measured FALSE before E-2: pairing's expansion silently won, an explicit fontFamilyHeading mutation produced ZERO channel movement on either door, byte-identical before/after. This was the real, measured cause of capability-propagation's own `does not let one capability move another capability's exclusive channel` (index.test.ts:573) going red -- not explained by the declared precedence, a genuine defect, escalated to the DT as a STOP rather than papered over. E-2 fixed it (tenantPostureFloors re-projects the explicit family LAST); re-measured this packet, both doors, all 3 verticals, byte-exact to literal+fallback, receipted.",
         "Declaring mono/display as regular (non-identity) causal-probe stops crashes `assertStopDiscrimination` on the DB arm for the WHOLE control (their role has zero members on the DB path's 2-member set, and that throw is not on the closed STOP_EXCLUSION_CLASSES list) -- fixed within this packet's own write-set by NOT declaring them as normalizedStops at all, verified instead by direct out-of-band compile (same technique as an identity stop), never touching the frozen instrument.",
         "The `CONSUMER_REACHED` pin in capability-propagation (index.test.ts:341) went stale for a DIFFERENT control, motion.dial, when F4B-13 (48cd4d347) made it reachable without updating the pin -- fixed alongside this close (R-1 class: legitimate growth, not a regression) since it shared the same test file as the E-2 verification.",
-        "internalChannels below does NOT list --ds-font-family-base/--ds-font-family-heading: the manifest's own cardinality law (customization-model/index.json, enforced in scripts/foundation/tokens/manifest/rules/index.mjs:767-784, 'internal channels may have many productive consumers but never competing semantic owners') is global and per-channelId, not per-family -- typography.pairing is ALREADY the recognised semanticOwner for both channels (this same family's own typography.pairing cell, plus a second cell under chart/basic/area-chart), so a second semanticOwner for the same channelId fails --check outright (measured: attempted it, got exactly that error). The shared surface is represented instead where the schema already supports it without a conflict -- targetBinding.sharedChannels below (pre-existing, unedited) already lists all 4 real channels for this reason. internalChannels here is scoped to the 2 channels typography.families exclusively owns (mono, display -- typography.pairing declares neither)."
+        "internalChannels below does NOT list --ds-font-family-base/--ds-font-family-heading: the manifest's own cardinality law (customization-model/index.json, enforced in scripts/libraries/manifest/rules/index.mjs:767-784, 'internal channels may have many productive consumers but never competing semantic owners') is global and per-channelId, not per-family -- typography.pairing is ALREADY the recognised semanticOwner for both channels (this same family's own typography.pairing cell, plus a second cell under chart/basic/area-chart), so a second semanticOwner for the same channelId fails --check outright (measured: attempted it, got exactly that error). The shared surface is represented instead where the schema already supports it without a conflict -- targetBinding.sharedChannels below (pre-existing, unedited) already lists all 4 real channels for this reason. internalChannels here is scoped to the 2 channels typography.families exclusively owns (mono, display -- typography.pairing declares neither)."
       ],
       "restoreRequirements": [
         "Unsetting the control through either door restores the baseline font-family exactly (measured: restore.exact true on all 12 isolated receipted scenarios, byte-identical rows). The compound scenario is a same-document composition proof, not a restore drill -- restore semantics for it are the same as typography.pairing's own (unsetting both fields returns to the vertical baseline)."
@@ -3430,13 +3405,13 @@
         {
           "channelId": "--ds-font-family-mono",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/typography"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/foundation/themes/default.css"
+            "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3622,7 +3597,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -3637,7 +3612,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ]
       }
@@ -3680,13 +3655,13 @@
         {
           "channelId": "--_ds-typography-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/typography"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3705,7 +3680,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3791,7 +3766,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3847,7 +3822,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3875,7 +3850,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/typography/index.css"
         ]
       }
     },
@@ -3918,11 +3893,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "CollectionWorkspaceSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/workspace",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/workspace",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace",
     "publicComponents": [
       "CollectionWorkspaceSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "65d7150712278dce46e5e759f6ef35d35c639ae8e91c4c7431f023a9ed730b69"
+    "inventoryRowDigest": "c2c9c3ba33e31adb38ca6ce01bbafa3021cbf4493554ccedbad5a78c837b0c0c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -29,10 +29,10 @@
     "assessmentState": "SOURCE_BOUND",
     "partCensusCompleteness": "PARTIAL_REQUIRES_GENERATED_LITERAL_AND_DYNAMIC_PART_CENSUS",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace",
-      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts",
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace",
+      "packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts",
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
     ],
     "stableParts": [
       "body",
@@ -788,7 +788,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__compact-action` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:971"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:971"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -797,7 +797,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__dock-more` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:991"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:991"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -806,10 +806,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__filter-dropdown` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:921",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:926",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:1017",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:1042"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:921",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:926",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1017",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1042"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -818,7 +818,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__filters-eyebrow` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:805"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:805"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -827,7 +827,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__filters-strip-row` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:798"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:798"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -836,7 +836,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__focused-row` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:511"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:511"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -845,10 +845,10 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__muted-text` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:18",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:810",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:812",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:854"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:18",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:810",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:812",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:854"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -857,7 +857,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__preview-accordion-trigger` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:949"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:949"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -866,8 +866,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__select` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:874",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:1072"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:874",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1072"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -876,7 +876,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__sticky-action-bar` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:979"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:979"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -885,7 +885,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__sticky-primary-action` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:1004"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:1004"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -894,8 +894,8 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__strip-scroller` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:837",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:848"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:837",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:848"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         },
@@ -904,7 +904,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-collection-workspace__views-strip-row` bound by the root pair `.ds-surface.ds-collection-workspace`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:724"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:724"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -5381,7 +5381,7 @@
         }
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css",
         "rootAnchor": ".ds-surface.ds-collection-workspace",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -5480,7 +5480,7 @@
           "channelId": "--ds-font-family-base",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
@@ -5495,7 +5495,7 @@
           "channelId": "--ds-font-family-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
@@ -5510,7 +5510,7 @@
           "channelId": "--ds-letter-spacing-heading",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
@@ -5525,7 +5525,7 @@
           "channelId": "--ds-line-height-display",
           "semanticOwner": "typography.pairing",
           "producer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/typography/index.css",
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
@@ -5549,13 +5549,13 @@
         {
           "channelId": "--_ds-collection-workspace-heading-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5584,13 +5584,13 @@
         {
           "channelId": "--_ds-collection-workspace-heading-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5625,13 +5625,13 @@
         {
           "channelId": "--_ds-collection-workspace-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5651,13 +5651,13 @@
         {
           "channelId": "--_ds-collection-workspace-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5685,13 +5685,13 @@
         {
           "channelId": "--_ds-collection-workspace-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5711,13 +5711,13 @@
         {
           "channelId": "--_ds-collection-workspace-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5736,7 +5736,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "uncoveredByDesign": {
           "Brazo compartido foundation (nivel 2/3)": [
             "--ds-motion-ease-out"
@@ -5755,7 +5755,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surface.elevation",
@@ -5780,7 +5780,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -5793,7 +5793,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -5806,7 +5806,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -5819,7 +5819,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -5843,13 +5843,13 @@
         {
           "channelId": "--_ds-collection-workspace-section-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/workspace/collection-workspace"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace-render-dispatch/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5873,7 +5873,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -5886,7 +5886,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -5925,7 +5925,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -5956,7 +5956,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -5970,11 +5970,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],
@@ -5983,9 +5983,9 @@
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/runtime/components/patterns/data/index.ts#CollectionViewMode",
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-      "packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts#useAdaptivePosture",
-      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts#WorkspaceViewModeConfig"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "packages/core/src/components/surfaces/runtime/adaptive-posture/index.ts#useAdaptivePosture",
+      "packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts#WorkspaceViewModeConfig"
     ],
     "groupBindings": [
       {
@@ -6016,8 +6016,8 @@
   "instanceApi": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx#CollectionWorkspaceProps",
-      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/collection/index.ts#CollectionWorkspaceConfig"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx#CollectionWorkspaceProps",
+      "packages/core/src/components/surfaces/foundation/contracts/adaptive/collection/index.ts#CollectionWorkspaceConfig"
     ],
     "contractSymbols": [
       "CollectionWorkspaceProps<T>",
@@ -6073,10 +6073,10 @@
   "hostAdaptation": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/runtime/collection-workspace/index.ts",
-      "packages/core/src/ui/surfaces/runtime/adaptive-posture/index.ts",
-      "packages/core/src/ui/surfaces/foundation/contracts/adaptive/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+      "packages/core/src/components/surfaces/runtime/collection-workspace/index.ts",
+      "packages/core/src/components/surfaces/runtime/adaptive-posture/index.ts",
+      "packages/core/src/components/surfaces/foundation/contracts/adaptive/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
     ],
     "contexts": [
       "page",
@@ -6095,8 +6095,8 @@
       "Page and embed reuse the same component, data, state and permissions."
     ],
     "sourceTests": [
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#resolves adaptive posture from a narrow collection inside a wide viewport",
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#uses lean chrome defaults in embedded mode without hiding search"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#resolves adaptive posture from a narrow collection inside a wide viewport",
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx#uses lean chrome defaults in embedded mode without hiding search"
     ],
     "evidenceIds": [],
     "nextAction": "PRODUCE_BROWSER_COMPUTED_KEYBOARD_AND_RESTORE_EVIDENCE_FOR_PAGE_AND_EMBED"
@@ -6113,9 +6113,9 @@
   "invariants": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
-      "packages/core/src/ui/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx"
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/index.tsx",
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/render-dispatch/index.tsx",
+      "packages/core/src/components/surfaces/presentation/pages/workspace/collection-workspace/tests/CollectionWorkspace.test.tsx"
     ],
     "entries": [
       "Adaptive posture owns both renderer and toolbar view state.",

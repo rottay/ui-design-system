@@ -8,15 +8,15 @@
     "components": [
       "Meter"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/foundation/Meter",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/foundation/meter",
     "publicComponents": [
       "Meter"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "bd84f68bb110dd7b92d1784324bb7d7b4f103b67b8a5a345243d79a01367d93a"
+    "inventoryRowDigest": "00da6f2e08e5bfb775e57761075df40cd0f64a57031bfd2f94fa654893f19251"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/foundation/Meter/index.tsx",
-      "packages/core/src/ui/primitives/foundation/Meter/contracts/index.ts",
-      "packages/core/src/ui/primitives/foundation/Meter/tests/Meter.announced-reading.test.tsx",
-      "packages/core/src/ui/primitives/foundation/Meter/tests/Meter.test.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/meter.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/arc.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/patterns.css"
+      "packages/core/src/components/primitives/foundation/meter/index.tsx",
+      "packages/core/src/components/primitives/foundation/meter/contracts/index.ts",
+      "packages/core/src/components/primitives/foundation/meter/tests/meter.announced-reading.test.tsx",
+      "packages/core/src/components/primitives/foundation/meter/tests/meter.test.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css"
     ],
     "stableParts": [
       "tick",
@@ -59,10 +59,10 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The measured element carries meter semantics with a complete value triple: role=\"meter\" plus aria-valuemin/valuemax/valuenow/valuetext at packages/core/src/ui/primitives/foundation/Meter/index.tsx:227-236, spread onto the ring at :291 and onto the track at :301.",
-      "The visible numeric readout is aria-hidden so the value is announced exactly once: packages/core/src/ui/primitives/foundation/Meter/index.tsx:280 and :295.",
-      "The label/description association is id-based, not positional: labelId/descriptionId at packages/core/src/ui/primitives/foundation/Meter/index.tsx:224-225 feeding aria-labelledby/aria-describedby at :233 and :235.",
-      "Forced-colors and reduced-motion floors are declared in the family paint: packages/core/src/foundation/tokens/css/presentation/components/meter.css:268 and :285; packages/core/src/foundation/tokens/css/presentation/components/arc.css:101."
+      "The measured element carries meter semantics with a complete value triple: role=\"meter\" plus aria-valuemin/valuemax/valuenow/valuetext at packages/core/src/components/primitives/foundation/meter/index.tsx:227-236, spread onto the ring at :291 and onto the track at :301.",
+      "The visible numeric readout is aria-hidden so the value is announced exactly once: packages/core/src/components/primitives/foundation/meter/index.tsx:280 and :295.",
+      "The label/description association is id-based, not positional: labelId/descriptionId at packages/core/src/components/primitives/foundation/meter/index.tsx:224-225 feeding aria-labelledby/aria-describedby at :233 and :235.",
+      "Forced-colors and reduced-motion floors are declared in the family paint: packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:268 and :285; packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:101."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -85,8 +85,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:247",
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:252"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:247",
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:252"
           ]
         },
         {
@@ -94,7 +94,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:265"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:265"
           ]
         },
         {
@@ -102,7 +102,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:273"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:273"
           ]
         },
         {
@@ -110,7 +110,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:275"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:275"
           ]
         },
         {
@@ -118,8 +118,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:280",
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:295"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:280",
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:295"
           ]
         },
         {
@@ -127,7 +127,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:290"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:290"
           ]
         },
         {
@@ -135,7 +135,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:301"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:301"
           ]
         },
         {
@@ -143,7 +143,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:303"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:303"
           ]
         },
         {
@@ -151,7 +151,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:311"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:311"
           ]
         }
       ],
@@ -159,8 +159,8 @@
         {
           "token": "hidden",
           "at": [
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:280",
-            "packages/core/src/ui/primitives/foundation/Meter/index.tsx:295"
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:280",
+            "packages/core/src/components/primitives/foundation/meter/index.tsx:295"
           ],
           "state": "hidden"
         }
@@ -187,36 +187,36 @@
           {
             "token": "rtl",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:137",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:138",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:139",
-              "packages/core/src/foundation/tokens/css/presentation/components/arc.css:81",
-              "packages/core/src/foundation/tokens/css/presentation/components/arc.css:82",
-              "packages/core/src/foundation/tokens/css/presentation/components/arc.css:83"
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:137",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:138",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:139",
+              "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:81",
+              "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:82",
+              "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:83"
             ],
             "atSiteCount": 10
           },
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:270",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:271",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:272",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:273",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:274",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:275"
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:270",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:271",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:272",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:273",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:274",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:275"
             ],
             "atSiteCount": 10
           },
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:285",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:286",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:287",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:288",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:289",
-              "packages/core/src/foundation/tokens/css/presentation/components/meter.css:290"
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:285",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:286",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:287",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:288",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:289",
+              "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:290"
             ],
             "atSiteCount": 10
           }
@@ -231,10 +231,10 @@
         ],
         "reason": "Per-instance generated identifier. RULING R-8: not a part anchor and not a variant axis."
       },
-      "engineDivergence": "No engine siblings. One implementation at packages/core/src/ui/primitives/foundation/Meter/index.tsx serves every engine. Its paint is split across a family sheet (meter.css), a shared arc sheet (arc.css) and a cross-family collision in patterns.css.",
+      "engineDivergence": "No engine siblings. One implementation at packages/core/src/components/primitives/foundation/meter/index.tsx serves every engine. Its paint is split across a family sheet (meter.css), a shared arc sheet (arc.css) and a cross-family collision in patterns.css.",
       "scoutGaps": {
         "assessmentConfidenceGaps": [
-          "Two of the three paint files are shared, so part attribution on the root and ring is class-based rather than data-part-based: packages/core/src/foundation/tokens/css/presentation/components/patterns.css was read under selectorFilter \"ds-meter\" (collision at :3517 and :3521 with .ds-command-home-meter) and packages/core/src/foundation/tokens/css/presentation/components/arc.css is a socket sheet shared with other arc consumers. See unresolved METER-PAINT-COLLIDES-WITH-A-PATTERN-CLASS.",
+          "Two of the three paint files are shared, so part attribution on the root and ring is class-based rather than data-part-based: packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css was read under selectorFilter \"ds-meter\" (collision at :3517 and :3521 with .ds-command-home-meter) and packages/core/src/foundation/tokens/css/presentation/components/arc/index.css is a socket sheet shared with other arc consumers. See unresolved METER-PAINT-COLLIDES-WITH-A-PATTERN-CLASS.",
           "Because patterns.css is shared, its literals were deliberately excluded from hardcodedValues, so the Meter hardcoded count is a floor."
         ]
       },
@@ -292,7 +292,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:46",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -303,7 +303,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:48",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -314,7 +314,7 @@
           },
           {
             "variable": "--ds-spacing-16",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:50",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:50",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -325,7 +325,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:53",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:53",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -336,7 +336,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:57",
             "fallback": null,
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -347,7 +347,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:59",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:59",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -358,7 +358,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:65",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:65",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -369,7 +369,7 @@
           },
           {
             "variable": "--ds-spacing-10",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:66",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:66",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -380,7 +380,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:69",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:69",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -391,7 +391,7 @@
           },
           {
             "variable": "--ds-spacing-16",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:70",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:70",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -402,7 +402,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:73",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -413,7 +413,7 @@
           },
           {
             "variable": "--ds-spacing-24",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:74",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -424,7 +424,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:83",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:83",
             "fallback": null,
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -435,7 +435,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:90",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -446,7 +446,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:91",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:91",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -457,7 +457,7 @@
           },
           {
             "variable": "--ds-line-height-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:92",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -468,7 +468,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:99",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -479,7 +479,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:100",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:100",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -490,7 +490,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:102",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -501,7 +501,7 @@
           },
           {
             "variable": "--ds-line-height-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:103",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:103",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -512,7 +512,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:107",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:107",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -523,7 +523,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:108",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:108",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -534,7 +534,7 @@
           },
           {
             "variable": "--ds-line-height-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:109",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:109",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -545,7 +545,7 @@
           },
           {
             "variable": "--_ds-meter-track-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:120",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:120",
             "fallback": null,
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -556,7 +556,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:121",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:121",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -567,7 +567,7 @@
           },
           {
             "variable": "--_ds-meter-track-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:122",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:122",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -578,7 +578,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:130",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -589,7 +589,7 @@
           },
           {
             "variable": "--_meter-fill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:131",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -600,7 +600,7 @@
           },
           {
             "variable": "--_meter-ratio",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:132",
             "fallback": "0",
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -611,7 +611,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:134",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:134",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -622,7 +622,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:134",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:134",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -633,7 +633,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:144",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:144",
             "fallback": null,
             "landsOnProperty": "inset-block",
             "propertyGroup": "spacing",
@@ -644,7 +644,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:145",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:145",
             "fallback": null,
             "landsOnProperty": "border-inline-start",
             "propertyGroup": "border",
@@ -655,7 +655,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:153",
             "fallback": null,
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -666,7 +666,7 @@
           },
           {
             "variable": "--ds-spacing-20",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:155",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:155",
             "fallback": null,
             "landsOnProperty": "min-inline-size",
             "propertyGroup": "size",
@@ -677,7 +677,7 @@
           },
           {
             "variable": "--_ds-meter-ring-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:190",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:190",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -688,7 +688,7 @@
           },
           {
             "variable": "--_meter-fill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:191",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:191",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -699,7 +699,7 @@
           },
           {
             "variable": "--_ds-meter-track-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:192",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:192",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -710,7 +710,7 @@
           },
           {
             "variable": "--_ds-arc-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:200",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:200",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -721,7 +721,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:207",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:207",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -732,7 +732,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:211",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:211",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -743,7 +743,7 @@
           },
           {
             "variable": "--ds-color-on-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:219",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:219",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -754,7 +754,7 @@
           },
           {
             "variable": "--ds-color-on-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:222",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:222",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -765,7 +765,7 @@
           },
           {
             "variable": "--ds-color-on-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:223",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:223",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -776,7 +776,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:226",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:226",
             "fallback": null,
             "landsOnProperty": "background-size",
             "propertyGroup": "color",
@@ -787,7 +787,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:226",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:226",
             "fallback": null,
             "landsOnProperty": "background-size",
             "propertyGroup": "color",
@@ -798,7 +798,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:230",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:230",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -809,7 +809,7 @@
           },
           {
             "variable": "--ds-color-on-error",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:236",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:236",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -820,7 +820,7 @@
           },
           {
             "variable": "--ds-color-on-error",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:239",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:239",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -831,7 +831,7 @@
           },
           {
             "variable": "--ds-color-on-error",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:240",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:240",
             "fallback": null,
             "landsOnProperty": "background-image",
             "propertyGroup": "color",
@@ -842,7 +842,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:243",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:243",
             "fallback": null,
             "landsOnProperty": "background-size",
             "propertyGroup": "color",
@@ -853,7 +853,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:243",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:243",
             "fallback": null,
             "landsOnProperty": "background-size",
             "propertyGroup": "color",
@@ -864,7 +864,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:249",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:249",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -875,7 +875,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:252",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:252",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -886,7 +886,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:255",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:255",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -897,7 +897,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:258",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:258",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -908,7 +908,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:261",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:261",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -919,7 +919,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:264",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:264",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -930,7 +930,7 @@
           },
           {
             "variable": "--_ds-arc-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:29",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -941,7 +941,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:30",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:30",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -952,7 +952,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:31",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:31",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -963,7 +963,7 @@
           },
           {
             "variable": "--_ds-arc-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:36",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:36",
             "fallback": null,
             "landsOnProperty": "inline-size",
             "propertyGroup": "size",
@@ -974,7 +974,7 @@
           },
           {
             "variable": "--_ds-arc-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:37",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:37",
             "fallback": null,
             "landsOnProperty": "block-size",
             "propertyGroup": "size",
@@ -985,7 +985,7 @@
           },
           {
             "variable": "--ds-motion-normal",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:39",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:39",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -996,7 +996,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:39",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:39",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -1007,7 +1007,7 @@
           },
           {
             "variable": "--_ds-arc-fill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:49",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1018,7 +1018,7 @@
           },
           {
             "variable": "--_ds-arc-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:49",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:49",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1029,7 +1029,7 @@
           },
           {
             "variable": "--_ds-arc-track",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:50",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:50",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1040,7 +1040,7 @@
           },
           {
             "variable": "--_ds-arc-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:54",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:54",
             "fallback": null,
             "landsOnProperty": "-webkit-mask",
             "propertyGroup": "layout",
@@ -1051,7 +1051,7 @@
           },
           {
             "variable": "--_ds-arc-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:55",
             "fallback": null,
             "landsOnProperty": "-webkit-mask",
             "propertyGroup": "layout",
@@ -1062,7 +1062,7 @@
           },
           {
             "variable": "--_ds-arc-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:59",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:59",
             "fallback": null,
             "landsOnProperty": "mask",
             "propertyGroup": "layout",
@@ -1073,7 +1073,7 @@
           },
           {
             "variable": "--_ds-arc-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:60",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:60",
             "fallback": null,
             "landsOnProperty": "mask",
             "propertyGroup": "layout",
@@ -1084,7 +1084,7 @@
           },
           {
             "variable": "--_ds-arc-thickness",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:67",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:67",
             "fallback": null,
             "landsOnProperty": "inset",
             "propertyGroup": "spacing",
@@ -1095,7 +1095,7 @@
           },
           {
             "variable": "--_ds-arc-fill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:70",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:70",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1106,7 +1106,7 @@
           },
           {
             "variable": "--_ds-arc-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:71",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1117,7 +1117,7 @@
           },
           {
             "variable": "--_ds-arc-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:72",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:72",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1128,7 +1128,7 @@
           },
           {
             "variable": "--_ds-arc-value",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:86",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1139,7 +1139,7 @@
           },
           {
             "variable": "--_ds-arc-size",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:87",
             "fallback": null,
             "landsOnProperty": "transform",
             "propertyGroup": "spacing",
@@ -1150,7 +1150,7 @@
           },
           {
             "variable": "--ds-command-home-meter-bg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:3517",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:3517",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1161,7 +1161,7 @@
           },
           {
             "variable": "--ds-command-home-meter-fill",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:3521",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:3521",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1177,49 +1177,49 @@
           {
             "kind": "duration",
             "literal": "0.01ms",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:287",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:287",
             "declaration": "transition-duration"
           },
           {
             "kind": "duration",
             "literal": "0.01ms",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/meter.css:288",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:288",
             "declaration": "animation-duration"
           },
           {
             "kind": "color",
             "literal": "#0000",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:54",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:54",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "#000",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:55",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:55",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "#0000",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:59",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:59",
             "declaration": null
           },
           {
             "kind": "color",
             "literal": "#000",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:60",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:60",
             "declaration": null
           },
           {
             "kind": "duration",
             "literal": "0.01ms",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:103",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:103",
             "declaration": "transition-duration"
           },
           {
             "kind": "duration",
             "literal": "0.01ms",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc.css:104",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/arc/index.css:104",
             "declaration": "animation-duration"
           }
         ],
@@ -1241,13 +1241,13 @@
         {
           "channelId": "--_ds-meter-track-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1257,13 +1257,13 @@
         {
           "channelId": "--_ds-meter-fill-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1273,13 +1273,13 @@
         {
           "channelId": "--_ds-meter-label-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1289,13 +1289,13 @@
         {
           "channelId": "--_ds-meter-value-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1305,13 +1305,13 @@
         {
           "channelId": "--_ds-meter-warning-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1321,13 +1321,13 @@
         {
           "channelId": "--_ds-meter-critical-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1405,13 +1405,13 @@
         {
           "channelId": "--_ds-meter-value-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1421,13 +1421,13 @@
         {
           "channelId": "--_ds-meter-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1447,13 +1447,13 @@
         {
           "channelId": "--_ds-meter-track-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1490,13 +1490,13 @@
         {
           "channelId": "--_ds-meter-track-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1506,13 +1506,13 @@
         {
           "channelId": "--_ds-meter-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1531,7 +1531,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1546,7 +1546,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ]
       }
@@ -1589,13 +1589,13 @@
         {
           "channelId": "--_ds-meter-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/ui/primitives/foundation/Meter",
+          "producer": "packages/core/src/components/primitives/foundation/meter",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/meter"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/primitives/foundation/Meter"
+            "packages/core/src/components/primitives/foundation/meter"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1614,7 +1614,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1694,7 +1694,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1750,7 +1750,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1777,7 +1777,7 @@
               "--ds-color-on-error",
               "--ds-color-info"
             ],
-            "noSocketReason": "sin socket propio; lee los canales compartidos de estado [at packages/core/src/foundation/tokens/css/presentation/components/meter.css:207-264]",
+            "noSocketReason": "sin socket propio; lee los canales compartidos de estado [at packages/core/src/foundation/tokens/css/presentation/components/meter/index.css:207-264]",
             "socketsResolved": true,
             "carrier": "shared-channel"
           }
@@ -1824,11 +1824,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

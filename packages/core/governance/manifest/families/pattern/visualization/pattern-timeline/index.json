@@ -8,15 +8,15 @@
     "components": [
       "PatternTimeline"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization/timeline",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/visualization/timeline",
     "publicComponents": [
       "PatternTimeline"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "ccaa87084b336aa68b99bdc6aaa71a3ec0fd1e59379a02be440c3e9c080d3e36"
+    "inventoryRowDigest": "ed560c49c3985321be104cdc3a42f8fe7c0aecea8ab1c041880f4efea1654cbe"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/visualization/timeline/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/timeline/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/timeline/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+      "packages/core/src/components/patterns/visualization/timeline/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/timeline/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/visualization/timeline/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
     ],
     "stableParts": [
       "avatar",
@@ -71,9 +71,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "zero colour literals; 9 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:143, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:246]",
-      "semantic tone is resolved in TS, not in CSS, on the rustic leg [at packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:40-45, packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:187, packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:77]",
-      "the rustic marker channel is read fallback-free but is always element-declared by the component that reads it [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:9, packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:77]"
+      "zero colour literals; 9 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:143, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:246]",
+      "semantic tone is resolved in TS, not in CSS, on the rustic leg [at packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:40-45, packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:187, packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:77]",
+      "the rustic marker channel is read fallback-free but is always element-declared by the component that reads it [at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:9, packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:77]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -96,11 +96,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:196",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:170",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:50"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:196",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:50"
           ]
         },
         {
@@ -108,12 +108,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:159",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:210",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:225",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:87",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:98",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:103"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:159",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:210",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:87",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:98",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:103"
           ],
           "atSiteCount": 8
         },
@@ -122,9 +122,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:269",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:260",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:262"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:269",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:262"
           ]
         },
         {
@@ -132,11 +132,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:270",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:261",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:266",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:415",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:46"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:270",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:261",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:266",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:415",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:46"
           ]
         },
         {
@@ -144,8 +144,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:215",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:46"
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:46"
           ]
         },
         {
@@ -153,11 +153,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:251",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:247",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:278",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:415",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:55"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:251",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:247",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:278",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:415",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:55"
           ]
         },
         {
@@ -165,10 +165,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:224",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:226",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:189",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:74"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:224",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:226",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:189",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:74"
           ]
         },
         {
@@ -176,12 +176,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:188",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:197",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:126",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:237"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:188",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:197",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:237"
           ],
           "atSiteCount": 14
         },
@@ -190,8 +190,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:208",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:218"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:218"
           ]
         },
         {
@@ -199,8 +199,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:196"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:196"
           ]
         },
         {
@@ -208,8 +208,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:207",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:211"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:211"
           ]
         },
         {
@@ -217,9 +217,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:217",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:224",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:66"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:217",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:224",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:66"
           ]
         },
         {
@@ -227,12 +227,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:174",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:192",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:194",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:312",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:7"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:174",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:192",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:194",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:312",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:7"
           ],
           "atSiteCount": 7
         },
@@ -241,12 +241,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:180",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:162",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:166"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:180",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:162",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:166"
           ],
           "atSiteCount": 7
         },
@@ -255,12 +255,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:237",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:248",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:239",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:245",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:254"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:237",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:248",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:239",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:245",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:254"
           ],
           "atSiteCount": 60
         },
@@ -269,8 +269,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:239",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:298"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:239",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:298"
           ]
         },
         {
@@ -278,11 +278,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:165",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:212",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:226",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:415",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:41"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:165",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:212",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:226",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:415",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:41"
           ]
         },
         {
@@ -290,10 +290,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:126",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:319"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:126",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:319"
           ]
         },
         {
@@ -301,8 +301,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:210",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:37"
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:210",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:37"
           ]
         },
         {
@@ -310,12 +310,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:202",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:347",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:360",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:365",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:370",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:375"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:202",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:347",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:360",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:365",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:370",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:375"
           ],
           "atSiteCount": 7
         },
@@ -324,10 +324,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:200",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:203",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:37"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:200",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:203",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:37"
           ]
         }
       ],
@@ -335,12 +335,12 @@
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:237",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:248",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:239",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:245",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:254"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:237",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:248",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:239",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:245",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:254"
           ],
           "state": "loading"
         }
@@ -349,48 +349,48 @@
         {
           "token": "clickable",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:190",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:198"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:190",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:198"
           ]
         },
         {
           "token": "grouped",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:261",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:254"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:261",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:254"
           ]
         },
         {
           "token": "mode",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:237",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:248",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:261"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:237",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:248",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:261"
           ]
         },
         {
           "token": "side",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:163",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:189"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:163",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:189"
           ]
         },
         {
           "token": "type",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:180",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:182",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:202",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:224",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:226",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:189"
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:180",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:182",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:202",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:224",
+            "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:226",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:189"
           ]
         },
         {
           "token": "variant",
           "at": [
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:192",
-            "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:194"
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:192",
+            "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:194"
           ]
         }
       ],
@@ -399,19 +399,19 @@
           {
             "token": "empty",
             "at": [
-              "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:237",
-              "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:248",
-              "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:261",
-              "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:239",
-              "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:245",
-              "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:254"
+              "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:237",
+              "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:248",
+              "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:261",
+              "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:239",
+              "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:245",
+              "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:254"
             ]
           },
           {
             "token": "edge",
             "at": [
-              "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:159",
-              "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:210"
+              "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:159",
+              "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:210"
             ]
           }
         ],
@@ -428,19 +428,19 @@
           "rootAnchor": {
             "modern": {
               "class": "ds-pattern-timeline ds-engine-modern",
-              "at": "packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:37"
+              "at": "packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:37"
             },
             "rustic": {
               "class": "ds-pattern-timeline ds-engine-rustic",
-              "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:25"
+              "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:25"
             },
             "classic": {
               "class": "ds-pattern-timeline ds-engine-classic",
-              "at": "packages/core/src/ui/patterns/visualization/timeline/engines/classic/index.tsx:142",
+              "at": "packages/core/src/components/patterns/visualization/timeline/engines/classic/index.tsx:142",
               "note": "DS-owned ROOT class, zero data-part"
             }
           },
-          "divergence": "modern 19 parts, rustic 14, classic 0 (root class only). The marker tone axis is spelled differently per engine: modern writes --_ds-timeline-marker-color at packages/core/src/ui/patterns/visualization/timeline/engines/modern/index.tsx:140, rustic writes --ds-pattern-timeline-marker-color at packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:77 and :89. Two names, one concept.",
+          "divergence": "modern 19 parts, rustic 14, classic 0 (root class only). The marker tone axis is spelled differently per engine: modern writes --_ds-timeline-marker-color at packages/core/src/components/patterns/visualization/timeline/engines/modern/index.tsx:140, rustic writes --ds-pattern-timeline-marker-color at packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:77 and :89. Two names, one concept.",
           "classicDisposition": "NOT_APPLICABLE_WITH_REASON",
           "classicReason": "R-2 AS NARROWED APPLIES, and this family is the clean instance of it. Sub-regions are rendered by AntD's own Timeline at timeline/engines/classic/index.tsx:150 and :154 (imported :22), so every classic sub-region is addressable only through .ant-timeline-* vocabulary, whose stability the DS does not own. ROOT IS EXEMPT: classic stamps the DS-owned identity pair 'ds-pattern-timeline ds-engine-classic' at :142, so a ROOT-scoped classic cell is APPLICABLE under R-8(b).",
           "r2AsNarrowedApplies": true,
@@ -502,7 +502,7 @@
         "dsVariableReads": [
           {
             "variable": "--ds-color-neutral-600",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/classic/index.tsx:147",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/classic/index.tsx:147",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -526,7 +526,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:41",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:41",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -556,7 +556,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:42",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:42",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -586,7 +586,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:43",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:43",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -616,7 +616,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:44",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:44",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -646,7 +646,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:45",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:45",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -676,7 +676,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:103",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:103",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -700,7 +700,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:106",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:106",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -721,7 +721,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:110",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:110",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -742,7 +742,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:125",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:125",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -763,7 +763,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:129",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:129",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -784,7 +784,7 @@
           },
           {
             "variable": "--ds-timeline-line-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:89",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector']",
@@ -805,7 +805,7 @@
           },
           {
             "variable": "--ds-timeline-line-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:92",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:92",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector']",
@@ -827,7 +827,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:100",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading']",
@@ -848,7 +848,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:100",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading']",
@@ -869,7 +869,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:105",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='trailing']",
@@ -890,7 +890,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:105",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='trailing']",
@@ -911,7 +911,7 @@
           },
           {
             "variable": "--ds-border-width-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:137",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:137",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -932,7 +932,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:137",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:137",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -953,7 +953,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:138",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:138",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -974,7 +974,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:139",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:139",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -995,7 +995,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:140",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:140",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -1016,7 +1016,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:141",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:141",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -1037,7 +1037,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:142",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:142",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -1058,7 +1058,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:143",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:143",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -1079,7 +1079,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:155",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:155",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon']",
@@ -1101,7 +1101,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:159",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:159",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='success']",
@@ -1123,7 +1123,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:163",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:163",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='warning']",
@@ -1145,7 +1145,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:167",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='error']",
@@ -1167,7 +1167,7 @@
           },
           {
             "variable": "--ds-timeline-marker-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:191",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:191",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon']",
@@ -1188,7 +1188,7 @@
           },
           {
             "variable": "--ds-timeline-marker-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:192",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon']",
@@ -1209,7 +1209,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:199",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:199",
             "part": "item-meta",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-meta[data-part='item-meta']",
@@ -1230,7 +1230,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:200",
             "part": "item-meta",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-meta[data-part='item-meta']",
@@ -1251,7 +1251,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:204",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:204",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name']",
@@ -1272,7 +1272,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:205",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:205",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name']",
@@ -1293,7 +1293,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:206",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:206",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name']",
@@ -1314,7 +1314,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:212",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -1335,7 +1335,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:213",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:213",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -1356,7 +1356,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:214",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:214",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -1377,7 +1377,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:215",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:215",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -1398,7 +1398,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:219",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:219",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -1419,7 +1419,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:220",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:220",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -1440,7 +1440,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:221",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -1461,7 +1461,7 @@
           },
           {
             "variable": "--ds-line-height-relaxed",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:222",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -1482,7 +1482,7 @@
           },
           {
             "variable": "--ds-timeline-timestamp-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:227",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -1504,7 +1504,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:228",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -1525,7 +1525,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:229",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:229",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -1546,7 +1546,7 @@
           },
           {
             "variable": "--ds-timeline-timestamp-letter-spacing",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:231",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:231",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -1567,7 +1567,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:240",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:240",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -1588,7 +1588,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:240",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:240",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -1609,7 +1609,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:241",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:241",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -1630,7 +1630,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:241",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:241",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -1651,7 +1651,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:246",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:246",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover",
@@ -1674,7 +1674,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:246",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:246",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover",
@@ -1697,7 +1697,7 @@
           },
           {
             "variable": "--ds-shadow-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:247",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:247",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover",
@@ -1720,7 +1720,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:252",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:252",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:active",
@@ -1741,7 +1741,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:252",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:252",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:active",
@@ -1762,7 +1762,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:256",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:256",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible",
@@ -1783,7 +1783,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:257",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:257",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible",
@@ -1805,7 +1805,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:258",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:258",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible",
@@ -1826,7 +1826,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:263",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:263",
             "part": "date-group",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-group[data-part='date-group']",
@@ -1847,7 +1847,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:267",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:267",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -1868,7 +1868,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:268",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:268",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -1889,7 +1889,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:269",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:269",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -1910,7 +1910,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:270",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:270",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -1931,7 +1931,7 @@
           },
           {
             "variable": "--ds-timeline-date-heading-letter-spacing",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:272",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:272",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -1952,7 +1952,7 @@
           },
           {
             "variable": "--ds-timeline-empty-padding-block",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:279",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:279",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty']",
@@ -1973,7 +1973,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:280",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:280",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty']",
@@ -1994,7 +1994,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:281",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:281",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty']",
@@ -2015,7 +2015,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:291",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']",
@@ -2036,7 +2036,7 @@
           },
           {
             "variable": "--ds-timeline-loading-padding-block",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:293",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:293",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']",
@@ -2057,7 +2057,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:334",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading']",
@@ -2080,7 +2080,7 @@
           },
           {
             "variable": "--ds-timeline-badge-padding-inline",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:351",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:351",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -2101,7 +2101,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:352",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:352",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -2122,7 +2122,7 @@
           },
           {
             "variable": "--ds-timeline-badge-font-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:353",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:353",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -2143,7 +2143,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:354",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:354",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -2164,7 +2164,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:361",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:361",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'], .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='info']",
@@ -2185,7 +2185,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:362",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:362",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'], .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='info']",
@@ -2206,7 +2206,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:366",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:366",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='success']",
@@ -2227,7 +2227,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:367",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:367",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='success']",
@@ -2248,7 +2248,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:371",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:371",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='warning']",
@@ -2269,7 +2269,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:372",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:372",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='warning']",
@@ -2290,7 +2290,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:376",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:376",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error']",
@@ -2311,7 +2311,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:377",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:377",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error']",
@@ -2332,7 +2332,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:4",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__connector[data-part='connector']",
@@ -2353,7 +2353,7 @@
           },
           {
             "variable": "--ds-pattern-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:9",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:9",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid']",
@@ -2374,7 +2374,7 @@
           },
           {
             "variable": "--ds-color-background",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:10",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:10",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid']",
@@ -2395,7 +2395,7 @@
           },
           {
             "variable": "--ds-pattern-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:11",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:11",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid']",
@@ -2416,7 +2416,7 @@
           },
           {
             "variable": "--ds-color-background",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:16",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:16",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='icon']",
@@ -2437,7 +2437,7 @@
           },
           {
             "variable": "--ds-pattern-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:17",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:17",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='icon']",
@@ -2458,7 +2458,7 @@
           },
           {
             "variable": "--ds-color-background",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:21",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card']",
@@ -2479,7 +2479,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:22",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:22",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card']",
@@ -2500,7 +2500,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:23",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card']",
@@ -2521,7 +2521,7 @@
           },
           {
             "variable": "--ds-color-text",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:38",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__title[data-part='title'], .ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__user-name[data-part='user-name']",
@@ -2542,7 +2542,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:42",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__timestamp[data-part='timestamp']",
@@ -2563,7 +2563,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:47",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__description[data-part='description'], .ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__date-heading[data-part='date-heading']",
@@ -2584,7 +2584,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:56",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:56",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-timeline.ds-engine-rustic[data-part='root'] > [data-part='empty']",
@@ -2640,7 +2640,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-neutral-600",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/classic/index.tsx:147",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/classic/index.tsx:147",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2664,7 +2664,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:41",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:41",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2694,7 +2694,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:42",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:42",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2724,7 +2724,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:43",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:43",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2754,7 +2754,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:44",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:44",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2784,7 +2784,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:45",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:45",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2814,7 +2814,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:103",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:103",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2838,7 +2838,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:106",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:106",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2859,7 +2859,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:110",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:110",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2880,7 +2880,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:125",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:125",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2901,7 +2901,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/ui/patterns/visualization/timeline/engines/rustic/index.tsx:129",
+            "at": "packages/core/src/components/patterns/visualization/timeline/engines/rustic/index.tsx:129",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -2922,7 +2922,7 @@
           },
           {
             "variable": "--ds-timeline-line-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:89",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector']",
@@ -2943,7 +2943,7 @@
           },
           {
             "variable": "--ds-timeline-line-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:92",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:92",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector']",
@@ -2965,7 +2965,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:100",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading']",
@@ -2986,7 +2986,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:100",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:100",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading']",
@@ -3007,7 +3007,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:105",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='trailing']",
@@ -3028,7 +3028,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:105",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:105",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='trailing']",
@@ -3049,7 +3049,7 @@
           },
           {
             "variable": "--ds-border-width-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:137",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:137",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3070,7 +3070,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:137",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:137",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3091,7 +3091,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:138",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:138",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3112,7 +3112,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:139",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:139",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3133,7 +3133,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:140",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:140",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3154,7 +3154,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:141",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:141",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3175,7 +3175,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:142",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:142",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3196,7 +3196,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:143",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:143",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card']",
@@ -3217,7 +3217,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:155",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:155",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon']",
@@ -3239,7 +3239,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:159",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:159",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='success']",
@@ -3261,7 +3261,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:163",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:163",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='warning']",
@@ -3283,7 +3283,7 @@
           },
           {
             "variable": "--_ds-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:167",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon'][data-type='error']",
@@ -3305,7 +3305,7 @@
           },
           {
             "variable": "--ds-timeline-marker-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:191",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:191",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon']",
@@ -3326,7 +3326,7 @@
           },
           {
             "variable": "--ds-timeline-marker-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:192",
             "part": "marker-icon",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__marker-icon[data-part='marker-icon']",
@@ -3347,7 +3347,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:199",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:199",
             "part": "item-meta",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-meta[data-part='item-meta']",
@@ -3368,7 +3368,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:200",
             "part": "item-meta",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-meta[data-part='item-meta']",
@@ -3389,7 +3389,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:204",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:204",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name']",
@@ -3410,7 +3410,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:205",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:205",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name']",
@@ -3431,7 +3431,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:206",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:206",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__user-name[data-part='user-name']",
@@ -3452,7 +3452,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:212",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -3473,7 +3473,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:213",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:213",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -3494,7 +3494,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:214",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:214",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -3515,7 +3515,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:215",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:215",
             "part": "item-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-title[data-part='item-title']",
@@ -3536,7 +3536,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:219",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:219",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -3557,7 +3557,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:220",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:220",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -3578,7 +3578,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:221",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -3599,7 +3599,7 @@
           },
           {
             "variable": "--ds-line-height-relaxed",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:222",
             "part": "item-description",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-description[data-part='item-description']",
@@ -3620,7 +3620,7 @@
           },
           {
             "variable": "--ds-timeline-timestamp-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:227",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -3642,7 +3642,7 @@
           },
           {
             "variable": "--ds-font-family-mono",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:228",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -3663,7 +3663,7 @@
           },
           {
             "variable": "--ds-font-size-xs",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:229",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:229",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -3684,7 +3684,7 @@
           },
           {
             "variable": "--ds-timeline-timestamp-letter-spacing",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:231",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:231",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__timestamp[data-part='timestamp']",
@@ -3705,7 +3705,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:240",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:240",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -3726,7 +3726,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:240",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:240",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -3747,7 +3747,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:241",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:241",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -3768,7 +3768,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:241",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:241",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']",
@@ -3789,7 +3789,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:246",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:246",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover",
@@ -3812,7 +3812,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:246",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:246",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover",
@@ -3835,7 +3835,7 @@
           },
           {
             "variable": "--ds-shadow-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:247",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:247",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:hover",
@@ -3858,7 +3858,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:252",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:252",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:active",
@@ -3879,7 +3879,7 @@
           },
           {
             "variable": "--ds-color-bg-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:252",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:252",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:active",
@@ -3900,7 +3900,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:256",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:256",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible",
@@ -3921,7 +3921,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:257",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:257",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible",
@@ -3943,7 +3943,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:258",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:258",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__item-card[data-part='item-card'][data-clickable='true']:focus-visible",
@@ -3964,7 +3964,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:263",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:263",
             "part": "date-group",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-group[data-part='date-group']",
@@ -3985,7 +3985,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:267",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:267",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -4006,7 +4006,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:268",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:268",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -4027,7 +4027,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:269",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:269",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -4048,7 +4048,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:270",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:270",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -4069,7 +4069,7 @@
           },
           {
             "variable": "--ds-timeline-date-heading-letter-spacing",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:272",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:272",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__date-heading[data-part='date-heading']",
@@ -4090,7 +4090,7 @@
           },
           {
             "variable": "--ds-timeline-empty-padding-block",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:279",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:279",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty']",
@@ -4111,7 +4111,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:280",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:280",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty']",
@@ -4132,7 +4132,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:281",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:281",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__empty[data-part='empty']",
@@ -4153,7 +4153,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:291",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']",
@@ -4174,7 +4174,7 @@
           },
           {
             "variable": "--ds-timeline-loading-padding-block",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:293",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:293",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'][data-loading='true']",
@@ -4195,7 +4195,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:334",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__connector[data-part='connector'][data-edge='leading']",
@@ -4218,7 +4218,7 @@
           },
           {
             "variable": "--ds-timeline-badge-padding-inline",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:351",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:351",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -4239,7 +4239,7 @@
           },
           {
             "variable": "--ds-radius-full",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:352",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:352",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -4260,7 +4260,7 @@
           },
           {
             "variable": "--ds-timeline-badge-font-size",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:353",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:353",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -4281,7 +4281,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:354",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:354",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge']",
@@ -4302,7 +4302,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:361",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:361",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'], .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='info']",
@@ -4323,7 +4323,7 @@
           },
           {
             "variable": "--ds-color-info",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:362",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:362",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='default'], .ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='info']",
@@ -4344,7 +4344,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:366",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:366",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='success']",
@@ -4365,7 +4365,7 @@
           },
           {
             "variable": "--ds-color-success",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:367",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:367",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='success']",
@@ -4386,7 +4386,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:371",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:371",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='warning']",
@@ -4407,7 +4407,7 @@
           },
           {
             "variable": "--ds-color-warning",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:372",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:372",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='warning']",
@@ -4428,7 +4428,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:376",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:376",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error']",
@@ -4449,7 +4449,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css:377",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css:377",
             "part": "type-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-modern[data-part='root'] .ds-timeline-modern__type-badge[data-part='type-badge'][data-type='error']",
@@ -4470,7 +4470,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:4",
             "part": "connector",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__connector[data-part='connector']",
@@ -4491,7 +4491,7 @@
           },
           {
             "variable": "--ds-pattern-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:9",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:9",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid']",
@@ -4512,7 +4512,7 @@
           },
           {
             "variable": "--ds-color-background",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:10",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:10",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid']",
@@ -4533,7 +4533,7 @@
           },
           {
             "variable": "--ds-pattern-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:11",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:11",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='solid']",
@@ -4554,7 +4554,7 @@
           },
           {
             "variable": "--ds-color-background",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:16",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:16",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='icon']",
@@ -4575,7 +4575,7 @@
           },
           {
             "variable": "--ds-pattern-timeline-marker-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:17",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:17",
             "part": "marker",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__marker[data-part='marker'][data-variant='icon']",
@@ -4596,7 +4596,7 @@
           },
           {
             "variable": "--ds-color-background",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:21",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card']",
@@ -4617,7 +4617,7 @@
           },
           {
             "variable": "--ds-color-neutral-200",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:22",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:22",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card']",
@@ -4638,7 +4638,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:23",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:23",
             "part": "item-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__item-card[data-part='item-card'][data-part='item-card']",
@@ -4659,7 +4659,7 @@
           },
           {
             "variable": "--ds-color-text",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:38",
             "part": "user-name",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__title[data-part='title'], .ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__user-name[data-part='user-name']",
@@ -4680,7 +4680,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:42",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:42",
             "part": "timestamp",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__timestamp[data-part='timestamp']",
@@ -4701,7 +4701,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:47",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:47",
             "part": "date-heading",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__description[data-part='description'], .ds-pattern-timeline.ds-engine-rustic[data-part='root'] .ds-timeline-rustic__date-heading[data-part='date-heading']",
@@ -4722,7 +4722,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline.css:56",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-timeline/index.css:56",
             "part": "empty",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-timeline.ds-engine-rustic[data-part='root'][data-loading='true'], .ds-pattern-timeline.ds-engine-rustic[data-part='root'] > [data-part='empty']",
@@ -4779,13 +4779,13 @@
         {
           "channelId": "--_ds-timeline-timestamp-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4802,7 +4802,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4842,7 +4842,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4893,13 +4893,13 @@
         {
           "channelId": "--_ds-pattern-timeline-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4909,13 +4909,13 @@
         {
           "channelId": "--_ds-timeline-badge-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4932,7 +4932,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -4970,7 +4970,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -5014,13 +5014,13 @@
         {
           "channelId": "--_ds-timeline-badge-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5029,13 +5029,13 @@
         {
           "channelId": "--_ds-timeline-empty-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5044,13 +5044,13 @@
         {
           "channelId": "--_ds-timeline-loading-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5059,13 +5059,13 @@
         {
           "channelId": "--_ds-timeline-marker-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5083,7 +5083,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -5113,7 +5113,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-ascii-diagram-line-cadence",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -5139,7 +5139,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -5164,7 +5164,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de lectura/trabajo como charts: acabado cero",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -5184,7 +5184,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -5204,7 +5204,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -5224,7 +5224,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia dentro del plano de visualizacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -5253,13 +5253,13 @@
         {
           "channelId": "--_ds-border-width-1",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-timeline"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-timeline/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5282,7 +5282,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -5295,7 +5295,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -5341,7 +5341,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -5386,7 +5386,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -5407,11 +5407,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

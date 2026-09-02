@@ -8,15 +8,15 @@
     "components": [
       "Cascader"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/Cascader",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/cascader",
     "publicComponents": [
       "Cascader"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1229667e4c42d305bf2ea319f2a0511e35bdea4b04a2c9bf7c54b85bd4aae23a"
+    "inventoryRowDigest": "b5655eabfe4d770238e3b68ad1ca24968f94a1066e2f2bd513f1b9dcd704fffe"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css",
-      "packages/core/src/ui/primitives/inputs/Cascader"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css",
+      "packages/core/src/components/primitives/inputs/cascader"
     ],
     "stableParts": [
       "trigger",
@@ -69,9 +69,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The trigger is role=\"combobox\" with aria-expanded, aria-haspopup=\"listbox\", aria-disabled and aria-invalid; the popup id is instance-scoped. [at packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:554, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:555, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:557, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:559 and more]",
-      "Each option column is a role=\"listbox\" whose children keep role=\"option\"; the empty row keeps role=\"option\" plus aria-disabled so the listbox never has an illegal child. [at packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:631, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:642, packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:654]",
-      "The loading panel is a role=\"status\" region, not a silent visual mask. [at packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:604]"
+      "The trigger is role=\"combobox\" with aria-expanded, aria-haspopup=\"listbox\", aria-disabled and aria-invalid; the popup id is instance-scoped. [at packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:554, packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:555, packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:557, packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:559 and more]",
+      "Each option column is a role=\"listbox\" whose children keep role=\"option\"; the empty row keeps role=\"option\" plus aria-disabled so the listbox never has an illegal child. [at packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:631, packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:642, packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:654]",
+      "The loading panel is a role=\"status\" region, not a silent visual mask. [at packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:604]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -94,9 +94,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:551",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:582",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:118"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:551",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:582",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:118"
           ]
         },
         {
@@ -104,12 +104,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:390",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:408",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:417",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:433",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:453",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:470"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:390",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:408",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:417",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:433",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:453",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:470"
           ],
           "atSiteCount": 7
         },
@@ -118,9 +118,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:587",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:596",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:171"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:587",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:596",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:171"
           ]
         },
         {
@@ -128,9 +128,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:616",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:481",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:272"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:616",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:481",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:272"
           ]
         },
         {
@@ -138,9 +138,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:602",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:467",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:232"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:602",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:467",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:232"
           ]
         },
         {
@@ -148,12 +148,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:388",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:441",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:445",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:468",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:665",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:523"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:388",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:441",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:445",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:468",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:665",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:523"
           ],
           "atSiteCount": 7
         },
@@ -162,11 +162,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:654",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:714",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:513",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:560",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:306"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:654",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:714",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:513",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:560",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:306"
           ]
         },
         {
@@ -174,9 +174,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:699",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:550",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:432"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:699",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:550",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:432"
           ]
         },
         {
@@ -184,8 +184,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:605",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:561"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:605",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:561"
           ]
         },
         {
@@ -193,12 +193,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:442",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:631",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:661",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:490",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:518",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:254"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:442",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:631",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:661",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:490",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:518",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:254"
           ]
         },
         {
@@ -206,9 +206,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:574",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:601",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:193"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:574",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:601",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:193"
           ]
         },
         {
@@ -216,8 +216,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:604",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:586"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:604",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:586"
           ]
         },
         {
@@ -225,8 +225,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:704",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:426"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:704",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:426"
           ]
         },
         {
@@ -234,9 +234,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:645",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:695",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:417"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:645",
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:695",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:417"
           ]
         },
         {
@@ -244,8 +244,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:572",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:569"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:572",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:569"
           ]
         },
         {
@@ -253,9 +253,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:612",
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:472",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:267"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:612",
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:472",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:267"
           ]
         },
         {
@@ -263,8 +263,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:553",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:211"
+            "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:553",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:211"
           ]
         },
         {
@@ -272,8 +272,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx:527",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:114"
+            "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx:527",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:114"
           ]
         }
       ],
@@ -283,7 +283,7 @@
           "scoutAnchorClaim": "element:from, element:to",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:80"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:80"
           ]
         },
         {
@@ -291,7 +291,7 @@
           "scoutAnchorClaim": "data-part",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:153"
           ]
         }
       ],
@@ -300,7 +300,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 22,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:143"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:143"
           ],
           "state": "focus-visible"
         },
@@ -308,7 +308,7 @@
           "token": "data-selected='true'",
           "occurrences": 11,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:382"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:382"
           ],
           "state": "selected"
         },
@@ -316,7 +316,7 @@
           "token": "data-disabled='true'",
           "occurrences": 10,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:133"
           ],
           "state": "disabled"
         },
@@ -324,7 +324,7 @@
           "token": "pseudo:hover",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:133"
           ],
           "state": "hover"
         },
@@ -332,7 +332,7 @@
           "token": "pseudo:active",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:139"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:139"
           ],
           "state": "active"
         },
@@ -340,7 +340,7 @@
           "token": "data-open='true'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:223"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:223"
           ],
           "state": "open"
         },
@@ -348,7 +348,7 @@
           "token": "data-status='error'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:551"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:551"
           ],
           "state": "error"
         },
@@ -356,7 +356,7 @@
           "token": "data-status='warning'",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:554"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:554"
           ],
           "state": "warning"
         },
@@ -364,7 +364,7 @@
           "token": "pseudo:disabled",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:290"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:290"
           ],
           "state": "disabled"
         },
@@ -372,7 +372,7 @@
           "token": "pseudo:focus",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:180"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:180"
           ],
           "state": "focus"
         },
@@ -380,7 +380,7 @@
           "token": "[data-status]",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:135"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:135"
           ],
           "state": "status"
         }
@@ -390,21 +390,21 @@
           "token": "data-size='large'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:531"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:531"
           ]
         },
         {
           "token": "data-size='middle'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:525"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:525"
           ]
         },
         {
           "token": "data-size='small'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:519"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:519"
           ]
         }
       ],
@@ -414,7 +414,7 @@
             "token": "data-last='true'",
             "occurrences": 3,
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:343"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:343"
             ]
           }
         ],
@@ -425,140 +425,140 @@
           "token": "data-part='root'",
           "occurrences": 215,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:114"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:114"
           ]
         },
         {
           "token": "data-part='trigger'",
           "occurrences": 50,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:118"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:118"
           ]
         },
         {
           "token": "data-part='option'",
           "occurrences": 40,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:360"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:360"
           ]
         },
         {
           "token": "data-part='dropdown'",
           "occurrences": 37,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:232"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:232"
           ]
         },
         {
           "token": "data-part='clear-button'",
           "occurrences": 30,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:171"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:171"
           ]
         },
         {
           "token": "data-part='search-input'",
           "occurrences": 28,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:272"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:272"
           ]
         },
         {
           "token": "data-part='menu-column'",
           "occurrences": 16,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:322"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:322"
           ]
         },
         {
           "token": "data-part='loading'",
           "occurrences": 12,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:432"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:432"
           ]
         },
         {
           "token": "data-part='empty'",
           "occurrences": 11,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:306"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:306"
           ]
         },
         {
           "token": "data-part='trigger-loading'",
           "occurrences": 11,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:561"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:561"
           ]
         },
         {
           "token": "data-part='loading-spinner'",
           "occurrences": 10,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:561"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:561"
           ]
         },
         {
           "token": "data-part='option-list'",
           "occurrences": 8,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:254"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:254"
           ]
         },
         {
           "token": "data-part='arrow-icon'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:193"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:193"
           ]
         },
         {
           "token": "data-part='placeholder'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:153"
           ]
         },
         {
           "token": "data-part='loading-state'",
           "occurrences": 6,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:586"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:586"
           ]
         },
         {
           "token": "data-part='value'",
           "occurrences": 5,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:160"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:160"
           ]
         },
         {
           "token": "data-part='chevron'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:426"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:426"
           ]
         },
         {
           "token": "data-part='option-label'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:417"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:417"
           ]
         },
         {
           "token": "data-part='search-input-wrapper'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:267"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:267"
           ]
         },
         {
           "token": "data-part='menu-item-arrow'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:211"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:211"
           ]
         }
       ],
@@ -566,22 +566,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Cascader/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/cascader/engines/classic/index.tsx",
             "lines": 100
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Cascader/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/cascader/engines/modern/index.tsx",
             "lines": 734
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx",
             "lines": 612
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "loading-spinner",
           "option-list",
@@ -721,21 +721,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:149",
                 "part": "arrow-icon",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:211",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:211",
                 "part": "menu-item-arrow",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:218",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:218",
                 "part": "loading",
                 "property": "border",
                 "hasFallback": false,
@@ -764,14 +764,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:123",
                 "part": "trigger",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:173",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:173",
                 "part": "search-input",
                 "property": "background-color",
                 "hasFallback": false,
@@ -800,14 +800,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:126",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:126",
                 "part": "trigger",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:177",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:177",
                 "part": "search-input",
                 "property": "border",
                 "hasFallback": false,
@@ -835,7 +835,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:129",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:129",
                 "part": "trigger",
                 "property": "border",
                 "hasFallback": false,
@@ -866,21 +866,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:143",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:143",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:284",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:284",
                 "part": "search-input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:135",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:135",
                 "part": "trigger",
                 "property": "border",
                 "hasFallback": false,
@@ -911,28 +911,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:133",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-control-border-hover)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:139",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-control-border-hover)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:290",
                 "part": "search-input",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-control-border-hover)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:296",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:296",
                 "part": "search-input",
                 "property": "border-color",
                 "hasFallback": true,
@@ -960,7 +960,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:132",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:132",
                 "part": "trigger",
                 "property": "border",
                 "hasFallback": false,
@@ -988,7 +988,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:145",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:145",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
@@ -1017,14 +1017,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:193",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:193",
                 "part": "arrow-icon",
                 "property": "margin-inline-start",
                 "hasFallback": true,
                 "fallback": "20px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:583",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:583",
                 "part": "trigger-loading",
                 "property": "margin-inline-start",
                 "hasFallback": true,
@@ -1052,7 +1052,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:172",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:172",
                 "part": "clear-button",
                 "property": "inset-inline-end",
                 "hasFallback": true,
@@ -1081,14 +1081,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:175",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:175",
                 "part": "clear-button",
                 "property": "inline-size",
                 "hasFallback": true,
                 "fallback": "24px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:176",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:176",
                 "part": "clear-button",
                 "property": "block-size",
                 "hasFallback": true,
@@ -1117,14 +1117,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:327",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:327",
                 "part": "menu-column",
                 "property": "max-block-size",
                 "hasFallback": true,
                 "fallback": "240px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:351",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:351",
                 "part": "option-list",
                 "property": "max-block-size",
                 "hasFallback": true,
@@ -1152,7 +1152,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:325",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:325",
                 "part": "menu-column",
                 "property": "inline-size",
                 "hasFallback": true,
@@ -1182,14 +1182,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:242",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-overlay-background, var(--ds-surface-card))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:161",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:161",
                 "part": "dropdown",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1217,7 +1217,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:162",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:162",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1246,14 +1246,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:243",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:243",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-material-overlay-shadow, var(--ds-elevation-2))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:163",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -1281,7 +1281,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:234",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:234",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": true,
@@ -1309,7 +1309,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:185",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:185",
                 "part": "empty",
                 "property": "color",
                 "hasFallback": false,
@@ -1337,7 +1337,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:201",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:201",
                 "part": "option",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1365,7 +1365,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:204",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:204",
                 "part": "option",
                 "property": "background-color",
                 "hasFallback": false,
@@ -1393,14 +1393,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:433",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:433",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:445",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:445",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -1428,7 +1428,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:97",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:97",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "large",
                 "hasFallback": false,
@@ -1456,7 +1456,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:96",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:96",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "default",
                 "hasFallback": false,
@@ -1486,14 +1486,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:167",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:167",
                 "part": "search-input-wrapper",
                 "property": "border-bottom",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:193",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:193",
                 "part": "menu-column",
                 "property": "border-right",
                 "hasFallback": false,
@@ -1521,14 +1521,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:426",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:426",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "maxHeight",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:496",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:496",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "maxHeight",
                 "hasFallback": false,
@@ -1556,7 +1556,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:425",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:425",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "minWidth",
                 "hasFallback": false,
@@ -1584,7 +1584,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:139",
                 "part": "placeholder",
                 "property": "color",
                 "hasFallback": false,
@@ -1613,14 +1613,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:122",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:122",
                 "part": "trigger",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:171",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:171",
                 "part": "search-input",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1651,28 +1651,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:144",
                 "part": "trigger",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-shadow-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:211",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:211",
                 "part": "clear-button",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-shadow-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:285",
                 "part": "search-input",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-shadow-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:396",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:396",
                 "part": "option",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1700,7 +1700,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:95",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:95",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "small",
                 "hasFallback": false,
@@ -1729,14 +1729,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:440",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:440",
                 "part": "loading",
                 "property": "animation",
                 "hasFallback": true,
                 "fallback": "var(--ds-motion-glacial)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:566",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:566",
                 "part": "loading-spinner",
                 "property": "animation",
                 "hasFallback": true,
@@ -1766,7 +1766,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:449",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:449",
                 "part": "clear-button",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -1794,7 +1794,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:408",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:408",
                 "part": "option",
                 "property": "background",
                 "hasFallback": true,
@@ -1823,14 +1823,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:148",
                 "part": "trigger",
                 "property": "opacity",
                 "hasFallback": true,
                 "fallback": "0.5"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:400",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:400",
                 "part": "option",
                 "property": "opacity",
                 "hasFallback": true,
@@ -1858,7 +1858,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:244",
                 "part": "dropdown",
                 "property": "border-color",
                 "hasFallback": true,
@@ -1886,7 +1886,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:406",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:406",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "animation",
                 "hasFallback": true,
@@ -1914,7 +1914,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:364",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:364",
                 "part": "option",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -1946,7 +1946,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:163",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:163",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1980,14 +1980,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:382",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:382",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:391",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:391",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
@@ -2029,28 +2029,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:121",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:121",
                 "part": "trigger",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:244",
                 "part": "dropdown",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:268",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:268",
                 "part": "search-input-wrapper",
                 "property": "border-bottom",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:273",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:273",
                 "part": "search-input",
                 "property": "border",
                 "hasFallback": false,
@@ -2082,7 +2082,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:551",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:551",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2122,28 +2122,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:143",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:143",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:284",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:284",
                 "part": "search-input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:408",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:408",
                 "part": "option",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:409",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:409",
                 "part": "option",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2178,28 +2178,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:153",
                 "part": "placeholder",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:299",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:299",
                 "part": "search-input",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:312",
                 "part": "empty",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:428",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:428",
                 "part": "chevron",
                 "property": "color",
                 "hasFallback": false,
@@ -2236,28 +2236,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:124",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:124",
                 "part": "trigger",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:183",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:183",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:198",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:198",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:206",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:206",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": false,
@@ -2289,7 +2289,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:590",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:590",
                 "part": "loading-state",
                 "property": "color",
                 "hasFallback": false,
@@ -2321,7 +2321,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:554",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:554",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2352,7 +2352,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:243",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:243",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -2383,14 +2383,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:242",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:242",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -2422,7 +2422,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:374",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:374",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -2456,28 +2456,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:313",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:313",
                 "part": "empty",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:384",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:384",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:417",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:417",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:439",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:439",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -2508,7 +2508,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:410",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:410",
                 "part": "option",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -2541,14 +2541,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:123",
                 "part": "trigger",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:275",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:275",
                 "part": "search-input",
                 "property": "background",
                 "hasFallback": true,
@@ -2582,14 +2582,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:198",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:198",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:206",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:206",
                 "part": "clear-button",
                 "property": "color",
                 "hasFallback": true,
@@ -2622,14 +2622,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:153",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:153",
                 "part": "placeholder",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-muted)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:299",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:299",
                 "part": "search-input",
                 "property": "color",
                 "hasFallback": true,
@@ -2660,7 +2660,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:534",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:534",
                 "part": "trigger",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2691,7 +2691,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:531",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:531",
                 "part": "trigger",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2722,7 +2722,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:533",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:533",
                 "part": "trigger",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -2754,7 +2754,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:528",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:528",
                 "part": "trigger",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2785,7 +2785,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:525",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:525",
                 "part": "trigger",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2816,7 +2816,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:527",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:527",
                 "part": "trigger",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -2850,28 +2850,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:370",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:370",
                 "part": "option",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:522",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:522",
                 "part": "trigger",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:543",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:543",
                 "part": "search-input",
                 "property": "font-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:591",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:591",
                 "part": "loading-state",
                 "property": "font-size",
                 "hasFallback": false,
@@ -2903,14 +2903,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:519",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:519",
                 "part": "trigger",
                 "property": "block-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:540",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:540",
                 "part": "search-input",
                 "property": "block-size",
                 "hasFallback": false,
@@ -2942,14 +2942,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:521",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:521",
                 "part": "trigger",
                 "property": "padding-inline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:542",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:542",
                 "part": "search-input",
                 "property": "padding-inline",
                 "hasFallback": false,
@@ -2980,7 +2980,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:314",
                 "part": "empty",
                 "property": "line-height",
                 "hasFallback": false,
@@ -3014,28 +3014,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:133",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:133",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:139",
                 "part": "trigger",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:290",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:290",
                 "part": "search-input",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:296",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:296",
                 "part": "search-input",
                 "property": "border-color",
                 "hasFallback": false,
@@ -3066,7 +3066,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:242",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": true,
@@ -3097,7 +3097,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:243",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:243",
                 "part": "dropdown",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -3135,28 +3135,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:128",
                 "part": "trigger",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:128",
                 "part": "trigger",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:187",
                 "part": "clear-button",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:218",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:218",
                 "part": "arrow-icon",
                 "property": "transition",
                 "hasFallback": false,
@@ -3195,28 +3195,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:128",
                 "part": "trigger",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:128",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:128",
                 "part": "trigger",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:187",
                 "part": "clear-button",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:218",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:218",
                 "part": "arrow-icon",
                 "property": "transition",
                 "hasFallback": false,
@@ -3249,14 +3249,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:440",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:440",
                 "part": "loading",
                 "property": "animation",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:566",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:566",
                 "part": "loading-spinner",
                 "property": "animation",
                 "hasFallback": false,
@@ -3287,7 +3287,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:237",
                 "part": "dropdown",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3320,21 +3320,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:122",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:122",
                 "part": "trigger",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:274",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:274",
                 "part": "search-input",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:311",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:311",
                 "part": "empty",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3365,7 +3365,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:367",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:367",
                 "part": "option",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -3400,28 +3400,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:144",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:144",
                 "part": "trigger",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:211",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:211",
                 "part": "clear-button",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:285",
                 "part": "search-input",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:396",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:396",
                 "part": "option",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -3460,28 +3460,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:235",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:235",
                 "part": "dropdown",
                 "property": "margin-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:261",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:261",
                 "part": "option-list",
                 "property": "max-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:324",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:324",
                 "part": "menu-column",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:350",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:350",
                 "part": "option-list",
                 "property": "padding",
                 "hasFallback": false,
@@ -3521,28 +3521,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:267",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:267",
                 "part": "search-input-wrapper",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:309",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:309",
                 "part": "empty",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:365",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:365",
                 "part": "option",
                 "property": "padding-inline",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:427",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:427",
                 "part": "chevron",
                 "property": "margin-inline-start",
                 "hasFallback": false,
@@ -3575,14 +3575,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:309",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:309",
                 "part": "empty",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:526",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:526",
                 "part": "trigger",
                 "property": "padding-block",
                 "hasFallback": false,
@@ -3614,14 +3614,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:236",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:236",
                 "part": "dropdown",
                 "property": "max-inline-size",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:261",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:261",
                 "part": "option-list",
                 "property": "max-inline-size",
                 "hasFallback": false,
@@ -3652,7 +3652,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:242",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:242",
                 "part": "dropdown",
                 "property": "background",
                 "hasFallback": false,
@@ -3684,14 +3684,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:123",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:123",
                 "part": "trigger",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:275",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:275",
                 "part": "search-input",
                 "property": "background",
                 "hasFallback": false,
@@ -3724,7 +3724,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:449",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:449",
                 "part": "clear-button",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -3755,7 +3755,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:375",
+                "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:375",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "transition",
                 "hasFallback": false,
@@ -3786,7 +3786,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css:234",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css:234",
                 "part": "dropdown",
                 "property": "z-index",
                 "hasFallback": false,
@@ -3849,7 +3849,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:180",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:180",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "border-color",
@@ -3857,7 +3857,7 @@
             "declaration": "border-color: var(--ds-color-primary, #1677ff);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:181",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:181",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "box-shadow",
@@ -3865,7 +3865,7 @@
             "declaration": "box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:181",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:181",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_DIRECT",
             "property": "box-shadow",
@@ -3873,7 +3873,7 @@
             "declaration": "box-shadow: 0 0 0 3px rgba(22, 119, 255, 0.15), 0 0 8px rgba(22, 119, 255, 0.08);"
           },
           {
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader.css:207",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css:207",
             "sourceKind": "rustic-skin-css",
             "class": "LITERAL_COLOR_AS_VAR_FALLBACK",
             "property": "box-shadow",
@@ -3881,7 +3881,7 @@
             "declaration": "box-shadow: inset 0 0 0 1px var(--ds-color-primary, #1677ff);"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:395",
+            "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:395",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3889,7 +3889,7 @@
             "declaration": "transition: 'transform 0.2s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:418",
+            "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:418",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3897,7 +3897,7 @@
             "declaration": "transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:418",
+            "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:418",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3905,7 +3905,7 @@
             "declaration": "transition: 'border-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1)',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:440",
+            "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:440",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3913,7 +3913,7 @@
             "declaration": "transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:440",
+            "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:440",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -3921,7 +3921,7 @@
             "declaration": "transition: 'background-color 0.15s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.15s',"
           },
           {
-            "at": "packages/core/src/ui/primitives/inputs/Cascader/engines/rustic/index.tsx:454",
+            "at": "packages/core/src/components/primitives/inputs/cascader/engines/rustic/index.tsx:454",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "animation",
@@ -4003,13 +4003,13 @@
         {
           "channelId": "--_ds-cascader-accent-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4019,13 +4019,13 @@
         {
           "channelId": "--_ds-cascader-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4035,13 +4035,13 @@
         {
           "channelId": "--_ds-cascader-border-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4050,13 +4050,13 @@
         {
           "channelId": "--_ds-cascader-dropdown-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4065,13 +4065,13 @@
         {
           "channelId": "--_ds-cascader-error-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4081,13 +4081,13 @@
         {
           "channelId": "--_ds-cascader-error-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4141,13 +4141,13 @@
         {
           "channelId": "--_ds-cascader-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4167,13 +4167,13 @@
         {
           "channelId": "--_ds-cascader-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4227,13 +4227,13 @@
         {
           "channelId": "--_ds-cascader-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4243,13 +4243,13 @@
         {
           "channelId": "--_ds-cascader-clear-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4258,13 +4258,13 @@
         {
           "channelId": "--_ds-cascader-clear-inset-inline-end",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4273,13 +4273,13 @@
         {
           "channelId": "--_ds-cascader-clear-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4288,13 +4288,13 @@
         {
           "channelId": "--_ds-cascader-column-max-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4303,13 +4303,13 @@
         {
           "channelId": "--_ds-cascader-column-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4345,13 +4345,13 @@
         {
           "channelId": "--_ds-cascader-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4361,13 +4361,13 @@
         {
           "channelId": "--_ds-cascader-spinner-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4474,13 +4474,13 @@
         {
           "channelId": "--_ds-cascader-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4490,13 +4490,13 @@
         {
           "channelId": "--_ds-cascader-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4506,13 +4506,13 @@
         {
           "channelId": "--_ds-cascader-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4522,13 +4522,13 @@
         {
           "channelId": "--_ds-cascader-border-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4537,13 +4537,13 @@
         {
           "channelId": "--_ds-cascader-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -4566,7 +4566,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -4622,7 +4622,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -4650,7 +4650,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
         ]
       }
     },
@@ -4665,13 +4665,13 @@
         {
           "channelId": "--_ds-cascader-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/cascader"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/cascader/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -4691,11 +4691,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

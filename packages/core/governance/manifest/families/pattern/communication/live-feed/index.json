@@ -8,15 +8,15 @@
     "components": [
       "PatternLiveFeed"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/communication/live-feed",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/communication/live-feed",
     "publicComponents": [
       "PatternLiveFeed"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "4589179469a10cadce99c8f16028c986e2be722bbbdd35d0af2e307b591678af"
+    "inventoryRowDigest": "9641a411f927e7c1c6d7b3e901979ac6ace51247b6f273988cd87a0058eba3f7"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/communication/live-feed/index.ts",
-      "packages/core/src/ui/patterns/communication/live-feed/contracts/index.ts",
-      "packages/core/src/ui/patterns/communication/live-feed/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css"
+      "packages/core/src/components/patterns/communication/live-feed/index.ts",
+      "packages/core/src/components/patterns/communication/live-feed/contracts/index.ts",
+      "packages/core/src/components/patterns/communication/live-feed/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css"
     ],
     "stableParts": [
       "badge",
@@ -80,158 +80,158 @@
           "part": "badge",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:206",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:136",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:234",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css:72"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:206",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:136",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:234",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css:72"
           ]
         },
         {
           "part": "banner",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:203",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:178",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:119",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:185",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:229"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:203",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:178",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:119",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:185",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:229"
           ]
         },
         {
           "part": "body",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:162",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:182",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:45"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:162",
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:182",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:45"
           ]
         },
         {
           "part": "empty",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:228",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:156",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css:79"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:228",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css:79"
           ]
         },
         {
           "part": "footer",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:260",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:166"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:166"
           ]
         },
         {
           "part": "header-content",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:139",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:97"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:139",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:97"
           ]
         },
         {
           "part": "header-row",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:138",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:87"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:87"
           ]
         },
         {
           "part": "list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:240"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:240"
           ]
         },
         {
           "part": "load-more",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:265",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:213",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:171",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:186",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:210"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:265",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:213",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:171",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:186",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:210"
           ]
         },
         {
           "part": "refresh",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:145",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:168",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:104",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:184",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:204",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:209"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:145",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:168",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:104",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:184",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:204",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:209"
           ]
         },
         {
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:157",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:177",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:153",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:36",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:45"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:157",
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:177",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:153",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:45"
           ]
         },
         {
           "part": "sentinel",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/classic/index.tsx:148",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:254",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:161"
+            "packages/core/src/components/patterns/communication/live-feed/engines/classic/index.tsx:148",
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:254",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:161"
           ]
         },
         {
           "part": "skeleton",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:165",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:167",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:154",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx:156",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:61",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:67"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:165",
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:167",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:154",
+            "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:61",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:67"
           ]
         },
         {
           "part": "skeleton-list",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:164",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:46",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:55",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:216"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:164",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:46",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:216"
           ]
         },
         {
           "part": "spinner",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:146",
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:266"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:146",
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:266"
           ]
         },
         {
           "part": "viewport",
           "anchorKind": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:220",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:193",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:247"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:220",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:193",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:247"
           ]
         }
       ],
@@ -239,16 +239,16 @@
         {
           "token": "skeleton=row",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:167",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:73"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:73"
           ],
           "state": "skeleton"
         },
         {
           "token": "skeleton=title",
           "at": [
-            "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx:165",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css:67"
+            "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx:165",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css:67"
           ],
           "state": "skeleton"
         }
@@ -257,17 +257,17 @@
         "engineSiblings": [
           {
             "engine": "classic",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/classic/index.tsx",
             "lines": 159
           },
           {
             "engine": "modern",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/modern/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/modern/index.tsx",
             "lines": 276
           },
           {
             "engine": "rustic",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
             "lines": 219
           }
         ]
@@ -282,7 +282,7 @@
         "variableCensus": [
           {
             "name": "--ds-color-border-subtle",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 37,
             "fallback": false,
             "fallbackValue": null,
@@ -295,7 +295,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 38,
             "fallback": false,
             "fallbackValue": null,
@@ -308,7 +308,7 @@
           },
           {
             "name": "--ds-surface-card",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 39,
             "fallback": false,
             "fallbackValue": null,
@@ -321,7 +321,7 @@
           },
           {
             "name": "--ds-elevation-1",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 40,
             "fallback": false,
             "fallbackValue": null,
@@ -334,7 +334,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 41,
             "fallback": false,
             "fallbackValue": null,
@@ -347,7 +347,7 @@
           },
           {
             "name": "--ds-live-feed-body-padding",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 47,
             "fallback": true,
             "fallbackValue": "20px",
@@ -360,7 +360,7 @@
           },
           {
             "name": "--ds-live-feed-skeleton-duration",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 57,
             "fallback": true,
             "fallbackValue": "var(--ds-motion-slow)",
@@ -373,7 +373,7 @@
           },
           {
             "name": "--ds-motion-slow",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 57,
             "fallback": false,
             "fallbackValue": null,
@@ -386,7 +386,7 @@
           },
           {
             "name": "--ds-motion-ease-in-out",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 58,
             "fallback": false,
             "fallbackValue": null,
@@ -399,7 +399,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 62,
             "fallback": false,
             "fallbackValue": null,
@@ -412,7 +412,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 63,
             "fallback": false,
             "fallbackValue": null,
@@ -425,7 +425,7 @@
           },
           {
             "name": "--ds-live-feed-skeleton-row-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 64,
             "fallback": true,
             "fallbackValue": "8px",
@@ -438,7 +438,7 @@
           },
           {
             "name": "--ds-live-feed-skeleton-title-height",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 68,
             "fallback": true,
             "fallbackValue": "16px",
@@ -451,7 +451,7 @@
           },
           {
             "name": "--ds-live-feed-skeleton-title-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 70,
             "fallback": true,
             "fallbackValue": "16px",
@@ -464,7 +464,7 @@
           },
           {
             "name": "--ds-live-feed-skeleton-row-height",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "64px",
@@ -477,7 +477,7 @@
           },
           {
             "name": "--ds-spacing-2",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 91,
             "fallback": false,
             "fallbackValue": null,
@@ -490,7 +490,7 @@
           },
           {
             "name": "--ds-live-feed-header-margin-block-end",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 92,
             "fallback": true,
             "fallbackValue": "12px",
@@ -503,7 +503,7 @@
           },
           {
             "name": "--ds-live-feed-refresh-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 105,
             "fallback": true,
             "fallbackValue": "32px",
@@ -516,7 +516,7 @@
           },
           {
             "name": "--ds-live-feed-refresh-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 106,
             "fallback": true,
             "fallbackValue": "32px",
@@ -529,7 +529,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 109,
             "fallback": false,
             "fallbackValue": null,
@@ -542,7 +542,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 110,
             "fallback": false,
             "fallbackValue": null,
@@ -555,7 +555,7 @@
           },
           {
             "name": "--ds-live-feed-control-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 112,
             "fallback": true,
             "fallbackValue": "13px",
@@ -568,7 +568,7 @@
           },
           {
             "name": "--ds-live-feed-banner-height",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 121,
             "fallback": true,
             "fallbackValue": "32px",
@@ -581,7 +581,7 @@
           },
           {
             "name": "--ds-live-feed-banner-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 122,
             "fallback": true,
             "fallbackValue": "8px",
@@ -594,7 +594,7 @@
           },
           {
             "name": "--ds-live-feed-banner-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 124,
             "fallback": true,
             "fallbackValue": "12px",
@@ -607,7 +607,7 @@
           },
           {
             "name": "--ds-live-feed-banner-margin-block-end",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 125,
             "fallback": true,
             "fallbackValue": "12px",
@@ -620,7 +620,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 126,
             "fallback": false,
             "fallbackValue": null,
@@ -633,7 +633,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 127,
             "fallback": false,
             "fallbackValue": null,
@@ -646,7 +646,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 128,
             "fallback": false,
             "fallbackValue": null,
@@ -659,7 +659,7 @@
           },
           {
             "name": "--ds-live-feed-control-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 130,
             "fallback": true,
             "fallbackValue": "13px",
@@ -672,7 +672,7 @@
           },
           {
             "name": "--ds-surface-panel",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 143,
             "fallback": false,
             "fallbackValue": null,
@@ -685,7 +685,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 144,
             "fallback": false,
             "fallbackValue": null,
@@ -698,7 +698,7 @@
           },
           {
             "name": "--ds-font-size-2xs",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 145,
             "fallback": false,
             "fallbackValue": null,
@@ -711,7 +711,7 @@
           },
           {
             "name": "--ds-font-weight-medium",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 147,
             "fallback": true,
             "fallbackValue": "500",
@@ -724,7 +724,7 @@
           },
           {
             "name": "--ds-live-feed-empty-padding-block",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 157,
             "fallback": true,
             "fallbackValue": "32px",
@@ -737,7 +737,7 @@
           },
           {
             "name": "--ds-live-feed-footer-margin-block-start",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 167,
             "fallback": true,
             "fallbackValue": "12px",
@@ -750,7 +750,7 @@
           },
           {
             "name": "--ds-live-feed-load-more-gap",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 172,
             "fallback": true,
             "fallbackValue": "6px",
@@ -763,7 +763,7 @@
           },
           {
             "name": "--ds-live-feed-control-height",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 173,
             "fallback": true,
             "fallbackValue": "32px",
@@ -776,7 +776,7 @@
           },
           {
             "name": "--ds-live-feed-control-padding-inline",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 175,
             "fallback": true,
             "fallbackValue": "12px",
@@ -789,7 +789,7 @@
           },
           {
             "name": "--ds-color-text-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 177,
             "fallback": false,
             "fallbackValue": null,
@@ -802,7 +802,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 178,
             "fallback": false,
             "fallbackValue": null,
@@ -815,7 +815,7 @@
           },
           {
             "name": "--ds-live-feed-control-font-size",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 180,
             "fallback": true,
             "fallbackValue": "13px",
@@ -828,7 +828,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 187,
             "fallback": true,
             "fallbackValue": "2px",
@@ -841,7 +841,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 187,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -854,7 +854,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 187,
             "fallback": false,
             "fallbackValue": null,
@@ -867,7 +867,7 @@
           },
           {
             "name": "--ds-focus-ring-offset",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 188,
             "fallback": true,
             "fallbackValue": "2px",
@@ -880,7 +880,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 194,
             "fallback": true,
             "fallbackValue": "2px",
@@ -893,7 +893,7 @@
           },
           {
             "name": "--ds-focus-ring-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 194,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -906,7 +906,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 194,
             "fallback": false,
             "fallbackValue": null,
@@ -919,7 +919,7 @@
           },
           {
             "name": "--ds-focus-ring-width",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 195,
             "fallback": true,
             "fallbackValue": "2px",
@@ -932,7 +932,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 196,
             "fallback": false,
             "fallbackValue": null,
@@ -945,7 +945,7 @@
           },
           {
             "name": "--ds-live-feed-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 207,
             "fallback": true,
             "fallbackValue": "var(--ds-touch-target-min, 44px)",
@@ -958,7 +958,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 207,
             "fallback": true,
             "fallbackValue": "44px",
@@ -971,7 +971,7 @@
           },
           {
             "name": "--ds-live-feed-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 211,
             "fallback": true,
             "fallbackValue": "var(--ds-touch-target-min, 44px)",
@@ -984,7 +984,7 @@
           },
           {
             "name": "--ds-touch-target-min",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 211,
             "fallback": true,
             "fallbackValue": "44px",
@@ -997,7 +997,7 @@
           },
           {
             "name": "--ds-live-feed-new-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 43,
             "fallback": true,
             "fallbackValue": "var(--ds-color-info-bg)",
@@ -1010,7 +1010,7 @@
           },
           {
             "name": "--ds-color-info-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 43,
             "fallback": false,
             "fallbackValue": null,
@@ -1023,7 +1023,7 @@
           },
           {
             "name": "--ds-color-neutral-900",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 49,
             "fallback": false,
             "fallbackValue": null,
@@ -1036,7 +1036,7 @@
           },
           {
             "name": "--ds-live-feed-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 50,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-elevated)",
@@ -1049,7 +1049,7 @@
           },
           {
             "name": "--ds-color-bg-elevated",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 50,
             "fallback": false,
             "fallbackValue": null,
@@ -1062,7 +1062,7 @@
           },
           {
             "name": "--ds-live-feed-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 51,
             "fallback": true,
             "fallbackValue": "var(--ds-color-border)",
@@ -1075,7 +1075,7 @@
           },
           {
             "name": "--ds-color-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 51,
             "fallback": false,
             "fallbackValue": null,
@@ -1088,7 +1088,7 @@
           },
           {
             "name": "--ds-radius-lg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 52,
             "fallback": false,
             "fallbackValue": null,
@@ -1101,7 +1101,7 @@
           },
           {
             "name": "--ds-live-feed-refresh-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 59,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-secondary)",
@@ -1114,7 +1114,7 @@
           },
           {
             "name": "--ds-color-text-secondary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 59,
             "fallback": false,
             "fallbackValue": null,
@@ -1127,7 +1127,7 @@
           },
           {
             "name": "--ds-radius-sm",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 60,
             "fallback": false,
             "fallbackValue": null,
@@ -1140,7 +1140,7 @@
           },
           {
             "name": "--ds-live-feed-new-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 65,
             "fallback": true,
             "fallbackValue": "var(--ds-color-info-bg)",
@@ -1153,7 +1153,7 @@
           },
           {
             "name": "--ds-color-info-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 65,
             "fallback": false,
             "fallbackValue": null,
@@ -1166,7 +1166,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 66,
             "fallback": false,
             "fallbackValue": null,
@@ -1179,7 +1179,7 @@
           },
           {
             "name": "--ds-live-feed-new-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 67,
             "fallback": true,
             "fallbackValue": "var(--ds-color-info)",
@@ -1192,7 +1192,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 67,
             "fallback": false,
             "fallbackValue": null,
@@ -1205,7 +1205,7 @@
           },
           {
             "name": "--ds-live-feed-new-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 68,
             "fallback": true,
             "fallbackValue": "var(--ds-color-info-border)",
@@ -1218,7 +1218,7 @@
           },
           {
             "name": "--ds-color-info-border",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 68,
             "fallback": false,
             "fallbackValue": null,
@@ -1231,7 +1231,7 @@
           },
           {
             "name": "--ds-radius-full",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 73,
             "fallback": true,
             "fallbackValue": "9999px",
@@ -1244,7 +1244,7 @@
           },
           {
             "name": "--ds-live-feed-badge-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 74,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1257,7 +1257,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 74,
             "fallback": false,
             "fallbackValue": null,
@@ -1270,7 +1270,7 @@
           },
           {
             "name": "--ds-live-feed-badge-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 75,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-on-primary)",
@@ -1283,7 +1283,7 @@
           },
           {
             "name": "--ds-color-text-on-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 75,
             "fallback": false,
             "fallbackValue": null,
@@ -1296,7 +1296,7 @@
           },
           {
             "name": "--ds-live-feed-empty-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 80,
             "fallback": true,
             "fallbackValue": "var(--ds-color-text-muted)",
@@ -1309,7 +1309,7 @@
           },
           {
             "name": "--ds-color-text-muted",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 80,
             "fallback": false,
             "fallbackValue": null,
@@ -1322,7 +1322,7 @@
           },
           {
             "name": "--ds-live-feed-load-more-color",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 87,
             "fallback": true,
             "fallbackValue": "var(--ds-color-primary)",
@@ -1335,7 +1335,7 @@
           },
           {
             "name": "--ds-color-primary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 87,
             "fallback": false,
             "fallbackValue": null,
@@ -1348,7 +1348,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 88,
             "fallback": false,
             "fallbackValue": null,
@@ -1361,7 +1361,7 @@
           },
           {
             "name": "--ds-radius-md",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 93,
             "fallback": false,
             "fallbackValue": null,
@@ -1374,7 +1374,7 @@
           },
           {
             "name": "--ds-live-feed-skeleton-bg",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 94,
             "fallback": true,
             "fallbackValue": "var(--ds-color-bg-tertiary)",
@@ -1387,7 +1387,7 @@
           },
           {
             "name": "--ds-color-bg-tertiary",
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 94,
             "fallback": false,
             "fallbackValue": null,
@@ -1400,7 +1400,7 @@
           },
           {
             "name": "--ds-color-info-bg",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/classic/index.tsx",
             "line": 111,
             "fallback": false,
             "fallbackValue": null,
@@ -1413,7 +1413,7 @@
           },
           {
             "name": "--ds-color-info",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/classic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/classic/index.tsx",
             "line": 115,
             "fallback": false,
             "fallbackValue": null,
@@ -1426,7 +1426,7 @@
           },
           {
             "name": "--ds-font-family-base",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
             "line": 36,
             "fallback": false,
             "fallbackValue": null,
@@ -1439,7 +1439,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
             "line": 55,
             "fallback": false,
             "fallbackValue": null,
@@ -1452,7 +1452,7 @@
           },
           {
             "name": "--ds-font-size-xs",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
             "line": 61,
             "fallback": false,
             "fallbackValue": null,
@@ -1465,7 +1465,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
             "line": 68,
             "fallback": false,
             "fallbackValue": null,
@@ -1478,7 +1478,7 @@
           },
           {
             "name": "--ds-font-size-sm",
-            "file": "packages/core/src/ui/patterns/communication/live-feed/engines/rustic/index.tsx",
+            "file": "packages/core/src/components/patterns/communication/live-feed/engines/rustic/index.tsx",
             "line": 79,
             "fallback": false,
             "fallbackValue": null,
@@ -1492,217 +1492,217 @@
         ],
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 37,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-color-border-subtle);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 47,
             "literal": "20px",
             "text": "padding: var(--ds-live-feed-body-padding, 20px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 64,
             "literal": "8px",
             "text": "margin-block-end: var(--ds-live-feed-skeleton-row-gap, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 68,
             "literal": "16px",
             "text": "block-size: var(--ds-live-feed-skeleton-title-height, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 70,
             "literal": "16px",
             "text": "margin-block-end: var(--ds-live-feed-skeleton-title-gap, 16px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 74,
             "literal": "64px",
             "text": "block-size: var(--ds-live-feed-skeleton-row-height, 64px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 92,
             "literal": "12px",
             "text": "margin-block-end: var(--ds-live-feed-header-margin-block-end, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 105,
             "literal": "32px",
             "text": "inline-size: var(--ds-live-feed-refresh-size, 32px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 106,
             "literal": "32px",
             "text": "block-size: var(--ds-live-feed-refresh-size, 32px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 112,
             "literal": "13px",
             "text": "font-size: var(--ds-live-feed-control-font-size, 13px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 121,
             "literal": "32px",
             "text": "min-block-size: var(--ds-live-feed-banner-height, 32px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 122,
             "literal": "8px",
             "text": "gap: var(--ds-live-feed-banner-gap, 8px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 124,
             "literal": "12px",
             "text": "padding-inline: var(--ds-live-feed-banner-padding-inline, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 125,
             "literal": "12px",
             "text": "margin-block-end: var(--ds-live-feed-banner-margin-block-end, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 130,
             "literal": "13px",
             "text": "font-size: var(--ds-live-feed-control-font-size, 13px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 140,
             "literal": "1px",
             "text": "padding-block: 1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 141,
             "literal": "6px",
             "text": "padding-inline: 6px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 142,
             "literal": "9999px",
             "text": "border-radius: 9999px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 148,
             "literal": "16px",
             "text": "line-height: 16px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 157,
             "literal": "32px",
             "text": "padding-block: var(--ds-live-feed-empty-padding-block, 32px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 162,
             "literal": "1px",
             "text": "block-size: 1px;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 167,
             "literal": "12px",
             "text": "margin-block-start: var(--ds-live-feed-footer-margin-block-start, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 172,
             "literal": "6px",
             "text": "gap: var(--ds-live-feed-load-more-gap, 6px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 173,
             "literal": "32px",
             "text": "block-size: var(--ds-live-feed-control-height, 32px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 175,
             "literal": "12px",
             "text": "padding-inline: var(--ds-live-feed-control-padding-inline, 12px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 180,
             "literal": "13px",
             "text": "font-size: var(--ds-live-feed-control-font-size, 13px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 187,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 188,
             "literal": "2px",
             "text": "outline-offset: var(--ds-focus-ring-offset, 2px);"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 194,
             "literal": "2px",
             "text": "outline: var(--ds-focus-ring-width, 2px) solid var(--ds-focus-ring-color, var(--ds-color-primary));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 195,
             "literal": "2px",
             "text": "outline-offset: calc(-1 * var(--ds-focus-ring-width, 2px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 207,
             "literal": "44px",
             "text": "min-block-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 211,
             "literal": "44px",
             "text": "min-inline-size: var(--ds-live-feed-touch-target-min, var(--ds-touch-target-min, 44px));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
             "line": 235,
             "literal": "1px",
             "text": "border: 1px solid HighlightText;"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 51,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-live-feed-border, var(--ds-color-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 68,
             "literal": "1px",
             "text": "border: 1px solid var(--ds-live-feed-new-border, var(--ds-color-info-border));"
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed.css",
+            "file": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/live-feed/index.css",
             "line": 73,
             "literal": "9999px",
             "text": "border-radius: var(--ds-radius-full, 9999px);"
@@ -1754,7 +1754,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -1778,7 +1778,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -1807,13 +1807,13 @@
         {
           "channelId": "--_ds-live-feed-control-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1822,13 +1822,13 @@
         {
           "channelId": "--_ds-live-feed-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1846,7 +1846,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -1874,7 +1874,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el composer y las acciones son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -1907,13 +1907,13 @@
         {
           "channelId": "--_ds-live-feed-banner-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1922,13 +1922,13 @@
         {
           "channelId": "--_ds-live-feed-banner-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1937,13 +1937,13 @@
         {
           "channelId": "--_ds-live-feed-banner-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1952,13 +1952,13 @@
         {
           "channelId": "--_ds-live-feed-body-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1967,13 +1967,13 @@
         {
           "channelId": "--_ds-live-feed-control-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1982,13 +1982,13 @@
         {
           "channelId": "--_ds-live-feed-control-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1997,13 +1997,13 @@
         {
           "channelId": "--_ds-live-feed-empty-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2012,13 +2012,13 @@
         {
           "channelId": "--_ds-live-feed-load-more-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2027,13 +2027,13 @@
         {
           "channelId": "--_ds-live-feed-refresh-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2042,13 +2042,13 @@
         {
           "channelId": "--_ds-live-feed-skeleton-row-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2057,13 +2057,13 @@
         {
           "channelId": "--_ds-live-feed-skeleton-row-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2072,13 +2072,13 @@
         {
           "channelId": "--_ds-live-feed-skeleton-title-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2087,13 +2087,13 @@
         {
           "channelId": "--_ds-live-feed-skeleton-title-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2121,13 +2121,13 @@
         {
           "channelId": "--_ds-live-feed-banner-margin-block-end",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2136,13 +2136,13 @@
         {
           "channelId": "--_ds-live-feed-footer-margin-block-start",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2151,13 +2151,13 @@
         {
           "channelId": "--_ds-live-feed-header-margin-block-end",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2185,13 +2185,13 @@
         {
           "channelId": "--_ds-live-feed-skeleton-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2200,13 +2200,13 @@
         {
           "channelId": "--_ds-live-feed-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/communication/live-feed"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/live-feed/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2225,7 +2225,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "mensajes y presence en flujo; el dropdown de mentions hereda elevacion del socket overlay de menu",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -2250,7 +2250,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "legibilidad del mensaje: mate; la tinta manda",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -2270,7 +2270,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "contenido de conversacion, no chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2290,7 +2290,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -2310,7 +2310,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "las burbujas son chrome pintado por familia; precedentes vivos --_ds-message-wash-head/-well",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -2329,7 +2329,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "remediatedFrom": "fam11-dup-sweep",
         "reasons": [
           {
@@ -2360,7 +2360,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2373,7 +2373,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -2419,7 +2419,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2457,7 +2457,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los ticks de estado del mensaje son iconos de la libreria",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -2478,11 +2478,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

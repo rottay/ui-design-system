@@ -8,15 +8,15 @@
     "components": [
       "Carousel"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/Carousel",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/carousel",
     "publicComponents": [
       "Carousel"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "1c7440098016e138bedc4e1e66f908e5e2d116f8a78d3a702915275da2135a1f"
+    "inventoryRowDigest": "41f17eb08371a050ce18e56b7bbac6aad2f87491135ea04363fac00ced55a857"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,16 +28,16 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/Carousel/index.tsx",
-      "packages/core/src/ui/primitives/display/Carousel/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/Carousel/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/display/Carousel/compound/Item/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css"
+      "packages/core/src/components/primitives/display/carousel/index.tsx",
+      "packages/core/src/components/primitives/display/carousel/contracts/index.ts",
+      "packages/core/src/components/primitives/display/carousel/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/display/carousel/compound/item/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css"
     ],
     "stableParts": [
       "root",
@@ -58,10 +58,10 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "Slides keep role='group' with aria-roledescription='slide'; the dot strip keeps tablist/tab semantics. [at packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:515, packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:516, packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:590, packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:612]",
-      "The disabled edge arrow stays visually distinct under forced-colors, where opacity is stripped. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:255, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:257]",
-      "Selected and unselected dots remain distinguishable under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:261, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:265]",
-      "Arrow and dot focus rings re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:270, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:271]"
+      "Slides keep role='group' with aria-roledescription='slide'; the dot strip keeps tablist/tab semantics. [at packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:515, packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:516, packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:590, packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:612]",
+      "The disabled edge arrow stays visually distinct under forced-colors, where opacity is stripped. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:255, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:257]",
+      "Selected and unselected dots remain distinguishable under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:261, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:265]",
+      "Arrow and dot focus rings re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:270, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:271]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -84,9 +84,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-vertical/data-fade/data-swipe axes",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:464",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:465",
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:312"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:464",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:465",
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:312"
           ]
         },
         {
@@ -94,8 +94,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:478",
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:324"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:478",
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:324"
           ]
         },
         {
@@ -103,13 +103,13 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='group' + aria-roledescription='slide' + data-selected",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:492",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:493",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:516",
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:329"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:492",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:493",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:516",
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:329"
           ],
           "citationsUnverified": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:515"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:515"
           ],
           "anchorStatus": "verified"
         },
@@ -118,10 +118,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-direction axis on a <button>",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:542",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:561",
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:346",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:138"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:542",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:561",
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:346",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:138"
           ]
         },
         {
@@ -129,9 +129,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='tablist'",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:588",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:590",
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:371"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:588",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:590",
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:371"
           ]
         },
         {
@@ -139,11 +139,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + role='tab' + data-selected axis",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:600",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:601",
-            "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:612",
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:379",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:216"
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:600",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:601",
+            "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:612",
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:379",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:216"
           ]
         },
         {
@@ -151,7 +151,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute (Carousel.Item compound)",
           "at": [
-            "packages/core/src/ui/primitives/display/Carousel/compound/Item/index.tsx:122"
+            "packages/core/src/components/primitives/display/carousel/compound/item/index.tsx:122"
           ]
         }
       ],
@@ -160,16 +160,16 @@
           "token": "hovered",
           "note": "arrow and unselected dot, hover-capable-gated, :not(:disabled)",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:138",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:142"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:138",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:142"
           ],
           "state": "hover"
         },
         {
           "token": "pressed",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:150",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:155"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:150",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:155"
           ],
           "state": "active-pressed"
         },
@@ -177,15 +177,15 @@
           "token": "disabled",
           "note": "native :disabled on the edge arrow",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:161"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:161"
           ],
           "state": "disabled"
         },
         {
           "token": "focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:167",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:168"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:167",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:168"
           ],
           "state": "focus-visible"
         },
@@ -193,9 +193,9 @@
           "token": "selected",
           "note": "data-selected true/false on the dot",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:216",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:225",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:229"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:216",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:225",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:229"
           ],
           "state": "selected"
         }
@@ -205,13 +205,13 @@
           {
             "token": "prefers-reduced-motion: reduce",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:234"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:234"
             ]
           },
           {
             "token": "forced-colors: active",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:248"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:248"
             ]
           }
         ],
@@ -220,7 +220,7 @@
       "engineDivergence": {
         "classic": {
           "dataPartEmissions": 0,
-          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1915-1950"
+          "note": "no data-part; paint from packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1915-1950"
         },
         "modern": {
           "dataPartEmissions": 8
@@ -229,7 +229,7 @@
           "dataPartEmissions": 7,
           "note": "same part names; track carries aria-live='polite' which modern does not stamp",
           "anchors": [
-            "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:324"
+            "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:324"
           ]
         }
       },
@@ -239,7 +239,7 @@
           {
             "variable": "--ds-carousel-height",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:483",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:483",
             "landsOn": "aria-roledescription",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -256,7 +256,7 @@
           {
             "variable": "--ds-carousel-rtl-factor",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:510",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:510",
             "landsOn": "--ds-carousel-slide-transform",
             "landingKind": "custom-property-redeclaration",
             "hasFallback": true,
@@ -273,7 +273,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:513",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:513",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -290,7 +290,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:513",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:513",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -307,7 +307,7 @@
           {
             "variable": "--ds-carousel-arrow-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:226",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:226",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -324,7 +324,7 @@
           {
             "variable": "--ds-carousel-arrow-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:227",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:227",
             "landsOn": "height",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -341,7 +341,7 @@
           {
             "variable": "--ds-carousel-transition",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:233",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:233",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -358,7 +358,7 @@
           {
             "variable": "--ds-carousel-dot-active-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:303",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:303",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -375,7 +375,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:303",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:303",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -392,7 +392,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:304",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:304",
             "landsOn": "height",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -409,7 +409,7 @@
           {
             "variable": "--ds-carousel-transition",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/Carousel/engines/rustic/index.tsx:306",
+            "at": "packages/core/src/components/primitives/display/carousel/engines/rustic/index.tsx:306",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -426,7 +426,7 @@
           {
             "variable": "--ds-carousel-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:62",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:62",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -443,7 +443,7 @@
           {
             "variable": "--ds-carousel-slide-transform",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:101",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:101",
             "landsOn": "transform",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -460,7 +460,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:118",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:118",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -477,7 +477,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:119",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:119",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -494,7 +494,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:123",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:123",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -511,7 +511,7 @@
           {
             "variable": "--ds-carousel-arrow-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:124",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -528,7 +528,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:124",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -545,7 +545,7 @@
           {
             "variable": "--ds-carousel-arrow-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:125",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:125",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -562,7 +562,7 @@
           {
             "variable": "--ds-density-effective-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:125",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:125",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -579,7 +579,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:126",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:126",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -596,7 +596,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:128",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:128",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -613,7 +613,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:128",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:128",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -630,7 +630,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:129",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:129",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -647,7 +647,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:129",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:129",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -664,7 +664,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:130",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:130",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -681,7 +681,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:130",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:130",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -698,7 +698,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:131",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:131",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -715,7 +715,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:131",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:131",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -732,7 +732,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:132",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -749,7 +749,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:132",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -766,7 +766,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:139",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:139",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -783,7 +783,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:139",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:139",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -800,7 +800,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:140",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:140",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -817,7 +817,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:143",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:143",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -834,7 +834,7 @@
           {
             "variable": "--ds-carousel-dot-ring",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:145",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:145",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -851,7 +851,7 @@
           {
             "variable": "--ds-color-alpha-black-20",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:145",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:145",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -868,7 +868,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:146",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:146",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -885,7 +885,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:151",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:151",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -902,7 +902,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:151",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:151",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -919,7 +919,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:152",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:152",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -936,7 +936,7 @@
           {
             "variable": "--ds-state-press-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:153",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:153",
             "landsOn": "transform",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -953,7 +953,7 @@
           {
             "variable": "--ds-state-press-scale",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:156",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:156",
             "landsOn": "transform",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -970,7 +970,7 @@
           {
             "variable": "--ds-state-disabled-opacity",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:163",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:163",
             "landsOn": "opacity",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -987,7 +987,7 @@
           {
             "variable": "--ds-focus-ring-width",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:169",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:169",
             "landsOn": "outline",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1004,7 +1004,7 @@
           {
             "variable": "--ds-focus-ring-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:169",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:169",
             "landsOn": "outline",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1021,7 +1021,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:169",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:169",
             "landsOn": "outline",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1040,7 +1040,7 @@
           {
             "variable": "--ds-focus-ring-offset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:170",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:170",
             "landsOn": "outline-offset",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1057,7 +1057,7 @@
           {
             "variable": "--ds-carousel-arrow-size-coarse",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:175",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:175",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1074,7 +1074,7 @@
           {
             "variable": "--ds-carousel-arrow-size-coarse",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:176",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:176",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1091,7 +1091,7 @@
           {
             "variable": "--ds-carousel-dot-touch-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:187",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:187",
             "landsOn": "inset",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1108,7 +1108,7 @@
           {
             "variable": "--ds-carousel-dots-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:198",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:198",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1125,7 +1125,7 @@
           {
             "variable": "--ds-carousel-controls-z",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:199",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:199",
             "landsOn": "z-index",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1142,7 +1142,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:203",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:203",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1159,7 +1159,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:204",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:204",
             "landsOn": "block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1176,7 +1176,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:210",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:210",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1193,7 +1193,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:210",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:210",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1210,7 +1210,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:211",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:211",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1227,7 +1227,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:211",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:211",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1244,7 +1244,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:212",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1261,7 +1261,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:212",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:212",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1278,7 +1278,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:213",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:213",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1295,7 +1295,7 @@
           {
             "variable": "--ds-motion-ease-out",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:213",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:213",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1312,7 +1312,7 @@
           {
             "variable": "--ds-carousel-dot-selected-inline-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:217",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:217",
             "landsOn": "inline-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1329,7 +1329,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:226",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:226",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1346,7 +1346,7 @@
           {
             "variable": "--ds-carousel-dot-halo",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:227",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1363,7 +1363,7 @@
           {
             "variable": "--ds-color-alpha-white-70",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:227",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:227",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1380,7 +1380,7 @@
           {
             "variable": "--ds-carousel-dot-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:230",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:230",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1397,7 +1397,7 @@
           {
             "variable": "--ds-surface-card",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:230",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:230",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1414,7 +1414,7 @@
           {
             "variable": "--ds-carousel-dot-ring",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:231",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:231",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1431,7 +1431,7 @@
           {
             "variable": "--ds-color-alpha-black-20",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:231",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:231",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1448,7 +1448,7 @@
           {
             "variable": "--ds-touch-target-min",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css:281",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css:281",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1465,7 +1465,7 @@
           {
             "variable": "--ds-carousel-slide-transform",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:32",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:32",
             "landsOn": "transform",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1482,7 +1482,7 @@
           {
             "variable": "--ds-carousel-arrow-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:38",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:38",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1499,7 +1499,7 @@
           {
             "variable": "--ds-carousel-arrow-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:39",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:39",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1516,7 +1516,7 @@
           {
             "variable": "--ds-carousel-arrow-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:40",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:40",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1533,7 +1533,7 @@
           {
             "variable": "--ds-carousel-dots-transform",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:45",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:45",
             "landsOn": "transform",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1550,7 +1550,7 @@
           {
             "variable": "--ds-carousel-dot-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:50",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1567,7 +1567,7 @@
           {
             "variable": "--ds-carousel-dot-active-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:54",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1584,7 +1584,7 @@
           {
             "variable": "--ds-color-primary-500",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:54",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:54",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1601,7 +1601,7 @@
           {
             "variable": "--ds-carousel-dot-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel.css:57",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/carousel/index.css:57",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1618,7 +1618,7 @@
           {
             "variable": "--ds-carousel-item-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css:24",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css:24",
             "landsOn": "background-color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1635,7 +1635,7 @@
           {
             "variable": "--ds-carousel-item-bg-image",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css:25",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css:25",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1652,7 +1652,7 @@
           {
             "variable": "--ds-carousel-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1915",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1915",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1669,7 +1669,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1919",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1919",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1686,7 +1686,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1920",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1920",
             "landsOn": "height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1703,7 +1703,7 @@
           {
             "variable": "--ds-carousel-dot-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1921",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1921",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1720,7 +1720,7 @@
           {
             "variable": "--ds-carousel-dot-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1922",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1922",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1737,7 +1737,7 @@
           {
             "variable": "--ds-carousel-dot-bg-active",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1926",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1926",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1754,7 +1754,7 @@
           {
             "variable": "--ds-carousel-dot-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1927",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1927",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1771,7 +1771,7 @@
           {
             "variable": "--ds-carousel-dot-gap",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1931",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1931",
             "landsOn": "margin",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1788,7 +1788,7 @@
           {
             "variable": "--ds-carousel-arrow-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1936",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1936",
             "landsOn": "width",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1805,7 +1805,7 @@
           {
             "variable": "--ds-carousel-arrow-size",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1937",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1937",
             "landsOn": "height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1822,7 +1822,7 @@
           {
             "variable": "--ds-carousel-arrow-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1938",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1938",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1839,7 +1839,7 @@
           {
             "variable": "--ds-carousel-arrow-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1939",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1939",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1856,7 +1856,7 @@
           {
             "variable": "--ds-carousel-arrow-radius",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1940",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1940",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1873,7 +1873,7 @@
           {
             "variable": "--ds-carousel-arrow-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1945",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1945",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1890,7 +1890,7 @@
           {
             "variable": "--ds-carousel-arrow-color",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1946",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1946",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1907,7 +1907,7 @@
           {
             "variable": "--ds-carousel-transition",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:1950",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:1950",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1952,7 +1952,7 @@
         "channelRedeclarations": [
           {
             "channel": "--ds-carousel-slide-transform",
-            "firstAnchor": "packages/core/src/ui/primitives/display/Carousel/engines/modern/index.tsx:510"
+            "firstAnchor": "packages/core/src/components/primitives/display/carousel/engines/modern/index.tsx:510"
           }
         ],
         "cssCustomPropertyReadsRemovedAsCommentText": 4,
@@ -1998,13 +1998,13 @@
         {
           "channelId": "--_ds-carousel-dot-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2013,13 +2013,13 @@
         {
           "channelId": "--_ds-carousel-item-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2028,13 +2028,13 @@
         {
           "channelId": "--_ds-carousel-item-bg-image",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/carousel-compounds/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2112,13 +2112,13 @@
         {
           "channelId": "--_ds-carousel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2163,13 +2163,13 @@
         {
           "channelId": "--_ds-carousel-dot-selected-inline-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2178,13 +2178,13 @@
         {
           "channelId": "--_ds-carousel-dot-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2193,13 +2193,13 @@
         {
           "channelId": "--_ds-carousel-dot-touch-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2208,13 +2208,13 @@
         {
           "channelId": "--_ds-carousel-dots-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2232,7 +2232,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reviewedFrom": "anatomy"
       }
     },
@@ -2256,13 +2256,13 @@
         {
           "channelId": "--_ds-carousel-slide-transform",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2298,7 +2298,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -2323,7 +2323,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -2393,13 +2393,13 @@
         {
           "channelId": "--_ds-carousel-dot-halo",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2408,13 +2408,13 @@
         {
           "channelId": "--_ds-carousel-dot-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2437,7 +2437,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2494,7 +2494,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2526,13 +2526,13 @@
         {
           "channelId": "--_ds-carousel-arrow-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2541,13 +2541,13 @@
         {
           "channelId": "--_ds-carousel-arrow-size-coarse",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/carousel"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/carousel/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2566,11 +2566,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

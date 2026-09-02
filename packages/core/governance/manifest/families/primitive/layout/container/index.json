@@ -8,15 +8,15 @@
     "components": [
       "Container"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/layout/Container",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/layout/container",
     "publicComponents": [
       "Container"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "fcf45ebee0f371d8140bbb8ff2c15e120ce9bb303dda5a30b8fcc09bc6ce194d"
+    "inventoryRowDigest": "9901c80a97eb7ce0012e392e8932c24fc2b2c5b9154c2658258c740cae1d9b3f"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/Container/index.ts",
-      "packages/core/src/ui/primitives/layout/Container/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/Container/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/layout/Container/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/layout/Container/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+      "packages/core/src/components/primitives/layout/container/index.ts",
+      "packages/core/src/components/primitives/layout/container/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/container/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/layout/container/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/layout/container/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
     ],
     "stableParts": [
       "root"
@@ -234,13 +234,13 @@
         {
           "channelId": "--_ds-container-background",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/container"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -249,13 +249,13 @@
         {
           "channelId": "--_ds-container-border",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/container"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -264,13 +264,13 @@
         {
           "channelId": "--_ds-container-lg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/container"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -287,7 +287,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -306,7 +306,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -325,7 +325,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -380,7 +380,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Intencion del consumidor (API de instancia o gap de layout): adjudicacion sostenida - el gap lo declara la app, no el tema": [
             "--ds-container-instance-padding"
@@ -438,13 +438,13 @@
         {
           "channelId": "--_ds-container-motion-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/container"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -453,13 +453,13 @@
         {
           "channelId": "--_ds-container-motion-easing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/container"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -478,13 +478,13 @@
         {
           "channelId": "--_ds-container-shadow",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/container"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/layout-primitives/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -501,8 +501,8 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
         "reviewedFrom": "anatomy",
         "reasons": [
           {
@@ -522,7 +522,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -601,7 +601,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -658,7 +658,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -708,11 +708,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

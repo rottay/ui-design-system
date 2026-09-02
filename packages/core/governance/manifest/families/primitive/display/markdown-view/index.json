@@ -8,15 +8,15 @@
     "components": [
       "MarkdownView"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/MarkdownView",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/markdown-view",
     "publicComponents": [
       "MarkdownView"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "0588133e554a3ea7df50083a37df1271d62ef615685dbd891848046b80541b02"
+    "inventoryRowDigest": "85303ae0330bfc1ba5116ae46cab1c522c9eb43ea8ef5aace4721e779e73cc00"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,16 +28,16 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/MarkdownView/MarkdownView.stories.tsx",
-      "packages/core/src/ui/primitives/display/MarkdownView/index.tsx",
-      "packages/core/src/ui/primitives/display/MarkdownView/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/MarkdownView/runtime/parser/index.ts",
-      "packages/core/src/ui/primitives/display/MarkdownView/runtime/parser/tests/parser.test.ts",
-      "packages/core/src/ui/primitives/display/MarkdownView/runtime/link-safety/index.ts",
-      "packages/core/src/ui/primitives/display/MarkdownView/runtime/link-safety/tests/link-safety.test.ts",
-      "packages/core/src/ui/primitives/display/MarkdownView/tests/MarkdownView.pass1-premium.test.tsx",
-      "packages/core/src/ui/primitives/display/MarkdownView/tests/MarkdownView.test.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+      "packages/core/src/components/primitives/display/markdown-view/MarkdownView.stories.tsx",
+      "packages/core/src/components/primitives/display/markdown-view/index.tsx",
+      "packages/core/src/components/primitives/display/markdown-view/contracts/index.ts",
+      "packages/core/src/components/primitives/display/markdown-view/runtime/parser/index.ts",
+      "packages/core/src/components/primitives/display/markdown-view/runtime/parser/tests/parser.test.ts",
+      "packages/core/src/components/primitives/display/markdown-view/runtime/link-safety/index.ts",
+      "packages/core/src/components/primitives/display/markdown-view/runtime/link-safety/tests/link-safety.test.ts",
+      "packages/core/src/components/primitives/display/markdown-view/tests/MarkdownView.pass1-premium.test.tsx",
+      "packages/core/src/components/primitives/display/markdown-view/tests/MarkdownView.test.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
     ],
     "stableParts": [
       "emphasis",
@@ -73,11 +73,11 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "A scrollable code block is a keyboard-reachable labelled region: role=\"region\" + tabIndex={0} + aria-label at packages/core/src/ui/primitives/display/MarkdownView/index.tsx:296-298; the same treatment is applied to the table wrapper at :427-429.",
-      "The task checkbox is an announced but deliberately non-interactive control: role=\"checkbox\" with aria-checked and a hard aria-disabled=\"true\" at packages/core/src/ui/primitives/display/MarkdownView/index.tsx:370-373.",
-      "Tables render real table semantics with a header scope, not a div grid: <table>/<thead>/<th> at packages/core/src/ui/primitives/display/MarkdownView/index.tsx:438-442 and scope= at :448.",
-      "Link rendering passes through the family's own safety module, packages/core/src/ui/primitives/display/MarkdownView/runtime/link-safety/index.ts (referenced at :27 and :88); a tenant control may not bypass it.",
-      "Bidirectional text keeps a logical-direction path: the :lang(ar,fa,ur,...) rule at packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:146."
+      "A scrollable code block is a keyboard-reachable labelled region: role=\"region\" + tabIndex={0} + aria-label at packages/core/src/components/primitives/display/markdown-view/index.tsx:296-298; the same treatment is applied to the table wrapper at :427-429.",
+      "The task checkbox is an announced but deliberately non-interactive control: role=\"checkbox\" with aria-checked and a hard aria-disabled=\"true\" at packages/core/src/components/primitives/display/markdown-view/index.tsx:370-373.",
+      "Tables render real table semantics with a header scope, not a div grid: <table>/<thead>/<th> at packages/core/src/components/primitives/display/markdown-view/index.tsx:438-442 and scope= at :448.",
+      "Link rendering passes through the family's own safety module, packages/core/src/components/primitives/display/markdown-view/runtime/link-safety/index.ts (referenced at :27 and :88); a tenant control may not bypass it.",
+      "Bidirectional text keeps a logical-direction path: the :lang(ar,fa,ur,...) rule at packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:146."
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -100,7 +100,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:142"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:142"
           ]
         },
         {
@@ -108,7 +108,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:148"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:148"
           ]
         },
         {
@@ -116,7 +116,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:154"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:154"
           ]
         },
         {
@@ -124,7 +124,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:202"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:202"
           ]
         },
         {
@@ -132,7 +132,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:278"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:278"
           ]
         },
         {
@@ -140,7 +140,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:284"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:284"
           ]
         },
         {
@@ -148,7 +148,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:289"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:289"
           ]
         },
         {
@@ -156,7 +156,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:335"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:335"
           ]
         },
         {
@@ -164,7 +164,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:360"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:360"
           ]
         },
         {
@@ -172,7 +172,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:374"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:374"
           ]
         },
         {
@@ -180,7 +180,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:397"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:397"
           ]
         },
         {
@@ -188,8 +188,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:406",
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:413"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:406",
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:413"
           ]
         },
         {
@@ -197,7 +197,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:426"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:426"
           ]
         },
         {
@@ -205,7 +205,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:438"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:438"
           ]
         },
         {
@@ -213,7 +213,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:439"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:439"
           ]
         },
         {
@@ -221,7 +221,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:444"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:444"
           ]
         },
         {
@@ -229,7 +229,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:468"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:468"
           ]
         },
         {
@@ -237,7 +237,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:474"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:474"
           ]
         },
         {
@@ -245,7 +245,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:494"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:494"
           ]
         },
         {
@@ -253,7 +253,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:542"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:542"
           ]
         }
       ],
@@ -267,12 +267,12 @@
         {
           "token": "hover",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:43",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:45",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:46",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:47",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:48"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:43",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:46",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:47",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:48"
           ],
           "atSiteCount": 7,
           "state": "hover"
@@ -280,12 +280,12 @@
         {
           "token": "active",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:53",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:54",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:55",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:56",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:57"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:53",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:54",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:55",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:56",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:57"
           ],
           "atSiteCount": 7,
           "state": "active"
@@ -293,12 +293,12 @@
         {
           "token": "focus-visible",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:60",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:61",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:62",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:63",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:64",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:65"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:60",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:61",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:62",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:63",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:64",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:65"
           ],
           "atSiteCount": 10,
           "state": "focus-visible"
@@ -306,18 +306,18 @@
         {
           "token": "checked",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:205",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:206",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:207",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:208",
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:371"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:205",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:207",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:208",
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:371"
           ],
           "state": "checked"
         },
         {
           "token": "disabled",
           "at": [
-            "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:372"
+            "packages/core/src/components/primitives/display/markdown-view/index.tsx:372"
           ],
           "state": "disabled"
         },
@@ -336,31 +336,31 @@
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:176",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:177",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:178",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:179",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:180",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:181"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:176",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:177",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:178",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:179",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:180",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:181"
             ],
             "atSiteCount": 10
           },
           {
             "token": "prefers-reduced-motion",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:213",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:214",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:215",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:216",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:217",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:218"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:213",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:214",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:215",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:216",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:217",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:218"
             ],
             "atSiteCount": 7
           }
         ],
         "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
       },
-      "engineDivergence": "No engine siblings. One implementation at packages/core/src/ui/primitives/display/MarkdownView/index.tsx serves every engine, so there is no engine divergence to report.",
+      "engineDivergence": "No engine siblings. One implementation at packages/core/src/components/primitives/display/markdown-view/index.tsx serves every engine, so there is no engine divergence to report.",
       "propertyGroupCensusNote": {
         "propertyGroupsByPart": {
           "UNATTRIBUTED": {
@@ -409,7 +409,7 @@
         "variableCensus": [
           {
             "variable": "--ds-font-family-mono",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:89",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:89",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -421,7 +421,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:92",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:92",
             "fallback": null,
             "landsOnProperty": "compact",
             "propertyGroup": "layout",
@@ -433,7 +433,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:93",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:93",
             "fallback": null,
             "landsOnProperty": "comfortable",
             "propertyGroup": "layout",
@@ -445,7 +445,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:99",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:99",
             "fallback": null,
             "landsOnProperty": "compact",
             "propertyGroup": "layout",
@@ -457,7 +457,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:100",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:100",
             "fallback": null,
             "landsOnProperty": "comfortable",
             "propertyGroup": "layout",
@@ -469,7 +469,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:107",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:107",
             "fallback": null,
             "landsOnProperty": "compact",
             "propertyGroup": "layout",
@@ -481,7 +481,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:108",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:108",
             "fallback": null,
             "landsOnProperty": "comfortable",
             "propertyGroup": "layout",
@@ -493,7 +493,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:115",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:115",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -505,7 +505,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:116",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:116",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -517,7 +517,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:117",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:117",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -529,7 +529,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:301",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:301",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -541,7 +541,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:305",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:305",
             "fallback": null,
             "landsOnProperty": "scrollbar-color",
             "propertyGroup": "layout",
@@ -553,7 +553,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:306",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:306",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -565,7 +565,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:307",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:307",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -577,7 +577,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:308",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:308",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -589,7 +589,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:314",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:314",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -601,7 +601,7 @@
           },
           {
             "variable": "--ds-line-height-body",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:315",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:315",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -613,7 +613,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:318",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:318",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -625,7 +625,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:351",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:351",
             "fallback": null,
             "landsOnProperty": "padding-inline-start",
             "propertyGroup": "spacing",
@@ -637,7 +637,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:362",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:362",
             "fallback": null,
             "landsOnProperty": "margin-top",
             "propertyGroup": "spacing",
@@ -649,7 +649,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:365",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:365",
             "fallback": null,
             "landsOnProperty": "gap",
             "propertyGroup": "spacing",
@@ -661,7 +661,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:381",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:381",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -673,7 +673,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:382",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:382",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -685,7 +685,7 @@
           },
           {
             "variable": "--_ds-markdown-task-fill",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:389",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:389",
             "fallback": "var(--ds-color-primary)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -697,7 +697,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:389",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:389",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -709,7 +709,7 @@
           },
           {
             "variable": "--_ds-markdown-task-fill-ring",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:392",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:392",
             "fallback": "var(--ds-surface-canvas)",
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -721,7 +721,7 @@
           },
           {
             "variable": "--ds-surface-canvas",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:392",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:392",
             "fallback": null,
             "landsOnProperty": null,
             "propertyGroup": "unattributed",
@@ -733,7 +733,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:435",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:435",
             "fallback": null,
             "landsOnProperty": "scrollbar-color",
             "propertyGroup": "layout",
@@ -745,7 +745,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:454",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:454",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -757,7 +757,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:454",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:454",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -769,7 +769,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:455",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:455",
             "fallback": null,
             "landsOnProperty": "border-bottom",
             "propertyGroup": "border",
@@ -781,7 +781,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:457",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:457",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -793,7 +793,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:477",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:477",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -805,7 +805,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:477",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:477",
             "fallback": null,
             "landsOnProperty": "padding",
             "propertyGroup": "spacing",
@@ -817,7 +817,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:478",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:478",
             "fallback": null,
             "landsOnProperty": "border-bottom",
             "propertyGroup": "border",
@@ -829,7 +829,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:499",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:499",
             "fallback": null,
             "landsOnProperty": "border-top",
             "propertyGroup": "border",
@@ -841,7 +841,7 @@
           },
           {
             "variable": "--ds-line-height-body",
-            "readAt": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:547",
+            "readAt": "packages/core/src/components/primitives/display/markdown-view/index.tsx:547",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -853,7 +853,7 @@
           },
           {
             "variable": "--ds-color-link",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:32",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:32",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -864,7 +864,7 @@
           },
           {
             "variable": "--ds-motion-instant",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:38",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:38",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -875,7 +875,7 @@
           },
           {
             "variable": "--ds-ease-standard",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:38",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:38",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -886,7 +886,7 @@
           },
           {
             "variable": "--ds-motion-instant",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:39",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:39",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -897,7 +897,7 @@
           },
           {
             "variable": "--ds-ease-standard",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:39",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:39",
             "fallback": null,
             "landsOnProperty": "transition",
             "propertyGroup": "motion",
@@ -908,7 +908,7 @@
           },
           {
             "variable": "--ds-color-link",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:46",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -919,7 +919,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:46",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -930,7 +930,7 @@
           },
           {
             "variable": "--ds-markdown-link-decoration-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:48",
             "fallback": "0.09em",
             "landsOnProperty": "text-decoration-thickness",
             "propertyGroup": "typography",
@@ -941,7 +941,7 @@
           },
           {
             "variable": "--ds-color-link",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:55",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -952,7 +952,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:55",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:55",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -963,7 +963,7 @@
           },
           {
             "variable": "--ds-markdown-link-decoration-hover",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:57",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:57",
             "fallback": "0.09em",
             "landsOnProperty": "text-decoration-thickness",
             "propertyGroup": "typography",
@@ -974,7 +974,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:62",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:62",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -985,7 +985,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:65",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:65",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -996,7 +996,7 @@
           },
           {
             "variable": "--ds-markdown-marker-ink",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:74",
             "fallback": "var(--ds-color-text-secondary)",
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1007,7 +1007,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:74",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:74",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1018,7 +1018,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:85",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:85",
             "fallback": null,
             "landsOnProperty": "padding-block",
             "propertyGroup": "spacing",
@@ -1029,7 +1029,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:86",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:86",
             "fallback": null,
             "landsOnProperty": "padding-inline-start",
             "propertyGroup": "spacing",
@@ -1040,7 +1040,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:87",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:87",
             "fallback": null,
             "landsOnProperty": "padding-inline-end",
             "propertyGroup": "spacing",
@@ -1051,7 +1051,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:88",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:88",
             "fallback": null,
             "landsOnProperty": "border-inline-start",
             "propertyGroup": "border",
@@ -1062,7 +1062,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:89",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:89",
             "fallback": null,
             "landsOnProperty": "background",
             "propertyGroup": "color",
@@ -1073,7 +1073,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:90",
             "fallback": null,
             "landsOnProperty": "border-start-end-radius",
             "propertyGroup": "radius",
@@ -1084,7 +1084,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:91",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:91",
             "fallback": null,
             "landsOnProperty": "border-end-end-radius",
             "propertyGroup": "radius",
@@ -1095,7 +1095,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:92",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -1106,7 +1106,7 @@
           },
           {
             "variable": "--ds-font-size-3xl",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:103",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:103",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1117,7 +1117,7 @@
           },
           {
             "variable": "--ds-font-weight-display",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:104",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:104",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1128,7 +1128,7 @@
           },
           {
             "variable": "--ds-line-height-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:105",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:105",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1139,7 +1139,7 @@
           },
           {
             "variable": "--ds-font-size-2xl",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:110",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:110",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1150,7 +1150,7 @@
           },
           {
             "variable": "--ds-font-weight-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:111",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:111",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1161,7 +1161,7 @@
           },
           {
             "variable": "--ds-line-height-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:112",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:112",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1172,7 +1172,7 @@
           },
           {
             "variable": "--ds-font-size-xl",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:117",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:117",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1183,7 +1183,7 @@
           },
           {
             "variable": "--ds-font-weight-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:118",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:118",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1194,7 +1194,7 @@
           },
           {
             "variable": "--ds-line-height-tight",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:119",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:119",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1205,7 +1205,7 @@
           },
           {
             "variable": "--ds-font-size-lg",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:124",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1216,7 +1216,7 @@
           },
           {
             "variable": "--ds-font-weight-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:125",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:125",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1227,7 +1227,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:126",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:126",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1238,7 +1238,7 @@
           },
           {
             "variable": "--ds-font-size-base",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:130",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1249,7 +1249,7 @@
           },
           {
             "variable": "--ds-font-weight-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:131",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1260,7 +1260,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:132",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:132",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1271,7 +1271,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:136",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:136",
             "fallback": null,
             "landsOnProperty": "font-size",
             "propertyGroup": "typography",
@@ -1282,7 +1282,7 @@
           },
           {
             "variable": "--ds-font-weight-heading",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:137",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:137",
             "fallback": null,
             "landsOnProperty": "font-weight",
             "propertyGroup": "typography",
@@ -1293,7 +1293,7 @@
           },
           {
             "variable": "--ds-line-height-snug",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:138",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:138",
             "fallback": null,
             "landsOnProperty": "line-height",
             "propertyGroup": "typography",
@@ -1304,7 +1304,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:159",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:159",
             "fallback": null,
             "landsOnProperty": "box-shadow",
             "propertyGroup": "elevation",
@@ -1315,7 +1315,7 @@
           },
           {
             "variable": "--ds-markdown-view-measure",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:169",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:169",
             "fallback": "none",
             "landsOnProperty": "max-inline-size",
             "propertyGroup": "size",
@@ -1326,7 +1326,7 @@
           },
           {
             "variable": "--ds-markdown-table-frame",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:172",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:172",
             "fallback": "1px solid var(--ds-color-border)",
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1337,7 +1337,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:172",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:172",
             "fallback": null,
             "landsOnProperty": "border",
             "propertyGroup": "border",
@@ -1348,7 +1348,7 @@
           },
           {
             "variable": "--ds-markdown-table-frame-radius",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:173",
             "fallback": "var(--ds-radius-md)",
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1359,7 +1359,7 @@
           },
           {
             "variable": "--ds-radius-md",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:173",
             "fallback": null,
             "landsOnProperty": "border-radius",
             "propertyGroup": "radius",
@@ -1375,43 +1375,43 @@
           {
             "kind": "spacing",
             "literal": "0.1em",
-            "at": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:114",
+            "at": "packages/core/src/components/primitives/display/markdown-view/index.tsx:114",
             "declaration": "padding"
           },
           {
             "kind": "spacing",
             "literal": "0.35em",
-            "at": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:114",
+            "at": "packages/core/src/components/primitives/display/markdown-view/index.tsx:114",
             "declaration": "padding"
           },
           {
             "kind": "shadow",
             "literal": "item.checked",
-            "at": "packages/core/src/ui/primitives/display/MarkdownView/index.tsx:391",
+            "at": "packages/core/src/components/primitives/display/markdown-view/index.tsx:391",
             "declaration": "boxShadow"
           },
           {
             "kind": "shadow",
             "literal": "none",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:182",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:182",
             "declaration": "box-shadow"
           },
           {
             "kind": "shadow",
             "literal": "none",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:187",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:187",
             "declaration": "box-shadow"
           },
           {
             "kind": "duration",
             "literal": "0.01ms",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:215",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:215",
             "declaration": "transition-duration"
           },
           {
             "kind": "duration",
             "literal": "0.01ms",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css:216",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css:216",
             "declaration": "animation-duration"
           }
         ],
@@ -1433,13 +1433,13 @@
         {
           "channelId": "--_ds-markdown-view-code-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1449,13 +1449,13 @@
         {
           "channelId": "--_ds-markdown-view-code-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1465,13 +1465,13 @@
         {
           "channelId": "--_ds-markdown-view-link-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1481,13 +1481,13 @@
         {
           "channelId": "--_ds-markdown-view-blockquote-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1497,13 +1497,13 @@
         {
           "channelId": "--_ds-markdown-view-heading-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1552,13 +1552,13 @@
         {
           "channelId": "--_ds-markdown-view-code-font-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1578,13 +1578,13 @@
         {
           "channelId": "--_ds-markdown-view-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1594,13 +1594,13 @@
         {
           "channelId": "--_ds-markdown-view-code-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1620,13 +1620,13 @@
         {
           "channelId": "--_ds-markdown-view-code-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1636,13 +1636,13 @@
         {
           "channelId": "--_ds-markdown-view-code-block-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1679,13 +1679,13 @@
         {
           "channelId": "--_ds-markdown-view-content-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1695,13 +1695,13 @@
         {
           "channelId": "--_ds-markdown-view-code-block-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1711,13 +1711,13 @@
         {
           "channelId": "--_ds-markdown-view-table-cell-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1736,7 +1736,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1751,7 +1751,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ]
       }
@@ -1794,13 +1794,13 @@
         {
           "channelId": "--_ds-markdown-view-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1819,7 +1819,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1867,13 +1867,13 @@
         {
           "channelId": "--_ds-markdown-view-blockquote-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1883,13 +1883,13 @@
         {
           "channelId": "--_ds-markdown-view-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1899,13 +1899,13 @@
         {
           "channelId": "--_ds-markdown-view-table-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/markdown-view"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/markdown-view/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1929,7 +1929,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1985,7 +1985,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2045,11 +2045,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

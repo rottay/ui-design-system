@@ -3,6 +3,7 @@
   "rootId": "shape.button-style",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-radius-button",
     "emission": [
       {

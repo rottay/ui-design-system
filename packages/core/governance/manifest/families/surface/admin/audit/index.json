@@ -8,15 +8,15 @@
     "components": [
       "AuditSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/surfaces/presentation/pages/admin",
-    "sourceOwner": "packages/core/src/ui/surfaces/presentation/pages/admin/audit",
+    "sourceRoot": "packages/core/src/components/surfaces/presentation/pages/admin",
+    "sourceOwner": "packages/core/src/components/surfaces/presentation/pages/admin/audit",
     "publicComponents": [
       "AuditSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "794043365ffaed85123a38ba0d50af5aef157e0096090684f6e3b7d1a57c9c94"
+    "inventoryRowDigest": "7a08dce2a4399389516a8142ac79da834139a7c56967c7a4fd82da7083d9a8f1"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/surfaces/presentation/pages/admin/audit",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css"
+      "packages/core/src/components/surfaces/presentation/pages/admin/audit",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css"
     ],
     "stableParts": [
       "root",
@@ -68,7 +68,7 @@
           "anchorKind": "ds-class-pair",
           "anchor": "`ds-audit__muted-text` bound by the root pair `.ds-surface.ds-audit`",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css:33"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css:33"
           ],
           "admittedUnder": "RULING R-8 (b): a surface carries no CSS under `ui/surfaces/`; its paint lives in a dedicated skin bound by a DS-owned component-identity class pair, so the pair is a stable part anchor."
         }
@@ -103,11 +103,11 @@
           "measurement": {
             "cssRuleBlocks": 1,
             "dsChannelReads": 0,
-            "skinFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css",
+            "skinFile": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
             "skinFileLines": 35
           },
           "evidence": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css:33-35 - the entire paint surface: `.ds-surface.ds-audit .ds-audit__muted-text[data-part='root'] { font-variant-numeric: tabular-nums; }`",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css:33-35 - the entire paint surface: `.ds-surface.ds-audit .ds-audit__muted-text[data-part='root'] { font-variant-numeric: tabular-nums; }`",
             "Same file :8-22 - 'the surface composes PageShellSurface, PatternFilterPanel, PatternDataTable, Card and the shared state kits - each owns its own chrome, states and forced-colors treatment. Two former inline drains were deliberately routed AWAY from this file, to the owner that already paints the concern'.",
             "Same file :20-22 - 'What remains is the ONE paint the surface owns: the numeric rhythm of the pagination summary'.",
             "Same file :28-30 - 'FORCED-COLORS: no surface-owned color to re-key ... so no FC block - same documented omission as list.css.'"
@@ -118,11 +118,11 @@
       },
       "measuredAbsence": {
         "finding": "MEASURED ABSENCE, stated by the source itself. The entire paint surface of `audit.css` is one rule, `.ds-surface.ds-audit .ds-audit__muted-text[data-part='root'] { font-variant-numeric: tabular-nums; }\" at audit.css:33-35. Everything else in the file is comment recording why there is nothing more: the summary ink comes from the Typography color channel and every composed part handles its own forced-colors treatment. The absence is deliberate and documented.",
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
         "cellDisposition": "UNKNOWN — the 20 cells of this family await the owner disposition ruling. This pass records the absence and its source evidence; it does not dispose of a single cell."
       },
       "surfaceSkinBinding": {
-        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css",
+        "skin": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
         "rootAnchor": ".ds-surface.ds-audit",
         "law": "A surface carries no CSS under `ui/surfaces/`. Its paint lives in a dedicated skin bound by the root pair plus BEM elements and data-part, so those class pairs are part anchors under RULING R-8 (b).",
         "partsAdmittedThisPass": [
@@ -145,13 +145,13 @@
         {
           "channelId": "--_ds-audit-muted-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/audit"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -169,7 +169,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -188,7 +188,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -209,13 +209,13 @@
         {
           "channelId": "--_ds-audit-muted-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "surface/admin/audit"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/audit/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -233,7 +233,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.radius-scale",
@@ -252,7 +252,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "shape.button-style",
@@ -271,7 +271,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "density.mode",
@@ -290,7 +290,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -310,7 +310,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano base no se mueve nunca; el movimiento vive en los componentes que lo habitan",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -330,7 +330,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la superficie ES el plano base: no se levanta a si misma; lo que flota dentro usa sockets de componente (overlay, card)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -350,7 +350,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de trabajo/escritura: mate. El acabado vive en surface/experience (marketing) y en los backdrops de overlay, los unicos sancionados",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -370,7 +370,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "la sidebar es un componente (primitive/navigation, ya decidido ahi); la superficie no acuna socket de tono propio",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -390,7 +390,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -410,7 +410,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome.families deriva fondos POR FAMILIA; la superficie es el lienzo global y lo gobiernan los canales semanticos de canvas, no una familia",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -429,7 +429,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "chrome.anatomy",
@@ -454,7 +454,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -467,7 +467,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -513,7 +513,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -544,7 +544,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el plano no porta iconos propios; los iconos viven en los componentes huesped",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -565,11 +565,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

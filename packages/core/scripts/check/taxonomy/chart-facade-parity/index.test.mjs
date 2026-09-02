@@ -56,7 +56,7 @@ const packageRoot = findPackageRoot(scriptDir);
 const FACADE_FILE = resolve(packageRoot, 'src/entrypoints/public/patterns/charts/index.ts');
 const INVENTORY_FILE = resolve(
   packageRoot,
-  'scripts/quality-evidence/programs/modern-rescue/family-inventory.json',
+  'scripts/check/modern-rescue/family-inventory/index.json',
 );
 
 /**

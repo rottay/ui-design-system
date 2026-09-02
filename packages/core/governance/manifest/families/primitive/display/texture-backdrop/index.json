@@ -8,15 +8,15 @@
     "components": [
       "TextureBackdrop"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/TextureBackdrop",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/texture-backdrop",
     "publicComponents": [
       "TextureBackdrop"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "21ce13f09c852e451e8564335df528293e4606af7cef87c0ac0b1bc49694d1b2"
+    "inventoryRowDigest": "62ee4d804a79b5ebb6978641a5dfe1ffd4e42ad0374250638f21b6ac25568d1c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/TextureBackdrop/index.tsx",
-      "packages/core/src/ui/primitives/display/TextureBackdrop/contracts/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css"
+      "packages/core/src/components/primitives/display/texture-backdrop/index.tsx",
+      "packages/core/src/components/primitives/display/texture-backdrop/contracts/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css"
     ],
     "stableParts": [
       "root",
@@ -44,9 +44,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "Texture never carries information: the pattern layer is aria-hidden=\"true\" at packages/core/src/ui/primitives/display/TextureBackdrop/index.tsx:38.",
-      "The layer must stay behind content: isolation: isolate on the root (packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:21) with z-index: -1 and pointer-events: none on the layer (:27, :31).",
-      "Degradation is total, not attenuated: the layer is display:none under forced-colors (packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:41-45) and under print (:46-50).",
+      "Texture never carries information: the pattern layer is aria-hidden=\"true\" at packages/core/src/components/primitives/display/texture-backdrop/index.tsx:38.",
+      "The layer must stay behind content: isolation: isolate on the root (packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:21) with z-index: -1 and pointer-events: none on the layer (:27, :31).",
+      "Degradation is total, not attenuated: the layer is display:none under forced-colors (packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:41-45) and under print (:46-50).",
       "The pattern is generated in CSS with no image asset dependency (gradients at :53-85, an inline SVG mask at :92-93); a control that swaps in a remote asset would break the zero-asset guarantee."
     ],
     "sourceEvidence": {
@@ -70,7 +70,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/TextureBackdrop/index.tsx:32"
+            "packages/core/src/components/primitives/display/texture-backdrop/index.tsx:32"
           ]
         },
         {
@@ -78,7 +78,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/TextureBackdrop/index.tsx:35"
+            "packages/core/src/components/primitives/display/texture-backdrop/index.tsx:35"
           ]
         }
       ],
@@ -86,7 +86,7 @@
         {
           "token": "hidden",
           "at": [
-            "packages/core/src/ui/primitives/display/TextureBackdrop/index.tsx:38"
+            "packages/core/src/components/primitives/display/texture-backdrop/index.tsx:38"
           ],
           "state": "hidden"
         }
@@ -101,27 +101,27 @@
           {
             "token": "forced-colors",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:41",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:42",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:43",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:44",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:45"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:41",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:42",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:43",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:44",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:45"
             ]
           },
           {
             "token": "print",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:46",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:47",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:48",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:49",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:50"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:46",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:47",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:48",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:49",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:50"
             ]
           }
         ],
         "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
       },
-      "engineDivergence": "No engine siblings. One implementation at packages/core/src/ui/primitives/display/TextureBackdrop/index.tsx serves every engine.",
+      "engineDivergence": "No engine siblings. One implementation at packages/core/src/components/primitives/display/texture-backdrop/index.tsx serves every engine.",
       "propertyGroupCensusNote": {
         "propertyGroupsByPart": {
           "layer": {
@@ -135,7 +135,7 @@
         "variableCensus": [
           {
             "variable": "--ds-texture-backdrop-ink",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:28",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:28",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -146,7 +146,7 @@
           },
           {
             "variable": "--_ds-texture-backdrop-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:29",
             "fallback": "var(--ds-texture-backdrop-opacity, 0.03)",
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -157,7 +157,7 @@
           },
           {
             "variable": "--ds-texture-backdrop-opacity",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:29",
             "fallback": "0.03",
             "landsOnProperty": "opacity",
             "propertyGroup": "color",
@@ -168,7 +168,7 @@
           },
           {
             "variable": "--ds-texture-backdrop-paper",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css:35",
             "fallback": null,
             "landsOnProperty": "color",
             "propertyGroup": "color",
@@ -394,7 +394,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -409,7 +409,7 @@
         "reasons": [
           {
             "root": "motion.character",
-            "why": "Text/Badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
+            "why": "Text/badge/Icon estaticos no transicionan; el icono que cambia lo hace dentro de su componente huesped."
           }
         ]
       }
@@ -452,13 +452,13 @@
         {
           "channelId": "--_ds-texture-backdrop-glass-bg",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/texture-backdrop"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/texture-backdrop/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -477,7 +477,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -557,7 +557,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -613,7 +613,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -673,11 +673,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

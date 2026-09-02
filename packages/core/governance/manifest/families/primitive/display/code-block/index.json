@@ -8,15 +8,15 @@
     "components": [
       "CodeBlock"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/display/CodeBlock",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/display/code-block",
     "publicComponents": [
       "CodeBlock"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "d33a142dfe12b6563205a211218c0c7d58cb058364a53d51d520e6183819fc66"
+    "inventoryRowDigest": "f52815f77b007246d7e6cdfaaf4d188fe22a4bb50717ca06d123c11df89c210b"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,10 +28,10 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/display/CodeBlock/index.tsx",
-      "packages/core/src/ui/primitives/display/CodeBlock/contracts/index.ts",
-      "packages/core/src/ui/primitives/display/CodeBlock/runtime/highlighter/index.ts",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+      "packages/core/src/components/primitives/display/code-block/index.tsx",
+      "packages/core/src/components/primitives/display/code-block/contracts/index.ts",
+      "packages/core/src/components/primitives/display/code-block/runtime/highlighter/index.ts",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
     ],
     "stableParts": [
       "root",
@@ -58,9 +58,9 @@
     "variantAxes": [],
     "propertyGroups": [],
     "invariants": [
-      "The scroll region is itself focusable and keeps a focus-visible ring, so keyboard users can scroll long listings. [at packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:167]",
-      "The copy result is announced through a dedicated copy-status part rather than by colour alone. [at packages/core/src/ui/primitives/display/CodeBlock/index.tsx:277]",
-      "Copy-button hover paint and focus ring both re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:181, packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:185]"
+      "The scroll region is itself focusable and keeps a focus-visible ring, so keyboard users can scroll long listings. [at packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:167]",
+      "The copy result is announced through a dedicated copy-status part rather than by colour alone. [at packages/core/src/components/primitives/display/code-block/index.tsx:277]",
+      "Copy-button hover paint and focus ring both re-assert under forced-colors. [at packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:181, packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:185]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -83,9 +83,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-language axis",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:211",
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:212",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:127"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:211",
+            "packages/core/src/components/primitives/display/code-block/index.tsx:212",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:127"
           ]
         },
         {
@@ -93,7 +93,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:221"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:221"
           ]
         },
         {
@@ -101,8 +101,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-language-badge axis",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:238",
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:239"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:238",
+            "packages/core/src/components/primitives/display/code-block/index.tsx:239"
           ]
         },
         {
@@ -110,8 +110,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-copied axis",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:256",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:127"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:256",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:127"
           ]
         },
         {
@@ -119,7 +119,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-copied axis",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:261"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:261"
           ]
         },
         {
@@ -127,7 +127,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:277"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:277"
           ]
         },
         {
@@ -135,8 +135,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:282",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:167"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:282",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:167"
           ]
         },
         {
@@ -144,7 +144,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:307"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:307"
           ]
         },
         {
@@ -152,7 +152,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:322"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:322"
           ]
         },
         {
@@ -160,9 +160,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute + data-highlighted axis",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:329",
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:330",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:203"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:329",
+            "packages/core/src/components/primitives/display/code-block/index.tsx:330",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:203"
           ]
         },
         {
@@ -170,7 +170,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:355"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:355"
           ]
         },
         {
@@ -178,7 +178,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:382"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:382"
           ]
         },
         {
@@ -186,7 +186,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute",
           "at": [
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:192"
+            "packages/core/src/components/primitives/display/code-block/index.tsx:192"
           ]
         }
       ],
@@ -195,7 +195,7 @@
           "token": "hovered",
           "note": "copy-button only, hover-capable-gated and :not(:disabled)",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:127"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:127"
           ],
           "state": "hover"
         },
@@ -203,7 +203,7 @@
           "token": "pressed",
           "note": "copy-button only",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:133"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:133"
           ],
           "state": "active-pressed"
         },
@@ -211,8 +211,8 @@
           "token": "focus-visible",
           "note": "copy-button and the scroll region",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:166",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:167"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:166",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:167"
           ],
           "state": "focus-visible"
         },
@@ -220,9 +220,9 @@
           "token": "copied",
           "note": "data-copied='true'",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:145",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:146",
-            "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:261"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:145",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:146",
+            "packages/core/src/components/primitives/display/code-block/index.tsx:261"
           ],
           "state": "copied"
         },
@@ -230,7 +230,7 @@
           "token": "highlighted line",
           "note": "data-highlighted='true' on the line part",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:203"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:203"
           ],
           "state": "highlighted"
         }
@@ -240,13 +240,13 @@
           {
             "token": "forced-colors: active",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:175"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:175"
             ]
           },
           {
             "token": "prefers-reduced-motion: reduce",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:220"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:220"
             ]
           }
         ],
@@ -254,7 +254,7 @@
       },
       "engineDivergence": {
         "engineSiblings": "none",
-        "note": "CodeBlock has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/ui/primitives/display/CodeBlock/index.tsx and its only paint layer is packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css. Engine divergence is therefore not applicable to this family."
+        "note": "CodeBlock has no engines/{classic,modern,rustic} siblings; the single implementation is packages/core/src/components/primitives/display/code-block/index.tsx and its only paint layer is packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css. Engine divergence is therefore not applicable to this family."
       },
       "scoutGaps": {
         "notes": [
@@ -267,7 +267,7 @@
           {
             "variable": "--ds-font-family-mono",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:47",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:47",
             "landsOn": "?",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -284,7 +284,7 @@
           {
             "variable": "--ds-radius-md",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:214",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:214",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -301,7 +301,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:215",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:215",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -318,7 +318,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:216",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:216",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -335,7 +335,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:226",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:226",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -352,7 +352,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:227",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:227",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -369,7 +369,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:227",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:227",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -386,7 +386,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:228",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:228",
             "landsOn": "border-bottom",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -403,7 +403,7 @@
           {
             "variable": "--ds-code-block-header-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:234",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:234",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -420,7 +420,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:234",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:234",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -437,7 +437,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:241",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:241",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -454,7 +454,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:242",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:242",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -471,7 +471,7 @@
           {
             "variable": "--ds-letter-spacing-wider",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:249",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:249",
             "landsOn": "letter-spacing",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -488,7 +488,7 @@
           {
             "variable": "--ds-color-border-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:297",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:297",
             "landsOn": "scrollbar-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -505,7 +505,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:310",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:310",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -522,7 +522,7 @@
           {
             "variable": "--ds-font-size-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:312",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:312",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -539,7 +539,7 @@
           {
             "variable": "--ds-line-height-body",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:313",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:313",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -556,7 +556,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:318",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:318",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -573,7 +573,7 @@
           {
             "variable": "--ds-code-block-line-highlight-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:334",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:334",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -590,7 +590,7 @@
           {
             "variable": "--ds-color-warning",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:334",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:334",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -607,7 +607,7 @@
           {
             "variable": "--ds-border-width-medium",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:343",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:343",
             "landsOn": "border-inline-start",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -624,7 +624,7 @@
           {
             "variable": "--ds-color-warning",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:345",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:345",
             "landsOn": "border-inline-start",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -641,7 +641,7 @@
           {
             "variable": "--ds-spacing-3",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:359",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:359",
             "landsOn": "margin-inline-end",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -658,7 +658,7 @@
           {
             "variable": "--ds-code-block-gutter-ink",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:375",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:375",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -675,7 +675,7 @@
           {
             "variable": "--ds-color-text-tertiary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:375",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:375",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -692,7 +692,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/ui/primitives/display/CodeBlock/index.tsx:375",
+            "at": "packages/core/src/components/primitives/display/code-block/index.tsx:375",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -709,7 +709,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:40",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:40",
             "landsOn": "gap",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -726,7 +726,7 @@
           {
             "variable": "--ds-spacing-1",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:41",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:41",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -743,7 +743,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:41",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:41",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -760,7 +760,7 @@
           {
             "variable": "--ds-radius-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:42",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:42",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -777,7 +777,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:43",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:43",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -794,7 +794,7 @@
           {
             "variable": "--ds-color-text-secondary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:45",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:45",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -811,7 +811,7 @@
           {
             "variable": "--ds-font-size-xs",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:47",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:47",
             "landsOn": "font-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -828,7 +828,7 @@
           {
             "variable": "--ds-code-block-motion-duration",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:51",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:51",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -845,7 +845,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:51",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:51",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -862,7 +862,7 @@
           {
             "variable": "--ds-code-block-motion-duration",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:52",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:52",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -879,7 +879,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:52",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:52",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -896,7 +896,7 @@
           {
             "variable": "--ds-code-block-motion-duration",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:53",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:53",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -913,7 +913,7 @@
           {
             "variable": "--ds-motion-fast",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:53",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:53",
             "landsOn": "transition",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -930,7 +930,7 @@
           {
             "variable": "--ds-touch-target-min",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:73",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:73",
             "landsOn": "min-block-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -947,7 +947,7 @@
           {
             "variable": "--ds-touch-target-min",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:74",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:74",
             "landsOn": "min-inline-size",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -964,7 +964,7 @@
           {
             "variable": "--ds-spacing-2",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:94",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:94",
             "landsOn": "padding",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -981,7 +981,7 @@
           {
             "variable": "--ds-color-border",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:95",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:95",
             "landsOn": "border",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -998,7 +998,7 @@
           {
             "variable": "--ds-radius-sm",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:96",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:96",
             "landsOn": "border-radius",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1015,7 +1015,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:99",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:99",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1032,7 +1032,7 @@
           {
             "variable": "--ds-line-height-snug",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:101",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:101",
             "landsOn": "line-height",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1049,7 +1049,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:106",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:106",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1066,7 +1066,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:107",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:107",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1083,7 +1083,7 @@
           {
             "variable": "--_ds-codeblock-scroll-shadow",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:110",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:110",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1100,7 +1100,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:110",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:110",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1117,7 +1117,7 @@
           {
             "variable": "--_ds-codeblock-scroll-shadow",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:115",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:115",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1134,7 +1134,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:115",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:115",
             "landsOn": "background-image",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1151,7 +1151,7 @@
           {
             "variable": "--ds-code-block-copy-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:128",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:128",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1168,7 +1168,7 @@
           {
             "variable": "--ds-button-ghost-bg-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:128",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:128",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1185,7 +1185,7 @@
           {
             "variable": "--ds-surface-inset",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:128",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:128",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1204,7 +1204,7 @@
           {
             "variable": "--ds-code-block-copy-ink-hover",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:129",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:129",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": true,
@@ -1221,7 +1221,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:129",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:129",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1238,7 +1238,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:136",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:136",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1255,7 +1255,7 @@
           {
             "variable": "--ds-color-success",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:149",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:149",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1272,7 +1272,7 @@
           {
             "variable": "--ds-color-text-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:149",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:149",
             "landsOn": "color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1289,7 +1289,7 @@
           {
             "variable": "--ds-color-success",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:153",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:153",
             "landsOn": "border-color",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1306,7 +1306,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:162",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:162",
             "landsOn": "background",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1323,7 +1323,7 @@
           {
             "variable": "--ds-color-primary",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:171",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:171",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1340,7 +1340,7 @@
           {
             "variable": "--ds-code-block-line-highlight-bg",
             "templatedNameFragment": false,
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css:202",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css:202",
             "landsOn": "box-shadow",
             "landingKind": "css-property",
             "hasFallback": false,
@@ -1402,13 +1402,13 @@
         {
           "channelId": "--_ds-code-block-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1418,13 +1418,13 @@
         {
           "channelId": "--_ds-code-block-code-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1434,13 +1434,13 @@
         {
           "channelId": "--_ds-code-block-copy-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1449,13 +1449,13 @@
         {
           "channelId": "--_ds-code-block-copy-button-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1465,13 +1465,13 @@
         {
           "channelId": "--_ds-code-block-copy-button-color-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1481,13 +1481,13 @@
         {
           "channelId": "--_ds-code-block-copy-ink-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1496,13 +1496,13 @@
         {
           "channelId": "--_ds-code-block-copy-status-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1512,13 +1512,13 @@
         {
           "channelId": "--_ds-code-block-header-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1528,13 +1528,13 @@
         {
           "channelId": "--_ds-code-block-line-highlight-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1543,13 +1543,13 @@
         {
           "channelId": "--_ds-code-block-line-number-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1559,13 +1559,13 @@
         {
           "channelId": "--_ds-code-block-title-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1603,13 +1603,13 @@
         {
           "channelId": "--_ds-code-block-code-font-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1638,13 +1638,13 @@
         {
           "channelId": "--_ds-code-block-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1654,13 +1654,13 @@
         {
           "channelId": "--_ds-code-block-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1688,13 +1688,13 @@
         {
           "channelId": "--_ds-code-block-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1740,13 +1740,13 @@
         {
           "channelId": "--_ds-code-block-header-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1756,13 +1756,13 @@
         {
           "channelId": "--_ds-code-block-line-min-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1772,13 +1772,13 @@
         {
           "channelId": "--_ds-code-block-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1788,13 +1788,13 @@
         {
           "channelId": "--_ds-code-block-scroll-max-block-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1813,7 +1813,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el interior de un componente display es composicion propia; rhythm gobierna el aire ENTRE bloques de pagina, no dentro de cards",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -1848,13 +1848,13 @@
         {
           "channelId": "--_ds-code-block-copy-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1864,13 +1864,13 @@
         {
           "channelId": "--_ds-code-block-motion-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1906,7 +1906,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-icon-frame-glass-bg: consumidor natural de effect-intensity",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -1926,7 +1926,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "display no es chrome de navegacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -1983,13 +1983,13 @@
         {
           "channelId": "--_ds-code-block-border-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1999,13 +1999,13 @@
         {
           "channelId": "--_ds-code-block-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2029,7 +2029,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2086,7 +2086,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2107,14 +2107,14 @@
             "examples": [
               "--ds-color-warning"
             ],
-            "noSocketReason": "SIN skin file (componente single-engine, TSX inline, sin engines/modern): background y borderInlineStart leen var(--ds-color-warning) directamente cuando data-highlighted='true'; evidencia verificada en ui/primitives/display/CodeBlock/index.tsx:334,345.",
+            "noSocketReason": "SIN skin file (componente single-engine, TSX inline, sin engines/modern): background y borderInlineStart leen var(--ds-color-warning) directamente cuando data-highlighted='true'; evidencia verificada en ui/primitives/display/code-block/index.tsx:334,345.",
             "socketsResolved": true,
             "carrier": "shared-channel"
           }
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/ui/primitives/display/CodeBlock/index.tsx"
+          "packages/core/src/components/primitives/display/code-block/index.tsx"
         ]
       }
     },
@@ -2129,13 +2129,13 @@
         {
           "channelId": "--_ds-code-block-copy-tick-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/display/code-block"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/code-block/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2155,11 +2155,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

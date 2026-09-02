@@ -8,15 +8,15 @@
     "components": [
       "Anchor"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/navigation/Anchor",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/navigation/anchor",
     "publicComponents": [
       "Anchor"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "50f394e923b972e518d061bd0c35b8be68e868adb06978d18f09b4d2b764b5bb"
+    "inventoryRowDigest": "1abee32d1f564ffeca0c2b9c4393bcdb55f678231b6ea5560358feb5bf0accda"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,14 +28,14 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css",
-      "packages/core/src/ui/primitives/navigation/Anchor/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Anchor/contracts/index.ts",
-      "packages/core/src/ui/primitives/navigation/Anchor/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Anchor/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/navigation/Anchor/compound/index.ts"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css",
+      "packages/core/src/components/primitives/navigation/anchor/index.tsx",
+      "packages/core/src/components/primitives/navigation/anchor/contracts/index.ts",
+      "packages/core/src/components/primitives/navigation/anchor/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/navigation/anchor/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/navigation/anchor/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/navigation/anchor/compound/index.ts"
     ],
     "stableParts": [
       "root",
@@ -53,8 +53,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The modern root is role=\"navigation\" with an accessible name. [at src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:465-466]",
-      "Keyboard traversal is scoped to [data-part='item'] nodes inside the root, so renaming/removing the item part breaks arrow-key navigation. [at src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:410]"
+      "The modern root is role=\"navigation\" with an accessible name. [at src/components/primitives/navigation/anchor/engines/modern/index.tsx:465-466]",
+      "Keyboard traversal is scoped to [data-part='item'] nodes inside the root, so renaming/removing the item part breaks arrow-key navigation. [at src/components/primitives/navigation/anchor/engines/modern/index.tsx:410]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -76,30 +76,30 @@
           "part": "root",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:462",
-            "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:423"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:462",
+            "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:423"
           ]
         },
         {
           "part": "link-wrapper",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:184"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:184"
           ]
         },
         {
           "part": "item",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:204",
-            "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:246"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:204",
+            "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:246"
           ]
         },
         {
           "part": "nested",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:211"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:211"
           ]
         }
       ],
@@ -108,9 +108,9 @@
           "token": "data-selected",
           "meaning": "active anchor target",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:205",
-            "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:247",
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:386"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:205",
+            "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:247",
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:386"
           ],
           "state": "selected"
         },
@@ -118,7 +118,7 @@
           "token": "aria-current",
           "meaning": "active anchor exposure",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:206"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:206"
           ],
           "state": "aria-current"
         }
@@ -128,18 +128,18 @@
           "token": "data-direction",
           "meaning": "vertical/horizontal posture",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:463"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:463"
           ]
         },
         {
           "token": "data-affix",
           "meaning": "affixed posture",
           "at": [
-            "src/ui/primitives/navigation/Anchor/engines/modern/index.tsx:464"
+            "src/components/primitives/navigation/anchor/engines/modern/index.tsx:464"
           ]
         }
       ],
-      "engineDivergence": "classic = Ant Anchor wrapper (src/ui/primitives/navigation/Anchor/engines/classic/index.tsx:80), no data-part and no --ds-* reads. modern owns four parts and the role=navigation landmark. rustic stamps only root and item and has no link-wrapper/nested parts; it hardcodes transition 'color 0.2s, border-color 0.2s' at src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:118.",
+      "engineDivergence": "classic = Ant Anchor wrapper (src/components/primitives/navigation/anchor/engines/classic/index.tsx:80), no data-part and no --ds-* reads. modern owns four parts and the role=navigation landmark. rustic stamps only root and item and has no link-wrapper/nested parts; it hardcodes transition 'color 0.2s, border-color 0.2s' at src/components/primitives/navigation/anchor/engines/rustic/index.tsx:118.",
       "variableReadCensus": {
         "attribution": "UNATTRIBUTED RAW EVIDENCE. Measured reads and declarations, not mapped to any controlId. themeControls stays UNKNOWN until the mapping wave; this block must not be read as a control edge.",
         "variableCensus": {
@@ -213,7 +213,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "gap",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:66",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:66",
               "hasFallback": true,
               "fallback": "var(--ds-spacing-2)",
               "layer": "modern-skin-css",
@@ -233,19 +233,19 @@
               ],
               "atRuleContext": [],
               "observableProperty": "gap",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:66",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:66",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:685",
-                "src/foundation/tokens/css/foundation/base/density.css:79"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+                "src/foundation/tokens/css/foundation/base/density/index.css:79"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:685"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:685"
               ]
             },
             {
@@ -258,21 +258,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "scrollbar-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:72",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:72",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:148",
-                "src/ui/patterns/customization/brand-studio/index.tsx:166",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+                "src/components/patterns/customization/brand-studio/index.tsx:148",
+                "src/components/patterns/customization/brand-studio/index.tsx:166",
+                "tests/fixtures/tenants/quality-evidence/index.ts:316"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:231",
-                "src/foundation/tokens/css/foundation/themes/default.css:2136"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:231",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2136"
               ]
             },
             {
@@ -285,7 +285,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "max-block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:79",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:79",
               "hasFallback": true,
               "fallback": "none",
               "layer": "modern-skin-css",
@@ -305,21 +305,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "scrollbar-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:82",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:82",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='vertical']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:148",
-                "src/ui/patterns/customization/brand-studio/index.tsx:166",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+                "src/components/patterns/customization/brand-studio/index.tsx:148",
+                "src/components/patterns/customization/brand-studio/index.tsx:166",
+                "tests/fixtures/tenants/quality-evidence/index.ts:316"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:231",
-                "src/foundation/tokens/css/foundation/themes/default.css:2136"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:231",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2136"
               ]
             },
             {
@@ -330,7 +330,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "padding-block",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:103",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:103",
               "hasFallback": true,
               "fallback": "var(--ds-spacing-1)",
               "layer": "modern-skin-css",
@@ -348,19 +348,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "padding-block",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:103",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:103",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:684",
-                "src/foundation/tokens/css/foundation/base/density.css:78"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:684",
+                "src/foundation/tokens/css/foundation/base/density/index.css:78"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:684"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:684"
               ]
             },
             {
@@ -371,7 +371,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "padding-inline",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:104",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:104",
               "hasFallback": true,
               "fallback": "var(--ds-spacing-3)",
               "layer": "modern-skin-css",
@@ -389,19 +389,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "padding-inline",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:104",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:104",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:686",
-                "src/foundation/tokens/css/foundation/base/density.css:80"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:686",
+                "src/foundation/tokens/css/foundation/base/density/index.css:80"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:686"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:686"
               ]
             },
             {
@@ -412,7 +412,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "font-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:105",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:105",
               "hasFallback": true,
               "fallback": "14px",
               "layer": "modern-skin-css",
@@ -430,7 +430,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "line-height",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:106",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:106",
               "hasFallback": true,
               "fallback": "1.5715",
               "layer": "modern-skin-css",
@@ -448,7 +448,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": true,
               "fallback": "var(--ds-motion-fast)",
               "layer": "modern-skin-css",
@@ -466,22 +466,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:925",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+                "src/foundation/tokens/css/runtime/personality/index.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:398"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:925",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+                "src/foundation/tokens/css/runtime/personality/index.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:398"
               ]
             },
             {
@@ -492,7 +492,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -510,18 +510,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -532,7 +532,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": true,
               "fallback": "var(--ds-motion-fast)",
               "layer": "modern-skin-css",
@@ -550,22 +550,22 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/runtime/personality.css:925",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+                "src/foundation/tokens/css/runtime/personality/index.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:398"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/runtime/personality.css:925",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:94",
-                "src/foundation/tokens/css/foundation/animations/transitions.css:398"
+                "src/foundation/tokens/css/runtime/personality/index.css:925",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:398"
               ]
             },
             {
@@ -576,7 +576,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": true,
               "fallback": "var(--ds-motion-ease-out)",
               "layer": "modern-skin-css",
@@ -594,18 +594,18 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "transition",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+                "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
               ]
             },
             {
@@ -618,7 +618,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:119",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:119",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-secondary)",
               "layer": "modern-skin-css",
@@ -638,21 +638,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:119",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:119",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:144",
-                "src/ui/patterns/customization/brand-studio/index.tsx:162",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:307"
+                "src/components/patterns/customization/brand-studio/index.tsx:144",
+                "src/components/patterns/customization/brand-studio/index.tsx:162",
+                "tests/fixtures/tenants/quality-evidence/index.ts:307"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:218",
-                "src/foundation/tokens/css/foundation/themes/default.css:2129"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
               ]
             },
             {
@@ -665,7 +665,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:130",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:130",
               "hasFallback": true,
               "fallback": "var(--ds-color-border-secondary)",
               "layer": "modern-skin-css",
@@ -685,21 +685,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:130",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:130",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:148",
-                "src/ui/patterns/customization/brand-studio/index.tsx:166",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+                "src/components/patterns/customization/brand-studio/index.tsx:148",
+                "src/components/patterns/customization/brand-studio/index.tsx:166",
+                "tests/fixtures/tenants/quality-evidence/index.ts:316"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:231",
-                "src/foundation/tokens/css/foundation/themes/default.css:2136"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:231",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2136"
               ]
             },
             {
@@ -712,7 +712,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
@@ -732,20 +732,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156"
               ]
             },
             {
@@ -758,20 +758,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+                "tests/fixtures/tenants/quality-evidence/index.ts:358",
+                "tests/fixtures/tenants/quality-evidence/index.ts:481",
+                "tests/fixtures/tenants/quality-evidence/index.ts:570"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/animations/premium.css:27"
+                "src/foundation/tokens/css/foundation/animations/premium/index.css:27"
               ]
             },
             {
@@ -784,7 +784,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:135",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:135",
               "hasFallback": true,
               "fallback": "var(--ds-color-primary)",
               "layer": "modern-skin-css",
@@ -804,20 +804,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:135",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:135",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156"
               ]
             },
             {
@@ -830,7 +830,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "font-weight",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:136",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:136",
               "hasFallback": true,
               "fallback": "500",
               "layer": "modern-skin-css",
@@ -852,7 +852,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-block-end-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:153",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:153",
               "hasFallback": true,
               "fallback": "var(--ds-color-border-secondary)",
               "layer": "modern-skin-css",
@@ -874,21 +874,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-block-end-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:153",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:153",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor.rottay-anchor--modern[data-part='root'][data-direction='horizontal'] .rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:148",
-                "src/ui/patterns/customization/brand-studio/index.tsx:166",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:316"
+                "src/components/patterns/customization/brand-studio/index.tsx:148",
+                "src/components/patterns/customization/brand-studio/index.tsx:166",
+                "tests/fixtures/tenants/quality-evidence/index.ts:316"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:231",
-                "src/foundation/tokens/css/foundation/themes/default.css:2136"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:231",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2136"
               ]
             },
             {
@@ -904,7 +904,7 @@
                 "@media (hover: hover)"
               ],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:161",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:161",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-primary)",
               "layer": "modern-skin-css",
@@ -927,21 +927,21 @@
                 "@media (hover: hover)"
               ],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:161",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:161",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:hover",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:143",
-                "src/ui/patterns/customization/brand-studio/index.tsx:161",
-                "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
+                "src/components/patterns/customization/brand-studio/index.tsx:143",
+                "src/components/patterns/customization/brand-studio/index.tsx:161",
+                "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:217",
-                "src/foundation/tokens/css/foundation/themes/default.css:2128"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
               ]
             },
             {
@@ -955,7 +955,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:166",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:166",
               "hasFallback": true,
               "fallback": "var(--ds-color-text-primary)",
               "layer": "modern-skin-css",
@@ -976,21 +976,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:166",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:166",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:active",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/ui/patterns/customization/brand-studio/index.tsx:143",
-                "src/ui/patterns/customization/brand-studio/index.tsx:161",
-                "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
+                "src/components/patterns/customization/brand-studio/index.tsx:143",
+                "src/components/patterns/customization/brand-studio/index.tsx:161",
+                "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/report/index.tsx:69"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:217",
-                "src/foundation/tokens/css/foundation/themes/default.css:2128"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
               ]
             },
             {
@@ -1004,7 +1004,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:167",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:167",
               "hasFallback": true,
               "fallback": "var(--ds-surface-inset)",
               "layer": "modern-skin-css",
@@ -1025,20 +1025,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "background",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:167",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:167",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item'][data-selected='false']:active",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:321",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:426",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:541"
+                "tests/fixtures/tenants/quality-evidence/index.ts:321",
+                "tests/fixtures/tenants/quality-evidence/index.ts:426",
+                "tests/fixtures/tenants/quality-evidence/index.ts:541"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:266"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:266"
               ]
             },
             {
@@ -1051,18 +1051,18 @@
               ],
               "atRuleContext": [],
               "observableProperty": "outline",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:172",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:172",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:872"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:872"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:872"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:872"
               ]
             },
             {
@@ -1075,21 +1075,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "outline",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:172",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:172",
               "hasFallback": true,
               "fallback": "var(--ds-color-primary)",
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:879",
-                "src/foundation/tokens/css/foundation/themes/default.css:2140",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:879",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2140",
                 "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts:1956"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:879",
-                "src/foundation/tokens/css/foundation/themes/default.css:2140"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:879",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2140"
               ]
             },
             {
@@ -1102,20 +1102,20 @@
               ],
               "atRuleContext": [],
               "observableProperty": "outline",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:172",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:172",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156",
                 "src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
                 "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts:813"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:156"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:156"
               ]
             },
             {
@@ -1128,7 +1128,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "outline-offset",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:173",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:173",
               "hasFallback": true,
               "fallback": "2px",
               "layer": "modern-skin-css",
@@ -1148,7 +1148,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-radius",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:174",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:174",
               "hasFallback": true,
               "fallback": "var(--ds-radius-sm)",
               "layer": "modern-skin-css",
@@ -1168,21 +1168,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-radius",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:174",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:174",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']:focus-visible",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:42",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:349",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:472"
+                "tests/fixtures/tenants/default/index.css:42",
+                "tests/fixtures/tenants/quality-evidence/index.ts:349",
+                "tests/fixtures/tenants/quality-evidence/index.ts:472"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:42",
-                "src/foundation/tokens/css/foundation/themes/default.css:769"
+                "tests/fixtures/tenants/default/index.css:42",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:769"
               ]
             },
             {
@@ -1194,7 +1194,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "margin-inline-start",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:180",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:180",
               "hasFallback": true,
               "fallback": "var(--ds-spacing-4)",
               "layer": "modern-skin-css",
@@ -1213,19 +1213,19 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "margin-inline-start",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:180",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:180",
               "hasFallback": false,
               "fallback": null,
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor.rottay-anchor--modern[data-part='root'] [data-part='nested']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:687",
-                "src/foundation/tokens/css/foundation/base/density.css:81"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+                "src/foundation/tokens/css/foundation/base/density/index.css:81"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:687"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:687"
               ]
             },
             {
@@ -1238,18 +1238,18 @@
                 "@media (hover: none), (pointer: coarse)"
               ],
               "observableProperty": "min-block-size",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:219",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:219",
               "hasFallback": true,
               "fallback": "44px",
               "layer": "modern-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--modern[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:921"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:921"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:921"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:921"
               ]
             },
             {
@@ -1260,20 +1260,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:26",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:26",
               "hasFallback": true,
               "fallback": "var(--ds-color-neutral-600, #595959)",
               "layer": "rustic-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--rustic[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2084",
-                "src/foundation/tokens/css/foundation/themes/default.css:2199"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2084",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2199"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2084",
-                "src/foundation/tokens/css/foundation/themes/default.css:2199"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2084",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2199"
               ]
             },
             {
@@ -1284,20 +1284,20 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:26",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:26",
               "hasFallback": true,
               "fallback": "#595959",
               "layer": "rustic-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--rustic[data-part='item']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:59",
-                "src/foundation/tokens/css/foundation/themes/default.css:2149"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:59",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2149"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:59",
-                "src/foundation/tokens/css/foundation/themes/default.css:2149"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:59",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2149"
               ]
             },
             {
@@ -1310,7 +1310,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:30",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:30",
               "hasFallback": true,
               "fallback": "var(--ds-color-primary-500, #1890ff)",
               "layer": "rustic-skin-css",
@@ -1330,21 +1330,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:30",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:30",
               "hasFallback": true,
               "fallback": "#1890ff",
               "layer": "rustic-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/rottay.css:8",
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/tooling/testing/fixtures/tenants/bithire.css:13"
+                "tests/fixtures/tenants/rottay/index.css:8",
+                "tests/fixtures/tenants/default/index.css:13",
+                "tests/fixtures/tenants/bithire/index.css:13"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/foundation/tokens/css/foundation/themes/default.css:30"
+                "tests/fixtures/tenants/default/index.css:13",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:30"
               ]
             },
             {
@@ -1357,21 +1357,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "border-radius",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:31",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:31",
               "hasFallback": true,
               "fallback": "6px",
               "layer": "rustic-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:42",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:349",
-                "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:472"
+                "tests/fixtures/tenants/default/index.css:42",
+                "tests/fixtures/tenants/quality-evidence/index.ts:349",
+                "tests/fixtures/tenants/quality-evidence/index.ts:472"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:42",
-                "src/foundation/tokens/css/foundation/themes/default.css:769"
+                "tests/fixtures/tenants/default/index.css:42",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:769"
               ]
             },
             {
@@ -1384,7 +1384,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:32",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:32",
               "hasFallback": true,
               "fallback": "var(--ds-color-primary-500, #1890ff)",
               "layer": "rustic-skin-css",
@@ -1404,21 +1404,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "box-shadow",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:32",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:32",
               "hasFallback": true,
               "fallback": "#1890ff",
               "layer": "rustic-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--rustic[data-part='item'][data-selected='true']",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/rottay.css:8",
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/tooling/testing/fixtures/tenants/bithire.css:13"
+                "tests/fixtures/tenants/rottay/index.css:8",
+                "tests/fixtures/tenants/default/index.css:13",
+                "tests/fixtures/tenants/bithire/index.css:13"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/foundation/tokens/css/foundation/themes/default.css:30"
+                "tests/fixtures/tenants/default/index.css:13",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:30"
               ]
             },
             {
@@ -1433,7 +1433,7 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:36",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:36",
               "hasFallback": true,
               "fallback": "var(--ds-color-primary-500, #1890ff)",
               "layer": "rustic-skin-css",
@@ -1455,21 +1455,21 @@
               ],
               "atRuleContext": [],
               "observableProperty": "color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:36",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:36",
               "hasFallback": true,
               "fallback": "#1890ff",
               "layer": "rustic-skin-css",
               "selector": ".rottay-anchor-link.rottay-anchor-link--rustic[data-part='item']:hover:not([data-selected='true'])",
               "declarationStatus": "DECLARED_DEFAULT_CSS",
               "declaredAt": [
-                "src/tooling/testing/fixtures/tenants/rottay.css:8",
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/tooling/testing/fixtures/tenants/bithire.css:13"
+                "tests/fixtures/tenants/rottay/index.css:8",
+                "tests/fixtures/tenants/default/index.css:13",
+                "tests/fixtures/tenants/bithire/index.css:13"
               ],
               "outerRungRootDefault": true,
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/foundation/tokens/css/foundation/themes/default.css:30"
+                "tests/fixtures/tenants/default/index.css:13",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:30"
               ]
             },
             {
@@ -1480,7 +1480,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "padding",
-              "readAt": "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:115",
+              "readAt": "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:115",
               "hasFallback": true,
               "fallback": "4px 12px",
               "layer": "engine-inline:rustic",
@@ -1498,7 +1498,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "fontSize",
-              "readAt": "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:116",
+              "readAt": "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:116",
               "hasFallback": true,
               "fallback": "14px",
               "layer": "engine-inline:rustic",
@@ -1516,7 +1516,7 @@
               "stateSelectors": [],
               "atRuleContext": [],
               "observableProperty": "marginLeft",
-              "readAt": "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:128",
+              "readAt": "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:128",
               "hasFallback": true,
               "fallback": "16px",
               "layer": "engine-inline:rustic",
@@ -1531,230 +1531,230 @@
         "undeclaredReads": [
           {
             "variable": "--ds-anchor-horizontal-gap",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:66"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:66"
           },
           {
             "variable": "--ds-anchor-list-max-block-size",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:79"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:79"
           },
           {
             "variable": "--ds-anchor-item-padding-block",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:103"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:103"
           },
           {
             "variable": "--ds-anchor-item-padding-inline",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:104"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:104"
           },
           {
             "variable": "--ds-anchor-item-font-size",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:105"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:105"
           },
           {
             "variable": "--ds-anchor-item-line-height",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:106"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:106"
           },
           {
             "variable": "--ds-anchor-transition-duration",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111"
           },
           {
             "variable": "--ds-anchor-transition-timing",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111"
           },
           {
             "variable": "--ds-anchor-item-color",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:119"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:119"
           },
           {
             "variable": "--ds-anchor-item-accent-selected",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:130"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:130"
           },
           {
             "variable": "--ds-anchor-item-bg-selected",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134"
           },
           {
             "variable": "--ds-anchor-item-color-selected",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:135"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:135"
           },
           {
             "variable": "--ds-anchor-item-font-weight-selected",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:136"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:136"
           },
           {
             "variable": "--ds-anchor-item-color-hover",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:161"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:161"
           },
           {
             "variable": "--ds-anchor-item-bg-active",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:167"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:167"
           },
           {
             "variable": "--ds-anchor-focus-ring-offset",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:173"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:173"
           },
           {
             "variable": "--ds-anchor-focus-ring-radius",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:174"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:174"
           },
           {
             "variable": "--ds-anchor-nested-indent",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:180"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:180"
           },
           {
             "variable": "--ds-anchor-link-active-color",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:30"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:30"
           },
           {
             "variable": "--ds-anchor-link-active-border",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:32"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:32"
           },
           {
             "variable": "--ds-anchor-link-hover-color",
-            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:36"
+            "firstReadAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:36"
           },
           {
             "variable": "--ds-anchor-link-padding",
-            "firstReadAt": "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:115"
+            "firstReadAt": "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:115"
           },
           {
             "variable": "--ds-anchor-link-font-size",
-            "firstReadAt": "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:116"
+            "firstReadAt": "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:116"
           }
         ],
         "readsWithoutFallback": [
           {
             "variable": "--ds-spacing-2",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:66",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:66",
             "observableProperty": "gap"
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:72",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:72",
             "observableProperty": "scrollbar-color"
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:82",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:82",
             "observableProperty": "scrollbar-color"
           },
           {
             "variable": "--ds-spacing-1",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:103",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:103",
             "observableProperty": "padding-block"
           },
           {
             "variable": "--ds-spacing-3",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:104",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:104",
             "observableProperty": "padding-inline"
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-fast",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-motion-ease-out",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:111",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:111",
             "observableProperty": "transition"
           },
           {
             "variable": "--ds-color-text-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:119",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:119",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:130",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:130",
             "observableProperty": "border-color"
           },
           {
             "variable": "--ds-anchor-item-bg-selected",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-effect-intensity",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:134",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:134",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:135",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:135",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-color-border-secondary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:153",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:153",
             "observableProperty": "border-block-end-color"
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:161",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:161",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-color-text-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:166",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:166",
             "observableProperty": "color"
           },
           {
             "variable": "--ds-surface-inset",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:167",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:167",
             "observableProperty": "background"
           },
           {
             "variable": "--ds-focus-ring-width",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:172",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:172",
             "observableProperty": "outline"
           },
           {
             "variable": "--ds-color-primary",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:172",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:172",
             "observableProperty": "outline"
           },
           {
             "variable": "--ds-radius-sm",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:174",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:174",
             "observableProperty": "border-radius"
           },
           {
             "variable": "--ds-spacing-4",
-            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:180",
+            "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:180",
             "observableProperty": "margin-inline-start"
           }
         ],
         "inertFallbackChains": {
-          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css:164-178.",
+          "definition": "A read whose OUTER rung already carries a :root default in a shipped stylesheet. The inner fallback rungs can never be consulted, so the control edge exists syntactically but is not causal. The modern skin states this rule in its own words at src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css:164-178.",
           "blockingCount": 8,
           "testFixtureOnlyCount": 0,
           "entries": [
             {
               "variable": "--ds-focus-ring-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:172",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:172",
               "fallback": "var(--ds-color-primary)",
               "observableProperty": "outline",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:879",
-                "src/foundation/tokens/css/foundation/themes/default.css:2140"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:879",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2140"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -1764,14 +1764,14 @@
             },
             {
               "variable": "--ds-touch-target-min",
-              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:219",
+              "readAt": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:219",
               "fallback": "44px",
               "observableProperty": "min-block-size",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:921"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:921"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -1781,15 +1781,15 @@
             },
             {
               "variable": "--ds-anchor-link-color",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:26",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:26",
               "fallback": "var(--ds-color-neutral-600, #595959)",
               "observableProperty": "color",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:2084",
-                "src/foundation/tokens/css/foundation/themes/default.css:2199"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2084",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2199"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -1799,15 +1799,15 @@
             },
             {
               "variable": "--ds-color-neutral-600",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:26",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:26",
               "fallback": "#595959",
               "observableProperty": "color",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/foundation/tokens/css/foundation/themes/default.css:59",
-                "src/foundation/tokens/css/foundation/themes/default.css:2149"
+                "src/foundation/tokens/css/foundation/themes/default/index.css:59",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:2149"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME"
@@ -1817,15 +1817,15 @@
             },
             {
               "variable": "--ds-color-primary-500",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:30",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:30",
               "fallback": "#1890ff",
               "observableProperty": "color",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/foundation/tokens/css/foundation/themes/default.css:30"
+                "tests/fixtures/tenants/default/index.css:13",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:30"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME",
@@ -1836,15 +1836,15 @@
             },
             {
               "variable": "--ds-radius-sm",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:31",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:31",
               "fallback": "6px",
               "observableProperty": "border-radius",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:42",
-                "src/foundation/tokens/css/foundation/themes/default.css:769"
+                "tests/fixtures/tenants/default/index.css:42",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:769"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME",
@@ -1855,15 +1855,15 @@
             },
             {
               "variable": "--ds-color-primary-500",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:32",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:32",
               "fallback": "#1890ff",
               "observableProperty": "box-shadow",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/foundation/tokens/css/foundation/themes/default.css:30"
+                "tests/fixtures/tenants/default/index.css:13",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:30"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME",
@@ -1874,15 +1874,15 @@
             },
             {
               "variable": "--ds-color-primary-500",
-              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:36",
+              "readAt": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:36",
               "fallback": "#1890ff",
               "observableProperty": "color",
               "parts": [
                 "item"
               ],
               "rootDefaultAt": [
-                "src/tooling/testing/fixtures/tenants/default.css:13",
-                "src/foundation/tokens/css/foundation/themes/default.css:30"
+                "tests/fixtures/tenants/default/index.css:13",
+                "src/foundation/tokens/css/foundation/themes/default/index.css:30"
               ],
               "rootDefaultProvenance": [
                 "SHIPPED_DEFAULT_THEME",
@@ -1899,7 +1899,7 @@
         "testOrStoryOnlyDeclaredReads": [],
         "hardcodedValues": [
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:102",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:102",
             "property": "border-inline-start-width",
             "literals": [
               "2px"
@@ -1910,7 +1910,7 @@
             "classification": "STRUCTURAL_HAIRLINE"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:150",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:150",
             "property": "border-block-end",
             "literals": [
               "2px"
@@ -1921,7 +1921,7 @@
             "classification": "STRUCTURAL_HAIRLINE"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css:210",
+            "at": "src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css:210",
             "property": "outline",
             "literals": [
               "2px"
@@ -1934,7 +1934,7 @@
             "classification": "ACCESSIBILITY_GUARANTEE_NOT_A_DEFECT"
           },
           {
-            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor.css:32",
+            "at": "src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css:32",
             "property": "box-shadow",
             "literals": [
               "1px"
@@ -1945,7 +1945,7 @@
             "classification": "UNGOVERNED_GEOMETRY"
           },
           {
-            "at": "src/ui/primitives/navigation/Anchor/engines/rustic/index.tsx:118",
+            "at": "src/components/primitives/navigation/anchor/engines/rustic/index.tsx:118",
             "property": "transition",
             "literals": [
               "0.2s"
@@ -2005,13 +2005,13 @@
         {
           "channelId": "--_ds-anchor-active-indicator",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2021,13 +2021,13 @@
         {
           "channelId": "--_ds-anchor-item-accent-selected",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2036,13 +2036,13 @@
         {
           "channelId": "--_ds-anchor-item-bg-active",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2051,13 +2051,13 @@
         {
           "channelId": "--_ds-anchor-item-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2066,13 +2066,13 @@
         {
           "channelId": "--_ds-anchor-item-color-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2081,13 +2081,13 @@
         {
           "channelId": "--_ds-anchor-item-color-selected",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2104,7 +2104,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2129,7 +2129,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2156,13 +2156,13 @@
         {
           "channelId": "--_ds-anchor-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2172,13 +2172,13 @@
         {
           "channelId": "--_ds-anchor-item-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2187,13 +2187,13 @@
         {
           "channelId": "--_ds-anchor-item-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2210,7 +2210,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -2243,13 +2243,13 @@
         {
           "channelId": "--_ds-anchor-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2269,13 +2269,13 @@
         {
           "channelId": "--_ds-anchor-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2285,13 +2285,13 @@
         {
           "channelId": "--_ds-anchor-horizontal-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2300,13 +2300,13 @@
         {
           "channelId": "--_ds-anchor-item-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2315,13 +2315,13 @@
         {
           "channelId": "--_ds-anchor-item-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2330,13 +2330,13 @@
         {
           "channelId": "--_ds-anchor-list-max-block-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2345,13 +2345,13 @@
         {
           "channelId": "--_ds-anchor-nested-indent",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2369,7 +2369,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2383,13 +2383,13 @@
         {
           "channelId": "--_ds-anchor-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2398,13 +2398,13 @@
         {
           "channelId": "--_ds-anchor-transition-timing",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2439,7 +2439,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "nav chrome mate; el estado activo lo da sidebar-tone, no efectos",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2487,7 +2487,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el fondo del chrome de navegacion lo emite sidebar-tone (seis hojas); una segunda fuente viola L4",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2501,13 +2501,13 @@
         {
           "channelId": "--_ds-anchor-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2517,13 +2517,13 @@
         {
           "channelId": "--_ds-anchor-focus-ring-offset",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2532,13 +2532,13 @@
         {
           "channelId": "--_ds-anchor-focus-ring-radius",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2561,7 +2561,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2617,7 +2617,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2649,13 +2649,13 @@
         {
           "channelId": "--_ds-anchor-icon-fill-mode",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/navigation/anchor"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/anchor/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2675,11 +2675,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -8,15 +8,15 @@
     "components": [
       "InputNumber"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/InputNumber",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/input-number",
     "publicComponents": [
       "InputNumber"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "e7c6268792da7800bac54c1c2db0c968bc97b6968185944db771efb00b91c801"
+    "inventoryRowDigest": "ebe1c1402073a85b8a96b0b3b103e0417492fb08a0d4590513f242ba4db9b73c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css",
-      "packages/core/src/ui/primitives/inputs/InputNumber"
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css",
+      "packages/core/src/components/primitives/inputs/input-number"
     ],
     "stableParts": [
       "root",
@@ -64,8 +64,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "aria-invalid and aria-describedby supplied by FormField are forwarded, not regenerated. [at packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:412, packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:413, packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:122]",
-      "The numeric value is exposed as aria-valuenow when it is a real number. [at packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:416]"
+      "aria-invalid and aria-describedby supplied by FormField are forwarded, not regenerated. [at packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:412, packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:413, packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:122]",
+      "The numeric value is exposed as aria-valuenow when it is a real number. [at packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:416]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -88,9 +88,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:390",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:260",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:58"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:390",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:260",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:58"
           ]
         },
         {
@@ -98,11 +98,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:424",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:440",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:290",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:301",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:398"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:424",
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:440",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:290",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:301",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:398"
           ]
         },
         {
@@ -110,9 +110,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:454",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:314",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:327"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:454",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:314",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:327"
           ]
         },
         {
@@ -120,9 +120,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:419",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:282",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:394"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:419",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:282",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:394"
           ]
         },
         {
@@ -130,8 +130,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:418",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:216"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:418",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:216"
           ]
         },
         {
@@ -139,8 +139,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:421",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:224"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:421",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:224"
           ]
         },
         {
@@ -148,9 +148,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:436",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:448",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:453"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:436",
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:448",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:453"
           ]
         },
         {
@@ -158,8 +158,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:382",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:246"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:382",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:246"
           ]
         },
         {
@@ -167,7 +167,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:383"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:383"
           ]
         },
         {
@@ -175,7 +175,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:381"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:381"
           ]
         },
         {
@@ -183,8 +183,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx:384",
-            "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:252"
+            "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx:384",
+            "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:252"
           ]
         }
       ],
@@ -194,7 +194,7 @@
           "scoutAnchorClaim": "element:0%, 100%, element:50%",
           "reason": "Not a part name. The scout recorded a placeholder or a raw class token here, not a DS-stamped part identity; nothing addressable follows from it under RULING R-8.",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:279"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:279"
           ]
         }
       ],
@@ -203,7 +203,7 @@
           "token": "data-disabled='true'",
           "occurrences": 19,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:183"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:183"
           ],
           "state": "disabled"
         },
@@ -211,7 +211,7 @@
           "token": "data-status='error'",
           "occurrences": 11,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:237"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:237"
           ],
           "state": "error"
         },
@@ -219,7 +219,7 @@
           "token": "data-status='warning'",
           "occurrences": 11,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:237"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:237"
           ],
           "state": "warning"
         },
@@ -227,7 +227,7 @@
           "token": "pseudo:focus-visible",
           "occurrences": 10,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:241"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:241"
           ],
           "state": "focus-visible"
         },
@@ -235,7 +235,7 @@
           "token": "pseudo:disabled",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:426"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:426"
           ],
           "state": "disabled"
         },
@@ -243,7 +243,7 @@
           "token": "data-readonly='true'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:183"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:183"
           ],
           "state": "readonly"
         },
@@ -251,7 +251,7 @@
           "token": "pseudo:active",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:426"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:426"
           ],
           "state": "active"
         },
@@ -259,7 +259,7 @@
           "token": "pseudo:hover",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:237"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:237"
           ],
           "state": "hover"
         },
@@ -267,7 +267,7 @@
           "token": "[data-bounds-hit]",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:273"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:273"
           ],
           "state": "bounds-hit"
         },
@@ -275,7 +275,7 @@
           "token": "pseudo:focus",
           "occurrences": 2,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:49"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:49"
           ],
           "state": "focus"
         },
@@ -283,7 +283,7 @@
           "token": "pseudo:focus-within",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:212"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:212"
           ],
           "state": "focus-within"
         }
@@ -293,42 +293,42 @@
           "token": "[data-size]",
           "occurrences": 13,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:187"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:187"
           ]
         },
         {
           "token": "data-has-trailing='true'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:170"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:170"
           ]
         },
         {
           "token": "data-size='lg'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:156"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:156"
           ]
         },
         {
           "token": "data-size='md'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:147"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:147"
           ]
         },
         {
           "token": "data-size='sm'",
           "occurrences": 7,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:138"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:138"
           ]
         },
         {
           "token": "data-has-prefix='true'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:167"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:167"
           ]
         }
       ],
@@ -337,77 +337,77 @@
           "token": "data-part='root'",
           "occurrences": 240,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:58"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:58"
           ]
         },
         {
           "token": "data-part='stepper-button'",
           "occurrences": 39,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:398"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:398"
           ]
         },
         {
           "token": "data-part='addon-after'",
           "occurrences": 36,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:327"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:327"
           ]
         },
         {
           "token": "data-part='addon-before'",
           "occurrences": 36,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:306"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:306"
           ]
         },
         {
           "token": "data-part='field'",
           "occurrences": 26,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:196"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:196"
           ]
         },
         {
           "token": "data-part='trailing'",
           "occurrences": 20,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:216"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:216"
           ]
         },
         {
           "token": "data-part='suffix'",
           "occurrences": 9,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:394"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:394"
           ]
         },
         {
           "token": "data-part='prefix'",
           "occurrences": 4,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:387"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:387"
           ]
         },
         {
           "token": "data-part='group'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:196"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:196"
           ]
         },
         {
           "token": "data-part='steppers'",
           "occurrences": 3,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:224"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:224"
           ]
         },
         {
           "token": "data-part='stepper-legacy-glyph'",
           "occurrences": 1,
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:453"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:453"
           ]
         }
       ],
@@ -415,22 +415,22 @@
         "engineSiblings": {
           "classic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/InputNumber/engines/classic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/input-number/engines/classic/index.tsx",
             "lines": 155
           },
           "modern": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/InputNumber/engines/modern/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/input-number/engines/modern/index.tsx",
             "lines": 463
           },
           "rustic": {
             "exists": true,
-            "path": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx",
+            "path": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx",
             "lines": 326
           }
         },
         "classicSkinCssPresent": false,
-        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
+        "classicPaintOwner": "Ant Design 5.21 plus packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css - the classic engine ships no per-family skin CSS directory, so classic paint is not addressable through this family CSS file.",
         "partsStyledByModernOnly": [
           "trailing",
           "steppers",
@@ -617,7 +617,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:297",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:297",
                 "part": "root",
                 "property": "opacity",
                 "hasFallback": true,
@@ -645,7 +645,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:212",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:212",
                 "part": "root",
                 "property": "z-index",
                 "hasFallback": true,
@@ -674,14 +674,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:241",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:241",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-border-focus, var(--ds-color-primary))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:366",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:366",
                 "part": "addon-after",
                 "property": "border-color",
                 "hasFallback": true,
@@ -711,7 +711,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:237",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -739,7 +739,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:160",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": true,
@@ -767,7 +767,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:156",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:156",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": true,
@@ -798,14 +798,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:159",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-lg-padding-x, 14px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:507",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:507",
                 "part": "root",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -833,7 +833,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:158",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:158",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -861,7 +861,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:151",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": true,
@@ -889,7 +889,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:147",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": true,
@@ -920,14 +920,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:150",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:150",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-md-padding-x, 12px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:504",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:504",
                 "part": "root",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -955,7 +955,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:149",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -983,7 +983,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:388",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:388",
                 "part": "root",
                 "property": "inset-inline-start",
                 "hasFallback": true,
@@ -1015,28 +1015,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:167",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:167",
                 "part": "root",
                 "property": "padding-inline-start",
                 "hasFallback": true,
                 "fallback": "32px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:512",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:512",
                 "part": "suffix",
                 "property": "padding-inline-end",
                 "hasFallback": true,
                 "fallback": "32px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:515",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:515",
                 "part": "suffix",
                 "property": "padding-inline-end",
                 "hasFallback": true,
                 "fallback": "32px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:518",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:518",
                 "part": "suffix",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -1064,7 +1064,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:43",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:43",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -1092,21 +1092,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:244",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-shadow-focus, var(--ds-focus-ring))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:261",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:261",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-focus-ring)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:264",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:264",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -1134,7 +1134,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:142",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:142",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": true,
@@ -1162,7 +1162,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:138",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": true,
@@ -1193,14 +1193,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:141",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-sm-padding-x, 10px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:501",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:501",
                 "part": "root",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -1228,7 +1228,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:140",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -1258,14 +1258,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:419",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:419",
                 "part": "stepper-button",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-inset)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:427",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:427",
                 "part": "stepper-button",
                 "property": "background",
                 "hasFallback": true,
@@ -1293,7 +1293,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:404",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:404",
                 "part": "stepper-button",
                 "property": "font-size",
                 "hasFallback": true,
@@ -1321,7 +1321,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:401",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:401",
                 "part": "stepper-button",
                 "property": "block-size",
                 "hasFallback": true,
@@ -1349,7 +1349,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:403",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:403",
                 "part": "stepper-button",
                 "property": "padding-inline",
                 "hasFallback": true,
@@ -1380,14 +1380,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:447",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:447",
                 "part": "stepper-button",
                 "property": "border-block-start",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-border-subtle)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:495",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:495",
                 "part": "stepper-button",
                 "property": "border-inline-start",
                 "hasFallback": true,
@@ -1419,21 +1419,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:466",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:466",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:488",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:488",
                 "part": "stepper-button",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "var(--ds-touch-target-min, 44px)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:489",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:489",
                 "part": "stepper-button",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -1464,14 +1464,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:217",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:217",
                 "part": "trailing",
                 "property": "inset-inline-end",
                 "hasFallback": true,
                 "fallback": "0.5rem"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:481",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:481",
                 "part": "suffix",
                 "property": "inset-inline-end",
                 "hasFallback": true,
@@ -1499,7 +1499,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:170",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:170",
                 "part": "root",
                 "property": "padding-inline-end",
                 "hasFallback": true,
@@ -1528,14 +1528,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:295",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:295",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-subtle, var(--ds-surface-canvas))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:382",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:382",
                 "part": "addon-after",
                 "property": "background",
                 "hasFallback": true,
@@ -1564,14 +1564,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:295",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:295",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-canvas)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:382",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:382",
                 "part": "addon-after",
                 "property": "background",
                 "hasFallback": true,
@@ -1607,28 +1607,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:187",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:232",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:237",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:296",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:296",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1663,14 +1663,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:447",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:447",
                 "part": "stepper-button",
                 "property": "border-block-start",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:495",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:495",
                 "part": "stepper-button",
                 "property": "border-inline-start",
                 "hasFallback": false,
@@ -1703,14 +1703,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:250",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:250",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:370",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:370",
                 "part": "addon-after",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1749,28 +1749,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:73",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:73",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:107",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:111",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:241",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:241",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
@@ -1804,21 +1804,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:291",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:291",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:378",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:378",
                 "part": "addon-after",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:438",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:438",
                 "part": "stepper-button",
                 "property": "color",
                 "hasFallback": false,
@@ -1850,7 +1850,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:94",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:94",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -1883,28 +1883,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:72",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:72",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:99",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:106",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:106",
                 "part": "root",
                 "property": "-webkit-text-fill-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:183",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:183",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -1939,28 +1939,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:311",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:311",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:332",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:332",
                 "part": "addon-after",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:391",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:391",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:394",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:394",
                 "part": "suffix",
                 "property": "color",
                 "hasFallback": false,
@@ -1997,21 +1997,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:254",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:254",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:285",
                 "part": "UNATTRIBUTED(elementSelector)",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:374",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:374",
                 "part": "addon-after",
                 "property": "border-color",
                 "hasFallback": false,
@@ -2042,21 +2042,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:138",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:147",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:156",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:156",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": false,
@@ -2087,21 +2087,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:244",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:261",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:261",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:264",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:264",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -2136,14 +2136,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:285",
                 "part": "UNATTRIBUTED(elementSelector)",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:432",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:432",
                 "part": "stepper-button",
                 "property": "outline",
                 "hasFallback": false,
@@ -2175,7 +2175,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:178",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:178",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontFamily",
                 "hasFallback": false,
@@ -2207,14 +2207,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:321",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:321",
                 "part": "root",
                 "property": "font-weight",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:340",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:340",
                 "part": "addon-after",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -2245,7 +2245,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:83",
                 "part": "root",
                 "property": "font-weight",
                 "hasFallback": false,
@@ -2276,7 +2276,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:428",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:428",
                 "part": "stepper-button",
                 "property": "transform",
                 "hasFallback": true,
@@ -2309,14 +2309,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:312",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-inset)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:333",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:333",
                 "part": "addon-after",
                 "property": "background",
                 "hasFallback": true,
@@ -2349,14 +2349,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:314",
                 "part": "root",
                 "property": "border",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-border, var(--ds-color-border))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:335",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:335",
                 "part": "addon-after",
                 "property": "border",
                 "hasFallback": true,
@@ -2389,14 +2389,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:311",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:311",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-secondary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:332",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:332",
                 "part": "addon-after",
                 "property": "color",
                 "hasFallback": true,
@@ -2429,14 +2429,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:321",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:321",
                 "part": "root",
                 "property": "font-weight",
                 "hasFallback": true,
                 "fallback": "var(--ds-font-weight-medium)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:340",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:340",
                 "part": "addon-after",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -2472,28 +2472,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:317",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:317",
                 "part": "root",
                 "property": "border-start-start-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-input, var(--ds-radius-md))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:318",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:318",
                 "part": "root",
                 "property": "border-end-start-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-input, var(--ds-radius-md))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:338",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:338",
                 "part": "addon-after",
                 "property": "border-start-end-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-input, var(--ds-radius-md))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:339",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:339",
                 "part": "addon-after",
                 "property": "border-end-end-radius",
                 "hasFallback": true,
@@ -2525,14 +2525,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:391",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:391",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-secondary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:394",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:394",
                 "part": "suffix",
                 "property": "color",
                 "hasFallback": true,
@@ -2563,14 +2563,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:108",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:108",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-bg, var(--ds-surface-control))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:112",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -2601,14 +2601,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:107",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-caret-color, var(--ds-color-primary))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:111",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -2639,7 +2639,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:106",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:106",
                 "part": "root",
                 "property": "-webkit-text-fill-color",
                 "hasFallback": true,
@@ -2672,28 +2672,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:71",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:71",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:108",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:108",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:112",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-control)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:184",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:184",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -2726,14 +2726,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:295",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:295",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
                 "fallback": "var(--ds-surface-disabled, var(--ds-surface-subtle, var(--ds-surface-canvas)))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:382",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:382",
                 "part": "addon-after",
                 "property": "background",
                 "hasFallback": true,
@@ -2766,21 +2766,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:232",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:314",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:335",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:335",
                 "part": "addon-after",
                 "property": "border",
                 "hasFallback": false,
@@ -2813,14 +2813,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:296",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:296",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-border)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:383",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:383",
                 "part": "addon-after",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2853,14 +2853,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:73",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:73",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:241",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:241",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2894,7 +2894,7 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:237",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:237",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -2926,21 +2926,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:232",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:314",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:335",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:335",
                 "part": "addon-after",
                 "property": "border",
                 "hasFallback": false,
@@ -2973,28 +2973,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:232",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:232",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:314",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:314",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:335",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:335",
                 "part": "addon-after",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:341",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:341",
                 "part": "addon-after",
                 "property": "margin-inline-start",
                 "hasFallback": false,
@@ -3025,21 +3025,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:73",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:73",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-border-focus, var(--ds-color-primary))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:107",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:107",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-primary)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:111",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:111",
                 "part": "root",
                 "property": "caret-color",
                 "hasFallback": true,
@@ -3072,14 +3072,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:291",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:291",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-text-disabled)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:378",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:378",
                 "part": "addon-after",
                 "property": "color",
                 "hasFallback": true,
@@ -3111,7 +3111,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:94",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:94",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
@@ -3143,14 +3143,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:298",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:298",
                 "part": "root",
                 "property": "cursor",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:440",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:440",
                 "part": "stepper-button",
                 "property": "cursor",
                 "hasFallback": false,
@@ -3181,7 +3181,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:251",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:251",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -3214,14 +3214,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:250",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:250",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-error)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:370",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:370",
                 "part": "addon-after",
                 "property": "border-color",
                 "hasFallback": true,
@@ -3253,7 +3253,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:261",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:261",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -3284,7 +3284,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:82",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:82",
                 "part": "root",
                 "property": "font-family",
                 "hasFallback": false,
@@ -3315,7 +3315,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:83",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:83",
                 "part": "root",
                 "property": "font-weight",
                 "hasFallback": true,
@@ -3347,14 +3347,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:341",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:341",
                 "part": "addon-after",
                 "property": "margin-inline-start",
                 "hasFallback": true,
                 "fallback": "calc(-1 * var(--ds-input-border-width))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:350",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:350",
                 "part": "root",
                 "property": "margin-inline-start",
                 "hasFallback": true,
@@ -3385,7 +3385,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:84",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:84",
                 "part": "root",
                 "property": "letter-spacing",
                 "hasFallback": false,
@@ -3416,7 +3416,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:157",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:157",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -3447,7 +3447,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:160",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:160",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": true,
@@ -3478,7 +3478,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:156",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:156",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": true,
@@ -3509,7 +3509,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:159",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:159",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": true,
@@ -3540,7 +3540,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:158",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:158",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -3572,7 +3572,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:157",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:157",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -3603,7 +3603,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:148",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -3635,7 +3635,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:151",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:151",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": true,
@@ -3666,7 +3666,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:147",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:147",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": true,
@@ -3697,7 +3697,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:150",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:150",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": true,
@@ -3728,7 +3728,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:149",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:149",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -3760,7 +3760,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:148",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -3791,7 +3791,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:95",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:95",
                 "part": "root",
                 "property": "opacity",
                 "hasFallback": false,
@@ -3822,7 +3822,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:184",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:184",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -3853,7 +3853,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:187",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:187",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
@@ -3884,7 +3884,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:183",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:183",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
@@ -3915,7 +3915,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:100",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:100",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -3946,7 +3946,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:99",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:99",
                 "part": "root",
                 "property": "color",
                 "hasFallback": true,
@@ -3978,7 +3978,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:244",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:244",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -4009,7 +4009,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:139",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -4040,7 +4040,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:142",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:142",
                 "part": "root",
                 "property": "font-size",
                 "hasFallback": true,
@@ -4071,7 +4071,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:138",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:138",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-height",
                 "hasFallback": true,
@@ -4102,7 +4102,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:141",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:141",
                 "part": "root",
                 "property": "padding-inline",
                 "hasFallback": true,
@@ -4133,7 +4133,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:140",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:140",
                 "part": "root",
                 "property": "padding-block",
                 "hasFallback": true,
@@ -4165,7 +4165,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:139",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -4196,7 +4196,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:255",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:255",
                 "part": "root",
                 "property": "background",
                 "hasFallback": true,
@@ -4232,21 +4232,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:254",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:254",
                 "part": "root",
                 "property": "border-color",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:285",
                 "part": "UNATTRIBUTED(elementSelector)",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-color-warning)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:374",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:374",
                 "part": "addon-after",
                 "property": "border-color",
                 "hasFallback": true,
@@ -4281,14 +4281,14 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:264",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:264",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": true,
                 "fallback": "var(--ds-input-number-shadow-focus, var(--ds-focus-ring))"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:285",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:285",
                 "part": "UNATTRIBUTED(elementSelector)",
                 "property": "box-shadow",
                 "hasFallback": true,
@@ -4321,14 +4321,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:66",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:66",
                 "part": "root",
                 "property": "background-color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:73",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:73",
                 "part": "addon-after",
                 "property": "background-color",
                 "hasFallback": false,
@@ -4361,14 +4361,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:67",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:67",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:74",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:74",
                 "part": "addon-after",
                 "property": "border",
                 "hasFallback": false,
@@ -4401,14 +4401,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:70",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:70",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:77",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:77",
                 "part": "addon-after",
                 "property": "color",
                 "hasFallback": false,
@@ -4441,14 +4441,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:81",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:81",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:84",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:84",
                 "part": "suffix",
                 "property": "color",
                 "hasFallback": false,
@@ -4480,7 +4480,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:41",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:41",
                 "part": "root",
                 "property": "background-color",
                 "hasFallback": false,
@@ -4512,7 +4512,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:46",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:46",
                 "part": "root",
                 "property": "background-color",
                 "hasFallback": false,
@@ -4544,7 +4544,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:53",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:53",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
@@ -4576,7 +4576,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:56",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:56",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
@@ -4608,7 +4608,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:40",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:40",
                 "part": "root",
                 "property": "color",
                 "hasFallback": false,
@@ -4640,7 +4640,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:88",
                 "part": "stepper-button",
                 "property": "background",
                 "hasFallback": false,
@@ -4672,7 +4672,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:89",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:89",
                 "part": "stepper-button",
                 "property": "color",
                 "hasFallback": false,
@@ -4704,7 +4704,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:62",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:62",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
@@ -4735,7 +4735,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:44",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:44",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -4766,7 +4766,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:43",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:43",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -4797,7 +4797,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:45",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:45",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "width",
                 "hasFallback": false,
@@ -4828,7 +4828,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:39",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:39",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -4859,7 +4859,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:38",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:38",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -4890,7 +4890,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:40",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:40",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "width",
                 "hasFallback": false,
@@ -4925,28 +4925,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:69",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:69",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:69",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:69",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:76",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:76",
                 "part": "addon-after",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:76",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:76",
                 "part": "addon-after",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -4978,7 +4978,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:49",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:49",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
@@ -5009,7 +5009,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:34",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:34",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "fontSize",
                 "hasFallback": false,
@@ -5040,7 +5040,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:33",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:33",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "padding",
                 "hasFallback": false,
@@ -5071,7 +5071,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:35",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:35",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "width",
                 "hasFallback": false,
@@ -5102,7 +5102,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:197",
+                "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:197",
                 "part": "UNRESOLVED_TSX_INLINE",
                 "property": "transition",
                 "hasFallback": false,
@@ -5134,7 +5134,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number.css:59",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/input-number/index.css:59",
                 "part": "root",
                 "property": "border",
                 "hasFallback": false,
@@ -5168,28 +5168,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:88",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:88",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:88",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:273",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:273",
                 "part": "root",
                 "property": "animation",
                 "hasFallback": false,
@@ -5223,28 +5223,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:88",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:88",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:88",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:88",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:324",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:324",
                 "part": "root",
                 "property": "transition",
                 "hasFallback": false,
@@ -5276,7 +5276,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:273",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:273",
                 "part": "root",
                 "property": "animation",
                 "hasFallback": false,
@@ -5313,28 +5313,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:78",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:139",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:148",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
                 "fallback": "var(--ds-radius-md)"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:157",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:157",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": true,
@@ -5371,28 +5371,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:78",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:78",
                 "part": "root",
                 "property": "border-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:139",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:139",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:148",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:148",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:157",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:157",
                 "part": "root",
                 "property": "--_ds-input-number-resolved-radius",
                 "hasFallback": false,
@@ -5423,7 +5423,7 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:409",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:409",
                 "part": "stepper-button",
                 "property": "border-radius",
                 "hasFallback": false,
@@ -5457,21 +5457,21 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:220",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:220",
                 "part": "trailing",
                 "property": "gap",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:310",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:310",
                 "part": "root",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:331",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:331",
                 "part": "addon-after",
                 "property": "padding",
                 "hasFallback": false,
@@ -5503,14 +5503,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:310",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:310",
                 "part": "root",
                 "property": "padding",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:331",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:331",
                 "part": "addon-after",
                 "property": "padding",
                 "hasFallback": false,
@@ -5542,14 +5542,14 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:295",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:295",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:382",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:382",
                 "part": "addon-after",
                 "property": "background",
                 "hasFallback": false,
@@ -5581,28 +5581,28 @@
             "atRuleScopes": [],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:71",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:71",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:108",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:108",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:112",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:112",
                 "part": "root",
                 "property": "box-shadow",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:184",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:184",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
@@ -5637,28 +5637,28 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:312",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:312",
                 "part": "root",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:333",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:333",
                 "part": "addon-after",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:419",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:419",
                 "part": "stepper-button",
                 "property": "background",
                 "hasFallback": false,
                 "fallback": null
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:427",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:427",
                 "part": "stepper-button",
                 "property": "background",
                 "hasFallback": false,
@@ -5693,21 +5693,21 @@
             ],
             "reads": [
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:466",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:466",
                 "part": "root",
                 "property": "min-block-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:488",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:488",
                 "part": "stepper-button",
                 "property": "min-inline-size",
                 "hasFallback": true,
                 "fallback": "44px"
               },
               {
-                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css:489",
+                "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css:489",
                 "part": "stepper-button",
                 "property": "min-block-size",
                 "hasFallback": true,
@@ -5763,7 +5763,7 @@
         },
         "hardcodedValues": [
           {
-            "at": "packages/core/src/ui/primitives/inputs/InputNumber/engines/rustic/index.tsx:235",
+            "at": "packages/core/src/components/primitives/inputs/input-number/engines/rustic/index.tsx:235",
             "sourceKind": "engine-tsx",
             "class": "LITERAL_DURATION_DIRECT",
             "property": "transition",
@@ -5844,13 +5844,13 @@
         {
           "channelId": "--_ds-input-number-border-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5859,13 +5859,13 @@
         {
           "channelId": "--_ds-input-number-stepper-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5920,13 +5920,13 @@
         {
           "channelId": "--_ds-input-number-sm-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5935,13 +5935,13 @@
         {
           "channelId": "--_ds-input-number-md-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5950,13 +5950,13 @@
         {
           "channelId": "--_ds-input-number-lg-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5965,13 +5965,13 @@
         {
           "channelId": "--_ds-input-number-stepper-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5990,13 +5990,13 @@
         {
           "channelId": "--_ds-input-number-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -6034,13 +6034,13 @@
         {
           "channelId": "--_ds-input-number-sm-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6049,13 +6049,13 @@
         {
           "channelId": "--_ds-input-number-sm-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6064,13 +6064,13 @@
         {
           "channelId": "--_ds-input-number-sm-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6079,13 +6079,13 @@
         {
           "channelId": "--_ds-input-number-md-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6094,13 +6094,13 @@
         {
           "channelId": "--_ds-input-number-md-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6109,13 +6109,13 @@
         {
           "channelId": "--_ds-input-number-md-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6124,13 +6124,13 @@
         {
           "channelId": "--_ds-input-number-lg-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6139,13 +6139,13 @@
         {
           "channelId": "--_ds-input-number-lg-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6154,13 +6154,13 @@
         {
           "channelId": "--_ds-input-number-lg-padding-y",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6169,13 +6169,13 @@
         {
           "channelId": "--_ds-input-number-stepper-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6184,13 +6184,13 @@
         {
           "channelId": "--_ds-input-number-stepper-padding-x",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6199,13 +6199,13 @@
         {
           "channelId": "--_ds-input-number-prefix-space",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6214,13 +6214,13 @@
         {
           "channelId": "--_ds-input-number-prefix-inset",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6229,13 +6229,13 @@
         {
           "channelId": "--_ds-input-number-trailing-space",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6244,13 +6244,13 @@
         {
           "channelId": "--_ds-input-number-trailing-inset",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6403,13 +6403,13 @@
         {
           "channelId": "--_ds-input-number-stepper-separator",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6418,13 +6418,13 @@
         {
           "channelId": "--_ds-input-number-border-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6433,13 +6433,13 @@
         {
           "channelId": "--_ds-input-number-shadow-focus",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/input-number"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -6462,7 +6462,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -6518,7 +6518,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -6546,7 +6546,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/input-number/index.css"
         ]
       }
     },
@@ -6579,11 +6579,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

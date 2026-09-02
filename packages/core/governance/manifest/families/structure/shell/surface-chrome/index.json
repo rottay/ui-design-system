@@ -10,8 +10,8 @@
       "SurfaceTabbedLabel",
       "SurfaceSectionCard"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/shell/surface-chrome",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/shell/surface-chrome",
     "publicComponents": [
       "SurfaceActionBar",
       "SurfaceTabbedLabel",
@@ -20,7 +20,7 @@
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "2e92fd75bab7c5bc0c64ddcd8d02a9cea70b0aa2647725434e4c77d4764d5431"
+    "inventoryRowDigest": "96891413b11cb04fe61eacbe7f05b5da685f442f7e089cd8c70cf3d39fae6dd5"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -32,9 +32,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/shell/surface-chrome",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+      "packages/core/src/components/structures/shell/surface-chrome",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css"
     ],
     "stableParts": [
       "content",
@@ -53,7 +53,7 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:133, packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:134, packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:139]"
+      "the family adapts through container queries rather than viewport media alone [at packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:133, packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:134, packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:139]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -81,8 +81,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:194",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:39"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:194",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:39"
           ]
         },
         {
@@ -90,11 +90,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:199",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:43",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:44",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:45",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:46"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:199",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:43",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:44",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:45",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:46"
           ]
         },
         {
@@ -102,11 +102,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:229",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:116",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:117",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:118",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:119"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:229",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:116",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:117",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:118",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:119"
           ]
         },
         {
@@ -114,8 +114,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:207",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:83"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:207",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:83"
           ]
         },
         {
@@ -123,11 +123,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:206",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:68",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:69",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:70",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:71"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:68",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:69",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:70",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:71"
           ]
         },
         {
@@ -135,9 +135,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:205",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:63",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:64"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:63",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:64"
           ]
         },
         {
@@ -145,10 +145,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:232",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:123",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:124",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:128"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:232",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:123",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:124",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:128"
           ]
         }
       ],
@@ -160,7 +160,7 @@
           "at": [],
           "citationsUnverified": [
             "packages/core/src/infrastructure/runtime/foundation/recipes/contracts/families/section-card/index.ts:11",
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:146"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:146"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -171,10 +171,10 @@
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
             "packages/core/src/infrastructure/runtime/foundation/recipes/contracts/families/section-card/index.ts:12",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:35"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:35"
           ],
           "citationsUnverified": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:146"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:146"
           ],
           "anchorStatus": "verified"
         },
@@ -183,10 +183,10 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:223",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:110",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:111",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:112"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:223",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:110",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:111",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:112"
           ]
         },
         {
@@ -194,11 +194,11 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:209",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:88",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:89",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:90",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:91"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:209",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:88",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:89",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:90",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:91"
           ]
         },
         {
@@ -206,11 +206,11 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:216",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:99",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:100",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:101",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:102"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:216",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:99",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:100",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:101",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:102"
           ]
         }
       ],
@@ -219,28 +219,28 @@
           "token": "has-header=false",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:128"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:128"
           ]
         },
         {
           "token": "data-has-actions",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:200"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:200"
           ]
         },
         {
           "token": "data-has-header",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:191"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:191"
           ]
         },
         {
           "token": "data-surface-action",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:95"
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx:95"
           ]
         }
       ],
@@ -250,15 +250,15 @@
             "token": "@container ds-section-card (max-width: 560px) >> .ds-surface.ds-section-card [data-part='header']",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:133",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:134"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:133",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:134"
             ]
           },
           {
             "token": "@container ds-section-card (max-width: 560px) >> .ds-surface.ds-section-card [data-part='header-actions'], .ds-surface.ds-section-card [data-part='header-actions'] > *",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:139"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:139"
             ]
           }
         ],
@@ -270,7 +270,7 @@
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/surface-chrome/index.tsx:94"
+              "packages/core/src/components/structures/shell/surface-chrome/index.tsx:94"
             ]
           }
         ],
@@ -279,7 +279,7 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css": {
             "rows": 56,
             "layer": "engine-agnostic skin"
           }
@@ -307,7 +307,7 @@
           {
             "variable": "--ds-surface-card-border-strong",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:27",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:27",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "border-color",
@@ -320,14 +320,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:28"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:28"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-card-border",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:27",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:27",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "border-color",
@@ -340,17 +340,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1073",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2158",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:75",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:148"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1073",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2158",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:75",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:148"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-surface-card-bg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:28",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:28",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "background",
@@ -363,14 +363,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:20"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:20"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-card-bg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:28",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:28",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "background",
@@ -383,17 +383,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2157",
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:24",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:74",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:267"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2157",
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:24",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:74",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:267"
             ],
             "declarationSiteCount": 7
           },
           {
             "variable": "--ds-color-bg-elevated",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:29",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "box-shadow",
@@ -406,17 +406,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-card-shadow",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:29",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "box-shadow",
@@ -429,17 +429,17 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1076",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:87",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:152",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:244"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1076",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:87",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:152",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:244"
             ],
             "declarationSiteCount": 10
           },
           {
             "variable": "--ds-elevation-1",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:29",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:29",
             "selector": ".ds-surface.ds-section-card[data-part='root']",
             "states": [],
             "landsOn": "box-shadow",
@@ -452,7 +452,7 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:800",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:800",
               "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:87",
               "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts:93"
             ],
@@ -461,7 +461,7 @@
           {
             "variable": "--ds-section-card-header-min-height",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:46",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:46",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "min-block-size",
@@ -479,7 +479,7 @@
           {
             "variable": "--ds-card-header-padding",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:47",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:47",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "padding",
@@ -492,8 +492,8 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:94",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:56",
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:94",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:56",
               "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:254",
               "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:392"
             ],
@@ -502,7 +502,7 @@
           {
             "variable": "--ds-spacing-4",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:47",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:47",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "padding",
@@ -515,15 +515,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-card-header-border",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:48",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "border-block-end",
@@ -536,14 +536,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1080"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1080"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-surface-card-border",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:48",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:48",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "border-block-end",
@@ -556,14 +556,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:24"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:24"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-card-header-bg",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:50",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:50",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "background",
@@ -576,14 +576,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:103"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:103"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-primary",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:50",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:50",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "background",
@@ -596,17 +596,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-surface-card-bg",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:50",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:50",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "background",
@@ -619,14 +619,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:20"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:20"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-surface-card-bg",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:50",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:50",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "background",
@@ -639,14 +639,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:20"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:20"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-bg-elevated",
             "part": "header",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:58",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:58",
             "selector": ".ds-surface.ds-section-card [data-part='header']",
             "states": [],
             "landsOn": "box-shadow",
@@ -659,17 +659,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-section-card-icon-size",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:70",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:70",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "inline-size",
@@ -687,7 +687,7 @@
           {
             "variable": "--ds-section-card-icon-size",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:71",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:71",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "block-size",
@@ -705,7 +705,7 @@
           {
             "variable": "--ds-workspace-card-icon-border",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:73",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "border",
@@ -725,7 +725,7 @@
           {
             "variable": "--ds-color-border-primary",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:73",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:73",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "border",
@@ -739,16 +739,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:230",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2135",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:29"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:230",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2135",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:29"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-radius-lg",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:75",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:75",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "border-radius",
@@ -762,16 +762,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-workspace-card-icon-bg",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:76",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:76",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "background",
@@ -792,7 +792,7 @@
           {
             "variable": "--ds-surface-card-bg",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:76",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:76",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "background",
@@ -805,14 +805,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:20"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:20"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-workspace-card-icon-color",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:77",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "color",
@@ -833,7 +833,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:77",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:77",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "color",
@@ -846,17 +846,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-bg-elevated",
             "part": "header-icon",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:78",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:78",
             "selector": ".ds-surface.ds-section-card [data-part='header-icon']",
             "states": [],
             "landsOn": "box-shadow",
@@ -869,17 +869,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-card-header-color",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:88",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:88",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "color",
@@ -902,7 +902,7 @@
           {
             "variable": "--ds-color-text-muted",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:88",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:88",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "color",
@@ -917,15 +917,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-font-family-mono",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:89",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:89",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-family",
@@ -938,7 +938,7 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:508",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:508",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:178"
             ],
             "declarationSiteCount": 2
@@ -946,7 +946,7 @@
           {
             "variable": "--ds-text-eyebrow-size",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:90",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-size",
@@ -968,7 +968,7 @@
           {
             "variable": "--ds-font-size-xs",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:90",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:90",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-size",
@@ -981,14 +981,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-weight-semibold",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:91",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:91",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-weight",
@@ -1001,14 +1001,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:624"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-section-card-eyebrow-tracking",
             "part": "eyebrow",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:92",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:92",
             "selector": ".ds-surface.ds-section-card .ds-section-card__eyebrow[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "letter-spacing",
@@ -1026,7 +1026,7 @@
           {
             "variable": "--ds-card-title-color",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:99",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "color",
@@ -1039,14 +1039,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:134"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:134"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-text-primary",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:99",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:99",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "color",
@@ -1060,16 +1060,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:56",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:217",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2128",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:22"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2128",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:22"
             ],
             "declarationSiteCount": 8
           },
           {
             "variable": "--ds-font-family-heading",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:100",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:100",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-family",
@@ -1082,7 +1082,7 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:507",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:507",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:177"
             ],
             "declarationSiteCount": 2
@@ -1090,7 +1090,7 @@
           {
             "variable": "--ds-font-family-base",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:100",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:100",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-family",
@@ -1103,7 +1103,7 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:506",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:506",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:176"
             ],
             "declarationSiteCount": 2
@@ -1111,7 +1111,7 @@
           {
             "variable": "--ds-card-title-font-size",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:101",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:101",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-size",
@@ -1124,14 +1124,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:130"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:130"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-size-lg",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:101",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:101",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-size",
@@ -1144,15 +1144,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:611",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:611",
+              "packages/core/tests/fixtures/tenants/default/index.css:32"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-card-title-font-weight",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:102",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-weight",
@@ -1165,14 +1165,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:131"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:131"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-font-weight-semibold",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:102",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:102",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-weight",
@@ -1185,14 +1185,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:624"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-card-title-letter-spacing",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:103",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:103",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "letter-spacing",
@@ -1205,14 +1205,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:133"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:133"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-letter-spacing-heading",
             "part": "title",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:103",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:103",
             "selector": ".ds-surface.ds-section-card .ds-section-card__title[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "letter-spacing",
@@ -1225,8 +1225,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root.css:47",
-              "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic.css:114",
+              "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic-root/index.css:47",
+              "packages/core/src/foundation/tokens/css/foundation/responsive/language-arabic/index.css:114",
               "packages/core/src/foundation/tokens/ts/presentation/expressive-profiles/expansion/index.ts:144"
             ],
             "declarationSiteCount": 3
@@ -1234,7 +1234,7 @@
           {
             "variable": "--ds-card-subtitle-color",
             "part": "description",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:110",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:110",
             "selector": ".ds-surface.ds-section-card .ds-section-card__description[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "color",
@@ -1247,14 +1247,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:138"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:138"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-text-muted",
             "part": "description",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:110",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:110",
             "selector": ".ds-surface.ds-section-card .ds-section-card__description[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "color",
@@ -1269,15 +1269,15 @@
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:59",
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:83",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:223",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2131"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:223",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2131"
             ],
             "declarationSiteCount": 9
           },
           {
             "variable": "--ds-font-size-xs",
             "part": "description",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:111",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:111",
             "selector": ".ds-surface.ds-section-card .ds-section-card__description[data-part='root'][data-part='root'][data-part='root']",
             "states": [],
             "landsOn": "font-size",
@@ -1290,14 +1290,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:608"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:608"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-card-body-padding",
             "part": "section-content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:124",
             "selector": ".ds-surface.ds-section-card [data-part='section-content']",
             "states": [],
             "landsOn": "padding",
@@ -1310,8 +1310,8 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:148",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:60",
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:148",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:60",
               "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:255",
               "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:393"
             ],
@@ -1320,7 +1320,7 @@
           {
             "variable": "--ds-spacing-5",
             "part": "section-content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:124",
             "selector": ".ds-surface.ds-section-card [data-part='section-content']",
             "states": [],
             "landsOn": "padding",
@@ -1333,15 +1333,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:82",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:688"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:82",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:688"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-card-body-padding",
             "part": "section-content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:128",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:128",
             "selector": ".ds-surface.ds-section-card[data-has-header='false'] [data-part='section-content']",
             "states": [
               "has-header=false"
@@ -1356,8 +1356,8 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:148",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:60",
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:148",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:60",
               "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:255",
               "packages/core/src/foundation/tokens/ts/runtime/personality/index.ts:393"
             ],
@@ -1366,7 +1366,7 @@
           {
             "variable": "--ds-spacing-5",
             "part": "section-content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css:128",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css:128",
             "selector": ".ds-surface.ds-section-card[data-has-header='false'] [data-part='section-content']",
             "states": [
               "has-header=false"
@@ -1381,15 +1381,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:82",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:688"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:82",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:688"
             ],
             "declarationSiteCount": 2
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css": {
               "rows": 56,
               "layer": "engine-agnostic skin"
             }
@@ -1426,7 +1426,7 @@
             "styleAttribute": 4
           },
           "perFile": {
-            "packages/core/src/ui/structures/shell/surface-chrome/index.tsx": {
+            "packages/core/src/components/structures/shell/surface-chrome/index.tsx": {
               "classNameOccurrences": 7,
               "dataPartOccurrences": 7,
               "styleAttributeOccurrences": 4,
@@ -1524,13 +1524,13 @@
         {
           "channelId": "--_ds-section-card-eyebrow-tracking",
           "semanticOwner": "typography.pairing",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1547,7 +1547,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1580,7 +1580,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -1613,7 +1613,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.corner",
@@ -1649,7 +1649,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los controles del shell son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1688,14 +1688,14 @@
         {
           "channelId": "--_ds-surface-chrome-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1715,14 +1715,14 @@
         {
           "channelId": "--_ds-surface-chrome-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1750,14 +1750,14 @@
         {
           "channelId": "--_ds-surface-chrome-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1776,7 +1776,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1790,14 +1790,14 @@
         {
           "channelId": "--_ds-surface-chrome-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1816,7 +1816,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1830,14 +1830,14 @@
         {
           "channelId": "--_ds-surface-chrome-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-accent-bar/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1855,7 +1855,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.edge",
@@ -1892,7 +1892,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1905,7 +1905,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1944,7 +1944,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1971,13 +1971,13 @@
         {
           "channelId": "--_ds-section-card-icon-size",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/surface-chrome"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/surface-section-card/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1996,11 +1996,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

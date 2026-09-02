@@ -8,15 +8,15 @@
     "components": [
       "VoiceInputButton"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/VoiceInputButton",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/voice-input-button",
     "publicComponents": [
       "VoiceInputButton"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "6f18ce2ca05f256854708c10f8369e68529015519149f049c56c93511a95a1e3"
+    "inventoryRowDigest": "6cc1b1ba7297f0f989322b82c447babcd8054cab801c23d8cf9fca1da345724a"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+      "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
     ],
     "stableParts": [
       "root"
@@ -51,12 +51,12 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The root is a real <button type=\"button\">; without the explicit type a mic toggle inside a form would submit it. [at packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:173, packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:174]",
-      "The error posture is shape, not hue: an ::after marker dot rides the corner on data-error='true', suppressed on data-blocked='true' because the MicOff glyph already carries that shape. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:122, packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:36]",
-      "Under prefers-reduced-motion the recording ring stays PAINTED and only the pulse animation stops; the recording frame must never collapse to the bare button. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:134, packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:136]",
-      "A VisuallyHidden role=status live region is mounted UNCONDITIONALLY so assistive technology observes the error mutation; conditional mounting would silence it. [at packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:204]",
-      "The coarse-pointer floor is 44px physical px, never rem, because the fluid 15px root erodes rem floors at narrow widths. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:179, packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:181]",
-      "The border-color rules reach their required specificity through the ALWAYS-stamped [data-size] + [data-variant] pair; dropping either stamp silently drops the border under the unlayered tenant floor. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:191, packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:178, packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:182]"
+      "The root is a real <button type=\"button\">; without the explicit type a mic toggle inside a form would submit it. [at packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:173, packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:174]",
+      "The error posture is shape, not hue: an ::after marker dot rides the corner on data-error='true', suppressed on data-blocked='true' because the MicOff glyph already carries that shape. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:122, packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:36]",
+      "Under prefers-reduced-motion the recording ring stays PAINTED and only the pulse animation stops; the recording frame must never collapse to the bare button. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:134, packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:136]",
+      "A VisuallyHidden role=status live region is mounted UNCONDITIONALLY so assistive technology observes the error mutation; conditional mounting would silence it. [at packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:204]",
+      "The coarse-pointer floor is 44px physical px, never rem, because the fluid 15px root erodes rem floors at narrow widths. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:179, packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:181]",
+      "The border-color rules reach their required specificity through the ALWAYS-stamped [data-size] + [data-variant] pair; dropping either stamp silently drops the border under the unlayered tenant floor. [at packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:191, packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:178, packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:182]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -79,12 +79,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:177",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:51",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:52",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:53",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:54",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:55"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:177",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:51",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:52",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:53",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:54",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:55"
           ],
           "atSiteCount": 7
         }
@@ -98,7 +98,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:180"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:180"
           ],
           "state": "active"
         },
@@ -107,7 +107,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:183"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:183"
           ],
           "state": "blocked"
         },
@@ -116,7 +116,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:181"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:181"
           ],
           "state": "error"
         },
@@ -125,7 +125,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:179"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:179"
           ],
           "state": "status"
         },
@@ -134,7 +134,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:78"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:78"
           ],
           "state": "active"
         },
@@ -143,10 +143,10 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:143",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:144",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:155"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:143",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:144",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:155"
           ],
           "state": "focus"
         },
@@ -155,10 +155,10 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:143",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:144",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:154",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:155"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:143",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:144",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:154",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:155"
           ],
           "state": "focus-visible"
         },
@@ -167,7 +167,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71"
           ],
           "state": "hover"
         },
@@ -176,11 +176,11 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:162",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:195",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:206",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:214"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:162",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:195",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:214"
           ],
           "state": "active"
         },
@@ -189,12 +189,12 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:123",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:124",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:125",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:126",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:127",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:128"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:123",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:124",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:125",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:127",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:128"
           ],
           "state": "blocked"
         },
@@ -203,12 +203,12 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:123",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:124",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:125",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:126",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:127"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:123",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:124",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:125",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:126",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:127"
           ],
           "state": "error"
         },
@@ -217,12 +217,12 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:107",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:108",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:109",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:110",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:111",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:112"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:107",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:108",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:109",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:110",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:111",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:112"
           ],
           "state": "listening"
         },
@@ -231,7 +231,7 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:118"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:118"
           ],
           "state": "transcribing"
         }
@@ -242,7 +242,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:178"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:178"
           ]
         },
         {
@@ -250,7 +250,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:182"
+            "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:182"
           ]
         },
         {
@@ -258,11 +258,11 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:89",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:90",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:91",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:98",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:99"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:89",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:90",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:91",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:98",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:99"
           ]
         },
         {
@@ -270,11 +270,11 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:84",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:85",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:86",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:94",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:95"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:85",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:94",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:95"
           ]
         },
         {
@@ -282,9 +282,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:206",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:209"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:206",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:209"
           ]
         }
       ],
@@ -295,12 +295,12 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:154",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:155",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:159",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:162",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:165",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:166"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:154",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:155",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:159",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:162",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:165",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:166"
             ]
           },
           {
@@ -308,7 +308,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71"
             ]
           },
           {
@@ -316,8 +316,8 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:181",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:182"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:181",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:182"
             ]
           },
           {
@@ -325,14 +325,14 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:137"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:137"
             ]
           }
         ],
         "reason": "Viewport, input-modality or platform conditions of the HOST. Neither an interaction state nor a customization axis of this family."
       },
       "engineDivergence": {
-        "engineDivergence": "NO engine siblings exist. packages/core/src/ui/primitives/inputs/VoiceInputButton/ contains a single index.tsx (207 lines) that renders under every engine, and its paint owner is the engine-agnostic, deliberately unlayered presentation/components/skin/voice-input-button.css (233 lines). This is the only family in this cohort with zero engine divergence.",
+        "engineDivergence": "NO engine siblings exist. packages/core/src/components/primitives/inputs/voice-input-button/ contains a single index.tsx (207 lines) that renders under every engine, and its paint owner is the engine-agnostic, deliberately unlayered presentation/components/skin/voice-input-button.css (233 lines). This is the only family in this cohort with zero engine divergence.",
         "engineDivergenceMatrix": {
           "note": "derived mechanically from stableParts. stampedBy counts data-part stamps found in engine TSX; styledBy counts parts matched by at least one CSS rule in that layer. classic never appears because it ships no skin CSS and stamps no data-part.",
           "stampedByLayer": {
@@ -361,8 +361,8 @@
               "variable": "--_ds-voice-input-error-dot-size",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:127",
-                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:128"
+                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:127",
+                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:128"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             },
@@ -370,7 +370,7 @@
               "variable": "--ds-voice-input-bg-hover",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71"
+                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             },
@@ -378,7 +378,7 @@
               "variable": "--ds-voice-input-focus-ring",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:144"
+                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:144"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             },
@@ -386,14 +386,14 @@
               "variable": "--ds-voice-input-pulse-duration",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:113"
+                "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:113"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             },
             {
               "variable": "--ds-voice-input-tooltip-max-width",
               "readAt": [
-                "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:165"
+                "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:165"
               ],
               "scope": "family skin CSS + component directory"
             }
@@ -402,7 +402,7 @@
           "unreadEmission": [],
           "hardcodedValue": [
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:58",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:58",
               "selector": ".ds-voice-input-button[data-part='root']",
               "property": "border-radius",
               "declaration": "border-radius: 999px",
@@ -416,7 +416,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:84",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:84",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='sm']",
               "property": "inline-size",
               "declaration": "inline-size: 28px",
@@ -430,7 +430,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:85",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:85",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='sm']",
               "property": "block-size",
               "declaration": "block-size: 28px",
@@ -444,7 +444,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:86",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:86",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='sm']",
               "property": "min-inline-size",
               "declaration": "min-inline-size: 28px",
@@ -458,7 +458,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:89",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:89",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='md']",
               "property": "inline-size",
               "declaration": "inline-size: 34px",
@@ -472,7 +472,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:90",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:90",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='md']",
               "property": "block-size",
               "declaration": "block-size: 34px",
@@ -486,7 +486,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:91",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:91",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='md']",
               "property": "min-inline-size",
               "declaration": "min-inline-size: 34px",
@@ -500,7 +500,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:94",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:94",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='sm'] > .rottay-icon",
               "property": "inline-size",
               "declaration": "inline-size: 13px",
@@ -514,7 +514,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:95",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:95",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='sm'] > .rottay-icon",
               "property": "block-size",
               "declaration": "block-size: 13px",
@@ -528,7 +528,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:98",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:98",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='md'] > .rottay-icon",
               "property": "inline-size",
               "declaration": "inline-size: 15px",
@@ -542,7 +542,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:99",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:99",
               "selector": ".ds-voice-input-button[data-part='root'][data-size='md'] > .rottay-icon",
               "property": "block-size",
               "declaration": "block-size: 15px",
@@ -556,7 +556,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:110",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:110",
               "selector": ".ds-voice-input-button[data-part='root'][data-part='root'][data-status='listening']::before",
               "property": "border-radius",
               "declaration": "border-radius: 999px",
@@ -570,7 +570,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:111",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:111",
               "selector": ".ds-voice-input-button[data-part='root'][data-part='root'][data-status='listening']::before",
               "property": "border",
               "declaration": "border: 1px solid color-mix(in srgb, var(--ds-color-primary) 38%, transparent)",
@@ -584,7 +584,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:129",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:129",
               "selector": ".ds-voice-input-button[data-part='root'][data-error='true']:not([data-blocked='true'])::after",
               "property": "border-radius",
               "declaration": "border-radius: 999px",
@@ -598,7 +598,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:131",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:131",
               "selector": ".ds-voice-input-button[data-part='root'][data-error='true']:not([data-blocked='true'])::after",
               "property": "border",
               "declaration": "border: 1px solid var(--ds-surface-card)",
@@ -612,7 +612,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:181",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:181",
               "selector": "@media (pointer: coarse) >> .ds-voice-input-button[data-part='root']",
               "property": "min-inline-size",
               "declaration": "min-inline-size: 44px",
@@ -626,7 +626,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:182",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:182",
               "selector": "@media (pointer: coarse) >> .ds-voice-input-button[data-part='root']",
               "property": "min-block-size",
               "declaration": "min-block-size: 44px",
@@ -640,7 +640,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:192",
+              "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:192",
               "selector": ".ds-voice-input-button[data-part='root'][data-size][data-variant]",
               "property": "border",
               "declaration": "border: 1px solid color-mix(in srgb, var(--ds-color-border-secondary) 82%, transparent)",
@@ -696,7 +696,7 @@
                   "readWithFallback": true,
                   "fallback": "280px",
                   "landsOnCssProperty": "maxWidth",
-                  "readAt": "packages/core/src/ui/primitives/inputs/VoiceInputButton/index.tsx:165",
+                  "readAt": "packages/core/src/components/primitives/inputs/voice-input-button/index.tsx:165",
                   "engineLayer": "shared",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -715,7 +715,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:60",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:60",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -725,7 +725,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:61",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -735,7 +735,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:61",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -745,7 +745,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:61",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -755,7 +755,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:61",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -765,7 +765,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:61",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -775,7 +775,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:61",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:61",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-voice-input-button[data-part='root']"
@@ -785,7 +785,7 @@
                   "readWithFallback": true,
                   "fallback": "color-mix(in srgb, var(--ds-color-text-primary) 6%, transparent)",
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "active=true",
@@ -800,7 +800,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:71",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:71",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "active=true",
@@ -815,7 +815,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:78",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:78",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     ":active"
@@ -827,7 +827,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:111",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:111",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "status=listening"
@@ -839,7 +839,7 @@
                   "readWithFallback": true,
                   "fallback": "calc(var(--ds-motion-glacial) * 3)",
                   "landsOnCssProperty": "animation",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:113",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:113",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "status=listening"
@@ -851,7 +851,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "animation",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:113",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:113",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "status=listening"
@@ -863,7 +863,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "animation",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:113",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:113",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "status=listening"
@@ -875,7 +875,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "animation",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:118",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:118",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "status=transcribing"
@@ -887,7 +887,7 @@
                   "readWithFallback": true,
                   "fallback": "8px",
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:127",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:127",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "error=true",
@@ -900,7 +900,7 @@
                   "readWithFallback": true,
                   "fallback": "8px",
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:128",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:128",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "error=true",
@@ -913,7 +913,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:130",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:130",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "error=true",
@@ -926,7 +926,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:131",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:131",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "error=true",
@@ -939,7 +939,7 @@
                   "readWithFallback": true,
                   "fallback": "0 0 0 3px color-mix(in srgb, var(--ds-color-primary) 24%, transparent)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:144",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:144",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     ":focus-visible",
@@ -952,7 +952,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:144",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:144",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     ":focus-visible",
@@ -965,7 +965,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:192",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:192",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "size",
@@ -978,7 +978,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:195",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:195",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "active=true",
@@ -991,7 +991,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:198",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:198",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "error=true",
@@ -1004,7 +1004,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:203",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:203",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "variant=filled"
@@ -1016,7 +1016,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:203",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:203",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "variant=filled"
@@ -1028,7 +1028,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:206",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:206",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "variant=filled",
@@ -1041,7 +1041,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:206",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:206",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "variant=filled",
@@ -1054,7 +1054,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:209",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:209",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "variant=filled",
@@ -1067,7 +1067,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:209",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:209",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "variant=filled",
@@ -1080,7 +1080,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:214",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:214",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "active=true"
@@ -1092,7 +1092,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:217",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:217",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "error=true"
@@ -1104,7 +1104,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css:222",
+                  "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css:222",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "blocked=true"
@@ -1143,13 +1143,13 @@
         {
           "channelId": "--_ds-voice-input-button-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1159,13 +1159,13 @@
         {
           "channelId": "--_ds-voice-input-button-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1175,13 +1175,13 @@
         {
           "channelId": "--_ds-voice-input-button-recording-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1191,13 +1191,13 @@
         {
           "channelId": "--_ds-voice-input-button-recording-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1287,13 +1287,13 @@
         {
           "channelId": "--_ds-voice-input-button-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1313,13 +1313,13 @@
         {
           "channelId": "--_ds-voice-input-button-size",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1356,13 +1356,13 @@
         {
           "channelId": "--_ds-voice-input-button-pulse-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1467,13 +1467,13 @@
         {
           "channelId": "--_ds-voice-input-button-focus-ring",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/voice-input-button"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1497,7 +1497,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1553,7 +1553,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -1581,7 +1581,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button.css"
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/voice-input-button/index.css"
         ]
       }
     },
@@ -1614,11 +1614,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

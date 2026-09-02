@@ -3,6 +3,7 @@
   "rootId": "palette.seeds",
   "tier": "standard",
   "rootChannel": {
+    "authority": "tenant-seed",
     "channel": "--ds-color-primary",
     "emission": [
       {
@@ -37,7 +38,7 @@
       "site": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "line": 1414,
       "state": "LIVE",
-      "note": "representante de --ds-tint-{4,8,12,16,24}; site CORREGIDO de packages/core/src/foundation/tokens/css/foundation/themes/default.css a brand-theme/index.ts: default.css no declara ningun --ds-tint-* (solo lo LEE como fallback en :850), el productor es setTintRampVariables (prefijo y semilla ligados en :1390)"
+      "note": "representante de --ds-tint-{4,8,12,16,24}; site CORREGIDO de packages/core/src/foundation/tokens/css/foundation/themes/default/index.css a brand-theme/index.ts: default.css no declara ningun --ds-tint-* (solo lo LEE como fallback en :850), el productor es setTintRampVariables (prefijo y semilla ligados en :1390)"
     },
     {
       "from": "--ds-color-primary",

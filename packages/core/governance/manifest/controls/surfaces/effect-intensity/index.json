@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Decoration intensity",
   "valueType": "scale",
@@ -34,11 +34,11 @@
   "dependsOn": [],
   "compatibility": "additive; 0 removes decoration, never hierarchy",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal.css",
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/overlay-modal/index.css",
     "symbol": "var(--ds-glass"
   },
   "calibration": {
-    "assessmentState": "COMPUTED_VERIFIED",
+    "assessmentState": "IMPLEMENTED",
     "normalizedStops": [
       {
         "id": "mate",
@@ -54,16 +54,8 @@
         "law": "autoria vertical POR CONSTRUCCION (quietPremiumOwnership): el sobre tenant es {0,0.65}/{0,0.75} con RECHAZO (composition/tenant-theme:128-174,:1206-1217); el tema espejo de fase 2 ES vertical y puede nombrarla; un editor tenant la muestra no-alcanzable. Precedente bithire=mate(0) en el README de modern"
       }
     ],
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-effect-intensity/computed-static-db/rottay-mate.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-effect-intensity/computed-static-db/bithire-mate.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-effect-intensity/computed-static-db/evnto-mate.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-effect-intensity/computed-static-db/rottay-sobrio.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-effect-intensity/computed-static-db/bithire-sobrio.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/surfaces-effect-intensity/computed-static-db/evnto-sobrio.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
       "font metrics remain fixed",
@@ -71,21 +63,21 @@
       "border remains fixed",
       "motion remains fixed"
     ],
-    "nextAction": "OBTAIN_CODEX_SIGHTED_ACCEPTANCE, and rule on the single-arm verdict question above. The computed half for mate and sobrio is done and receipted on three verticals through both doors; SIGHTED_ACCEPTED is not claimable from a computed run.",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "sourceBindings": {
       "staticLowerer": "packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
       "dbLowerer": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "verticalEnvelopes": "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts#TENANT_THEME_VERTICAL_ENVELOPES",
       "globalBounds": "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts#TENANT_THEME_EFFECT_INTENSITY_BOUNDS",
-      "registeredProperty": "packages/core/src/foundation/tokens/css/foundation/base/properties.css",
-      "gradientProducer": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css",
-      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card.css",
+      "registeredProperty": "packages/core/src/foundation/tokens/css/foundation/base/properties/index.css",
+      "gradientProducer": "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css",
+      "computedMounts": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/card/index.css",
       "envelopeRejectionProof": "packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/surfaces-effect-intensity-envelope.test.ts"
     },
     "negativeControlsScopeNote": "Decoration intensity is ADDITIVE over a hierarchy it must not author. So the negative set is the whole non-decoration surface of the measured root: its box (control height remains fixed, bound to card-modern-md/root and carrying the two @rect-* observables so a transform or zoom cannot hide behind an unmoved longhand), its type, its base fill and border COLOR, its border widths and radii, and its motion. What is deliberately NOT in the set is the pair the control owns and must move: box-shadow's inset optical keyline and background-image's surface tint. 'touch target remains fixed' is deliberately NOT declared: it is a declared-targets phrase and the only bindable target here is a Card root, which is not a control-bearing element. Declaring it and binding it to a non-control would report a real assertion about a target it was never about; declaring it and leaving it unbound would fail the run closed. The box-geometry claim it would have made on this root is already made by 'control height remains fixed', whose property set covers both axes through @rect-inline-size/@rect-block-size.",
     "evidenceKindLabellingRule": "Every one of the six artifacts proves BOTH a computed delta and an exact restore; each is a three-phase both-arm run. evidenceKind names the ROLE the receipt is claimed for, not the only thing its artifact contains: the three mate receipts are claimed as static-db-computed-parity and the three sobrio receipts as exact-restore. A reader who wants the other half of either receipt will find it in the same artifact.",
     "measuredResult": {
-      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1",
+      "instrument": "packages/core/scripts/check/tokens/cascade/probe (causal command), Chromium, --bundle fresh, 1280x800 dpr1",
       "scenarios": "6 = {rottay,bithire,evnto} x {mate,sobrio}, both ingress doors on ONE scene, both themes. All six self-check harness-live; ingressEquivalence identical with 0 differing rows in all six; restore.exact true and negativeControls.held true on every arm of every scenario.",
       "directChannel": "--ds-effect-intensity read directly on token-readout moved on BOTH arms in all six scenarios: rottay/evnto 1 -> 0 and 1 -> 0.6; bithire 0.58 -> 0 and 0.58 -> 0.6. The bithire baseline is 0.58 because its compiled artifact authors that floor, which is also the precedent the estandar law cites.",
       "paintedDelta": "card-modern-md/root background-image, first gradient stop alpha: 0.024 -> 0 at mate and 0.024 -> 0.016 at sobrio, in rottay and evnto, on both arms and both themes. Monotonic (0 < 0.016 < 0.024). The authored ramp is 0.025 * effectIntensity; Chromium serialises rgba alpha at 8-bit precision, so 0.025 reads 0.024 and 0.015 reads 0.016. The quantisation is the browser's, not a compiler rounding, and it is recorded rather than smoothed away.",
@@ -112,7 +104,7 @@
       {
         "question": "estandar (1) has no receipted computed run, and the reason is an instrument limitation rather than a missing measurement. The stop is reachable only through the static door by contract, so it must be run single-arm; but a single-arm causal run reports ingressEquivalenceHeld=false (comparable=false is folded into 'did not hold'), which forces verdict.pass=false and exitCode 1, and the receipt validator refuses a non-zero exit for any evidenceKind except negative-drill. Forcing both arms is impossible: the DB arm throws at lowering, which is the very behaviour under test.",
         "whatWasMeasuredAnyway": "A single-arm static run on bithire WAS harness-live: --ds-effect-intensity moved 0.58 -> 1 on both themes, negative controls held, restore exact. rottay and evnto were correctly refused as harness-suspect for a different and honest reason -- their compiled baseline is ALREADY 1, so estandar is a no-op there and no movement exists to observe.",
-        "reproduce": "node src/tooling/resolution-probe/public/cli/index.mjs causal --control-manifest governance/manifest/controls/surfaces/effect-intensity/index.json --family-manifest governance/manifest/families/primitive/display/card/index.json --stop estandar --vertical bithire --arm static-brand-theme --fixture card-modern-md --fixture token-readout --bind control-height-fixed=card-modern-md/root",
+        "reproduce": "node scripts/check/tokens/cascade/probe/public/cli/index.mjs causal --control-manifest governance/manifest/controls/surfaces/effect-intensity/index.json --family-manifest governance/manifest/families/primitive/display/card/index.json --stop estandar --vertical bithire --arm static-brand-theme --fixture card-modern-md --fixture token-readout --bind control-height-fixed=card-modern-md/root",
         "proposedResolution": "DT ruling needed on whether a deliberately single-arm causal run may report ingressEquivalence as NOT-COMPARABLE without failing its verdict. Reporting 'the two doors disagreed' when only one door was measured is the same class of error the measurement guards exist to refuse. This packet did NOT change that semantics: weakening a verdict rule is an owner decision, not a lane decision."
       }
     ],
@@ -130,7 +122,7 @@
       {
         "question": "Does the harness lower a BOUNDED control correctly? spacing.rhythm is closed-enum, where the stop id IS the value a tenant writes, so nothing had ever exercised the other shape.",
         "outcome": "Discharged, and discharging it required an instrument fix: it did NOT. buildIngressInput wrote the stop ID at the ingress path for every domain kind, so this control would have lowered --ds-effect-intensity: mate. The static lowering is String(su.effectIntensity ?? 1) with no numeric guard, so the NAME reached the channel verbatim; --ds-effect-intensity is a registered @property with syntax '<number>' and initial-value 1, so the declaration is invalid at computed-value time and the browser substitutes 1. Every stop would have painted the baseline and the run would have reported a LIVE control as inert, while the arm still carried a non-empty variable map so no existing guard would have fired. The harness now derives the written value from domain.kind and fails closed on any kind it cannot write.",
-        "evidence": "packages/core/src/tooling/resolution-probe/runtime/ingress/tests/index.test.mjs -- 31 assertions green, including a counterfactual that drives the REAL compiled compileBrandTheme with the stop NAME and pins that it emits the literal 'mate', plus fail-closed drills for a bounded stop with no finite value and for every domain kind the harness cannot write."
+        "evidence": "packages/core/scripts/check/tokens/cascade/probe/runtime/ingress/tests/index.test.mjs -- 31 assertions green, including a counterfactual that drives the REAL compiled compileBrandTheme with the stop NAME and pins that it emits the literal 'mate', plus fail-closed drills for a bounded stop with no finite value and for every domain kind the harness cannot write."
       }
     ],
     "unmeasuredScope": [

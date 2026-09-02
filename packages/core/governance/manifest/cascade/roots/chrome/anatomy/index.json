@@ -3,6 +3,7 @@
   "rootId": "chrome.anatomy",
   "tier": "pro",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "data-anatomy-card",
     "emission": [
       {
@@ -23,7 +24,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
       "state": "LIVE",
       "line": 372
     },
@@ -34,7 +35,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
       "state": "LIVE",
       "line": 373
     },
@@ -45,7 +46,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
       "state": "LIVE",
       "line": 374
     },
@@ -56,7 +57,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='rail']"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
       "state": "LIVE",
       "line": 381
     },
@@ -67,7 +68,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='rail']"
       },
-      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell.css",
+      "site": "packages/core/src/foundation/tokens/css/presentation/components/skin/app-shell/index.css",
       "state": "LIVE",
       "line": 382
     },
@@ -78,7 +79,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+      "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
       "state": "LIVE",
       "line": 379
     },
@@ -89,7 +90,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+      "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
       "state": "LIVE",
       "line": 380
     },
@@ -100,7 +101,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='rail']"
       },
-      "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout.css",
+      "site": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/layout/index.css",
       "state": "LIVE",
       "line": 387
     },
@@ -111,7 +112,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout.css",
+      "site": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css",
       "state": "LIVE",
       "line": 132
     },
@@ -122,7 +123,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='panel']"
       },
-      "site": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout.css",
+      "site": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css",
       "state": "LIVE",
       "line": 133
     },
@@ -133,7 +134,7 @@
         "kind": "data-attr-select",
         "selector": "[data-anatomy-sidebar='rail']"
       },
-      "site": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout.css",
+      "site": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/layout/index.css",
       "state": "LIVE",
       "line": 140
     }

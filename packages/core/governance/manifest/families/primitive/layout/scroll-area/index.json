@@ -8,15 +8,15 @@
     "components": [
       "ScrollArea"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/layout/ScrollArea",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/layout/scroll-area",
     "publicComponents": [
       "ScrollArea"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "395d1afaf542219f668b13d0ebc66b21d5532359f3680bf3e15565bf85d40f5f"
+    "inventoryRowDigest": "42d543faf209f6b8c4a16ca394ca4f4bc8b6770c37ea532c8491524e9d56cf3d"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,13 +28,13 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/layout/ScrollArea/index.tsx",
-      "packages/core/src/ui/primitives/layout/ScrollArea/contracts/index.ts",
-      "packages/core/src/ui/primitives/layout/ScrollArea/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/layout/ScrollArea/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/layout/ScrollArea/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/scroll-area.css"
+      "packages/core/src/components/primitives/layout/scroll-area/index.tsx",
+      "packages/core/src/components/primitives/layout/scroll-area/contracts/index.ts",
+      "packages/core/src/components/primitives/layout/scroll-area/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/layout/scroll-area/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/layout/scroll-area/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/scroll-area/index.css"
     ],
     "stableParts": [
       "root"
@@ -258,13 +258,13 @@
         {
           "channelId": "--_ds-scroll-area-track-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/scroll-area"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -281,7 +281,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.pairing",
@@ -300,7 +300,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.families",
@@ -319,7 +319,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "typography.scale",
@@ -379,7 +379,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "uncoveredByDesign": {
           "Brazos foundation compartidos (nivel 2/3 de la forma canonica)": [
             "--ds-focus-ring-width"
@@ -457,8 +457,8 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_NOT_REACH",
-        "why": "Box/Flex/Grid no tienen superficie propia que acabar",
-        "source": "huecos-kimi",
+        "why": "Box/flex/Grid no tienen superficie propia que acabar",
+        "source": "gap-audit-primary",
         "reviewedFrom": "anatomy",
         "reasons": [
           {
@@ -478,7 +478,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el layout no pinta chrome",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -548,13 +548,13 @@
         {
           "channelId": "--_ds-scroll-area-focus-ring-offset",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/scroll-area"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -563,13 +563,13 @@
         {
           "channelId": "--_ds-scroll-area-focus-ring-radius",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/layout/scroll-area"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/scroll-area/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -592,7 +592,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -649,7 +649,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -699,11 +699,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

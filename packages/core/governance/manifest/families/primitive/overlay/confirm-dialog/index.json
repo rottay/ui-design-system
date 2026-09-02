@@ -8,15 +8,15 @@
     "components": [
       "ConfirmDialog"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/overlay/ConfirmDialog",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/confirm-dialog",
     "publicComponents": [
       "ConfirmDialog"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "4b39ac4cefaa6c9d45cdaf6dc0b3f6f95df01b363fdd1a8ec64d61c51ae9d0be"
+    "inventoryRowDigest": "5b47d33ebc0a26d3e86e7ae5b55f2018b132a6fecbf7f27cc104aeb50375f22c"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts",
-      "packages/core/src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/ConfirmDialog/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+      "packages/core/src/components/primitives/overlay/confirm-dialog/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/confirm-dialog/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
     ],
     "stableParts": [
       "backdrop",
@@ -57,15 +57,15 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "aria-modal [at src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:237, src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:149]",
-      "role-attribute [at src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:236, src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:148]",
-      "aria-label-or-labelledby [at src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:238, src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:150]",
-      "aria-describedby [at src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:239, src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:151]",
-      "inert [at src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:33]",
-      "escape-key-dismiss [at src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:87]",
-      "body-scroll-lock [at src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:145, src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:96]",
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:259]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:17, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:66, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:231]"
+      "aria-modal [at src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:237, src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:149]",
+      "role-attribute [at src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:236, src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:148]",
+      "aria-label-or-labelledby [at src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:238, src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:150]",
+      "aria-describedby [at src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:239, src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:151]",
+      "inert [at src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:33]",
+      "escape-key-dismiss [at src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:87]",
+      "body-scroll-lock [at src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:145, src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:96]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:259]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:17, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:66, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:231]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -87,12 +87,12 @@
           "part": "backdrop",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:206",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:140",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:93",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:94",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:95",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:96"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:206",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:140",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:93",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:94",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:95",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:96"
           ],
           "atSiteCount": 8
         },
@@ -100,12 +100,12 @@
           "part": "scrim",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:231",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:107",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:108",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:109",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:110",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:111"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:231",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:107",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:108",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:109",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:110",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:111"
           ],
           "atSiteCount": 7
         },
@@ -113,12 +113,12 @@
           "part": "surface",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:233",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:152",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:132",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:133",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:134",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:135"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:233",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:152",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:132",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:133",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:134",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:135"
           ],
           "atSiteCount": 8
         },
@@ -126,21 +126,21 @@
           "part": "content",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:241",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:174",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:175"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:241",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:174",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:175"
           ]
         },
         {
           "part": "icon",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:243",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:161",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:178",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:179",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:180",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:181"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:243",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:161",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:178",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:180",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:181"
           ],
           "atSiteCount": 8
         },
@@ -148,21 +148,21 @@
           "part": "copy",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:247",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:187",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:188"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:247",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:187",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:188"
           ]
         },
         {
           "part": "title",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:249",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:179",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:211",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:212",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:213",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:214"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:249",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:211",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:212",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:213",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:214"
           ],
           "atSiteCount": 8
         },
@@ -170,12 +170,12 @@
           "part": "description",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:252",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:192",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:222",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:223",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:224",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:225"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:252",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:192",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:222",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:223",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:224",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:225"
           ],
           "atSiteCount": 8
         },
@@ -183,12 +183,12 @@
           "part": "footer",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:264",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:235",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:236",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:237",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:238",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:251"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:264",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:235",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:236",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:237",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:238",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:251"
           ],
           "atSiteCount": 7
         },
@@ -196,7 +196,7 @@
           "part": "anchor",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:198"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:198"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         },
@@ -204,10 +204,10 @@
           "part": "action",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:268",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/modern/index.tsx:278",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:206",
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:216"
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:268",
+            "src/components/primitives/overlay/confirm-dialog/engines/modern/index.tsx:278",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:206",
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:216"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         },
@@ -215,58 +215,58 @@
           "part": "spinner",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:228"
+            "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:228"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:72, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:73, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:77]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:72, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:73, src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:77]"
         ]
       },
       "variantAxisAnchors": [
         {
           "token": "data-density=compact",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:165"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:165"
           ]
         },
         {
           "token": "data-density=spacious",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:168"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:168"
           ]
         },
         {
           "token": "data-variant=info",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:194",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:195",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:196"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:194",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:195",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:196"
           ]
         },
         {
           "token": "data-variant=warning",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:199",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:200",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:201"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:199",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:200",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:201"
           ]
         },
         {
           "token": "data-variant=danger",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:204",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:205",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:206"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:204",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:205",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:206"
           ]
         },
         {
           "token": "data-ds-motion=reduced",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:275",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:276"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:275",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:276"
           ]
         }
       ],
@@ -431,7 +431,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:78",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:78",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -456,7 +456,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:79",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:79",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -479,15 +479,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1144",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:2134",
-              "src/foundation/tokens/css/foundation/themes/default.css:1102"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1102"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1102"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1102"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:110",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:110",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "background-color",
@@ -508,15 +508,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:133"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:133"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:133"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:133"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:110",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:110",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "background-color",
@@ -537,13 +537,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/premium.css:53"
+              "src/foundation/tokens/css/foundation/animations/premium/index.css:53"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:111",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:111",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "background-image",
@@ -551,7 +551,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:111",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:111",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "background-image",
@@ -573,14 +573,14 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/premium.css:52",
-              "src/foundation/tokens/css/foundation/animations/premium.css:101"
+              "src/foundation/tokens/css/foundation/animations/premium/index.css:52",
+              "src/foundation/tokens/css/foundation/animations/premium/index.css:101"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:112",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:112",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "backdrop-filter",
@@ -588,7 +588,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:113",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:113",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "-webkit-backdrop-filter",
@@ -612,15 +612,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:373",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:661",
-              "src/foundation/tokens/css/foundation/themes/default.css:1103"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1103"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1103"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1103"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:112",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:112",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "backdrop-filter",
@@ -628,7 +628,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:113",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:113",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "-webkit-backdrop-filter",
@@ -650,15 +650,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:926",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              "src/foundation/tokens/css/runtime/personality/index.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:114",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:114",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "animation",
@@ -666,7 +666,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:151",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:151",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -688,13 +688,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:115",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:115",
                 "readIn": "modern-skin-css",
                 "part": "scrim",
                 "landsOn": "animation",
@@ -702,7 +702,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:152",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:152",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -728,12 +728,12 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:651"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/modal.css:71"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:71"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:133",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:133",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background-color",
@@ -754,17 +754,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+              "tests/fixtures/tenants/quality-evidence/index.ts:320",
+              "tests/fixtures/tenants/quality-evidence/index.ts:425",
+              "tests/fixtures/tenants/quality-evidence/index.ts:540"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:265"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:133",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:133",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background-color",
@@ -785,15 +785,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:825"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:825"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:825"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:825"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:134",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:134",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background-image",
@@ -801,7 +801,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:134",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:134",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background-image",
@@ -822,15 +822,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1099"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1099"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:1099"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:1099"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:135",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:135",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border-radius",
@@ -851,17 +851,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:44",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+              "tests/fixtures/tenants/default/index.css:44",
+              "tests/fixtures/tenants/quality-evidence/index.ts:351",
+              "tests/fixtures/tenants/quality-evidence/index.ts:474"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:771"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:771"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:135",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:135",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border-radius",
@@ -882,18 +882,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "src/ui/patterns/customization/brand-studio/index.tsx:158",
+              "src/components/patterns/customization/brand-studio/index.tsx:140",
+              "src/components/patterns/customization/brand-studio/index.tsx:158",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:188"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:209",
-              "src/foundation/tokens/css/foundation/themes/default.css:2123"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2123"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:137",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:137",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -914,15 +914,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:358",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:481",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:570"
+              "tests/fixtures/tenants/quality-evidence/index.ts:358",
+              "tests/fixtures/tenants/quality-evidence/index.ts:481",
+              "tests/fixtures/tenants/quality-evidence/index.ts:570"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:137",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:137",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -948,12 +948,12 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:663"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/modal.css:88"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:88"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:138",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:138",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -975,15 +975,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1083",
-              "src/foundation/tokens/css/foundation/themes/default.css:803"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:803"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:803"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:803"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:138",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:138",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -1008,7 +1008,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:141",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:141",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1032,16 +1032,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687",
-              "src/foundation/tokens/css/foundation/base/density.css:81"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "src/foundation/tokens/css/foundation/base/density/index.css:81"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:142",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:142",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1049,7 +1049,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:142",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:142",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -1057,7 +1057,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:165",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:165",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -1065,7 +1065,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:238",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:238",
                 "readIn": "modern-skin-css",
                 "part": "footer",
                 "landsOn": "margin-block-start",
@@ -1073,7 +1073,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:116",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:116",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "padding",
@@ -1095,16 +1095,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:690",
-              "src/foundation/tokens/css/foundation/base/density.css:85"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:690",
+              "src/foundation/tokens/css/foundation/base/density/index.css:85"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:690"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:690"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:146",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:146",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-block-size",
@@ -1112,7 +1112,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:147",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:147",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-block-size",
@@ -1120,7 +1120,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:168",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:168",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -1145,7 +1145,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:150",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:150",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -1166,16 +1166,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:689",
-              "src/foundation/tokens/css/foundation/base/density.css:83"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:689",
+              "src/foundation/tokens/css/foundation/base/density/index.css:83"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:689"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:689"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:150",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:150",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -1202,7 +1202,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:158",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:158",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -1228,13 +1228,13 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1161"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:232",
-              "src/foundation/tokens/css/foundation/themes/default.css:2112"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2112"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:158",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:158",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -1255,16 +1255,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:686",
-              "src/foundation/tokens/css/foundation/base/density.css:80"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:686",
+              "src/foundation/tokens/css/foundation/base/density/index.css:80"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:686"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:175",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:175",
                 "readIn": "modern-skin-css",
                 "part": "content",
                 "landsOn": "gap",
@@ -1286,15 +1286,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:490"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:490"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:490"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:490"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:182",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:182",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "inline-size",
@@ -1302,7 +1302,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:183",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:183",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "block-size",
@@ -1323,17 +1323,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:46",
+              "tests/fixtures/tenants/default/index.css:46",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:837",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1069"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:775"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:775"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:184",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:184",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "border-radius",
@@ -1358,17 +1358,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
-              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:552",
-              "src/tooling/testing/system/tests/theming.test.ts:254"
+              "src/components/patterns/visualization/charts/tests/Heatmaps.correctness.test.tsx:129",
+              "tests/integration/capability-propagation/tests/index.test.ts:552",
+              "tests/system/theming/index.test.ts:254"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:30"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:30"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:194",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:194",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "background",
@@ -1376,7 +1376,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:195",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:195",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "box-shadow",
@@ -1384,7 +1384,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:196",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:196",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -1392,7 +1392,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:51",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:51",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "icon",
@@ -1400,7 +1400,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:52",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:52",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "button",
@@ -1425,17 +1425,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:21",
+              "tests/fixtures/tenants/default/index.css:21",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:262",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:283"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:86"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:86"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:199",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:199",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "background",
@@ -1443,7 +1443,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:200",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:200",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "box-shadow",
@@ -1451,7 +1451,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:201",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:201",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -1459,7 +1459,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:56",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:56",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "icon",
@@ -1467,7 +1467,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:57",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:57",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "button",
@@ -1492,17 +1492,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:22",
+              "tests/fixtures/tenants/default/index.css:22",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:202",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:219"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:100"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:100"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:204",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:204",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "background",
@@ -1510,7 +1510,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:205",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:205",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "box-shadow",
@@ -1518,7 +1518,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:206",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:206",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -1526,7 +1526,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:61",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:61",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "icon",
@@ -1534,7 +1534,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:62",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:62",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "button",
@@ -1557,16 +1557,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:685",
-              "src/foundation/tokens/css/foundation/base/density.css:79"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+              "src/foundation/tokens/css/foundation/base/density/index.css:79"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:685"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:213",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:213",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "margin-block-end",
@@ -1574,7 +1574,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:237",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:237",
                 "readIn": "modern-skin-css",
                 "part": "footer",
                 "landsOn": "gap",
@@ -1595,18 +1595,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
-              "src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:217",
-              "src/foundation/tokens/css/foundation/themes/default.css:2128"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:214",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:214",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "color",
@@ -1614,7 +1614,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx:136",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx:136",
                 "readIn": "classic",
                 "part": null,
                 "landsOn": "color",
@@ -1635,17 +1635,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:458",
-              "src/ui/primitives/display/Typography/Typography.stories.tsx:464"
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:224",
+              "src/components/primitives/display/Typography/Typography.stories.tsx:458",
+              "src/components/primitives/display/Typography/Typography.stories.tsx:464"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:507"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:507"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:215",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:215",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font-family",
@@ -1667,17 +1667,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:215",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:215",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font-family",
@@ -1685,7 +1685,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:224",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:224",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "font-family",
@@ -1693,7 +1693,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:115",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:115",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "font-family",
@@ -1714,17 +1714,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:32",
-              "src/foundation/tokens/css/foundation/themes/default.css:611",
+              "tests/fixtures/tenants/default/index.css:32",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:611",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:121"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:611"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:611"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:216",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:216",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font-size",
@@ -1745,15 +1745,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:624"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:624"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:217",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:217",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font-weight",
@@ -1782,7 +1782,7 @@
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:218",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:218",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "letter-spacing",
@@ -1808,12 +1808,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:208"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:631"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:631"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:219",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:219",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "line-height",
@@ -1834,18 +1834,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:218",
-              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:223",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:223",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "color",
@@ -1853,7 +1853,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx:141",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx:141",
                 "readIn": "classic",
                 "part": null,
                 "landsOn": "color",
@@ -1874,17 +1874,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:30",
-              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:609"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:225",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:225",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "font-size",
@@ -1910,12 +1910,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:207"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:634"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:634"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css:226",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css:226",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "line-height",
@@ -1934,17 +1934,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:8",
-              "src/tooling/testing/fixtures/tenants/bithire.css:8",
+              "tests/fixtures/tenants/default/index.css:8",
+              "tests/fixtures/tenants/bithire/index.css:8",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:227"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:25"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:25"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:53",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:53",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "bg",
@@ -1968,12 +1968,12 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:282"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:81"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:81"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:58",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:58",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "bg",
@@ -1997,12 +1997,12 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:218"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:95"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:95"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/contracts/index.ts:63",
+                "at": "src/components/primitives/overlay/confirm-dialog/contracts/index.ts:63",
                 "readIn": "shared",
                 "part": null,
                 "landsOn": "bg",
@@ -2021,15 +2021,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/modal.css:115"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:115"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/modal.css:115"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:115"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx:136",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx:136",
                 "readIn": "classic",
                 "part": null,
                 "landsOn": "font-size",
@@ -2048,15 +2048,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/presentation/components/modal.css:116"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:116"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/modal.css:116"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:116"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx:136",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx:136",
                 "readIn": "classic",
                 "part": null,
                 "landsOn": "font-weight",
@@ -2080,13 +2080,13 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:665"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:2181",
-              "src/foundation/tokens/css/presentation/components/modal.css:118"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2181",
+              "src/foundation/tokens/css/presentation/components/modal/index.css:118"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx:136",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx:136",
                 "readIn": "classic",
                 "part": null,
                 "landsOn": "color",
@@ -2110,12 +2110,12 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:664"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/modal.css:122"
+              "src/foundation/tokens/css/presentation/components/modal/index.css:122"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/classic/index.tsx:141",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/classic/index.tsx:141",
                 "readIn": "classic",
                 "part": null,
                 "landsOn": "color",
@@ -2140,7 +2140,7 @@
             "adjudicationClass": "FOUNDATION_SHARED",
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:135",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:135",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "transition",
@@ -2148,7 +2148,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:135",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:135",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "transition",
@@ -2156,7 +2156,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:135",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:135",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "transition",
@@ -2177,15 +2177,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:333",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:503",
-              "src/foundation/tokens/css/presentation/components/input.css:263"
+              "src/foundation/tokens/css/presentation/components/input/index.css:263"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/presentation/components/input.css:263"
+              "src/foundation/tokens/css/presentation/components/input/index.css:263"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:135",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:135",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "transition",
@@ -2193,7 +2193,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:135",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:135",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "transition",
@@ -2201,7 +2201,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx:135",
+                "at": "src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx:135",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "transition",
@@ -2300,7 +2300,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2325,7 +2325,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2352,13 +2352,13 @@
         {
           "channelId": "--_ds-confirm-dialog-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2378,13 +2378,13 @@
         {
           "channelId": "--_ds-confirm-dialog-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2436,13 +2436,13 @@
         {
           "channelId": "--_ds-confirm-dialog-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2460,7 +2460,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2474,13 +2474,13 @@
         {
           "channelId": "--_ds-confirm-dialog-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2490,13 +2490,13 @@
         {
           "channelId": "--_ds-confirm-dialog-motion-scale",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2515,13 +2515,13 @@
         {
           "channelId": "--_ds-confirm-dialog-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2541,13 +2541,13 @@
         {
           "channelId": "--_ds-confirm-dialog-backdrop-filter",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2566,7 +2566,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2597,13 +2597,13 @@
         {
           "channelId": "--_ds-confirm-dialog-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2623,13 +2623,13 @@
         {
           "channelId": "--_ds-confirm-dialog-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2639,13 +2639,13 @@
         {
           "channelId": "--_ds-confirm-dialog-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/confirm-dialog"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2669,7 +2669,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2725,7 +2725,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2754,7 +2754,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/confirm-dialog/index.css"
         ]
       }
     },
@@ -2768,7 +2768,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "icon.posture",
@@ -2789,11 +2789,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

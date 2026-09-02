@@ -95,7 +95,7 @@ pass on the corrected door. `drill-mutation-proof.{mjs,txt}`.
 
 ## Closures the DT required
 
-1. **Ledger** `docs/ROADMAP-EJECUCION-2026-08-19.md`: summary row 2/20 → **3/20**
+1. **Ledger** `docs/history/programs/architecture-refactor/2026-08/execution/index.md`: summary row 2/20 → **3/20**
    plus a full entry covering the corrected door, the preflight, the measured
    numbers, and 11 honest notes. The previous entry's toolchain paragraph was
    restored to it; mine carries its own and explicitly does **not** claim the

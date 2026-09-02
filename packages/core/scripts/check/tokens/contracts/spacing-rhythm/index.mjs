@@ -185,7 +185,7 @@ export const CORE_ROOT = findPackageRoot(SCRIPTS_DIR);
 export const DEFAULT_SOURCE_ROOT = resolve(CORE_ROOT, 'src');
 export const DEFAULT_FAMILY_INVENTORY = resolve(
   CORE_ROOT,
-  'scripts/quality-evidence/programs/modern-rescue/family-inventory.json',
+  'scripts/check/modern-rescue/family-inventory/index.json',
 );
 
 /** The clamped derivation every consumer is supposed to read. */

@@ -8,15 +8,15 @@
     "components": [
       "PatternKanbanBoard"
     ],
-    "sourceRoot": "packages/core/src/ui/patterns",
-    "sourceOwner": "packages/core/src/ui/patterns/visualization/kanban-board",
+    "sourceRoot": "packages/core/src/components/patterns",
+    "sourceOwner": "packages/core/src/components/patterns/visualization/kanban-board",
     "publicComponents": [
       "PatternKanbanBoard"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "85681a19d1bed7a1753bce1e233f7c54e642675fd0c625389d7455c7f1d9e820"
+    "inventoryRowDigest": "feded89beff94e142e29be51a3334c1b7cf5dcfd8ab66fb8b7cfcdc21da5ff97"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/patterns/visualization/kanban-board/contracts/index.ts",
-      "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx",
-      "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx",
-      "packages/core/src/ui/patterns/visualization/kanban-board/index.ts",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+      "packages/core/src/components/patterns/visualization/kanban-board/contracts/index.ts",
+      "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx",
+      "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx",
+      "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx",
+      "packages/core/src/components/patterns/visualization/kanban-board/index.ts",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
     ],
     "stableParts": [
       "add-item",
@@ -80,8 +80,8 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "zero colour literals; 3 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:234, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:235, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:244]",
-      "the drag/drop interaction surface is complete across modern and rustic but absent from classic [at packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:151]"
+      "zero colour literals; 3 token-composed color-mix computations [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:234, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:235, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:244]",
+      "the drag/drop interaction surface is complete across modern and rustic but absent from classic [at packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:151]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -104,11 +104,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:574",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:305",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:344",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:129"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:574",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:305",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:344",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:129"
           ]
         },
         {
@@ -116,12 +116,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:131",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:380",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:418",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:137",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:80",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:122"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:131",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:380",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:418",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:137",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:80",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:122"
           ],
           "atSiteCount": 42
         },
@@ -130,12 +130,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:505",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:265",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:285",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:294",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:297",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:300"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:505",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:265",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:294",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:297",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:300"
           ],
           "atSiteCount": 18
         },
@@ -144,8 +144,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:533",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:339"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:533",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:339"
           ]
         },
         {
@@ -153,12 +153,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:498",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:269",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:285",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:308",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:331",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:420"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:498",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:269",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:285",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:308",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:331",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:420"
           ],
           "atSiteCount": 8
         },
@@ -167,7 +167,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:540"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:540"
           ]
         },
         {
@@ -175,7 +175,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:553"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:553"
           ]
         },
         {
@@ -183,12 +183,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:148",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:435",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:156",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:163",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:169",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:179"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:148",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:435",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:156",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:163",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:169",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:179"
           ],
           "atSiteCount": 35
         },
@@ -197,12 +197,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:484",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:215",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:227",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:233",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:242"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:484",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:215",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:227",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:233",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:242"
           ],
           "atSiteCount": 26
         },
@@ -211,12 +211,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:163",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:444",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:170",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:179",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:390",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:10"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:163",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:444",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:170",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:179",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:390",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:10"
           ],
           "atSiteCount": 9
         },
@@ -225,8 +225,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:454",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:188"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:454",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:188"
           ]
         },
         {
@@ -234,10 +234,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:459",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:198",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:198",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:20"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:459",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:198",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:20"
           ]
         },
         {
@@ -245,9 +245,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:455",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:188",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:195"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:455",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:188",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:195"
           ]
         },
         {
@@ -255,8 +255,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:413",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:262"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:413",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:262"
           ]
         },
         {
@@ -264,10 +264,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:494",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:249",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:253",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:66"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:494",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:249",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:253",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:66"
           ]
         },
         {
@@ -275,8 +275,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:390",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:65"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:390",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:65"
           ]
         },
         {
@@ -284,9 +284,9 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:21",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:590",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:65"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:21",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:590",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:65"
           ]
         },
         {
@@ -294,12 +294,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:111",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:128",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:375",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:399",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:114",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:132"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:111",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:128",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:375",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:399",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:114",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:132"
           ],
           "atSiteCount": 40
         },
@@ -308,12 +308,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:385",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:105",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:109",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:112",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:372"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:385",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:105",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:109",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:372"
           ]
         },
         {
@@ -321,8 +321,8 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:382",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:85"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:382",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:85"
           ]
         },
         {
@@ -330,10 +330,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:383",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:93",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:100",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:372"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:383",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:93",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:100",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:372"
           ]
         },
         {
@@ -341,7 +341,7 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:391"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:391"
           ]
         },
         {
@@ -349,10 +349,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:129",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:410",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:134",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:117"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:129",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:410",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:134",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:117"
           ]
         },
         {
@@ -360,11 +360,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:467",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:208",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:28",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:38"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:467",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:208",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:28",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:38"
           ]
         }
       ],
@@ -372,91 +372,91 @@
         {
           "token": "collapsed",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:149",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:436",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:157"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:149",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:436",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:157"
           ],
           "state": "collapsed"
         },
         {
           "token": "dragging",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:506",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:266"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:506",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:266"
           ],
           "state": "dragging"
         },
         {
           "token": "drop-at-end",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:487"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:487"
           ],
           "state": "drop-at-end"
         },
         {
           "token": "drop-before",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:508"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:508"
           ],
           "state": "drop-before"
         },
         {
           "token": "dropping",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:151",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:438",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:485",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:159",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:234"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:151",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:438",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:485",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:159",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:234"
           ],
           "state": "dropping"
         },
         {
           "token": "loading",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:112",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:128",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:376",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:400",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:115",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:132"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:112",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:128",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:376",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:400",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:115",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:132"
           ],
           "state": "loading"
         },
         {
           "token": "skeleton",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:380"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:380"
           ],
           "state": "skeleton"
         },
         {
           "token": "move-intent",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:554"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:554"
           ],
           "state": "move-intent"
         },
         {
           "token": "over-limit",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:150",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:437",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:158"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:150",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:437",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:158"
           ],
           "state": "over-limit"
         },
         {
           "token": "scrollable-end",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:420"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:420"
           ],
           "state": "scrollable-end"
         },
         {
           "token": "scrollable-start",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:419"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:419"
           ],
           "state": "scrollable-start"
         }
@@ -464,10 +464,10 @@
       "variantAxisAnchors": [
         {
           "token": "hover-cycle",
-          "note": "stamped imperatively, not as a JSX attribute; a JSX-attribute-only detector misses it. Painted at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:101 and pinned at packages/core/src/ui/patterns/visualization/tests/NonChartCkEAnatomy.contract.test.tsx:147-162",
+          "note": "stamped imperatively, not as a JSX attribute; a JSX-attribute-only detector misses it. Painted at packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:101 and pinned at packages/core/src/components/patterns/visualization/tests/NonChartCkEAnatomy.contract.test.tsx:147-162",
           "at": [],
           "citationsUnverified": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:280"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:280"
           ],
           "anchorStatus": "name-kept-anchor-dropped",
           "anchorDropReason": "Every coordinate the scout recorded for this entry failed verification against live source. The measured identity is kept because a name set is trustworthy even when a citation is not; only the coordinate is withdrawn. Admission under RULING R-8 rests on the independent source stamp index, not on this coordinate."
@@ -475,8 +475,8 @@
         {
           "token": "clickable",
           "at": [
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:507",
-            "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:267"
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:507",
+            "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:267"
           ]
         }
       ],
@@ -485,8 +485,8 @@
           {
             "token": "empty",
             "at": [
-              "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:486",
-              "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:235"
+              "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:486",
+              "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:235"
             ]
           }
         ],
@@ -503,15 +503,15 @@
           "rootAnchor": {
             "modern": {
               "class": "ds-pattern-kanban-board ds-engine-modern",
-              "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:74"
+              "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:74"
             },
             "rustic": {
               "class": "ds-pattern-kanban-board ds-engine-rustic",
-              "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:28"
+              "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:28"
             },
             "classic": {
               "class": null,
-              "dataPartRoot": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:128",
+              "dataPartRoot": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:128",
               "note": "classic stamps data-part=\"root\" AND four non-root DS parts"
             }
           },
@@ -580,7 +580,7 @@
         "dsVariableReads": [
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -601,7 +601,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -622,7 +622,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -646,7 +646,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -670,7 +670,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:215",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:215",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -694,7 +694,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:544",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:544",
             "part": "card-move",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -718,7 +718,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:545",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:545",
             "part": "card-move",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -742,7 +742,7 @@
           },
           {
             "variable": "--ds-personality-animation-entrance-duration",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:27",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:27",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -763,7 +763,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:176",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:176",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -785,7 +785,7 @@
           },
           {
             "variable": "--ds-typography-heading-font-weight",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:200",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:200",
             "part": "column-title",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -806,7 +806,7 @@
           },
           {
             "variable": "--ds-typography-heading-letter-spacing",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:202",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:202",
             "part": "column-title",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -830,7 +830,7 @@
           },
           {
             "variable": "--ds-kanban-column-gap",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:82",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:82",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true']   > [data-part='board'][data-skeleton='true']",
@@ -851,7 +851,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:89",
             "part": "skeleton-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-column']",
@@ -872,7 +872,7 @@
           },
           {
             "variable": "--ds-kanban-column-min-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:90",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:90",
             "part": "skeleton-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-column']",
@@ -893,7 +893,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:94",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:94",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -914,7 +914,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:95",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -935,7 +935,7 @@
           },
           {
             "variable": "--ds-motion-attention",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:97",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:97",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -956,7 +956,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:98",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:98",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -977,7 +977,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:102",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:102",
             "part": "skeleton-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header']",
@@ -998,7 +998,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:103",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:103",
             "part": "skeleton-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header']",
@@ -1019,7 +1019,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:118",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:118",
             "part": "toolbar",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='toolbar']",
@@ -1040,7 +1040,7 @@
           },
           {
             "variable": "--ds-kanban-column-gap",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:124",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board']",
@@ -1061,7 +1061,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:125",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:125",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board']",
@@ -1082,7 +1082,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:132",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true']",
@@ -1103,7 +1103,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:135",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:135",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true']",
@@ -1124,7 +1124,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:141",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:141",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -1145,7 +1145,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:142",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:142",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -1166,7 +1166,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:147",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:147",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true']",
@@ -1187,7 +1187,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:150",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:150",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true']",
@@ -1208,7 +1208,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:156",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:156",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -1229,7 +1229,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:157",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:157",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -1250,7 +1250,7 @@
           },
           {
             "variable": "--ds-kanban-column-min-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:167",
             "part": "column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column']",
@@ -1271,7 +1271,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:180",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:180",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -1292,7 +1292,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:181",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:181",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -1313,7 +1313,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:182",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:182",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -1334,7 +1334,7 @@
           },
           {
             "variable": "--ds-kanban-column-accent",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:183",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:183",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -1355,7 +1355,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:184",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:184",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -1376,7 +1376,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:185",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:185",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -1397,7 +1397,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:192",
             "part": "column-title-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column-header-content'], .ds-pattern-kanban-board.ds-engine-modern [data-part='column-title-row']",
@@ -1418,7 +1418,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:200",
             "part": "column-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column-title']",
@@ -1439,7 +1439,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:201",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:201",
             "part": "column-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column-title']",
@@ -1460,7 +1460,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:218",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:218",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -1481,7 +1481,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:219",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:219",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -1502,7 +1502,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:221",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -1523,7 +1523,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:221",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -1544,7 +1544,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:222",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -1565,7 +1565,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:222",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -1586,7 +1586,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:228",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -1607,7 +1607,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:234",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:234",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -1628,7 +1628,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:235",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:235",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -1649,7 +1649,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:244",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:244",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true']",
@@ -1670,7 +1670,7 @@
           },
           {
             "variable": "--_ds-kanban-insert-bar",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:245",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:245",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true']",
@@ -1691,7 +1691,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:245",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:245",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true']",
@@ -1712,7 +1712,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:257",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:257",
             "part": "empty-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='empty-column']",
@@ -1733,7 +1733,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:258",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:258",
             "part": "empty-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='empty-column']",
@@ -1754,7 +1754,7 @@
           },
           {
             "variable": "--ds-spacing-12",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:265",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:265",
             "part": "empty-board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='empty-board']",
@@ -1775,7 +1775,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:272",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:272",
             "part": "card-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card-list']",
@@ -1796,7 +1796,7 @@
           },
           {
             "variable": "--ds-kanban-column-max-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:273",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:273",
             "part": "card-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card-list']",
@@ -1817,7 +1817,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:286",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:286",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1838,7 +1838,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:287",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:287",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1859,7 +1859,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:288",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:288",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1880,7 +1880,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:289",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:289",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1901,7 +1901,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:291",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1922,7 +1922,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:291",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1943,7 +1943,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:292",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:292",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1964,7 +1964,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:292",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:292",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -1985,7 +1985,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:309",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:309",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']:focus-visible",
@@ -2006,7 +2006,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:309",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:309",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']:focus-visible",
@@ -2028,7 +2028,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:310",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:310",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']:focus-visible",
@@ -2049,7 +2049,7 @@
           },
           {
             "variable": "--ds-elevation-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:314",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:314",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card']:hover",
@@ -2072,7 +2072,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:333",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:333",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true'], .ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true']:hover",
@@ -2093,7 +2093,7 @@
           },
           {
             "variable": "--_ds-kanban-insert-bar",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:334",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true'], .ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true']:hover",
@@ -2114,7 +2114,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:334",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true'], .ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true']:hover",
@@ -2135,7 +2135,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:340",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:340",
             "part": "card-content",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card-content']",
@@ -2156,7 +2156,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:346",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:346",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='add-item']",
@@ -2177,7 +2177,7 @@
           },
           {
             "variable": "--ds-kanban-touch-target",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:364",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:364",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='add-item']",
@@ -2200,7 +2200,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:4",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root'][data-loading='true']",
@@ -2221,7 +2221,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:11",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:11",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header'][data-part='column-header']",
@@ -2242,7 +2242,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:12",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:12",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header'][data-part='column-header']",
@@ -2264,7 +2264,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:13",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:13",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header'][data-part='column-header']",
@@ -2286,7 +2286,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:21",
             "part": "column-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']   [data-part='column-title']",
@@ -2308,7 +2308,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:30",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:30",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='false']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -2330,7 +2330,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:31",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:31",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='false']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -2352,7 +2352,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:40",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:40",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='true']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -2374,7 +2374,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:41",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='true']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -2396,7 +2396,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:48",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -2417,7 +2417,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:49",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:49",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -2439,7 +2439,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:50",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -2461,7 +2461,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:57",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:57",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -2482,7 +2482,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:58",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:58",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -2504,7 +2504,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:59",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -2525,7 +2525,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:67",
             "part": "empty-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='empty-column']",
@@ -2547,7 +2547,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:75",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -2568,7 +2568,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:76",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -2590,7 +2590,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:77",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -2612,7 +2612,7 @@
           },
           {
             "variable": "--ds-card-shadow",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:78",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:78",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -2634,7 +2634,7 @@
           },
           {
             "variable": "--ds-card-shadow",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:102",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:102",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-hover-cycle='settled']",
@@ -2655,7 +2655,7 @@
           },
           {
             "variable": "--ds-card-shadow-hover",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:110",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:110",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-dragging='false']:hover",
@@ -2677,7 +2677,7 @@
           },
           {
             "variable": "--ds-card-hover-transform",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:111",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:111",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-dragging='false']:hover",
@@ -2698,7 +2698,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:119",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:119",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item'][data-part='add-item']",
@@ -2720,7 +2720,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:120",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:120",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item'][data-part='add-item']",
@@ -2741,7 +2741,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:122",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:122",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item'][data-part='add-item']",
@@ -2763,7 +2763,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:130",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:130",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item']:hover",
@@ -2784,7 +2784,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:131",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:131",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item']:hover",
@@ -2805,7 +2805,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:132",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item']:hover",
@@ -2858,7 +2858,7 @@
         "variableCensus": [
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2879,7 +2879,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:195",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2900,7 +2900,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2924,7 +2924,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:196",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2948,7 +2948,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/classic/index.tsx:215",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/classic/index.tsx:215",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2972,7 +2972,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:544",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:544",
             "part": "card-move",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -2996,7 +2996,7 @@
           },
           {
             "variable": "--ds-spacing-1",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/modern/index.tsx:545",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/modern/index.tsx:545",
             "part": "card-move",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -3020,7 +3020,7 @@
           },
           {
             "variable": "--ds-personality-animation-entrance-duration",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:27",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:27",
             "part": null,
             "partResolution": "NONE",
             "selector": null,
@@ -3041,7 +3041,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:176",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:176",
             "part": "column-header",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -3063,7 +3063,7 @@
           },
           {
             "variable": "--ds-typography-heading-font-weight",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:200",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:200",
             "part": "column-title",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -3084,7 +3084,7 @@
           },
           {
             "variable": "--ds-typography-heading-letter-spacing",
-            "at": "packages/core/src/ui/patterns/visualization/kanban-board/engines/rustic/index.tsx:202",
+            "at": "packages/core/src/components/patterns/visualization/kanban-board/engines/rustic/index.tsx:202",
             "part": "column-title",
             "partResolution": "NEAREST_PRECEDING_TSX",
             "selector": null,
@@ -3108,7 +3108,7 @@
           },
           {
             "variable": "--ds-kanban-column-gap",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:82",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:82",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root'][data-loading='true']   > [data-part='board'][data-skeleton='true']",
@@ -3129,7 +3129,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:89",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:89",
             "part": "skeleton-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-column']",
@@ -3150,7 +3150,7 @@
           },
           {
             "variable": "--ds-kanban-column-min-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:90",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:90",
             "part": "skeleton-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-column']",
@@ -3171,7 +3171,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:94",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:94",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -3192,7 +3192,7 @@
           },
           {
             "variable": "--ds-surface-panel",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:95",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:95",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -3213,7 +3213,7 @@
           },
           {
             "variable": "--ds-motion-attention",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:97",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:97",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -3234,7 +3234,7 @@
           },
           {
             "variable": "--ds-motion-ease-in-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:98",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:98",
             "part": "skeleton-card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header'], .ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-card']",
@@ -3255,7 +3255,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:102",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:102",
             "part": "skeleton-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header']",
@@ -3276,7 +3276,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:103",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:103",
             "part": "skeleton-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='skeleton-header']",
@@ -3297,7 +3297,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:118",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:118",
             "part": "toolbar",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='toolbar']",
@@ -3318,7 +3318,7 @@
           },
           {
             "variable": "--ds-kanban-column-gap",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:124",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:124",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board']",
@@ -3339,7 +3339,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:125",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:125",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board']",
@@ -3360,7 +3360,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:132",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true']",
@@ -3381,7 +3381,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:135",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:135",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true']",
@@ -3402,7 +3402,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:141",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:141",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -3423,7 +3423,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:142",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:142",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -3444,7 +3444,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:147",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:147",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true']",
@@ -3465,7 +3465,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:150",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:150",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-end='true']",
@@ -3486,7 +3486,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:156",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:156",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -3507,7 +3507,7 @@
           },
           {
             "variable": "--_ds-kanban-edge-fade",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:157",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:157",
             "part": "board",
             "partResolution": "SELECTOR",
             "selector": ":dir(rtl) .ds-pattern-kanban-board.ds-engine-modern [data-part='board'][data-scrollable-start='true'][data-scrollable-end='true']",
@@ -3528,7 +3528,7 @@
           },
           {
             "variable": "--ds-kanban-column-min-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:167",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:167",
             "part": "column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column']",
@@ -3549,7 +3549,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:180",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:180",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -3570,7 +3570,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:181",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:181",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -3591,7 +3591,7 @@
           },
           {
             "variable": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:182",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:182",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -3612,7 +3612,7 @@
           },
           {
             "variable": "--ds-kanban-column-accent",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:183",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:183",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -3633,7 +3633,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:184",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:184",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -3654,7 +3654,7 @@
           },
           {
             "variable": "--ds-surface-inset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:185",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:185",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']",
@@ -3675,7 +3675,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:192",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:192",
             "part": "column-title-row",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column-header-content'], .ds-pattern-kanban-board.ds-engine-modern [data-part='column-title-row']",
@@ -3696,7 +3696,7 @@
           },
           {
             "variable": "--ds-font-size-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:200",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:200",
             "part": "column-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column-title']",
@@ -3717,7 +3717,7 @@
           },
           {
             "variable": "--ds-font-weight-semibold",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:201",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:201",
             "part": "column-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='column-title']",
@@ -3738,7 +3738,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:218",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:218",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -3759,7 +3759,7 @@
           },
           {
             "variable": "--ds-radius-xl",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:219",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:219",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -3780,7 +3780,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:221",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -3801,7 +3801,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:221",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:221",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -3822,7 +3822,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:222",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -3843,7 +3843,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:222",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:222",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']",
@@ -3864,7 +3864,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:228",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:228",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -3885,7 +3885,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:234",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:234",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -3906,7 +3906,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:235",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:235",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -3927,7 +3927,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:244",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:244",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true']",
@@ -3948,7 +3948,7 @@
           },
           {
             "variable": "--_ds-kanban-insert-bar",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:245",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:245",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true']",
@@ -3969,7 +3969,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:245",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:245",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true'][data-drop-at-end='true']",
@@ -3990,7 +3990,7 @@
           },
           {
             "variable": "--ds-spacing-6",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:257",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:257",
             "part": "empty-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='empty-column']",
@@ -4011,7 +4011,7 @@
           },
           {
             "variable": "--ds-color-text-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:258",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:258",
             "part": "empty-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='empty-column']",
@@ -4032,7 +4032,7 @@
           },
           {
             "variable": "--ds-spacing-12",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:265",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:265",
             "part": "empty-board",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='empty-board']",
@@ -4053,7 +4053,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:272",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:272",
             "part": "card-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card-list']",
@@ -4074,7 +4074,7 @@
           },
           {
             "variable": "--ds-kanban-column-max-height",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:273",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:273",
             "part": "card-list",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card-list']",
@@ -4095,7 +4095,7 @@
           },
           {
             "variable": "--ds-color-border",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:286",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:286",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4116,7 +4116,7 @@
           },
           {
             "variable": "--ds-radius-lg",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:287",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:287",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4137,7 +4137,7 @@
           },
           {
             "variable": "--ds-surface-card",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:288",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:288",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4158,7 +4158,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:289",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:289",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4179,7 +4179,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:291",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4200,7 +4200,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:291",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:291",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4221,7 +4221,7 @@
           },
           {
             "variable": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:292",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:292",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4242,7 +4242,7 @@
           },
           {
             "variable": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:292",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:292",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']",
@@ -4263,7 +4263,7 @@
           },
           {
             "variable": "--ds-focus-ring-width",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:309",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:309",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']:focus-visible",
@@ -4284,7 +4284,7 @@
           },
           {
             "variable": "--ds-focus-ring-color",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:309",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:309",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']:focus-visible",
@@ -4306,7 +4306,7 @@
           },
           {
             "variable": "--ds-focus-ring-offset",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:310",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:310",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card']:focus-visible",
@@ -4327,7 +4327,7 @@
           },
           {
             "variable": "--ds-elevation-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:314",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:314",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card']:hover",
@@ -4350,7 +4350,7 @@
           },
           {
             "variable": "--ds-elevation-1",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:333",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:333",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true'], .ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true']:hover",
@@ -4371,7 +4371,7 @@
           },
           {
             "variable": "--_ds-kanban-insert-bar",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:334",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true'], .ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true']:hover",
@@ -4392,7 +4392,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:334",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:334",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true'], .ds-pattern-kanban-board.ds-engine-modern[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card-list']   > [data-part='card'][data-drop-before='true']:hover",
@@ -4413,7 +4413,7 @@
           },
           {
             "variable": "--ds-spacing-3",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:340",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:340",
             "part": "card-content",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='card-content']",
@@ -4434,7 +4434,7 @@
           },
           {
             "variable": "--ds-spacing-2",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:346",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:346",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='add-item']",
@@ -4455,7 +4455,7 @@
           },
           {
             "variable": "--ds-kanban-touch-target",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css:364",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css:364",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-modern [data-part='add-item']",
@@ -4478,7 +4478,7 @@
           },
           {
             "variable": "--ds-color-text-muted",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:4",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:4",
             "part": "root",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root'][data-loading='true']",
@@ -4499,7 +4499,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:11",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:11",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header'][data-part='column-header']",
@@ -4520,7 +4520,7 @@
           },
           {
             "variable": "--ds-color-bg-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:12",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:12",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header'][data-part='column-header']",
@@ -4542,7 +4542,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:13",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:13",
             "part": "column-header",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header'][data-part='column-header']",
@@ -4564,7 +4564,7 @@
           },
           {
             "variable": "--ds-color-text-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:21",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:21",
             "part": "column-title",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-header']   [data-part='column-title']",
@@ -4586,7 +4586,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:30",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:30",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='false']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -4608,7 +4608,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:31",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:31",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='false']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -4630,7 +4630,7 @@
           },
           {
             "variable": "--ds-color-error",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:40",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:40",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='true']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -4652,7 +4652,7 @@
           },
           {
             "variable": "--ds-color-text-on-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:41",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:41",
             "part": "wip-badge",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column'][data-over-limit='true']   > [data-part='column-header']   [data-part='wip-badge']",
@@ -4674,7 +4674,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:48",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:48",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -4695,7 +4695,7 @@
           },
           {
             "variable": "--ds-color-bg-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:49",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:49",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -4717,7 +4717,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:50",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:50",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='false']",
@@ -4739,7 +4739,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:57",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:57",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -4760,7 +4760,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:58",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:58",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -4782,7 +4782,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:59",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:59",
             "part": "column-body",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body'][data-dropping='true']",
@@ -4803,7 +4803,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:67",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:67",
             "part": "empty-column",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='empty-column']",
@@ -4825,7 +4825,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:75",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:75",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -4846,7 +4846,7 @@
           },
           {
             "variable": "--ds-color-bg-elevated",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:76",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:76",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -4868,7 +4868,7 @@
           },
           {
             "variable": "--ds-color-border-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:77",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:77",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -4890,7 +4890,7 @@
           },
           {
             "variable": "--ds-card-shadow",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:78",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:78",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-part='card']",
@@ -4912,7 +4912,7 @@
           },
           {
             "variable": "--ds-card-shadow",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:102",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:102",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-hover-cycle='settled']",
@@ -4933,7 +4933,7 @@
           },
           {
             "variable": "--ds-card-shadow-hover",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:110",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:110",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-dragging='false']:hover",
@@ -4955,7 +4955,7 @@
           },
           {
             "variable": "--ds-card-hover-transform",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:111",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:111",
             "part": "card",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='card'][data-dragging='false']:hover",
@@ -4976,7 +4976,7 @@
           },
           {
             "variable": "--ds-color-border-secondary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:119",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:119",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item'][data-part='add-item']",
@@ -4998,7 +4998,7 @@
           },
           {
             "variable": "--ds-radius-sm",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:120",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:120",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item'][data-part='add-item']",
@@ -5019,7 +5019,7 @@
           },
           {
             "variable": "--ds-color-text-tertiary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:122",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:122",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item'][data-part='add-item']",
@@ -5041,7 +5041,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:130",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:130",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item']:hover",
@@ -5062,7 +5062,7 @@
           },
           {
             "variable": "--ds-color-primary",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:131",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:131",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item']:hover",
@@ -5083,7 +5083,7 @@
           },
           {
             "variable": "--ds-color-primary-50",
-            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board.css:132",
+            "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/pattern-kanban-board/index.css:132",
             "part": "add-item",
             "partResolution": "SELECTOR",
             "selector": ".ds-pattern-kanban-board.ds-engine-rustic[data-part='root']   > [data-part='board']   > [data-part='column']   > [data-part='column-body']   > [data-part='add-item']:hover",
@@ -5145,13 +5145,13 @@
         {
           "channelId": "--_ds-kanban-column-accent",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5168,7 +5168,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [],
         "remediatedFrom": "fam13-dup-sweep",
         "reviewedFrom": "anatomy",
@@ -5193,13 +5193,13 @@
         {
           "channelId": "--_ds-kanban-column-title-family",
           "semanticOwner": "typography.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5227,13 +5227,13 @@
         {
           "channelId": "--_ds-pattern-kanban-board-label-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5262,13 +5262,13 @@
         {
           "channelId": "--_ds-kanban-card-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5286,7 +5286,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -5333,13 +5333,13 @@
         {
           "channelId": "--_ds-kanban-card-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -5349,13 +5349,13 @@
         {
           "channelId": "--_ds-kanban-column-max-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5364,13 +5364,13 @@
         {
           "channelId": "--_ds-kanban-column-min-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "pattern/visualization/pattern-kanban-board"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/pattern-kanban-board/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -5388,7 +5388,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los gaps internos de estas vistas son layout de DATOS (columnas kanban, grilla de dias, guias de arbol): moverlos por tema desalinea estructura que el usuario lee como posicion. El gap de items de timeline ya esta declarado en patterns/workflow",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "reasons": [
           {
             "root": "spacing.rhythm",
@@ -5418,7 +5418,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "socket heredado --_ds-ascii-diagram-line-cadence",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "motion.dial",
@@ -5446,7 +5446,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los planos tecnicos (ascii, calendar, timeline, tree) quedan planos",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.elevation-posture",
@@ -5472,7 +5472,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "superficie de lectura/trabajo como charts: acabado cero",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "surfaces.effect-intensity",
@@ -5492,7 +5492,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "planos de contenido; el tree-view que ES navegacion usa --_ds-tree-row-bg-active ya decidido",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "navigation.sidebar-tone",
@@ -5512,7 +5512,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "experience.profile",
@@ -5532,7 +5532,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "regiones pintadas por familia dentro del plano de visualizacion",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "chrome.families",
@@ -5551,7 +5551,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": null,
@@ -5593,7 +5593,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -5606,7 +5606,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "recipe-profile",
@@ -5652,7 +5652,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -5683,7 +5683,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ascii-diagram (caracteres) y map-view (marcas de dato) quedan fuera",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [
           {
             "root": "profiles.icon",
@@ -5704,11 +5704,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -232,8 +232,8 @@ with a real portal-scoping precedent). The inventory is normative for *what* pai
 contract is normative for *how* it moves. Where they disagree, the inventory's site tables win on
 facts and this contract wins on method.
 
-Scope: `packages/core/src/ui/structures/workspace/` (8 components, 8 files) +
-`packages/core/src/ui/patterns/data/{list-toolbar,saved-views,status-filter-pills}/`
+Scope: `packages/core/src/components/structures/workspace/` (8 components, 8 files) +
+`packages/core/src/components/patterns/data/{list-toolbar,saved-views,status-filter-pills}/`
 (3 components, 5 files including `list-toolbar/tokens.ts`) — **466 counted sites, ~470 real once
 the counter-blind imperative writes are added, 11 components, 18 files.** `list-toolbar/engines/
 classic.tsx` and `saved-views/engines/classic/index.tsx` (both AntD-wrapped, 0 counted sites) are **out

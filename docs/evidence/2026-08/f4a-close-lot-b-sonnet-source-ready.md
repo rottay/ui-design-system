@@ -74,7 +74,7 @@ root-exposure-gate OK -- 26 tenant-dial, 28 internal-head, 10 gap; every dial ha
 
 ## 5. Aislamiento y perímetro
 
-Porcelain final: **29**, mismo conjunto exacto que el preestado — **ningún path 30.º**. `test-artifacts/gates/gat-07/*`, `manifest/variant-parity/*`, `brand-themes/*`, `cascade-wiring-ratchet.baseline.json` y `docs/ROADMAP-EJECUCION-2026-08-19.md`: **no tocados por esta sesión** (verificado que siguen dentro del mismo conjunto de 29 dirty, sin ningún Write/Edit mío sobre ellos en este lote). Cero `git add/stage/commit/push/stash/checkout/restore/reset/R7`. Cero build/browser. Kimi fuera de la cadena en todo momento.
+Porcelain final: **29**, mismo conjunto exacto que el preestado — **ningún path 30.º**. `test-artifacts/gates/gat-07/*`, `manifest/variant-parity/*`, `brand-themes/*`, `cascade-wiring-ratchet.baseline.json` y `docs/history/programs/architecture-refactor/2026-08/execution/index.md`: **no tocados por esta sesión** (verificado que siguen dentro del mismo conjunto de 29 dirty, sin ningún Write/Edit mío sobre ellos en este lote). Cero `git add/stage/commit/push/stash/checkout/restore/reset/R7`. Cero build/browser. Kimi fuera de la cadena en todo momento.
 
 ## 6. R-1 y `gates:ci`
 

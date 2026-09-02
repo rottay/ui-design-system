@@ -8,15 +8,15 @@
     "components": [
       "Popconfirm"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/overlay/Popconfirm",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/overlay/popconfirm",
     "publicComponents": [
       "Popconfirm"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "6abf2bf1a290df5700267d46be47519cfb1e86761e33755084cf405c9f6f4d15"
+    "inventoryRowDigest": "0e91066327028300d9d85a0cea4e8afd5461798ad7fbaabfe98431c09665574f"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/overlay/Popconfirm/contracts/index.ts",
-      "packages/core/src/ui/primitives/overlay/Popconfirm/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx",
-      "packages/core/src/ui/primitives/overlay/Popconfirm/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+      "packages/core/src/components/primitives/overlay/popconfirm/contracts/index.ts",
+      "packages/core/src/components/primitives/overlay/popconfirm/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/overlay/popconfirm/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx",
+      "packages/core/src/components/primitives/overlay/popconfirm/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
     ],
     "stableParts": [
       "trigger",
@@ -56,14 +56,14 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "aria-modal [at src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:149]",
-      "role-attribute [at src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:294, src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:148]",
-      "aria-label-or-labelledby [at src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:295]",
-      "aria-describedby [at src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:296]",
-      "escape-key-dismiss [at src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:157]",
-      "body-scroll-lock [at src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:150]",
-      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:184]",
-      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:173, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:194]"
+      "aria-modal [at src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:149]",
+      "role-attribute [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:294, src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:148]",
+      "aria-label-or-labelledby [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:295]",
+      "aria-describedby [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:296]",
+      "escape-key-dismiss [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:157]",
+      "body-scroll-lock [at src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:150]",
+      "prefers-reduced-motion [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:184]",
+      "forced-colors [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:173, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:194]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -85,32 +85,32 @@
           "part": "trigger",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:277",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:232",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:68",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:69",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:70"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:277",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:232",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:68",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:69",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:70"
           ]
         },
         {
           "part": "trigger-content",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:283",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:78",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:79"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:283",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:78",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:79"
           ]
         },
         {
           "part": "surface",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:290",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:150",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:93",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:94",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:98",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:99"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:290",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:150",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:93",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:94",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:98",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:99"
           ],
           "atSiteCount": 8
         },
@@ -118,31 +118,31 @@
           "part": "content",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:302",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:130",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:131",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:132"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:302",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:130",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:131",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:132"
           ]
         },
         {
           "part": "copy",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:304",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:135",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:136"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:304",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:135",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:136"
           ]
         },
         {
           "part": "icon",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:303",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:168",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:141",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:142",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:143",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:149"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:303",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:168",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:141",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:142",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:143",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:149"
           ],
           "atSiteCount": 8
         },
@@ -150,12 +150,12 @@
           "part": "title",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:305",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:173",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:155",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:156",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:157",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:158"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:305",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:173",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:155",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:156",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:157",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:158"
           ],
           "atSiteCount": 8
         },
@@ -163,12 +163,12 @@
           "part": "description",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:307",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:175",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:163",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:164",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:165",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:166"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:307",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:175",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:163",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:164",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:165",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:166"
           ],
           "atSiteCount": 7
         },
@@ -176,38 +176,38 @@
           "part": "footer",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:317",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:178",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:179",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:180",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:181"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:317",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:178",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:179",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:180",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:181"
           ]
         },
         {
           "part": "action",
           "anchorKind": "data-part",
           "at": [
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:321",
-            "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:331",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:191",
-            "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:205"
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:321",
+            "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:331",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:191",
+            "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:205"
           ],
           "note": "EMITTED_IN_TSX_BUT_NOT_STYLED_IN_MODERN_SKIN"
         }
       ],
       "partCensus": {
         "measuredAbsence": [
-          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:53, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:55, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:58]"
+          "STYLED_IN_MODERN_SKIN_BUT_NO_TSX_EMISSION_FOUND [at src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:53, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:55, src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:58]"
         ]
       },
       "stateAnchors": [
         {
           "token": "data-open",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:115",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:196",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:197",
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:198"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:196",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:197",
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:198"
           ],
           "state": "open"
         }
@@ -216,19 +216,19 @@
         {
           "token": "data-ds-position-strategy=anchor-css",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:124"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:124"
           ]
         },
         {
           "token": "data-ok-type=danger",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:149"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:149"
           ]
         },
         {
           "token": "data-ok-type=primary",
           "at": [
-            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:152"
+            "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:152"
           ]
         }
       ],
@@ -365,7 +365,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:54",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:54",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -390,7 +390,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:55",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:55",
                 "readIn": "modern-skin-css",
                 "part": "(scope)",
                 "landsOn": "transform",
@@ -418,7 +418,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:91",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:91",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -439,15 +439,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:824"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:824"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:824"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:92",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:92",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -455,7 +455,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:92",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:92",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -477,15 +477,15 @@
             "declaredInPackage": true,
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:600",
-              "src/foundation/tokens/css/foundation/themes/default.css:427"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:427"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:427"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -506,17 +506,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:320",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:425",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:540"
+              "tests/fixtures/tenants/quality-evidence/index.ts:320",
+              "tests/fixtures/tenants/quality-evidence/index.ts:425",
+              "tests/fixtures/tenants/quality-evidence/index.ts:540"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:265"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:93",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:93",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "background",
@@ -537,17 +537,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:44",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:351",
-              "src/tooling/testing/fixtures/tenants/quality-evidence/index.ts:474"
+              "tests/fixtures/tenants/default/index.css:44",
+              "tests/fixtures/tenants/quality-evidence/index.ts:351",
+              "tests/fixtures/tenants/quality-evidence/index.ts:474"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:771"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:771"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:94",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:94",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border-radius",
@@ -572,7 +572,7 @@
             "adjudicationClass": "FROZEN_ENGINE_SCOPED",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:95",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:95",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -597,7 +597,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:97",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:97",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -620,15 +620,15 @@
             "declarationSites": [
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1082",
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:351",
-              "src/foundation/tokens/css/foundation/themes/default.css:802"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:802"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:802"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:97",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:97",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "box-shadow",
@@ -653,7 +653,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -661,7 +661,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:157",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:157",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "padding",
@@ -686,16 +686,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687",
-              "src/foundation/tokens/css/foundation/base/density.css:81"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687",
+              "src/foundation/tokens/css/foundation/base/density/index.css:81"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:687"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:99",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:99",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "padding",
@@ -703,7 +703,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:102",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:102",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -711,7 +711,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:102",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:102",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -719,7 +719,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:106",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:106",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -727,7 +727,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:106",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:106",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -735,7 +735,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:181",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:181",
                 "readIn": "modern-skin-css",
                 "part": "footer",
                 "landsOn": "margin-block-start",
@@ -761,7 +761,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:101",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:101",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "min-inline-size",
@@ -769,7 +769,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:158",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:158",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "min-width",
@@ -795,7 +795,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:105",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:105",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "max-inline-size",
@@ -803,7 +803,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:159",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:159",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "max-width",
@@ -825,18 +825,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
-              "src/ui/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
-              "src/ui/patterns/customization/brand-studio/index.tsx:143"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:47",
+              "src/components/patterns/customization/branding-preview-sandbox/tests/branding-preview-sandbox.test.tsx:52",
+              "src/components/patterns/customization/brand-studio/index.tsx:143"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:217",
-              "src/foundation/tokens/css/foundation/themes/default.css:2128"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:217",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2128"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:108",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:108",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "color",
@@ -844,7 +844,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:157",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:157",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "color",
@@ -865,17 +865,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
+              "src/components/patterns/customization/brand-studio/runtime/tenant-theme-preview/tests/tenant-theme-preview.test.tsx:225",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:271",
               "src/foundation/tokens/css/facade/artifacts/rottay/index.css:1062"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:506"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:506"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:109",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:109",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "font-family",
@@ -896,15 +896,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/runtime/personality.css:926",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "src/foundation/tokens/css/foundation/animations/transitions.css:399"
+              "src/foundation/tokens/css/runtime/personality/index.css:926",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:399"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:110",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:110",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -925,13 +925,13 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "rootDefaultInBundledCss": null,
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:111",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:111",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "animation",
@@ -956,7 +956,7 @@
             "adjudicationClass": "FROZEN_ENGINE_SCOPED",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:115",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -983,7 +983,7 @@
             "adjudicationClass": "TENANT_FACING_CANDIDATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:115",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -1009,13 +1009,13 @@
               "src/foundation/tokens/css/facade/artifacts/bithire/index.css:1161"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:232",
-              "src/foundation/tokens/css/foundation/themes/default.css:2112"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2112"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:115",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:115",
                 "readIn": "modern-skin-css",
                 "part": "surface",
                 "landsOn": "border",
@@ -1037,16 +1037,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:685",
-              "src/foundation/tokens/css/foundation/base/density.css:79"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685",
+              "src/foundation/tokens/css/foundation/base/density/index.css:79"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:685"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:685"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:132",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:132",
                 "readIn": "modern-skin-css",
                 "part": "content",
                 "landsOn": "gap",
@@ -1054,7 +1054,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:180",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:180",
                 "readIn": "modern-skin-css",
                 "part": "footer",
                 "landsOn": "gap",
@@ -1079,7 +1079,7 @@
             "adjudicationClass": "MODERN_PRIVATE",
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:142",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:142",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "margin-block-start",
@@ -1100,17 +1100,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:45",
-              "src/ui/patterns/customization/brand-studio/index.tsx:104",
-              "src/tooling/testing/system/tests/whitelabel-field-coverage.test.ts:133"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:45",
+              "src/components/patterns/customization/brand-studio/index.tsx:104",
+              "tests/integration/customization-fields/index.test.ts:133"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:176"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:176"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:143",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:143",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -1131,17 +1131,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
-              "src/ui/patterns/customization/brand-studio/index.tsx:106",
-              "src/tooling/testing/integration/capability-propagation/tests/index.test.ts:157"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:44",
+              "src/components/patterns/customization/brand-studio/index.tsx:106",
+              "tests/integration/capability-propagation/tests/index.test.ts:157"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:177"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:177"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:149",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:149",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -1162,17 +1162,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
-              "src/ui/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:315",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:359",
+              "src/components/patterns/customization/tenant-preview/runtime/preview-css/tests/preview-css.test.ts:380"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:156"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:156"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:152",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:152",
                 "readIn": "modern-skin-css",
                 "part": "icon",
                 "landsOn": "color",
@@ -1194,17 +1194,17 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/tooling/testing/fixtures/tenants/default.css:30",
-              "src/foundation/tokens/css/foundation/themes/default.css:609",
+              "tests/fixtures/tenants/default/index.css:30",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609",
               "src/foundation/tokens/css/foundation/themes/tests/type-radius-scale-resolution.test.ts:118"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:609"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:609"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:158",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:158",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font-size",
@@ -1212,7 +1212,7 @@
                 "hasFallback": false
               },
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:166",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:166",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "font-size",
@@ -1233,15 +1233,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:623"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:623"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:623"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:623"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:159",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:159",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "font-weight",
@@ -1267,12 +1267,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:208"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:631"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:631"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:160",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:160",
                 "readIn": "modern-skin-css",
                 "part": "title",
                 "landsOn": "line-height",
@@ -1293,16 +1293,16 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:684",
-              "src/foundation/tokens/css/foundation/base/density.css:78"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684",
+              "src/foundation/tokens/css/foundation/base/density/index.css:78"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:684"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:684"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:163",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:163",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "margin-block-start",
@@ -1323,18 +1323,18 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/ui/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
-              "src/ui/patterns/customization/brand-studio/index.tsx:144",
-              "src/ui/patterns/customization/brand-studio/index.tsx:162"
+              "src/components/patterns/visualization/charts/tests/ChartC.skin-migration.test.tsx:48",
+              "src/components/patterns/customization/brand-studio/index.tsx:144",
+              "src/components/patterns/customization/brand-studio/index.tsx:162"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:218",
-              "src/foundation/tokens/css/foundation/themes/default.css:2129"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:218",
+              "src/foundation/tokens/css/foundation/themes/default/index.css:2129"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:165",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:165",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "color",
@@ -1360,12 +1360,12 @@
               "src/foundation/tokens/css/facade/artifacts/evnto/index.css:207"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:634"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:634"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css:167",
+                "at": "src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css:167",
                 "readIn": "modern-skin-css",
                 "part": "description",
                 "landsOn": "line-height",
@@ -1384,15 +1384,15 @@
             ],
             "declaredInPackage": true,
             "declarationSites": [
-              "src/foundation/tokens/css/foundation/themes/default.css:959"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
             ],
             "rootDefaultInBundledCss": [
-              "src/foundation/tokens/css/foundation/themes/default.css:959"
+              "src/foundation/tokens/css/foundation/themes/default/index.css:959"
             ],
             "adjudicationClass": null,
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/modern/index.tsx:232",
+                "at": "src/components/primitives/overlay/popconfirm/engines/modern/index.tsx:232",
                 "readIn": "modern",
                 "part": null,
                 "landsOn": "z-index",
@@ -1415,7 +1415,7 @@
             "adjudicationClass": "FROZEN_ENGINE_SCOPED",
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:137",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:137",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "padding",
@@ -1423,7 +1423,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:195",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:195",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "padding",
@@ -1446,7 +1446,7 @@
             "adjudicationClass": "FROZEN_ENGINE_SCOPED",
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:140",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:140",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "font-size",
@@ -1454,7 +1454,7 @@
                 "hasFallback": true
               },
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:198",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:198",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "font-size",
@@ -1477,7 +1477,7 @@
             "adjudicationClass": "FROZEN_ENGINE_SCOPED",
             "reads": [
               {
-                "at": "src/ui/primitives/overlay/Popconfirm/engines/rustic/index.tsx:156",
+                "at": "src/components/primitives/overlay/popconfirm/engines/rustic/index.tsx:156",
                 "readIn": "rustic",
                 "part": null,
                 "landsOn": "z-index",
@@ -1542,13 +1542,13 @@
         {
           "channelId": "--_ds-popconfirm-border-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1565,7 +1565,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1590,7 +1590,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -1617,13 +1617,13 @@
         {
           "channelId": "--_ds-popconfirm-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1643,13 +1643,13 @@
         {
           "channelId": "--_ds-popconfirm-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1703,13 +1703,13 @@
         {
           "channelId": "--_ds-popconfirm-padding",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1727,7 +1727,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "sus gaps internos son composicion del componente o layout de datos, no ritmo de pagina; rhythm gobierna el aire ENTRE bloques que el shell posee",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -1741,13 +1741,13 @@
         {
           "channelId": "--_ds-popconfirm-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1757,13 +1757,13 @@
         {
           "channelId": "--_ds-popconfirm-motion-scale",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -1782,13 +1782,13 @@
         {
           "channelId": "--_ds-popconfirm-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1808,13 +1808,13 @@
         {
           "channelId": "--_ds-popconfirm-backdrop-filter",
           "semanticOwner": "surfaces.effect-intensity",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1833,7 +1833,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los overlays leen los canales de superficie; nunca el tono de la sidebar",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -1864,13 +1864,13 @@
         {
           "channelId": "--_ds-popconfirm-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1890,13 +1890,13 @@
         {
           "channelId": "--_ds-popconfirm-border-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1906,13 +1906,13 @@
         {
           "channelId": "--_ds-popconfirm-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/overlay/popconfirm"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -1936,7 +1936,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -1992,7 +1992,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2021,7 +2021,7 @@
         ],
         "reviewedFrom": "anatomy",
         "sourceBindings": [
-          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm.css"
+          "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/popconfirm/index.css"
         ]
       }
     },
@@ -2035,7 +2035,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los iconos dentro de overlays viven en los controles huesped (inputs), no en el contenedor",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2049,11 +2049,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

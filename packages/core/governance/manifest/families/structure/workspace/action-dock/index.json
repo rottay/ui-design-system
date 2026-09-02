@@ -8,15 +8,15 @@
     "components": [
       "ActionDock"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/workspace/action-dock",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/workspace/action-dock",
     "publicComponents": [
       "ActionDock"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "85ab41bd406b784b628af825099d2339ced95b4e76639e881427f18da1fc460e"
+    "inventoryRowDigest": "5d8cccf020a054583085da9ae1b16b0482dad4556b7fbafad6ebb08224603d63"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,9 +28,9 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/workspace/action-dock",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+      "packages/core/src/components/structures/workspace/action-dock",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
     ],
     "stableParts": [
       "root"
@@ -44,9 +44,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:278, packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:279]",
-      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:141, packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:152]",
-      "the family stamps role='toolbar' [at packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:275]"
+      "motion is suppressed under prefers-reduced-motion [at packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:278, packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:279]",
+      "the family pins at least one part out of normal flow (position sticky or fixed) [at packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:141, packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:152]",
+      "the family stamps role='toolbar' [at packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:275]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -73,7 +73,7 @@
         {
           "part": "root",
           "anchorKind": "data-part",
-          "anchor": "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:277"
+          "anchor": "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:277"
         }
       ],
       "unanchoredPartClaims": [
@@ -82,9 +82,9 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:221",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:235",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:239"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:221",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:235",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:239"
           ]
         },
         {
@@ -92,11 +92,11 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:284",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:221",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:228",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:284",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:221",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:222",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:228",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:257"
           ]
         },
         {
@@ -104,8 +104,8 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:244",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:248"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:244",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:248"
           ]
         },
         {
@@ -113,8 +113,8 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:259",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:259",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:257"
           ]
         }
       ],
@@ -129,96 +129,96 @@
           "token": "mode",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:121",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:122",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:121",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:122",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123"
           ]
         },
         {
           "token": "mode=fixed",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:141",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:142",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:141",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:142",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:186"
           ]
         },
         {
           "token": "mode=sticky",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:152",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:194"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:152",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:153",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:194"
           ]
         },
         {
           "token": "placement",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:121",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:122",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:121",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:122",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123"
           ]
         },
         {
           "token": "placement=bottom",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:161",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:165",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:161",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:165",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:167"
           ]
         },
         {
           "token": "placement=top",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:199",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:203",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:205"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:199",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:203",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:205"
           ]
         },
         {
           "token": "priority=danger",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:239"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:239"
           ]
         },
         {
           "token": "priority=primary",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:235"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:235"
           ]
         },
         {
           "token": "data-density",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:280"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:280"
           ]
         },
         {
           "token": "data-mode",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:279"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:279"
           ]
         },
         {
           "token": "data-placement",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:278"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:278"
           ]
         },
         {
           "token": "data-priority",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:222"
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:222"
           ]
         }
       ],
@@ -228,29 +228,29 @@
             "token": "@media(pointer: coarse)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:257"
             ]
           },
           {
             "token": "@media(prefers-reduced-motion: reduce)",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:278",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:279"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:278",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:279"
             ]
           },
           {
             "token": "keyboard-open=true",
             "axis": "css-selector",
             "at": [
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:190"
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:190"
             ]
           },
           {
             "token": "data-keyboard-open",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:281"
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:281"
             ]
           }
         ],
@@ -262,9 +262,9 @@
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:230",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:263",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:276"
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:230",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:263",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:276"
             ]
           }
         ],
@@ -276,17 +276,17 @@
             "token": "data-action-key",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:223",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:260"
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:223",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:260"
             ]
           },
           {
             "token": "data-testid",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:231",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:264",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:274"
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:231",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:264",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:274"
             ]
           }
         ],
@@ -295,11 +295,11 @@
       "engineDivergence": {
         "hasEnginesDirectory": true,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css": {
             "rows": 38,
             "layer": "engine-agnostic skin"
           },
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css": {
             "rows": 2,
             "layer": "engine-agnostic skin"
           }
@@ -392,7 +392,7 @@
           {
             "variable": "--ds-action-dock-padding-inline",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -413,7 +413,7 @@
           {
             "variable": "--ds-spacing-4",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -429,15 +429,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:81",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:81",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-action-dock-z-index",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:124",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -458,7 +458,7 @@
           {
             "variable": "--ds-z-index-fixed",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:124",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -474,14 +474,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:934"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:934"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-action-dock-bg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:125",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -502,7 +502,7 @@
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:125",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -518,8 +518,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -528,7 +528,7 @@
           {
             "variable": "--ds-action-dock-backdrop-filter",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:129",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -549,7 +549,7 @@
           {
             "variable": "--ds-glass-blur",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:129",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -566,8 +566,8 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:295",
-              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37",
-              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:97",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:237"
             ],
             "declarationSiteCount": 4
@@ -575,7 +575,7 @@
           {
             "variable": "--ds-action-dock-backdrop-filter",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:130",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -596,7 +596,7 @@
           {
             "variable": "--ds-glass-blur",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:130",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -613,8 +613,8 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:295",
-              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37",
-              "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:97",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37",
+              "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:97",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:237"
             ],
             "declarationSiteCount": 4
@@ -622,7 +622,7 @@
           {
             "variable": "--ds-motion-fast",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:131",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -638,16 +638,16 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:131",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -663,14 +663,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:131",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -686,16 +686,16 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:131",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -711,14 +711,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-fast",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:131",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -734,16 +734,16 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:94",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:398",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:94",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:398",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:131",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -759,14 +759,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-motion-normal",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:135",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:135",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -782,16 +782,16 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:95",
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:399",
-              "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:95",
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:399",
+              "packages/core/src/foundation/tokens/css/runtime/personality/index.css:926"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-motion-ease-out",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:135",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:135",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode]",
             "states": [
               "placement",
@@ -807,14 +807,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-action-dock-sticky-z-index",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:153",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode='sticky']",
             "states": [
               "mode=sticky",
@@ -835,7 +835,7 @@
           {
             "variable": "--ds-z-index-sticky",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:153",
             "selector": ".rottay-action-dock[data-part='root'][data-placement][data-mode='sticky']",
             "states": [
               "mode=sticky",
@@ -851,14 +851,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:933"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:933"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-action-dock-safe-area-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:161",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -878,7 +878,7 @@
           {
             "variable": "--ds-safe-area-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:161",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:161",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -898,7 +898,7 @@
           {
             "variable": "--ds-action-dock-padding-block",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:167",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -918,7 +918,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:167",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -933,15 +933,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-action-dock-padding-block",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:168",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -961,7 +961,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:168",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -976,15 +976,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-action-dock-safe-area-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:168",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1004,7 +1004,7 @@
           {
             "variable": "--ds-safe-area-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:168",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:168",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1024,7 +1024,7 @@
           {
             "variable": "--ds-action-dock-edge-color",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:172",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1044,7 +1044,7 @@
           {
             "variable": "--ds-color-border-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:172",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1060,16 +1060,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:230",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2135",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:29"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:230",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2135",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:29"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-action-dock-edge-highlight",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:173",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1089,7 +1089,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:173",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1104,17 +1104,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-action-dock-shadow-bottom",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:173",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1134,7 +1134,7 @@
           {
             "variable": "--ds-color-shadow",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:173",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1149,14 +1149,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:240"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:240"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-color-shadow",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:173",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:173",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom']",
             "states": [
               "placement=bottom"
@@ -1171,14 +1171,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:240"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:240"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-shell-bottom-inset",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:186",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed']",
             "states": [
               "placement=bottom",
@@ -1194,14 +1194,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/structures/shell/app-shell/index.tsx:299"
+              "packages/core/src/components/structures/shell/app-shell/index.tsx:299"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-virtual-keyboard-inset",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:186",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed']",
             "states": [
               "placement=bottom",
@@ -1217,16 +1217,16 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:119",
-              "packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx:358"
+              "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:119",
+              "packages/core/src/components/surfaces/presentation/pages/experience/chat/index.tsx:358"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-virtual-keyboard-inset",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:190",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:190",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='bottom'][data-mode='fixed'][data-keyboard-open='true']",
             "states": [
               "placement=bottom",
@@ -1243,16 +1243,16 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24",
-              "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx:119",
-              "packages/core/src/ui/surfaces/presentation/pages/experience/chat/index.tsx:358"
+              "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24",
+              "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx:119",
+              "packages/core/src/components/surfaces/presentation/pages/experience/chat/index.tsx:358"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-action-dock-safe-area-top",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:199",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:199",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1272,7 +1272,7 @@
           {
             "variable": "--ds-safe-area-top",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:199",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:199",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1292,7 +1292,7 @@
           {
             "variable": "--ds-action-dock-padding-block",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:206",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1312,7 +1312,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:206",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1327,15 +1327,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-action-dock-safe-area-top",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:206",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1355,7 +1355,7 @@
           {
             "variable": "--ds-safe-area-top",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:206",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:206",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1375,7 +1375,7 @@
           {
             "variable": "--ds-action-dock-padding-block",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:210",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1395,7 +1395,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:210",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1410,15 +1410,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-action-dock-edge-color",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:211",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1438,7 +1438,7 @@
           {
             "variable": "--ds-color-border-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:211",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1454,16 +1454,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:63",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:230",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2135",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:29"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:230",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2135",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:29"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-action-dock-edge-highlight",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:212",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1483,7 +1483,7 @@
           {
             "variable": "--ds-color-bg-elevated",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:212",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1498,17 +1498,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:209",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2123",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:158"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:209",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2123",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:158"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-action-dock-shadow-top",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:212",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1528,7 +1528,7 @@
           {
             "variable": "--ds-shadow-navbar",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:212",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:212",
             "selector": ".rottay-action-dock[data-part='root'][data-placement='top']",
             "states": [
               "placement=top"
@@ -1543,14 +1543,14 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/shadows.css:109"
+              "packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:109"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-action-dock-gap",
             "part": "actions",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:222",
             "selector": ".rottay-action-dock__actions",
             "states": [],
             "landsOn": "gap",
@@ -1568,7 +1568,7 @@
           {
             "variable": "--ds-spacing-3",
             "part": "actions",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:222",
             "selector": ".rottay-action-dock__actions",
             "states": [],
             "landsOn": "gap",
@@ -1581,15 +1581,15 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/density.css:80",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "packages/core/src/foundation/tokens/css/foundation/base/density/index.css:80",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-size-touch-target",
             "part": "actions",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:257",
             "selector": "@media (pointer: coarse) >> .rottay-action-dock__actions > :where(button, a), .rottay-action-dock__overflow-trigger",
             "states": [
               "@media(pointer: coarse)"
@@ -1609,7 +1609,7 @@
           {
             "variable": "--ds-color-bg-primary",
             "part": "(family root)",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:980",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:980",
             "selector": ".ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode=\"sticky\"]",
             "states": [
               "mode=sticky"
@@ -1624,8 +1624,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -1634,7 +1634,7 @@
           {
             "variable": "--ds-color-border-secondary",
             "part": "(family root)",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:981",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:981",
             "selector": ".ds-surface.ds-collection-workspace.ds-collection-workspace__sticky-action-bar.rottay-action-dock[data-mode=\"sticky\"]",
             "states": [
               "mode=sticky"
@@ -1650,9 +1650,9 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:64",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:231",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2136",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:30"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:231",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2136",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:30"
             ],
             "declarationSiteCount": 7
           }
@@ -1669,7 +1669,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123",
                   "part": "root",
                   "landsOn": "padding-inline",
                   "fallbackPresent": true,
@@ -1689,7 +1689,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123",
                   "part": "root",
                   "landsOn": "padding-inline",
                   "fallbackPresent": true,
@@ -1699,7 +1699,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
             },
             {
               "variable": "--ds-action-dock-z-index",
@@ -1709,7 +1709,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:124",
                   "part": "root",
                   "landsOn": "z-index",
                   "fallbackPresent": true,
@@ -1729,7 +1729,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:124",
                   "part": "root",
                   "landsOn": "z-index",
                   "fallbackPresent": true,
@@ -1739,7 +1739,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:934"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:934"
             },
             {
               "variable": "--ds-action-dock-bg",
@@ -1749,7 +1749,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:125",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": true,
@@ -1769,7 +1769,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:127",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:127",
                   "part": "root",
                   "landsOn": "background",
                   "fallbackPresent": false,
@@ -1779,7 +1779,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:137"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:137"
             },
             {
               "variable": "--ds-action-dock-backdrop-filter",
@@ -1789,7 +1789,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:129",
                   "part": "root",
                   "landsOn": "backdrop-filter",
                   "fallbackPresent": true,
@@ -1798,7 +1798,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:130",
                   "part": "root",
                   "landsOn": "-webkit-backdrop-filter",
                   "fallbackPresent": true,
@@ -1818,7 +1818,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:129",
                   "part": "root",
                   "landsOn": "backdrop-filter",
                   "fallbackPresent": true,
@@ -1827,7 +1827,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:130",
                   "part": "root",
                   "landsOn": "-webkit-backdrop-filter",
                   "fallbackPresent": true,
@@ -1837,7 +1837,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37"
             },
             {
               "variable": "--ds-motion-fast",
@@ -1847,7 +1847,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:132",
                   "part": "root",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -1856,7 +1856,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:133",
                   "part": "root",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -1865,7 +1865,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:134",
                   "part": "root",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -1875,7 +1875,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
             },
             {
               "variable": "--ds-motion-ease-out",
@@ -1885,7 +1885,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:132",
                   "part": "root",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -1894,7 +1894,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:133",
                   "part": "root",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -1903,7 +1903,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:134",
                   "part": "root",
                   "landsOn": "transition",
                   "fallbackPresent": true,
@@ -1912,7 +1912,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:137",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:137",
                   "part": "root",
                   "landsOn": "animation",
                   "fallbackPresent": true,
@@ -1922,7 +1922,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
             },
             {
               "variable": "--ds-motion-normal",
@@ -1932,7 +1932,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:136",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:136",
                   "part": "root",
                   "landsOn": "animation",
                   "fallbackPresent": true,
@@ -1942,7 +1942,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+              "declarationSite": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:926"
             },
             {
               "variable": "--ds-action-dock-sticky-z-index",
@@ -1952,7 +1952,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:153",
                   "part": "root",
                   "landsOn": "z-index",
                   "fallbackPresent": true,
@@ -1972,7 +1972,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:153",
                   "part": "root",
                   "landsOn": "z-index",
                   "fallbackPresent": true,
@@ -1982,7 +1982,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:933"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:933"
             },
             {
               "variable": "--ds-action-dock-safe-area-bottom",
@@ -1992,7 +1992,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:162",
                   "part": "root",
                   "landsOn": "--ds-action-dock-reserved-block-end",
                   "fallbackPresent": true,
@@ -2001,7 +2001,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:170",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:170",
                   "part": "root",
                   "landsOn": "padding-block-end",
                   "fallbackPresent": true,
@@ -2021,7 +2021,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:162",
                   "part": "root",
                   "landsOn": "--ds-action-dock-reserved-block-end",
                   "fallbackPresent": true,
@@ -2030,7 +2030,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:170",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:170",
                   "part": "root",
                   "landsOn": "padding-block-end",
                   "fallbackPresent": true,
@@ -2050,7 +2050,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:167",
                   "part": "root",
                   "landsOn": "padding-block-start",
                   "fallbackPresent": true,
@@ -2059,7 +2059,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:169",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:169",
                   "part": "root",
                   "landsOn": "padding-block-end",
                   "fallbackPresent": true,
@@ -2068,7 +2068,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:207",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:207",
                   "part": "root",
                   "landsOn": "padding-block-start",
                   "fallbackPresent": true,
@@ -2077,7 +2077,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:210",
                   "part": "root",
                   "landsOn": "padding-block-end",
                   "fallbackPresent": true,
@@ -2098,7 +2098,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:167",
                   "part": "root",
                   "landsOn": "padding-block-start",
                   "fallbackPresent": true,
@@ -2107,7 +2107,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:169",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:169",
                   "part": "root",
                   "landsOn": "padding-block-end",
                   "fallbackPresent": true,
@@ -2116,7 +2116,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:207",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:207",
                   "part": "root",
                   "landsOn": "padding-block-start",
                   "fallbackPresent": true,
@@ -2125,7 +2125,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:210",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:210",
                   "part": "root",
                   "landsOn": "padding-block-end",
                   "fallbackPresent": true,
@@ -2134,7 +2134,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:222",
                   "part": "actions",
                   "landsOn": "gap",
                   "fallbackPresent": true,
@@ -2144,7 +2144,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:686"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:686"
             },
             {
               "variable": "--ds-action-dock-edge-color",
@@ -2154,7 +2154,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:172",
                   "part": "root",
                   "landsOn": "border-block-start",
                   "fallbackPresent": true,
@@ -2163,7 +2163,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:211",
                   "part": "root",
                   "landsOn": "border-block-end",
                   "fallbackPresent": true,
@@ -2183,7 +2183,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:172",
                   "part": "root",
                   "landsOn": "border-block-start",
                   "fallbackPresent": true,
@@ -2192,7 +2192,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:211",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:211",
                   "part": "root",
                   "landsOn": "border-block-end",
                   "fallbackPresent": true,
@@ -2212,7 +2212,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:174",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:174",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -2221,7 +2221,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:213",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:213",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -2241,7 +2241,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:176",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:176",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -2250,7 +2250,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:215",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:215",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -2260,7 +2260,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:140"
+              "declarationSite": "packages/core/src/components/patterns/customization/brand-studio/index.tsx:140"
             },
             {
               "variable": "--ds-action-dock-shadow-bottom",
@@ -2270,7 +2270,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:178",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:178",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -2290,7 +2290,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:180",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:180",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -2299,7 +2299,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:181",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:181",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -2309,7 +2309,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:240"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:240"
             },
             {
               "variable": "--ds-shell-bottom-inset",
@@ -2319,7 +2319,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:186",
                   "part": "root",
                   "landsOn": "inset-block-end",
                   "fallbackPresent": true,
@@ -2329,7 +2329,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/structures/shell/app-shell/index.tsx:299"
+              "declarationSite": "packages/core/src/components/structures/shell/app-shell/index.tsx:299"
             },
             {
               "variable": "--ds-virtual-keyboard-inset",
@@ -2339,7 +2339,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:186",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:186",
                   "part": "root",
                   "landsOn": "inset-block-end",
                   "fallbackPresent": true,
@@ -2348,7 +2348,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:190",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:190",
                   "part": "root",
                   "landsOn": "inset-block-end",
                   "fallbackPresent": true,
@@ -2358,7 +2358,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24"
+              "declarationSite": "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:24"
             },
             {
               "variable": "--ds-action-dock-safe-area-top",
@@ -2368,7 +2368,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:200",
                   "part": "root",
                   "landsOn": "--ds-action-dock-reserved-block-start",
                   "fallbackPresent": true,
@@ -2377,7 +2377,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:208",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:208",
                   "part": "root",
                   "landsOn": "padding-block-start",
                   "fallbackPresent": true,
@@ -2397,7 +2397,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:200",
                   "part": "root",
                   "landsOn": "--ds-action-dock-reserved-block-start",
                   "fallbackPresent": true,
@@ -2406,7 +2406,7 @@
                   "layer": "presentation-skin"
                 },
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:208",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:208",
                   "part": "root",
                   "landsOn": "padding-block-start",
                   "fallbackPresent": true,
@@ -2426,7 +2426,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:217",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:217",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": true,
@@ -2446,7 +2446,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:217",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:217",
                   "part": "root",
                   "landsOn": "box-shadow",
                   "fallbackPresent": false,
@@ -2456,7 +2456,7 @@
                 }
               ],
               "declaredInPackage": true,
-              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/shadows.css:109"
+              "declarationSite": "packages/core/src/foundation/tokens/css/foundation/base/shadows/index.css:109"
             },
             {
               "variable": "--ds-action-dock-gap",
@@ -2466,7 +2466,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:222",
                   "part": "actions",
                   "landsOn": "gap",
                   "fallbackPresent": true,
@@ -2486,7 +2486,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:257",
                   "part": "overflow-trigger",
                   "landsOn": "min-block-size",
                   "fallbackPresent": true,
@@ -2506,7 +2506,7 @@
               ],
               "readSites": [
                 {
-                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:266",
+                  "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:266",
                   "part": "root",
                   "landsOn": "transform",
                   "fallbackPresent": true,
@@ -2524,7 +2524,7 @@
           {
             "variable": "--ds-action-dock-padding-inline",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123",
             "fallbackPresent": true,
             "fallback": "var(--ds-spacing-4, 1rem)",
             "landsOn": "padding-inline"
@@ -2532,7 +2532,7 @@
           {
             "variable": "--ds-action-dock-z-index",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:124",
             "fallbackPresent": true,
             "fallback": "var(--ds-z-index-fixed, 1200)",
             "landsOn": "z-index"
@@ -2540,7 +2540,7 @@
           {
             "variable": "--ds-action-dock-bg",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:125",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:125",
             "fallbackPresent": true,
             "fallback": "color-mix(in srgb, var(--ds-color-bg-primary) 90%, transparent)",
             "landsOn": "background"
@@ -2548,7 +2548,7 @@
           {
             "variable": "--ds-action-dock-backdrop-filter",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:129",
             "fallbackPresent": true,
             "fallback": "blur(var(--ds-glass-blur, 8px))",
             "landsOn": "backdrop-filter"
@@ -2556,7 +2556,7 @@
           {
             "variable": "--ds-action-dock-sticky-z-index",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:153",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:153",
             "fallbackPresent": true,
             "fallback": "var(--ds-z-index-sticky, 1100)",
             "landsOn": "z-index"
@@ -2564,7 +2564,7 @@
           {
             "variable": "--ds-action-dock-safe-area-bottom",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:162",
             "fallbackPresent": true,
             "fallback": "var(--ds-safe-area-bottom, env(safe-area-inset-bottom, 0px))",
             "landsOn": "--ds-action-dock-reserved-block-end"
@@ -2572,7 +2572,7 @@
           {
             "variable": "--ds-safe-area-bottom",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:162",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:162",
             "fallbackPresent": true,
             "fallback": "env(safe-area-inset-bottom, 0px)",
             "landsOn": "--ds-action-dock-reserved-block-end"
@@ -2580,7 +2580,7 @@
           {
             "variable": "--ds-action-dock-padding-block",
             "reads": 4,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:167",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:167",
             "fallbackPresent": true,
             "fallback": "var(--ds-spacing-3, 0.75rem)",
             "landsOn": "padding-block-start"
@@ -2588,7 +2588,7 @@
           {
             "variable": "--ds-action-dock-edge-color",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:172",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:172",
             "fallbackPresent": true,
             "fallback": "var(--ds-color-border-primary, transparent)",
             "landsOn": "border-block-start"
@@ -2596,7 +2596,7 @@
           {
             "variable": "--ds-action-dock-edge-highlight",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:174",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:174",
             "fallbackPresent": true,
             "fallback": "color-mix(in srgb, var(--ds-color-bg-elevated) 72%, transparent)",
             "landsOn": "box-shadow"
@@ -2604,7 +2604,7 @@
           {
             "variable": "--ds-action-dock-shadow-bottom",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:178",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:178",
             "fallbackPresent": true,
             "fallback": "0 -2px 4px color-mix(in srgb, var(--ds-color-shadow) 30%, transparent),\n      0 -12px 28px -12px color-mix(in srgb, var(--ds-color-shadow) 60%, transparent)",
             "landsOn": "box-shadow"
@@ -2612,7 +2612,7 @@
           {
             "variable": "--ds-action-dock-safe-area-top",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:200",
             "fallbackPresent": true,
             "fallback": "var(--ds-safe-area-top, env(safe-area-inset-top, 0px))",
             "landsOn": "--ds-action-dock-reserved-block-start"
@@ -2620,7 +2620,7 @@
           {
             "variable": "--ds-safe-area-top",
             "reads": 2,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:200",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:200",
             "fallbackPresent": true,
             "fallback": "env(safe-area-inset-top, 0px)",
             "landsOn": "--ds-action-dock-reserved-block-start"
@@ -2628,7 +2628,7 @@
           {
             "variable": "--ds-action-dock-shadow-top",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:217",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:217",
             "fallbackPresent": true,
             "fallback": "var(--ds-shadow-navbar)",
             "landsOn": "box-shadow"
@@ -2636,7 +2636,7 @@
           {
             "variable": "--ds-action-dock-gap",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:222",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:222",
             "fallbackPresent": true,
             "fallback": "var(--ds-spacing-3, 0.75rem)",
             "landsOn": "gap"
@@ -2644,7 +2644,7 @@
           {
             "variable": "--ds-size-touch-target",
             "reads": 1,
-            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:257",
+            "firstRead": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:257",
             "fallbackPresent": true,
             "fallback": "44px",
             "landsOn": "min-block-size"
@@ -2653,81 +2653,81 @@
         "inertFallbackChainSample": [
           {
             "name": "--ds-spacing-4",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:123",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:123",
             "fallback": "1rem",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:687"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:687"
           },
           {
             "name": "--ds-z-index-fixed",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:124",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:124",
             "fallback": "1200",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default.css:934"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:934"
           },
           {
             "name": "--ds-glass-blur",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:129",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:129",
             "fallback": "8px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37"
           },
           {
             "name": "--ds-glass-blur",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:130",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:130",
             "fallback": "8px",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/premium.css:37"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/premium/index.css:37"
           },
           {
             "name": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:132",
             "fallback": "120ms",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:132",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:132",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           },
           {
             "name": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:133",
             "fallback": "120ms",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:133",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:133",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           },
           {
             "name": "--ds-motion-fast",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:134",
             "fallback": "120ms",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:925"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:925"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:134",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:134",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           },
           {
             "name": "--ds-motion-normal",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:136",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:136",
             "fallback": "200ms",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:926"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:926"
           },
           {
             "name": "--ds-motion-ease-out",
-            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css:137",
+            "at": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css:137",
             "fallback": "ease-out",
-            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions.css:123"
+            "rootDeclaredAt": "packages/core/src/foundation/tokens/css/foundation/animations/transitions/index.css:123"
           }
         ],
         "inertFallbackChainSites": 20,
         "hardcodedValues": [
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 161,
             "property": "--ds-action-dock-reserved-block-end",
             "literal": "60px",
@@ -2735,7 +2735,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 165,
             "property": "--_ds-action-dock-enter-offset",
             "literal": "8px",
@@ -2743,7 +2743,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 172,
             "property": "border-block-start",
             "literal": "1px",
@@ -2751,7 +2751,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 173,
             "property": "box-shadow",
             "literal": "1px",
@@ -2759,7 +2759,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 199,
             "property": "--ds-action-dock-reserved-block-start",
             "literal": "60px",
@@ -2767,7 +2767,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 211,
             "property": "border-block-end",
             "literal": "1px",
@@ -2775,7 +2775,7 @@
             "atRule": null
           },
           {
-            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+            "file": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
             "line": 257,
             "property": "min-block-size",
             "literal": "44px",
@@ -2785,11 +2785,11 @@
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css": {
               "rows": 38,
               "layer": "engine-agnostic skin"
             },
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css": {
               "rows": 2,
               "layer": "engine-agnostic skin"
             }
@@ -2811,18 +2811,18 @@
           "foreignStampSitesOfOwnedTokens": {
             "rottay-action-dock__actions": {
               "foreignOwnerDirectories": [
-                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/"
+                "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/"
               ],
               "sampleForeignStampSites": [
-                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:39"
+                "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:39"
               ]
             },
             "rottay-action-dock": {
               "foreignOwnerDirectories": [
-                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/"
+                "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/"
               ],
               "sampleForeignStampSites": [
-                "packages/core/src/ui/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:29"
+                "packages/core/src/components/patterns/forms/step-wizard/runtime/sticky-actions/index.tsx:29"
               ]
             }
           },
@@ -2839,37 +2839,37 @@
             "styleAttribute": 1
           },
           "perFile": {
-            "packages/core/src/ui/structures/workspace/action-dock/contracts/index.ts": {
+            "packages/core/src/components/structures/workspace/action-dock/contracts/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 154
             },
-            "packages/core/src/ui/structures/workspace/action-dock/engines/classic/index.tsx": {
+            "packages/core/src/components/structures/workspace/action-dock/engines/classic/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/workspace/action-dock/engines/modern/index.tsx": {
+            "packages/core/src/components/structures/workspace/action-dock/engines/modern/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/workspace/action-dock/engines/rustic/index.tsx": {
+            "packages/core/src/components/structures/workspace/action-dock/engines/rustic/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 10
             },
-            "packages/core/src/ui/structures/workspace/action-dock/index.ts": {
+            "packages/core/src/components/structures/workspace/action-dock/index.ts": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 0,
               "lines": 37
             },
-            "packages/core/src/ui/structures/workspace/action-dock/runtime/rendering/index.tsx": {
+            "packages/core/src/components/structures/workspace/action-dock/runtime/rendering/index.tsx": {
               "classNameOccurrences": 5,
               "dataPartOccurrences": 1,
               "styleAttributeOccurrences": 1,
@@ -2955,14 +2955,14 @@
         {
           "channelId": "--_ds-action-dock-accent-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2972,14 +2972,14 @@
         {
           "channelId": "--_ds-action-dock-edge-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock",
             "pattern/forms/step-wizard"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2988,13 +2988,13 @@
         {
           "channelId": "--_ds-action-dock-reserved-block-end",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3011,7 +3011,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -3047,7 +3047,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -3072,7 +3072,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -3120,14 +3120,14 @@
         {
           "channelId": "--_ds-action-dock-panel-radius",
           "semanticOwner": "shape.radius-scale",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3147,14 +3147,14 @@
         {
           "channelId": "--_ds-action-dock-control-radius",
           "semanticOwner": "shape.button-style",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3192,14 +3192,14 @@
         {
           "channelId": "--_ds-action-dock-density-factor",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3209,14 +3209,14 @@
         {
           "channelId": "--_ds-action-dock-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock",
             "pattern/forms/step-wizard"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3225,14 +3225,14 @@
         {
           "channelId": "--_ds-action-dock-padding-block",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock",
             "pattern/forms/step-wizard"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3241,14 +3241,14 @@
         {
           "channelId": "--_ds-action-dock-padding-inline",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock",
             "pattern/forms/step-wizard"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3267,14 +3267,14 @@
         {
           "channelId": "--_ds-action-dock-grid-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3307,14 +3307,14 @@
         {
           "channelId": "--_ds-action-dock-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3333,7 +3333,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "plano de trabajo plano; lo flotante usa sockets overlay",
-        "source": "huecos-kimi",
+        "source": "gap-audit-primary",
         "reasons": [],
         "reviewedFrom": "anatomy",
         "uncoveredByDesign": {
@@ -3383,7 +3383,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "el lienzo es contenido; la sidebar que lo acompana ya tiene sus sockets en primitive/navigation",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -3414,14 +3414,14 @@
         {
           "channelId": "--_ds-action-dock-panel-header-bg",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3455,14 +3455,14 @@
         {
           "channelId": "--_ds-action-dock-rule-style",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3486,7 +3486,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3542,7 +3542,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3569,14 +3569,14 @@
         {
           "channelId": "--_ds-action-dock-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/workspace/action-dock"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock.css",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/action-dock/index.css",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -3596,11 +3596,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

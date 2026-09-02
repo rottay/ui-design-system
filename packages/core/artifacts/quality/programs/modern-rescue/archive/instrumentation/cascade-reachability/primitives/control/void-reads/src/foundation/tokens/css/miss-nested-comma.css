@@ -1,2 +1,0 @@
-.rottay-v[data-part='root'] { --ds-v-tone-bg: #eee; }
-.rottay-v:hover { background: var(--ds-v-tone-bg, var(--ds-fallback, #fff)); }

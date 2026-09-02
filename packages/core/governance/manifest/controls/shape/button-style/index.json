@@ -7,7 +7,7 @@
   "semanticOwner": {
     "owner": "design-system",
     "registryPath": "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
-    "registryDigest": "5941d2eebc8749b7c04aa34aae6135f2eb34f6514842b3b5e040f7ed4faac138"
+    "registryDigest": "c0dc2b74e74105980f8f1e57745f0349ef5b4a4828eb1cb1474c4d9d1af79e82"
   },
   "title": "Button silhouette",
   "valueType": "enum",
@@ -35,7 +35,7 @@
   "dependsOn": [],
   "compatibility": "additive, unset-to-rollback",
   "productiveConsumerWitness": {
-    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
+    "consumer": "src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
     "symbol": "var(--ds-button-md-radius"
   },
   "calibration": {
@@ -60,16 +60,10 @@
     "stopDiscriminationException": {
       "armId": "static-brand-theme",
       "reason": "bithire ONLY: chrome.controls.buttonGeometry.radius: '9px' is authored unconditionally in bithire's own BrandTheme and chromeToVariables spreads it onto vars AFTER the buttonStyle posture branch (brand-theme.ts:2020, {...paletteVars, ...chromeVars}), so --ds-radius-button lowers the SAME constant (calc(9px / bithire's radiusScale * ...)) across all 3 declared stops on this arm -- tool-measured verbatim: assertStopDiscrimination itself throws this exact refusal when run un-excepted (packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-button-style/computed-static-db/ carries no bithire receipt for this reason). rottay and evnto are UNAFFECTED: this exception is consulted only on the failure branches (witnesses<2 or discriminating=0), so it does not touch their already-passing PASS verdict. See knownDefects/CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF for the full chain.",
-      "adjudicatedBy": "Kimi K3 (DT), 2026-08-24 — RATIFIED. Proposed by the F4B-9 packet executor with the fact measured three times (source, the guard's own verbatim refusal, a DB-only run); ratified as a statement of measured fact, not as a design decision about whether a tenant override should someday win over bithire's authored leaf — that adjudication (same class as shape.radius-scale's own bithire compensation note) is explicitly NOT made here and is tracked as knownDefects/CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF (OPEN_DT)."
+      "adjudicatedBy": "design authority (DT), 2026-08-24 — RATIFIED. Proposed by the F4B-9 packet executor with the fact measured three times (source, the guard's own verbatim refusal, a DB-only run); ratified as a statement of measured fact, not as a design decision about whether a tenant override should someday win over bithire's authored leaf — that adjudication (same class as shape.radius-scale's own bithire compensation note) is explicitly NOT made here and is tracked as knownDefects/CHANNEL_SHADOWED_BY_AUTHORED_CHROME_LEAF (OPEN_DT)."
     },
-    "staticDbParityEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-button-style/computed-static-db/rottay-sharp.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-button-style/computed-static-db/evnto-sharp.json.receipt.json"
-    ],
-    "exactRestoreEvidenceIds": [
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-button-style/computed-static-db/rottay-pill.json.receipt.json",
-      "packages/core/artifacts/quality/programs/modern-rescue/cascade-proofs/controls/shape-button-style/computed-static-db/evnto-pill.json.receipt.json"
-    ],
+    "staticDbParityEvidenceIds": [],
+    "exactRestoreEvidenceIds": [],
     "negativeControls": [
       "control height remains fixed",
       "touch target remains fixed",
@@ -79,7 +73,7 @@
       "motion remains fixed"
     ],
     "negativeControlsScopeNote": "shape.button-style owns the CORNER of the button and nothing else, so the negative set is the rest of button-modern-md/hitbox: its box (control height remains fixed, touch target remains fixed -- both bound to button-modern-md/hitbox, a real control-bearing target unlike shape.radius-scale's card root, so both are declarable here), its type, its colour, its border STROKE and its motion. \"border remains fixed\" is deliberately NOT declared, same law as shape.radius-scale: it bundles the four border-*-radius longhands with the widths/styles, so binding it would assert the very channel under test must not move. Replaced by \"border width and style remain fixed\" (border-width-style-fixed), reused unchanged from shape.radius-scale's own vocabulary entry.",
-    "nextAction": "ADJUDICATE_CHANNEL_WIRING_THEN_DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
+    "nextAction": "RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain append-only historical evidence but no longer support an active claim after the canonical-path refactor.",
     "sourceBindings": [
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/appearance-posture/index.ts",
@@ -87,12 +81,12 @@
       "packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
       "packages/core/src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
       "packages/core/src/foundation/kernel/geometry/radius-dial/index.ts",
-      "packages/core/src/foundation/tokens/css/foundation/base/borders.css",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button.css",
-      "packages/core/src/tooling/resolution-probe/foundation/roster/fixtures.json"
+      "packages/core/src/foundation/tokens/css/foundation/base/borders/index.css",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/button/index.css",
+      "packages/core/scripts/check/tokens/cascade/probe/foundation/roster/fixtures/index.json"
     ],
     "measuredResult": {
-      "instrument": "packages/core/src/tooling/resolution-probe (causal command), Chromium, --bundle fresh, Node 22.17.0.",
+      "instrument": "packages/core/scripts/check/tokens/cascade/probe (causal command), Chromium, --bundle fresh, Node 22.17.0.",
       "authorityFix": "ONE ingress field. capabilities/index.ts's brandThemePath read `chrome.controls.button* (radius channels)`, prose with a parenthetical: every walker here splits on `.`, so it resolved to `chrome['controls']['button* (radius channels)']` and landed the stop where nothing reads it -- the exact F4B-7 class, confirmed against source before editing (brand-theme:786 reads `bt.surfaces?.buttonStyle`; BrandSurfaces.buttonStyle at themes/index.ts:597). Fixed to `surfaces.buttonStyle`. The manifest is generated from that registry (generator/index.mjs --sync); regeneration touched all 20 control manifests' semanticOwner.registryDigest plus governance/manifest/index.json's derived digests and NOTHING ELSE semantic -- verified field by field against the pre-edit tree.",
       "harnessExtension": "--ds-radius-button carried no direct-read fixture: directControlFixtureIds requires a fixture target whose declared properties include every channel the control declares, and token-readout's tokens target did not track this one (only its sibling --ds-button-md-radius/--ds-button-md-border-radius did, from an earlier control's extension). Every prior F4B control needed the identical step (rhythm 2026-08-11, effect-intensity/experience.profile/density.mode all 2026-08-23, per fixtures.json's own dated 'Extended...' provenance trail) -- this is that same precedented, one-property addition, not a new mechanism. Without it every causal run for this control resolves harness-suspect regardless of keypath correctness, which is exactly what the first trial run (pre-extension) measured.",
       "directChannel": "--ds-radius-button read directly on token-readout moved on BOTH arms, both verticals, both stops, both modes (light/dark), with byte-identical applied values between arms: rottay/evnto sharp -> `calc(2px * var(--ds-radius-scale, 1))`; sharp/pill baselines calc(10px * 1) [rottay] / calc(14px * 1) [evnto] -> calc(2px * 1) / calc(9999px * 1) respectively. ingressEquivalence.equivalent = true, 0 differing rows, on all 4 receipted scenarios.",

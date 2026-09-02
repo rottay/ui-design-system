@@ -1,2 +1,0 @@
-drill "geometry-leak" (inyecta un delta de geometria en un carrier MOVER; el veredicto debe fallar): comparacion limpia verde; con la perturbacion el comparador FALLO como debe
-  FAIL(inducido): result|the-management|390 :: [result-success-well] movio pintura pero TAMBIEN movio geometria/tipografia/motion: m0/n0:span[status-icon].fontSize

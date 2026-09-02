@@ -3,6 +3,7 @@
   "rootId": "shape.radius-scale",
   "tier": "standard",
   "rootChannel": {
+    "authority": "floor-arbitrated",
     "channel": "--ds-radius-scale",
     "emission": [
       {
@@ -23,7 +24,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-radius-sm-base (6px)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 769
     },
@@ -34,7 +35,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-radius-md-base (8px)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 770
     },
@@ -45,7 +46,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-radius-lg-base (12px)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 771
     },
@@ -56,7 +57,7 @@
         "kind": "calc-multiply",
         "operand": "--ds-radius-xl-base (16px)"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 772
     },
@@ -68,7 +69,7 @@
         "value": "20px",
         "why": "R8: NO escala; pin del sistema"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 773
     },
@@ -80,7 +81,7 @@
         "value": "24px",
         "why": "R8: NO escala"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 774
     },
@@ -92,7 +93,7 @@
         "value": "9999px",
         "why": "R8: NO escala; cerca de circulos de identidad"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "state": "LIVE",
       "line": 775
     },
@@ -117,7 +118,7 @@
         "value": "0",
         "why": "R8 corregido: fuera del dial; comentario verbatim default.css:764 'none/xs/2xl/3xl/full stay literal (0 and pill radii are not dial-scaled)'"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "line": 757,
       "state": "LIVE"
     },
@@ -129,7 +130,7 @@
         "value": "3px",
         "why": "R8 corregido: fuera del dial; comentario verbatim default.css:764 'none/xs/2xl/3xl/full stay literal (0 and pill radii are not dial-scaled)'"
       },
-      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+      "site": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
       "line": 758,
       "state": "LIVE"
     }

@@ -8,15 +8,15 @@
     "components": [
       "PageShellSurface"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/shell/page-shell-surface",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/shell/page-shell-surface",
     "publicComponents": [
       "PageShellSurface"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "98e8222fcf67a9b282c0608e8bdf0bf8714cf1de12aea01a9eab65a3a8cfe523"
+    "inventoryRowDigest": "12e53e0f23f054599dc64283980beb94116edb948712b0a316ef50ea5bf9f5ce"
   },
   "maximumClaim": "INVENTORIED_ONLY",
   "review": {
@@ -28,7 +28,7 @@
   "anatomy": {
     "assessmentState": "UNKNOWN",
     "sourceBindings": [
-      "packages/core/src/ui/structures/shell/page-shell-surface"
+      "packages/core/src/components/structures/shell/page-shell-surface"
     ],
     "stableParts": [],
     "states": [],
@@ -102,7 +102,7 @@
             "styleAttribute": 1
           },
           "perFile": {
-            "packages/core/src/ui/structures/shell/page-shell-surface/index.tsx": {
+            "packages/core/src/components/structures/shell/page-shell-surface/index.tsx": {
               "classNameOccurrences": 0,
               "dataPartOccurrences": 0,
               "styleAttributeOccurrences": 1,
@@ -160,7 +160,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -185,7 +185,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -210,7 +210,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -235,7 +235,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.corner",
@@ -267,7 +267,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los controles del shell son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -298,13 +298,13 @@
         {
           "channelId": "--_ds-page-shell-surface-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "producer": "packages/core/src/components/structures/shell/page-shell-surface",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/page-shell-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/shell/page-shell-surface"
+            "packages/core/src/components/structures/shell/page-shell-surface"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -324,13 +324,13 @@
         {
           "channelId": "--_ds-page-shell-surface-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "producer": "packages/core/src/components/structures/shell/page-shell-surface",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/page-shell-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/shell/page-shell-surface"
+            "packages/core/src/components/structures/shell/page-shell-surface"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -350,13 +350,13 @@
         {
           "channelId": "--_ds-page-shell-surface-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "producer": "packages/core/src/components/structures/shell/page-shell-surface",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/page-shell-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/shell/page-shell-surface"
+            "packages/core/src/components/structures/shell/page-shell-surface"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -375,7 +375,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -389,13 +389,13 @@
         {
           "channelId": "--_ds-page-shell-surface-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "producer": "packages/core/src/components/structures/shell/page-shell-surface",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/page-shell-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/shell/page-shell-surface"
+            "packages/core/src/components/structures/shell/page-shell-surface"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -414,7 +414,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -428,13 +428,13 @@
         {
           "channelId": "--_ds-page-shell-surface-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "producer": "packages/core/src/components/structures/shell/page-shell-surface",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/page-shell-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/shell/page-shell-surface"
+            "packages/core/src/components/structures/shell/page-shell-surface"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -452,7 +452,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.edge",
@@ -489,7 +489,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -502,7 +502,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -541,7 +541,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -568,13 +568,13 @@
         {
           "channelId": "--_ds-page-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/ui/structures/shell/page-shell-surface",
+          "producer": "packages/core/src/components/structures/shell/page-shell-surface",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/page-shell-surface"
           ],
           "sourceBindings": [
-            "packages/core/src/ui/structures/shell/page-shell-surface"
+            "packages/core/src/components/structures/shell/page-shell-surface"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -594,11 +594,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

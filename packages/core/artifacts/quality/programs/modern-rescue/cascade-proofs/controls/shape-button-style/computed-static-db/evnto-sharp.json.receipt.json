@@ -63,9 +63,9 @@
     "packages/core/src/ui/primitives/inputs/Button/engines/classic/index.tsx",
     "packages/core/src/ui/primitives/inputs/Button/engines/modern/index.tsx",
     "packages/core/src/ui/primitives/inputs/Button/engines/rustic/index.tsx",
-    "packages/core/artifacts/generated/css/verticals/bithire/index.css",
-    "packages/core/artifacts/generated/css/all-verticals/index.css",
-    "packages/core/artifacts/generated/css/verticals/rottay/index.css"
+    "packages/core/styles/bithire.css",
+    "packages/core/styles/index.css",
+    "packages/core/styles/rottay.css"
   ],
   "sourceDigest": "f0145a32f6575adad63871eede642a3114cea51fa75bafa93a138761a461e306",
   "artifactPath": "packages/core/test-artifacts/quality-evidence/wo-cra-23/F4B/shape-button-style/evnto-sharp.json",

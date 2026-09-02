@@ -8,15 +8,15 @@
     "components": [
       "Switch"
     ],
-    "sourceRoot": "packages/core/src/ui/primitives",
-    "sourceOwner": "packages/core/src/ui/primitives/inputs/Switch",
+    "sourceRoot": "packages/core/src/components/primitives",
+    "sourceOwner": "packages/core/src/components/primitives/inputs/switch",
     "publicComponents": [
       "Switch"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "67673745ef370a01854f63adb872b42f957895e6b7a4476ad2b7c6f634bcc536"
+    "inventoryRowDigest": "4447f57aa6709480a8bd5e0225e91f6b52485c0fcc9e7e6c3dca5840a4039ddf"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,12 +28,12 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/primitives/inputs/Switch/index.tsx",
-      "packages/core/src/ui/primitives/inputs/Switch/contracts/index.ts",
-      "packages/core/src/ui/primitives/inputs/Switch/engines/classic/index.tsx",
-      "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx",
-      "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx",
-      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+      "packages/core/src/components/primitives/inputs/switch/index.tsx",
+      "packages/core/src/components/primitives/inputs/switch/contracts/index.ts",
+      "packages/core/src/components/primitives/inputs/switch/engines/classic/index.tsx",
+      "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx",
+      "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx",
+      "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
     ],
     "stableParts": [
       "label",
@@ -57,9 +57,9 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "The root carries role=switch with aria-checked, aria-busy and aria-disabled; the painted track and thumb are decorative (aria-hidden) and must not become the focus owner. [at packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:128, packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:135]",
-      "The checked state moves the thumb (a positional change), so the state is not hue-only. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:127]",
-      "A physical 44px coarse-pointer floor applies to the root. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:42, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:203]"
+      "The root carries role=switch with aria-checked, aria-busy and aria-disabled; the painted track and thumb are decorative (aria-hidden) and must not become the focus owner. [at packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:128, packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:135]",
+      "The checked state moves the thumb (a positional change), so the state is not hue-only. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:127]",
+      "A physical 44px coarse-pointer floor applies to the root. [at packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:42, packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:203]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -82,12 +82,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:147",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:183",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:205",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:158",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:159",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:160"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:147",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:183",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:205",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:158",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:159",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:160"
           ],
           "atSiteCount": 7
         },
@@ -96,10 +96,10 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:154",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:175",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:177"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:154",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:175",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:177"
           ]
         },
         {
@@ -107,12 +107,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:104",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:176",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:34",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:35",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:36",
-            "packages/core/src/foundation/tokens/css/runtime/personality.css:518"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:104",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:176",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:34",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:35",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:36",
+            "packages/core/src/foundation/tokens/css/runtime/personality/index.css:518"
           ],
           "atSiteCount": 11
         },
@@ -121,12 +121,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:136",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:201",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:117",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:118",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:119",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:45"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:136",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:201",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:117",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:118",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:119",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:45"
           ],
           "atSiteCount": 8
         },
@@ -135,12 +135,12 @@
           "anchorKind": "data-part",
           "anchor": "data-part attribute stamped in engine TSX",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:135",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:200",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:54",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:55",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:56",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:30"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:135",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:200",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:54",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:55",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:56",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:30"
           ],
           "atSiteCount": 8
         }
@@ -154,8 +154,8 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:106",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:177"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:106",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:177"
           ],
           "state": "checked"
         },
@@ -164,8 +164,8 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:107",
-            "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:178"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:107",
+            "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:178"
           ],
           "state": "disabled"
         },
@@ -174,7 +174,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:108"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:108"
           ],
           "state": "loading"
         },
@@ -183,8 +183,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:102",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:105"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:102",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:105"
           ],
           "state": "active"
         },
@@ -193,8 +193,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:483",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:487"
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:483",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:487"
           ],
           "state": "checked"
         },
@@ -203,11 +203,11 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:112",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:39",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:40",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:491"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:39",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:40",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:491"
           ],
           "state": "focus"
         },
@@ -216,9 +216,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:112",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:491"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:112",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:491"
           ],
           "state": "focus-visible"
         },
@@ -227,8 +227,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "pseudo-class",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:94",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:97"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:97"
           ],
           "state": "hover"
         },
@@ -237,9 +237,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:89",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:97",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:36"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:89",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:97",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:36"
           ],
           "state": "checked"
         },
@@ -248,9 +248,9 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:86",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:94",
-            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:33"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:86",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:94",
+            "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:33"
           ],
           "state": "checked"
         },
@@ -259,8 +259,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:49",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:94"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:49",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:94"
           ],
           "state": "disabled"
         }
@@ -271,7 +271,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:105"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:105"
           ]
         },
         {
@@ -279,7 +279,7 @@
           "kind": "declared-by-engine",
           "axis": "attribute",
           "at": [
-            "packages/core/src/ui/primitives/inputs/Switch/engines/modern/index.tsx:111"
+            "packages/core/src/components/primitives/inputs/switch/engines/modern/index.tsx:111"
           ]
         },
         {
@@ -287,8 +287,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:75",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:76"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:75",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:76"
           ]
         },
         {
@@ -296,8 +296,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:70",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:71"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:70",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:71"
           ]
         },
         {
@@ -305,8 +305,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:65",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:66"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:65",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:66"
           ]
         },
         {
@@ -314,8 +314,8 @@
           "kind": "exercised-by-skin-css",
           "axis": "attribute-value",
           "at": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:206",
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:207"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:206",
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:207"
           ]
         }
       ],
@@ -326,7 +326,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:221"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:221"
             ]
           },
           {
@@ -334,8 +334,8 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:94",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:97"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:94",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:97"
             ]
           },
           {
@@ -343,8 +343,8 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:203",
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:206"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:203",
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:206"
             ]
           },
           {
@@ -352,7 +352,7 @@
             "kind": "exercised-by-skin-css",
             "axis": "media-query",
             "at": [
-              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:215"
+              "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:215"
             ]
           }
         ],
@@ -394,35 +394,35 @@
             {
               "variable": "--ds-switch-disabled-cursor",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:49"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:49"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-disabled-opacity",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:108"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:108"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-focus-ring-color",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-focus-ring-offset",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:112"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:112"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-focus-ring-width",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111"
               ],
               "scope": "family skin CSS + component directory"
             },
@@ -430,42 +430,42 @@
               "variable": "--ds-switch-height",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:456"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:456"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             },
             {
               "variable": "--ds-switch-label-font-size",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:159"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:159"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-label-line-height",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:160"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:160"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-lg-thumb",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:77"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:77"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-md-thumb",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:72"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:72"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-sm-thumb",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:67"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:67"
               ],
               "scope": "family skin CSS + component directory"
             },
@@ -473,51 +473,51 @@
               "variable": "--ds-switch-thumb-size",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:467",
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:468",
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:487"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:467",
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:468",
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:487"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             },
             {
               "variable": "--ds-switch-touch-target-min",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:42",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:203",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:206",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:207"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:42",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:203",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:206",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:207"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-track-radius",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:57"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:57"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-transition-duration",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:59",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:60",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:127",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:128"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:59",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:60",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:127",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:128"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-unchecked-bg",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:89"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:89"
               ],
               "scope": "family skin CSS + component directory"
             },
             {
               "variable": "--ds-switch-unchecked-bg-hover",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:97",
-                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:105"
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:97",
+                "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:105"
               ],
               "scope": "family skin CSS + component directory"
             },
@@ -525,7 +525,7 @@
               "variable": "--ds-switch-width",
               "classification": "UNDECLARED_ANYWHERE",
               "readAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:455"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:455"
               ],
               "scope": "additional paint owner (personality.css / engine theme.css / presentation skin)"
             }
@@ -543,26 +543,26 @@
             },
             {
               "selector": "[data-engine] .ds-switch-handle",
-              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:527",
+              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:527",
               "proof": "the class token 'ds-switch-handle' is stamped nowhere; both engines address the thumb through [data-part='thumb']",
               "readsStranded": [],
               "kind": "DEAD_SELECTOR_PAINT"
             },
             {
               "selector": ".ds-switch__track / .ds-switch__thumb / .ds-switch__input (and the combinator chain at 482/486/490)",
-              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:453",
+              "declaredAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:453",
               "declaredAtAlso": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:462",
-                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:475"
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:462",
+                "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:475"
               ],
-              "proof": "none of the three class tokens is stamped anywhere in packages/core/src/ui",
+              "proof": "none of the three class tokens is stamped anywhere in packages/core/src/components",
               "readsStranded": [],
               "kind": "DEAD_SELECTOR_PAINT"
             }
           ],
           "hardcodedValue": [
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:185",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:185",
               "engine": "modern",
               "selector": ".ds-switch.ds-switch--modern input",
               "property": "inline-size",
@@ -578,7 +578,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:186",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:186",
               "engine": "modern",
               "selector": ".ds-switch.ds-switch--modern input",
               "property": "block-size",
@@ -594,7 +594,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:215",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:215",
               "engine": "modern",
               "selector": "@media (prefers-reduced-motion: reduce) >> .ds-switch.ds-switch--modern [data-part='track'], .ds-switch.ds-switch--modern [data-part='thumb']",
               "property": "transition-duration",
@@ -610,7 +610,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:40",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:40",
               "engine": "rustic",
               "selector": ".ds-switch.ds-switch--rustic input:focus ~ [data-part='track']",
               "property": "outline-offset",
@@ -626,7 +626,7 @@
               "layer": "skin CSS"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/personality.css:528",
+              "at": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:528",
               "selector": ".ant-switch-handle, [data-engine] .ds-toggle-dot, [data-engine] .ds-switch-handle",
               "property": "transition",
               "declaration": "transition: transform var(--ds-personality-animation-entrance-duration, 200ms) cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -640,7 +640,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:449",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:449",
               "selector": ".ds-switch",
               "property": "gap",
               "declaration": "gap: 0.5rem",
@@ -654,7 +654,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:465",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:465",
               "selector": ".ds-switch__thumb",
               "property": "left",
               "declaration": "left: 2px",
@@ -668,7 +668,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:487",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:487",
               "selector": ".ds-switch__input:checked + .ds-switch__track .ds-switch__thumb",
               "property": "left",
               "declaration": "left: calc(100% - var(--ds-switch-thumb-size) - 2px)",
@@ -682,7 +682,7 @@
               "layer": "additional paint owner"
             },
             {
-              "at": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:213",
+              "at": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:213",
               "engine": "rustic",
               "literalsOutsideAnyVar": [
                 {
@@ -700,7 +700,7 @@
           ],
           "hardcodedFallbackLiteralsInsideVar": [
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:42",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:42",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -712,7 +712,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:67",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:67",
               "engine": "modern",
               "property": "--ds-switch-resolved-thumb",
               "fallbacks": [
@@ -724,7 +724,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:72",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:72",
               "engine": "modern",
               "property": "--ds-switch-resolved-thumb",
               "fallbacks": [
@@ -736,7 +736,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:77",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:77",
               "engine": "modern",
               "property": "--ds-switch-resolved-thumb",
               "fallbacks": [
@@ -748,7 +748,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:203",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:203",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -760,7 +760,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:206",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:206",
               "engine": "modern",
               "property": "min-block-size",
               "fallbacks": [
@@ -772,7 +772,7 @@
               ]
             },
             {
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:207",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:207",
               "engine": "modern",
               "property": "min-inline-size",
               "fallbacks": [
@@ -790,10 +790,10 @@
               "declaredAt": [
                 "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:1349",
                 "packages/core/src/foundation/tokens/css/facade/artifacts/rottay/index.css:2334",
-                "packages/core/src/foundation/tokens/css/foundation/themes/default.css:1358"
+                "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:1358"
               ],
               "readElsewhereAt": [
-                "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme.css:388"
+                "packages/core/src/foundation/tokens/css/runtime/engines/classic/theme/index.css:388"
               ]
             }
           ]
@@ -887,7 +887,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:31",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:31",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -900,7 +900,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:32",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:32",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -913,7 +913,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "thumbSize",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:33",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:33",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -926,7 +926,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:34",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:34",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -939,7 +939,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:34",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:34",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -952,7 +952,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:34",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:34",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -965,7 +965,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:37",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:37",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -978,7 +978,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:38",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:38",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -991,7 +991,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "thumbSize",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:39",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:39",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1004,7 +1004,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:40",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:40",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1017,7 +1017,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:40",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:40",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1030,7 +1030,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:40",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:40",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1043,7 +1043,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:43",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:43",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1056,7 +1056,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:44",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:44",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1069,7 +1069,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "thumbSize",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:45",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:45",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1082,7 +1082,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:46",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:46",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1095,7 +1095,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:46",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:46",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1108,7 +1108,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "translate",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:46",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:46",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1121,7 +1121,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "gap",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:125",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:125",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1134,7 +1134,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "fontFamily",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:127",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:127",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1147,7 +1147,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:153",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:153",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1160,7 +1160,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "left",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:162",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:162",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1173,7 +1173,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "bottom",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:163",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:163",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1186,7 +1186,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:164",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:164",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1199,7 +1199,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "fontSize",
-                  "readAt": "packages/core/src/ui/primitives/inputs/Switch/engines/rustic/index.tsx:169",
+                  "readAt": "packages/core/src/components/primitives/inputs/switch/engines/rustic/index.tsx:169",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": "(TSX inline style or prop, no CSS selector)",
@@ -1218,7 +1218,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-text-primary)",
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:158",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:158",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='label']"
@@ -1228,7 +1228,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:158",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:158",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='label']"
@@ -1238,7 +1238,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-font-size-sm)",
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:159",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:159",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='label']"
@@ -1248,7 +1248,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "font-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:159",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:159",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='label']"
@@ -1258,7 +1258,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-line-height-snug)",
                   "landsOnCssProperty": "line-height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:160",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:160",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='label']"
@@ -1268,7 +1268,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "line-height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:160",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:160",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='label']"
@@ -1278,7 +1278,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:167",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:167",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true"
@@ -1290,7 +1290,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:53",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:53",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--rustic [data-part='label']"
@@ -1306,7 +1306,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-spacing-2)",
                   "landsOnCssProperty": "gap",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:37",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:37",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern[data-part='root']"
@@ -1316,7 +1316,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "gap",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:37",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:37",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern[data-part='root']"
@@ -1326,7 +1326,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:42",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:42",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern[data-part='root']"
@@ -1336,7 +1336,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:42",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:42",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern[data-part='root']"
@@ -1346,7 +1346,7 @@
                   "readWithFallback": true,
                   "fallback": "not-allowed",
                   "landsOnCssProperty": "cursor",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:49",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:49",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true"
@@ -1358,7 +1358,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:203",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:203",
                   "engineLayer": "modern",
                   "states": [
                     "@media(pointer: coarse)"
@@ -1370,7 +1370,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:203",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:203",
                   "engineLayer": "modern",
                   "states": [
                     "@media(pointer: coarse)"
@@ -1382,7 +1382,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:206",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:206",
                   "engineLayer": "modern",
                   "states": [
                     "standalone=true",
@@ -1395,7 +1395,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:206",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:206",
                   "engineLayer": "modern",
                   "states": [
                     "standalone=true",
@@ -1408,7 +1408,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-touch-target-min, 44px)",
                   "landsOnCssProperty": "min-inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:207",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:207",
                   "engineLayer": "modern",
                   "states": [
                     "standalone=true",
@@ -1421,7 +1421,7 @@
                   "readWithFallback": true,
                   "fallback": "44px",
                   "landsOnCssProperty": "min-inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:207",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:207",
                   "engineLayer": "modern",
                   "states": [
                     "standalone=true",
@@ -1434,7 +1434,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:518",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:518",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -1446,7 +1446,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:518",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:518",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -1458,7 +1458,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:518",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:518",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -1470,7 +1470,7 @@
                   "readWithFallback": true,
                   "fallback": "ease-in-out",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:518",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:518",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -1482,7 +1482,7 @@
                   "readWithFallback": true,
                   "fallback": "200ms",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality.css:528",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/personality/index.css:528",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     "engine"
@@ -1494,7 +1494,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:455",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:455",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__track"
@@ -1504,7 +1504,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:456",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:456",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__track"
@@ -1514,7 +1514,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:457",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:457",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__track"
@@ -1524,7 +1524,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:458",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:458",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__track"
@@ -1534,7 +1534,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:459",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:459",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__track"
@@ -1544,7 +1544,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "width",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:467",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:467",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__thumb"
@@ -1554,7 +1554,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "height",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:468",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:468",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__thumb"
@@ -1564,7 +1564,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:469",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:469",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__thumb"
@@ -1574,7 +1574,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:471",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:471",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__thumb"
@@ -1584,7 +1584,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:472",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:472",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [],
                   "selector": ".ds-switch__thumb"
@@ -1594,7 +1594,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:483",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:483",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     ":checked"
@@ -1606,7 +1606,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "left",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:487",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:487",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     ":checked"
@@ -1618,7 +1618,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme.css:491",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/theme/index.css:491",
                   "engineLayer": "engine-agnostic-or-shared",
                   "states": [
                     ":focus-visible",
@@ -1637,7 +1637,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "inset-block-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:118",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:118",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1647,7 +1647,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "inset-block-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:118",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:118",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1657,7 +1657,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "inset-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:119",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:119",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1667,7 +1667,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "inset-inline-start",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:119",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:119",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1677,7 +1677,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:120",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:120",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1687,7 +1687,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:121",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:121",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1697,7 +1697,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-surface-control, var(--ds-color-text-on-primary))",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:123",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:123",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1707,7 +1707,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-text-on-primary)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:123",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:123",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1717,7 +1717,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:123",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:123",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1727,7 +1727,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-elevation-1)",
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:124",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:124",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1737,7 +1737,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:124",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:124",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1747,7 +1747,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-motion-normal)",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:126",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:126",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1757,7 +1757,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:126",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:126",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1767,7 +1767,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:126",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:126",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1777,7 +1777,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-motion-normal)",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:126",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:126",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1787,7 +1787,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:126",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:126",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1797,7 +1797,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:126",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:126",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='thumb']"
@@ -1807,7 +1807,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:132",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:132",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true"
@@ -1819,7 +1819,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:132",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:132",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true"
@@ -1831,7 +1831,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:138",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:138",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true",
@@ -1844,7 +1844,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:138",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:138",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true",
@@ -1857,7 +1857,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:146",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:146",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1871,7 +1871,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:149",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:149",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1885,7 +1885,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:149",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:149",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1899,7 +1899,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:149",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:149",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1913,7 +1913,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:153",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:153",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1928,7 +1928,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:153",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:153",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1943,7 +1943,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:153",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:153",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true",
@@ -1958,7 +1958,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:46",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:46",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--rustic [data-part='thumb']"
@@ -1968,7 +1968,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "box-shadow",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:47",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:47",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--rustic [data-part='thumb']"
@@ -1978,7 +1978,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transform",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:48",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:48",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--rustic [data-part='thumb']"
@@ -1994,7 +1994,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-radius-full)",
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:57",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:57",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2004,7 +2004,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:57",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:57",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2014,7 +2014,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-motion-normal)",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2024,7 +2024,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2034,7 +2034,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2044,7 +2044,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-motion-normal)",
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2054,7 +2054,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2064,7 +2064,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "transition",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:58",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:58",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track']"
@@ -2074,7 +2074,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-w)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:65",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:65",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -2086,7 +2086,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-w)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:65",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:65",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -2098,7 +2098,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-h)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:66",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:66",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -2110,7 +2110,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-h)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:66",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:66",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -2122,7 +2122,7 @@
                   "readWithFallback": true,
                   "fallback": "0.75rem",
                   "landsOnCssProperty": "(defines --ds-switch-resolved-thumb)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:67",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:67",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -2134,7 +2134,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-thumb)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:67",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:67",
                   "engineLayer": "modern",
                   "states": [
                     "size=sm"
@@ -2146,7 +2146,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-w)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:70",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:70",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -2158,7 +2158,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-w)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:70",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:70",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -2170,7 +2170,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-h)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:71",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:71",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -2182,7 +2182,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-h)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:71",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:71",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -2194,7 +2194,7 @@
                   "readWithFallback": true,
                   "fallback": "1rem",
                   "landsOnCssProperty": "(defines --ds-switch-resolved-thumb)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:72",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:72",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -2206,7 +2206,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-thumb)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:72",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:72",
                   "engineLayer": "modern",
                   "states": [
                     "size=md"
@@ -2218,7 +2218,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-w)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:75",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:75",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -2230,7 +2230,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-w)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:75",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:75",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -2242,7 +2242,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-h)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:76",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:76",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -2254,7 +2254,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-track-h)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:76",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:76",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -2266,7 +2266,7 @@
                   "readWithFallback": true,
                   "fallback": "1.25rem",
                   "landsOnCssProperty": "(defines --ds-switch-resolved-thumb)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:77",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:77",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -2278,7 +2278,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "(defines --ds-switch-resolved-thumb)",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:77",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:77",
                   "engineLayer": "modern",
                   "states": [
                     "size=lg"
@@ -2290,7 +2290,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "inline-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:81",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:81",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track'][data-part='track']"
@@ -2300,7 +2300,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "block-size",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:82",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:82",
                   "engineLayer": "modern",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--modern [data-part='track'][data-part='track']"
@@ -2310,7 +2310,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:86",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:86",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true"
@@ -2322,7 +2322,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:86",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:86",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true"
@@ -2334,7 +2334,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-border-secondary)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:89",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:89",
                   "engineLayer": "modern",
                   "states": [
                     "checked=false"
@@ -2346,7 +2346,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:89",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:89",
                   "engineLayer": "modern",
                   "states": [
                     "checked=false"
@@ -2358,7 +2358,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary-hover)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:94",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:94",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true",
@@ -2373,7 +2373,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:94",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:94",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true",
@@ -2388,7 +2388,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-border)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:97",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:97",
                   "engineLayer": "modern",
                   "states": [
                     "checked=false",
@@ -2403,7 +2403,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:97",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:97",
                   "engineLayer": "modern",
                   "states": [
                     "checked=false",
@@ -2418,7 +2418,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary-hover)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:102",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:102",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true",
@@ -2432,7 +2432,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:102",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:102",
                   "engineLayer": "modern",
                   "states": [
                     "checked=true",
@@ -2446,7 +2446,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-border)",
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:105",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:105",
                   "engineLayer": "modern",
                   "states": [
                     "checked=false",
@@ -2460,7 +2460,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:105",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:105",
                   "engineLayer": "modern",
                   "states": [
                     "checked=false",
@@ -2474,7 +2474,7 @@
                   "readWithFallback": true,
                   "fallback": "0.5",
                   "landsOnCssProperty": "opacity",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:108",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:108",
                   "engineLayer": "modern",
                   "states": [
                     "disabled=true"
@@ -2486,7 +2486,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-focus-ring-width)",
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2499,7 +2499,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2512,7 +2512,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-focus-ring-color, var(--ds-color-primary))",
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2525,7 +2525,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-color-primary)",
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2538,7 +2538,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:111",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:111",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2551,7 +2551,7 @@
                   "readWithFallback": true,
                   "fallback": "var(--ds-focus-ring-offset)",
                   "landsOnCssProperty": "outline-offset",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:112",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:112",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2564,7 +2564,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "outline-offset",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:112",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:112",
                   "engineLayer": "modern",
                   "states": [
                     ":focus-visible",
@@ -2577,7 +2577,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "border-radius",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:30",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:30",
                   "engineLayer": "rustic",
                   "states": [],
                   "selector": ".ds-switch.ds-switch--rustic [data-part='track']"
@@ -2587,7 +2587,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:33",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:33",
                   "engineLayer": "rustic",
                   "states": [
                     "checked=true"
@@ -2599,7 +2599,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "background-color",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:36",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:36",
                   "engineLayer": "rustic",
                   "states": [
                     "checked=false"
@@ -2611,7 +2611,7 @@
                   "readWithFallback": false,
                   "fallback": null,
                   "landsOnCssProperty": "outline",
-                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css:39",
+                  "readAt": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css:39",
                   "engineLayer": "rustic",
                   "states": [
                     ":focus"
@@ -2624,7 +2624,7 @@
           "privateOrLocalRelayDefinitions": [
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-track-w",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:65",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:65",
               "part": "track",
               "states": [
                 "size=sm"
@@ -2635,7 +2635,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-track-h",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:66",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:66",
               "part": "track",
               "states": [
                 "size=sm"
@@ -2646,7 +2646,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-thumb",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:67",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:67",
               "part": "track",
               "states": [
                 "size=sm"
@@ -2657,7 +2657,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-track-w",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:70",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:70",
               "part": "track",
               "states": [
                 "size=md"
@@ -2668,7 +2668,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-track-h",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:71",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:71",
               "part": "track",
               "states": [
                 "size=md"
@@ -2679,7 +2679,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-thumb",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:72",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:72",
               "part": "track",
               "states": [
                 "size=md"
@@ -2690,7 +2690,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-track-w",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:75",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:75",
               "part": "track",
               "states": [
                 "size=lg"
@@ -2701,7 +2701,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-track-h",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:76",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:76",
               "part": "track",
               "states": [
                 "size=lg"
@@ -2712,7 +2712,7 @@
             },
             {
               "definesPrivateOrLocal": "--ds-switch-resolved-thumb",
-              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css:77",
+              "at": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css:77",
               "part": "track",
               "states": [
                 "size=lg"
@@ -2725,8 +2725,8 @@
         },
         "paintOwners": {
           "engineSkinCss": {
-            "modern": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-            "rustic": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch.css"
+            "modern": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+            "rustic": "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/switch/index.css"
           },
           "additionalPaintOwners": [
             {
@@ -2800,13 +2800,13 @@
         {
           "channelId": "--_ds-switch-checked-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2815,13 +2815,13 @@
         {
           "channelId": "--_ds-switch-checked-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2830,13 +2830,13 @@
         {
           "channelId": "--_ds-switch-unchecked-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2845,13 +2845,13 @@
         {
           "channelId": "--_ds-switch-unchecked-bg-hover",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2860,13 +2860,13 @@
         {
           "channelId": "--_ds-switch-thumb-bg",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2875,13 +2875,13 @@
         {
           "channelId": "--_ds-switch-label-color",
           "semanticOwner": "palette.seeds",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2934,13 +2934,13 @@
         {
           "channelId": "--_ds-switch-label-font-size",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2949,13 +2949,13 @@
         {
           "channelId": "--_ds-switch-label-line-height",
           "semanticOwner": "typography.scale",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3010,13 +3010,13 @@
         {
           "channelId": "--_ds-switch-sm-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3025,13 +3025,13 @@
         {
           "channelId": "--_ds-switch-sm-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3040,13 +3040,13 @@
         {
           "channelId": "--_ds-switch-sm-thumb",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3055,13 +3055,13 @@
         {
           "channelId": "--_ds-switch-md-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3070,13 +3070,13 @@
         {
           "channelId": "--_ds-switch-md-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3085,13 +3085,13 @@
         {
           "channelId": "--_ds-switch-md-thumb",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3100,13 +3100,13 @@
         {
           "channelId": "--_ds-switch-lg-height",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3115,13 +3115,13 @@
         {
           "channelId": "--_ds-switch-lg-width",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3130,13 +3130,13 @@
         {
           "channelId": "--_ds-switch-lg-thumb",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3145,13 +3145,13 @@
         {
           "channelId": "--_ds-switch-label-gap",
           "semanticOwner": "density.mode",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css",
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3187,13 +3187,13 @@
         {
           "channelId": "--_ds-switch-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3299,13 +3299,13 @@
         {
           "channelId": "--_ds-switch-focus-ring-color",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3314,13 +3314,13 @@
         {
           "channelId": "--_ds-switch-focus-ring-offset",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3329,13 +3329,13 @@
         {
           "channelId": "--_ds-switch-focus-ring-width",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css",
+          "producer": "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "primitive/inputs/switch"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch.css"
+            "packages/core/src/foundation/tokens/css/runtime/engines/modern/skin/switch/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -3358,7 +3358,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -3414,7 +3414,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -3464,11 +3464,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],

@@ -24,7 +24,7 @@ classic untouched; caller className/style semantics unchanged.
 
 ### WO-SKIN-01 Fleet census + paint-counter machinery extension
 - **Outcome** — The exact migratable surface is measured, not guessed: a census script/pass lists
-  every component under `packages/core/src/ui/` with counted inline paint (same property-
+  every component under `packages/core/src/components/` with counted inline paint (same property-
   name classes as `arc09.inlinePaint`), per file, engine-split vs agnostic, with its trap classes
   (imperative/useState state paint, Text color sites, child-primitive style landings, keyframes,
   portals). `engine-token-audit.mjs` gains the full fleet file list with per-file decrease-only
@@ -176,7 +176,7 @@ surface), preserved at commit `2454ef4f`. `roadmap/skin-census.json` is intentio
 residual**, not that frozen start; after Stage 1 it reports `30 components / 60 files / 634 sites`,
 all adjudicated by exact runtime/non-paint floors. Ratchet live:
 `fleet.inlinePaint.<file>` decrease-only counters, same lexer as arc09 (shared module
-`scripts/tooling/libraries/inline-paint-counter.mjs`). Model tier from script-detected trap markers
+`scripts/libraries/inline-paint-counter.mjs`). Model tier from script-detected trap markers
 (imperative paint, hover handlers, state-hover, Text color, style-into-child, keyframes tags,
 portals); the per-batch contract still resolves each collision exactly.
 
@@ -195,7 +195,7 @@ the live residual JSON is the executable post-migration truth.
 Start order: 01 strictly first (everything else derives its file lists from it); 02 before the
 rest (it dissolves suppression interplays the later batches would otherwise have to reproduce);
 03-06 parallelizable pairwise where files are disjoint; 07 last. Statuses change ONLY via
-`scripts/roadmap/status/index.mjs`.
+`scripts/maintain/roadmap/status/index.mjs`.
 
 ### WO-SKIN-08 Stage-2 residue adjudication sweep
 - **Source IDs / phase** — DS-IMP-039, DS-IMP-040, DS-IMP-041, DS-IMP-042, DS-IMP-043, DS-IMP-044, DS-IMP-045, DS-IMP-046, DS-IMP-047, DS-IMP-049, DS-IMP-050; Phase 6.

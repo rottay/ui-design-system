@@ -8,15 +8,15 @@
     "components": [
       "WorkspaceShell"
     ],
-    "sourceRoot": "packages/core/src/ui/structures",
-    "sourceOwner": "packages/core/src/ui/structures/shell/workspace-shell",
+    "sourceRoot": "packages/core/src/components/structures",
+    "sourceOwner": "packages/core/src/components/structures/shell/workspace-shell",
     "publicComponents": [
       "WorkspaceShell"
     ],
     "unresolvedPublicComponents": [],
     "publicApiCompleteness": "COMPONENT_SYMBOLS_ONLY_REQUIRES_FAMILY_EXPORT_CENSUS",
     "inventoryResolution": "RESOLVED_SOURCE_AND_PUBLIC_EXPORT",
-    "inventoryRowDigest": "9e5cbedcd3b097033927b951c4585ff8712841d09e7642e995802ef2e07851be"
+    "inventoryRowDigest": "d6e6f9f34af3f5f131584f746e937367132c253e9ca69c42e4d12f89b66a9c65"
   },
   "maximumClaim": "SOURCE_BOUND",
   "review": {
@@ -28,8 +28,8 @@
   "anatomy": {
     "assessmentState": "SOURCE_BOUND",
     "sourceBindings": [
-      "packages/core/src/ui/structures/shell/workspace-shell",
-      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+      "packages/core/src/components/structures/shell/workspace-shell",
+      "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
     ],
     "stableParts": [
       "root",
@@ -54,7 +54,7 @@
     ],
     "propertyGroups": [],
     "invariants": [
-      "the family stamps role='img' [at packages/core/src/ui/structures/shell/workspace-shell/index.tsx:130]"
+      "the family stamps role='img' [at packages/core/src/components/structures/shell/workspace-shell/index.tsx:130]"
     ],
     "sourceEvidence": {
       "methodProvenance": {
@@ -82,7 +82,7 @@
           "anchorKind": "data-part",
           "anchor": "root-class-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:171"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:171"
           ]
         },
         {
@@ -90,11 +90,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:282",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:171",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:176",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:193",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:198"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:282",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:171",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:176",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:193",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:198"
           ]
         },
         {
@@ -102,11 +102,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:271",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:207",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:220",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:271",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:207",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:220",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247"
           ]
         },
         {
@@ -114,11 +114,11 @@
           "anchorKind": "data-part",
           "anchor": "data-part-attribute-stamp",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:127",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:84",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:85",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:86",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:87"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:127",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:85",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:87"
           ]
         }
       ],
@@ -128,7 +128,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:233"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:233"
           ]
         },
         {
@@ -136,7 +136,7 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:206"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:206"
           ]
         },
         {
@@ -144,11 +144,11 @@
           "scoutAnchorClaim": "bem-class-stamp",
           "reason": "Source stamps no data-part with this name and no DS component-identity class pair matches; not admissible under RULING R-8.",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:122",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:84",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:85",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:86",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:87"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:122",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:84",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:85",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:86",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:87"
           ]
         }
       ],
@@ -157,8 +157,8 @@
           "token": "focus-active=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263"
           ],
           "state": "focus-active"
         },
@@ -166,8 +166,8 @@
           "token": "preview-active=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263"
           ],
           "state": "preview-active"
         },
@@ -175,7 +175,7 @@
           "token": "data-focus-active",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:180"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:180"
           ],
           "state": "focus-active"
         },
@@ -183,7 +183,7 @@
           "token": "data-particle-field-state",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:129"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:129"
           ],
           "state": "particle-field-state"
         },
@@ -191,7 +191,7 @@
           "token": "data-preview-active",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:181"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:181"
           ],
           "state": "preview-active"
         }
@@ -201,149 +201,149 @@
           "token": "continuity=seamless",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:8",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:9",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:8",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:9",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35"
           ]
         },
         {
           "token": "continuity=segmented",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:21",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:22",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:59"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:21",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:22",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:59"
           ]
         },
         {
           "token": "field-pattern=ambient",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:131",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:141"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:131",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:141"
           ]
         },
         {
           "token": "field-pattern=hybrid",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:146",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:166"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:146",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:166"
           ]
         },
         {
           "token": "field-pattern=orbital",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:116",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:126"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:116",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:126"
           ]
         },
         {
           "token": "focus-reaction=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263"
           ]
         },
         {
           "token": "intensity=high",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:111"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:111"
           ]
         },
         {
           "token": "intensity=low",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:106"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:106"
           ]
         },
         {
           "token": "preview-emphasis=true",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263"
           ]
         },
         {
           "token": "variant=ai-field",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:59",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:84"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:59",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:84"
           ]
         },
         {
           "token": "variant=default",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:59",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:207"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:59",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:207"
           ]
         },
         {
           "token": "data-continuity",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:176"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:176"
           ]
         },
         {
           "token": "data-field-pattern",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:124",
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:177"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:124",
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:177"
           ]
         },
         {
           "token": "data-focus-reaction",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:178"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:178"
           ]
         },
         {
           "token": "data-intensity",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:125",
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:175"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:125",
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:175"
           ]
         },
         {
           "token": "data-mood",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:126",
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:174"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:126",
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:174"
           ]
         },
         {
           "token": "data-particle-field-mode",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:182"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:182"
           ]
         },
         {
           "token": "data-preview-emphasis",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:179"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:179"
           ]
         },
         {
           "token": "data-variant",
           "axis": "stamped-data-attribute",
           "at": [
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:173"
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx:173"
           ]
         }
       ],
@@ -353,7 +353,7 @@
             "token": "aria-label",
             "axis": "aria-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:121"
+              "packages/core/src/components/structures/shell/workspace-shell/index.tsx:121"
             ]
           }
         ],
@@ -364,17 +364,17 @@
           "token": "anatomy-layout=flat",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:180",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:181",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:182"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:180",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:181",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:182"
           ]
         },
         {
           "token": "anatomy-layout=floating",
           "axis": "css-selector",
           "at": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:187",
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:193"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:187",
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:193"
           ]
         }
       ],
@@ -384,14 +384,14 @@
             "token": "data-cra-14-static-fallback",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:123"
+              "packages/core/src/components/structures/shell/workspace-shell/index.tsx:123"
             ]
           },
           {
             "token": "data-particle-field-runtime",
             "axis": "stamped-data-attribute",
             "at": [
-              "packages/core/src/ui/structures/shell/workspace-shell/index.tsx:128"
+              "packages/core/src/components/structures/shell/workspace-shell/index.tsx:128"
             ]
           }
         ],
@@ -400,11 +400,11 @@
       "engineDivergence": {
         "hasEnginesDirectory": false,
         "paintLayerBreakdown": {
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css": {
             "rows": 37,
             "layer": "engine-agnostic skin"
           },
-          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css": {
+          "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css": {
             "rows": 3,
             "layer": "engine-agnostic skin"
           }
@@ -432,7 +432,7 @@
           {
             "variable": "--ds-card-radius",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:8",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:8",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"]",
             "states": [
               "continuity=seamless"
@@ -447,17 +447,17 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:64",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:83",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:250",
-              "packages/core/src/tooling/testing/fixtures/tenants/bithire.css:47"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:64",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:83",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:250",
+              "packages/core/tests/fixtures/tenants/bithire/index.css:47"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-radius-xl",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:8",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:8",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"]",
             "states": [
               "continuity=seamless"
@@ -473,15 +473,15 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-workspace-shell-border",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:9",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:9",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"]",
             "states": [
               "continuity=seamless"
@@ -504,7 +504,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:9",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:9",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"]",
             "states": [
               "continuity=seamless"
@@ -519,17 +519,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:9",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:9",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"]",
             "states": [
               "continuity=seamless"
@@ -545,16 +545,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-card-radius-sm",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:21",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:21",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"segmented\"]",
             "states": [
               "continuity=segmented"
@@ -569,14 +569,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:65"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:65"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-radius-lg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:21",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:21",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"segmented\"]",
             "states": [
               "continuity=segmented"
@@ -592,16 +592,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:22",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:22",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"segmented\"]",
             "states": [
               "continuity=segmented"
@@ -617,16 +617,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-workspace-shell-shadow",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:26",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:26",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [],
             "landsOn": "box-shadow",
@@ -646,7 +646,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:26",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:26",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [],
             "landsOn": "box-shadow",
@@ -659,17 +659,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:26",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:26",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [],
             "landsOn": "box-shadow",
@@ -682,17 +682,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:26",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:26",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [],
             "landsOn": "box-shadow",
@@ -706,14 +706,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-workspace-shell-bg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -729,15 +729,15 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:995",
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:1020"
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:995",
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:1020"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -754,14 +754,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -777,17 +777,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -804,14 +804,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-secondary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -827,17 +827,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:199",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2121",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:138",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:156"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -853,15 +853,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:35",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:35",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=default",
@@ -878,14 +878,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:59",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:59",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"][data-continuity=\"segmented\"], .ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"segmented\"]",
             "states": [
               "variant=default",
@@ -903,14 +903,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=ai-field",
@@ -927,14 +927,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=ai-field",
@@ -950,15 +950,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=ai-field",
@@ -975,14 +975,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-primary",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=ai-field",
@@ -998,8 +998,8 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:198",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2120",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:198",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2120",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:131",
               "packages/core/src/infrastructure/compilers/kernel/runtime/appearance/index.ts:255"
             ],
@@ -1008,7 +1008,7 @@
           {
             "variable": "--ds-color-bg-canvas",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=ai-field",
@@ -1024,15 +1024,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-surface-card",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:63",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:63",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-continuity=\"seamless\"]",
             "states": [
               "variant=ai-field",
@@ -1049,14 +1049,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:116",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"orbital\"]",
             "states": [
               "variant=ai-field",
@@ -1072,17 +1072,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:116",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:116",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"orbital\"]",
             "states": [
               "variant=ai-field",
@@ -1098,17 +1098,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:131",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"ambient\"]",
             "states": [
               "variant=ai-field",
@@ -1124,17 +1124,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:131",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:131",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"ambient\"]",
             "states": [
               "variant=ai-field",
@@ -1150,17 +1150,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:146",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:146",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"hybrid\"]",
             "states": [
               "variant=ai-field",
@@ -1176,17 +1176,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:146",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:146",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"hybrid\"]",
             "states": [
               "variant=ai-field",
@@ -1202,17 +1202,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:146",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:146",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"hybrid\"]",
             "states": [
               "variant=ai-field",
@@ -1228,17 +1228,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "particle-field-static-fallback",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:146",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:146",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__static-particle-field[data-part=\"particle-field-static-fallback\"][data-field-pattern=\"hybrid\"]",
             "states": [
               "variant=ai-field",
@@ -1254,17 +1254,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-card-radius",
             "part": "content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:171",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:171",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"] > .ds-collection-shell__content[data-part=\"content\"]",
             "states": [
               "continuity=seamless"
@@ -1279,17 +1279,17 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:64",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:83",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:250",
-              "packages/core/src/tooling/testing/fixtures/tenants/bithire.css:47"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:64",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:83",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:250",
+              "packages/core/tests/fixtures/tenants/bithire/index.css:47"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-radius-xl",
             "part": "content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:171",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:171",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"seamless\"] > .ds-collection-shell__content[data-part=\"content\"]",
             "states": [
               "continuity=seamless"
@@ -1305,15 +1305,15 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:238",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:772",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:45"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:772",
+              "packages/core/tests/fixtures/tenants/default/index.css:45"
             ],
             "declarationSiteCount": 3
           },
           {
             "variable": "--ds-card-radius-sm",
             "part": "content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:176",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:176",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"segmented\"] > .ds-collection-shell__content[data-part=\"content\"]",
             "states": [
               "continuity=segmented"
@@ -1328,14 +1328,14 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:65"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:65"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-radius-lg",
             "part": "content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:176",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:176",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-continuity=\"segmented\"] > .ds-collection-shell__content[data-part=\"content\"]",
             "states": [
               "continuity=segmented"
@@ -1351,16 +1351,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-border-width-none",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:180",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:180",
             "selector": "[data-anatomy-layout=\"flat\"] .ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [
               "anatomy-layout=flat"
@@ -1375,14 +1375,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/base/borders.css:15"
+              "packages/core/src/foundation/tokens/css/foundation/base/borders/index.css:15"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-radius-none",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:181",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:181",
             "selector": "[data-anatomy-layout=\"flat\"] .ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [
               "anatomy-layout=flat"
@@ -1397,14 +1397,14 @@
             "fallbackKind": "literal-scalar",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:757"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:757"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-shadow-none",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:182",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:182",
             "selector": "[data-anatomy-layout=\"flat\"] .ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [
               "anatomy-layout=flat"
@@ -1419,14 +1419,14 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:828"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:828"
             ],
             "declarationSiteCount": 1
           },
           {
             "variable": "--ds-card-radius",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:187",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:187",
             "selector": "[data-anatomy-layout=\"floating\"] .ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [
               "anatomy-layout=floating"
@@ -1441,17 +1441,17 @@
             "fallbackKind": "chained-custom-property",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/card.css:64",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:83",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile.css:250",
-              "packages/core/src/tooling/testing/fixtures/tenants/bithire.css:47"
+              "packages/core/src/foundation/tokens/css/presentation/components/card/index.css:64",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:83",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/data-table-mobile/index.css:250",
+              "packages/core/tests/fixtures/tenants/bithire/index.css:47"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-radius-lg",
             "part": "root",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:187",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:187",
             "selector": "[data-anatomy-layout=\"floating\"] .ds-surface.ds-collection-shell[data-part=\"root\"]",
             "states": [
               "anatomy-layout=floating"
@@ -1467,16 +1467,16 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:237",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:771",
-              "packages/core/src/tooling/testing/fixtures/tenants/default.css:44",
-              "packages/core/src/ui/primitives/feedback/Modal/engines/rustic/index.tsx:32"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:771",
+              "packages/core/tests/fixtures/tenants/default/index.css:44",
+              "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx:32"
             ],
             "declarationSiteCount": 5
           },
           {
             "variable": "--ds-surface-card",
             "part": "content",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:198",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:198",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__content[data-part=\"content\"]",
             "states": [
               "variant=ai-field"
@@ -1492,14 +1492,14 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/fixtures/themanagement-db-row/index.ts:336",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:265"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:265"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-workspace-shell-overlay",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:207",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:207",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=default"
@@ -1514,8 +1514,8 @@
             "fallbackKind": "literal-other",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:19",
-              "packages/core/src/foundation/tokens/css/presentation/components/patterns.css:1005",
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:19",
+              "packages/core/src/foundation/tokens/css/presentation/components/patterns/index.css:1005",
               "packages/core/governance/tokens/decisions/reads/index.json:22128"
             ],
             "declarationSiteCount": 3
@@ -1523,7 +1523,7 @@
           {
             "variable": "--ds-color-primary",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:207",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:207",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=default"
@@ -1538,17 +1538,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-bg-secondary",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:207",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:207",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"default\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=default"
@@ -1563,17 +1563,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:199",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2121",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:138",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:156"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:199",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2121",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:138",
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:156"
             ],
             "declarationSiteCount": 4
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:220",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field"
@@ -1588,15 +1588,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:220",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field"
@@ -1611,15 +1611,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:220",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field"
@@ -1634,15 +1634,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:220",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:220",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field"
@@ -1657,15 +1657,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1682,15 +1682,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1707,15 +1707,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1732,15 +1732,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1757,15 +1757,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:231",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:231",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1782,17 +1782,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1809,15 +1809,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1834,15 +1834,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1859,15 +1859,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1884,15 +1884,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:247",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:247",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1909,17 +1909,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1938,15 +1938,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1965,15 +1965,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -1992,15 +1992,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-bg-canvas",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -2019,15 +2019,15 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:208",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2109"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:208",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2109"
             ],
             "declarationSiteCount": 2
           },
           {
             "variable": "--ds-color-primary",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -2046,17 +2046,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-primary",
             "part": "overlay",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css:263",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css:263",
             "selector": ".ds-surface.ds-collection-shell[data-part=\"root\"][data-variant=\"ai-field\"][data-preview-emphasis=\"true\"][data-preview-active=\"true\"][data-focus-reaction=\"true\"][data-focus-active=\"true\"] > .ds-collection-shell__overlay[data-part=\"overlay\"]",
             "states": [
               "variant=ai-field",
@@ -2075,17 +2075,17 @@
             "fallbackKind": "none",
             "declarationStatus": "DECLARED",
             "declarationSites": [
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:156",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:156",
               "packages/core/src/infrastructure/compilers/composition/tenant-theme/migrate-v1/index.ts:124",
-              "packages/core/src/ui/patterns/customization/brand-studio/index.tsx:18",
-              "packages/core/src/ui/primitives/feedback/Progress/engines/modern/index.tsx:30"
+              "packages/core/src/components/patterns/customization/brand-studio/index.tsx:18",
+              "packages/core/src/components/primitives/feedback/Progress/engines/modern/index.tsx:30"
             ],
             "declarationSiteCount": 6
           },
           {
             "variable": "--ds-color-border-subtle",
             "part": "toolbar-row",
-            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css:670",
+            "readAt": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css:670",
             "selector": ".ds-surface.ds-collection-workspace.ds-collection-shell .ds-collection-workspace__toolbar-row[data-part=\"toolbar-row\"]",
             "states": [],
             "landsOn": "border-top",
@@ -2099,20 +2099,20 @@
             "declarationStatus": "DECLARED",
             "declarationSites": [
               "packages/core/src/foundation/tokens/css/foundation/monochrome/index.css:65",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:232",
-              "packages/core/src/foundation/tokens/css/foundation/themes/default.css:2112",
-              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section.css:31"
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:232",
+              "packages/core/src/foundation/tokens/css/foundation/themes/default/index.css:2112",
+              "packages/core/src/foundation/tokens/css/presentation/components/skin/invert-section/index.css:31"
             ],
             "declarationSiteCount": 4
           }
         ],
         "paintOwnership": {
           "owners": {
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css": {
               "rows": 37,
               "layer": "engine-agnostic skin"
             },
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace.css": {
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-workspace/index.css": {
               "rows": 3,
               "layer": "engine-agnostic skin"
             }
@@ -2146,7 +2146,7 @@
             "styleAttribute": 5
           },
           "perFile": {
-            "packages/core/src/ui/structures/shell/workspace-shell/index.tsx": {
+            "packages/core/src/components/structures/shell/workspace-shell/index.tsx": {
               "classNameOccurrences": 6,
               "dataPartOccurrences": 4,
               "styleAttributeOccurrences": 5,
@@ -2208,7 +2208,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2233,7 +2233,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.pairing",
@@ -2258,7 +2258,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "type.scale",
@@ -2283,7 +2283,7 @@
       "nextAction": "DIFFERENTIAL_COMPILE_AND_COMPUTED_FAMILY_BINDING",
       "targetBinding": {
         "status": "MUST_REACH",
-        "source": "huecos-fable",
+        "source": "gap-audit-independent",
         "bindings": [
           {
             "root": "shape.corner",
@@ -2323,7 +2323,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "los controles del shell son primitivas: sus acciones son Button/primitivas que ya reciben la raiz por su propio socket; un socket de familia crearia dos autoridades sobre el mismo pixel (L4 en espiritu)",
-        "source": "huecos-fable"
+        "source": "gap-audit-independent"
       }
     },
     {
@@ -2354,13 +2354,13 @@
         {
           "channelId": "--_ds-workspace-shell-section-gap",
           "semanticOwner": "spacing.rhythm",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2380,13 +2380,13 @@
         {
           "channelId": "--_ds-workspace-shell-transition-duration",
           "semanticOwner": "motion.dial",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2414,13 +2414,13 @@
         {
           "channelId": "--_ds-workspace-shell-elevation",
           "semanticOwner": "surfaces.elevation-posture",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2439,7 +2439,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "chrome mate",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2453,13 +2453,13 @@
         {
           "channelId": "--_ds-workspace-shell-sidebar-bg",
           "semanticOwner": "navigation.sidebar-tone",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2478,7 +2478,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-experience-profile: selecciona la composicion de raices en carga y su expansion siempre pierde contra cualquier campo autorado; el marcador es inmutable tras el mount",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2492,13 +2492,13 @@
         {
           "channelId": "--_ds-workspace-shell-z-index",
           "semanticOwner": "chrome.families",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2518,13 +2518,13 @@
         {
           "channelId": "--_ds-border-width-none",
           "semanticOwner": "chrome.anatomy",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
-          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/borders.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
+          "fallbackAuthority": "packages/core/src/foundation/tokens/css/foundation/base/borders/index.css",
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "LIVE"
@@ -2555,7 +2555,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/token-overrides.json"
+        "adjudicatedFrom": "controls/tokens/overrides/index.json"
       }
     },
     {
@@ -2568,7 +2568,7 @@
       "targetBinding": {
         "status": "MUST_NOT_REACH",
         "why": "ningun componente ni superficie lee --ds-recipe-profile: la receta rebinds raices y el marcador vive en el :root del tema compilado; leerla directamente rompe la cascada (L4)",
-        "source": "huecos-kimi"
+        "source": "gap-audit-primary"
       }
     },
     {
@@ -2607,7 +2607,7 @@
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/profiles.expressive.json"
+        "adjudicatedFrom": "controls/profiles/expressive/index.json"
       }
     },
     {
@@ -2634,13 +2634,13 @@
         {
           "channelId": "--_ds-page-icon-stroke-width",
           "semanticOwner": "profiles.icon",
-          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css",
+          "producer": "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css",
           "fallbackAuthority": null,
           "productiveConsumerFamilyIds": [
             "structure/shell/workspace-shell"
           ],
           "sourceBindings": [
-            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell.css"
+            "packages/core/src/foundation/tokens/css/presentation/components/skin/collection-shell/index.css"
           ],
           "replacementDisposition": {
             "state": "REQUIRED_ADDITION",
@@ -2660,11 +2660,11 @@
         "status": "NO_CSS_CHANNEL",
         "why": "no emite ninguna variable CSS: declaredOutputs.channels esta vacio y el propio control lo declara -- la escalera viaja como DATO (document -> schema -> artifact normalizedAppearance) y llega a la geometria solo por la puerta 2 del solver (AdaptiveLayoutEnv.spanBias) y por el bucketing de postura de contenedor. Nunca un canal CSS, nunca una lectura de viewport.",
         "reach": "solo las familias que consumen el runtime de adaptive-layout, y por prop de JS, no por socket",
-        "consumer": "src/ui/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
+        "consumer": "src/components/patterns/runtime/adaptive-layout/presentation/react/index.ts :: resolveActiveResponsivePosture",
         "socketsExpected": false,
         "tier": "pro",
         "source": "adjudicacion-controls-pro",
-        "adjudicatedFrom": "controls/responsive.posture.json"
+        "adjudicatedFrom": "controls/responsive/posture/index.json"
       }
     }
   ],
