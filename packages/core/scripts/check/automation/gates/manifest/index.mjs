@@ -144,13 +144,13 @@ export const CI_GATES = Object.freeze([
     blocking: true,
   },
   // Generated manifest views must match their live sources.
-  { id: 'fanout-facts-freshness', run: ['node', 'manifest/fanout-facts/index.mjs', '--check'], blocking: true },
-  { id: 'root-checklists-freshness', run: ['node', 'manifest/root-checklist/index.mjs', '--check'], blocking: true },
-  { id: 'mirror-parity-freshness', run: ['node', 'manifest/mirror-parity/index.mjs', '--check'], blocking: true },
+  { id: 'fanout-facts-freshness', run: ['node', 'scripts/generate/tokens/manifest/fanout/index.mjs', '--check'], blocking: true },
+  { id: 'root-checklists-freshness', run: ['node', 'scripts/generate/tokens/manifest/root-checklists/index.mjs', '--check'], blocking: true },
+  { id: 'mirror-parity-freshness', run: ['node', 'scripts/generate/tokens/manifest/mirror-parity/index.mjs', '--check'], blocking: true },
   // El cuarto mide la FUENTE, no el artefacto: variant-parity es el canon
   // estructural de los 3 themes y corre sin build. Su `--check` es frescura Y
   // trinquete (divergentSlots / untaggedAuthoredLeaves, decrease-only).
-  { id: 'variant-parity', run: ['node', 'manifest/variant-parity/index.mjs', '--check'], blocking: true },
+  { id: 'variant-parity', run: ['node', 'scripts/generate/tokens/manifest/variant-parity/index.mjs', '--check'], blocking: true },
   // The exact proof runs the audit above a second time inside two deterministic
   // passes and adds the planes no other gate covers: the claim/contract census in
   // the documentation, the code-derived vertical rows, the data-part corpus, and
@@ -158,7 +158,7 @@ export const CI_GATES = Object.freeze([
   // `pnpm run claim-exactness:check`, so a doc could contradict source with the whole
   // dashboard green. It sits AFTER the audit deliberately: when the audit is red
   // this gate is red for the same reason but far more slowly.
-  { id: 'claim-exactness', run: ['node', 'scripts/evidence/gat-07-exact-proof/index.mjs', '--check-artifact'], blocking: true },
+  { id: 'claim-exactness', run: ['node', 'scripts/check/evidence/certification/claims/exactness/index.mjs', '--check-artifact'], blocking: true },
   { id: 'anatomy-variant-gate', run: ['node', 'scripts/check/engine/runtime/anatomy-variants/index.mjs', '--check'], blocking: true },
   { id: 'size-axis-law-gate', run: ['node', 'scripts/check/boundaries/components/sizing/index.mjs', '--check'], blocking: true },
   { id: 'application-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/components/imports/index.test.mjs'], blocking: true },
@@ -274,7 +274,7 @@ export const CI_GATES = Object.freeze([
   // Drill first: the reachability census is baseline-backed, so a measurer that
   // quietly stopped resolving names would report zero violations and read as clean.
   { id: 'tenant-reachability-drill', run: ['node', 'scripts/check/orchestration/tests/drills/tenant-reachability/index.mjs'], blocking: true },
-  { id: 'tenant-reachability', run: ['node', 'scripts/check/orchestration/public/tenant-reachability/index.mjs', '--check'], blocking: true },
+  { id: 'tenant-reachability', run: ['node', 'scripts/check/orchestration/public/tenant-reachability/index.mjs'], blocking: true },
   { id: 'i18n-key-parity', run: ['node', 'scripts/check/localization/index.mjs', '--check'], blocking: true },
   // CI checks app-bithire out explicitly and local workspace runs discover the
   // sibling repository. NOT `--optional`: a missing corpus is a hard failure,
@@ -347,12 +347,12 @@ export const CI_GATES = Object.freeze([
   // zero findings and looks identical to a clean tree.
   {
     id: 'manifest-generator-drill',
-    run: ['node', '--test', 'manifest/generator/index.test.mjs'],
+    run: ['node', '--test', 'scripts/generate/tokens/manifest/generation/index.test.mjs'],
     blocking: true,
   },
   {
     id: 'modern-rescue-customization-manifest-freshness',
-    run: ['node', 'manifest/generator/index.mjs', '--check'],
+    run: ['node', 'scripts/generate/tokens/manifest/generation/index.mjs', '--check'],
     blocking: true,
   },
   // The drill runs on synthetic fixtures and fails if the gate stops detecting
