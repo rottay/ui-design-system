@@ -518,23 +518,80 @@ export function resolveMisKeyed(path, tracked) {
  *   symbol present               -> hard failure until the obligation is deleted
  *                                   in the same commit that satisfies it
  */
-export const OBLIGATIONS = Object.freeze([
+export const OBLIGATIONS = Object.freeze([]);
+
+/**
+ * Obligations that were MET and therefore left the roster, with the owner that
+ * now enforces them. An obligation may only leave `OBLIGATIONS` through this
+ * ledger: the regex it ran moves to `successorSymbolFile`, and the half the
+ * regex could not express moves to `successorAssertions`, which are files that
+ * execute. Deleting a row from here is deleting the evidence, not the debt.
+ */
+export const DISCHARGED = Object.freeze([
   Object.freeze({
     id: 'engine-posture-totality',
+    dischargedInPhase: 'C1 (contract freeze)',
     owner: 'DT / coordinator seat',
-    phase: 'C1 (contract freeze)',
-    expires: '2026-12-31',
     assertion:
       'EnginePosture is exported from infrastructure/compilers/theme/presentation/engines/contract/, '
       + 'and classic/rustic/modern each declare a TOTAL posture record.',
-    symbolFile: 'packages/core/src/infrastructure/compilers/theme/presentation/engines/contract/index.ts',
-    symbol: 'EnginePosture',
+    expires: '2026-12-31',
     why:
       'This gate is a CONTENT freeze. It must not grow a posture checker it cannot satisfy, and the '
       + 'adapter posture policy cannot be resolved before C1 — so the obligation is recorded where it '
       + 'fails loud instead of being carried as prose.',
+    pinnedSymbolFile:
+      'packages/core/src/infrastructure/compilers/theme/presentation/engines/contract/index.ts',
+    successorSymbolFile:
+      'packages/core/src/foundation/contracts/composition/tenants/themes/engine-adapter/index.ts',
+    symbol: 'EnginePosture',
+    relocationReason:
+      'the pinned path is a local-layer inversion: runtime/lowering consumes the contract, '
+      + 'and LOCAL_LAYER_RANKS ranks runtime below presentation, so the contract belongs in '
+      + 'foundation/contracts. The engine folder name is also a FROZEN path under this gate.',
+    successorAssertions: Object.freeze([
+      'packages/core/src/foundation/contracts/composition/tenants/themes/engine-adapter/tests/index.test.ts',
+      'packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/tests/index.test.ts',
+    ]),
   }),
 ]);
+
+/**
+ * A discharged obligation is only evidence while its successor still holds.
+ * Re-runs the retired obligation's own regex against the successor owner and
+ * proves every named successor assertion still exists, so deleting the
+ * successor re-reddens the gate instead of silently retiring the debt.
+ */
+export function evaluateDischarged(discharged, { readRepoFile }) {
+  const findings = [];
+  for (const row of discharged) {
+    const source = readRepoFile(row.successorSymbolFile);
+    const present =
+      typeof source === 'string'
+      && new RegExp(`\\bexport\\b[^\\n]*\\b${row.symbol}\\b`).test(source);
+    if (!present) {
+      findings.push({
+        id: row.id,
+        state: 'successor-missing',
+        blocking: true,
+        message:
+          `${row.id}: the successor ${row.successorSymbolFile} no longer exports ${row.symbol}. `
+          + 'A discharged obligation whose successor vanished is the debt back, undetected.',
+      });
+    }
+    for (const path of row.successorAssertions) {
+      if (readRepoFile(path) === null) {
+        findings.push({
+          id: row.id,
+          state: 'successor-assertion-missing',
+          blocking: true,
+          message: `${row.id}: successor assertion ${path} does not exist.`,
+        });
+      }
+    }
+  }
+  return findings;
+}
 
 export function evaluateObligations(obligations, { readRepoFile, today }) {
   const findings = [];
@@ -716,6 +773,17 @@ function readRepoFile(relativePath) {
   return readFileSync(full, 'utf8');
 }
 
+/**
+ * The discharge ledger is a claim about THIS repository's own source, so it is
+ * read from the real checkout and never from a `--repo` fixture: a throwaway
+ * repo can neither satisfy nor falsify where a retired obligation went.
+ */
+function readOwnRepoFile(relativePath) {
+  const full = join(findRepoRoot(scriptDir), relativePath);
+  if (!existsSync(full)) return null;
+  return readFileSync(full, 'utf8');
+}
+
 /* -------------------------------------------------------------------------- */
 /* modes                                                                      */
 /* -------------------------------------------------------------------------- */
@@ -809,6 +877,9 @@ function main() {
     readRepoFile,
     today: new Date().toISOString().slice(0, 10),
   });
+  obligationFindings.push(
+    ...evaluateDischarged(DISCHARGED, { readRepoFile: readOwnRepoFile }),
+  );
   const blockingObligations = obligationFindings.filter((finding) => finding.blocking);
   const violations =
     unauthorized.length

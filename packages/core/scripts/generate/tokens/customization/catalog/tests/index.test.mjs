@@ -44,23 +44,36 @@ function pageNames(tree) {
   return names;
 }
 
+/**
+ * The EXACT residual the sibling `docs-engineering` checkout carries today, in
+ * the generator's own normalized wording. Two files, named one by one: an
+ * extra, a missing, a renamed or a differently-categorized residual all fail
+ * here, where a category pattern would have absorbed every one of them.
+ */
+const CROSS_REPO_RESIDUAL = [
+  'stale/missing generated view: tokens/README.md — run pnpm tokens:catalog:write',
+  'stale/missing generated view: tokens/governance/lifecycle-and-deprecations.md — run pnpm tokens:catalog:write',
+];
+
 test('positive: the catalog check passes on the real tree', () => {
-  // The IN-REPO check is the one this package can satisfy. The full `--check`
-  // additionally audits the sibling `docs-engineering` checkout, and exactly one
-  // generated view there is stale; regenerating it is a cross-repo write that
-  // belongs to the documentation reconciliation, not to this package's gates.
+  // The IN-REPO check is the one this package owns, and it must be green.
   const { status, out } = run('--check', '--in-repo-only');
   assert.equal(status, 0, out);
 
-  // The residual is stated exactly, so "deferred" cannot quietly grow. If this
-  // list ever changes, the deferral has stopped being the one-file reconciliation
-  // it is recorded as.
+  // The full `--check` additionally audits the sibling `docs-engineering`
+  // checkout, whose freshness this package cannot write. It is still RUN and
+  // nothing is deferred: the residual it reports is pinned file by file, so it
+  // can neither grow nor change category without reddening this gate.
   const full = run('--check');
-  const failures = full.out.split(String.fromCharCode(10)).filter((line) => line.includes('tokens-catalog FAIL'));
-  assert.deepEqual(
-    failures.map((line) => line.replace(/^.*FAIL — /, '')),
-    ['stale/missing generated view: tokens/governance/lifecycle-and-deprecations.md — run pnpm tokens:catalog:write'],
-  );
+  assert.equal(full.out.includes('DEFERRED (cross-repo'), false, full.out);
+
+  const failures = full.out
+    .split(String.fromCharCode(10))
+    .filter((line) => line.includes('tokens-catalog FAIL'))
+    .map((line) => line.replace(/^.*FAIL — /, ''));
+
+  assert.deepEqual(failures, CROSS_REPO_RESIDUAL, full.out);
+  assert.equal(full.status, 1, full.out);
 });
 
 test('positive: the two trees cover the census exactly once, and never mix', () => {

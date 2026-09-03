@@ -9,33 +9,14 @@
  * @package @rottay/design-system
  */
 
-import type { SurfaceTokens, MotionTokens } from '@/foundation/contracts';
+import type { EngineTokenOverrides } from '@/foundation/contracts/kernel/tokens/engine-tokens';
 
 /**
- * Token overrides that differentiate one engine from another.
- * The token resolution pipeline in `useTokens` layers these under
- * product-profile and tenant overrides.
+ * The interface moved to `foundation/contracts/kernel/tokens/engine-tokens` so a
+ * foundation contract can name it. The three token rows and `getEngineTokens`
+ * stay here; this re-export keeps every existing consumer's specifier valid.
  */
-export interface EngineTokenOverrides {
-  borderRadius: {
-    none: string;
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-    full: string;
-  };
-  shadows: {
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
-  surface: SurfaceTokens;
-  motion: MotionTokens;
-  /** Spacing density multiplier (< 1 = compact, 1 = normal, > 1 = spacious) */
-  densityScale: number;
-}
+export type { EngineTokenOverrides };
 
 /**
  * Classic engine: Enterprise, structured, corporate.

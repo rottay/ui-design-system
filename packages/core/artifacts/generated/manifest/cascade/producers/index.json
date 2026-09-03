@@ -18,8 +18,8 @@
     "cssEdges": "6be5af3f23544885f9550ca1547edeafd8482ddef1cfed024c5c08ca71d5c9a7",
     "cascadeRoots": "b67809d4aa89572b381255b3511d0cc4dcf7d67da42d1a19253000916e00fe95",
     "rootCatalog": "82e7057a3a1f6f0d0192887f594c5cd726cf6ef2a8b2369d0b1a6e07456cab16",
-    "srcTsx": "ae98ed7194d37d64fe88d27de7318a5972b2596065c2b803ed5ac65a230e8f2d",
-    "srcCompilers": "5562fd7f1a47628fac73c2f22cb8c6ed61e278665d74c5abeb9c8c02762e5ca6",
+    "srcTsx": "fcbc5e50102ace1554d082191b5154aef27ab2eecb1b78f1800092598dfdebd5",
+    "srcCompilers": "84f4859fd872f539997bb05f52f824024715b4d0db4d2af4facf2a08b1dac5d7",
     "artifacts": "125b9745911d4f7de451894eadba4b10d552e0be1a002bb4d4b8811231202716"
   },
   "stats": {
@@ -95,8 +95,8 @@
       "stampSites": 513
     },
     "measuredCensus": {
-      "scannedFiles": 1715,
-      "excludedFiles": 1625,
+      "scannedFiles": 1730,
+      "excludedFiles": 1633,
       "styleSinks": 3291,
       "stampSites": 312,
       "distinctCustomProperties": 202,
@@ -108,13 +108,13 @@
     "censusDiff": {
       "scannedFiles": {
         "authored": 1740,
-        "measured": 1715,
-        "delta": -25
+        "measured": 1730,
+        "delta": -10
       },
       "excludedFiles": {
         "authored": 1664,
-        "measured": 1625,
-        "delta": -39
+        "measured": 1633,
+        "delta": -31
       },
       "styleSinks": {
         "authored": 3283,
@@ -150,7 +150,7 @@
     "censusReconciliation": {
       "method": "identity, not tolerance. This module publishes the full member lists below; the authored census published COUNTS ONLY and no member list, so the two cannot be reconciled member by member from its side. The residual is therefore expressed as unknownProvenance rows with file and symbol, never as a numeric tolerance.",
       "authoredPublishesMemberLists": false,
-      "scannedFiles": 1715,
+      "scannedFiles": 1730,
       "governedChannels": 163,
       "unresolvedSites": 0
     },
@@ -1673,9 +1673,14 @@
       "packages/core/src/foundation/contracts/composition/tenants/capabilities/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/product-profiles/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/compiled/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/emission/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/engine-adapter/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/intent/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/iso/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/iso/shape/index.ts",
+      "packages/core/src/foundation/contracts/composition/tenants/themes/resolved/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/artifact-protocol/index.ts",
       "packages/core/src/foundation/contracts/composition/tenants/themes/tenant-theme/index.ts",
       "packages/core/src/foundation/contracts/index.ts",
@@ -1686,6 +1691,7 @@
       "packages/core/src/foundation/contracts/kernel/responsive/index.ts",
       "packages/core/src/foundation/contracts/kernel/responsive/values/index.ts",
       "packages/core/src/foundation/contracts/kernel/spatial/index.ts",
+      "packages/core/src/foundation/contracts/kernel/tokens/engine-tokens/index.ts",
       "packages/core/src/foundation/contracts/kernel/tokens/extensions/index.ts",
       "packages/core/src/foundation/contracts/kernel/tokens/index.ts",
       "packages/core/src/foundation/contracts/kernel/tokens/materials/index.ts",
@@ -1731,6 +1737,7 @@
       "packages/core/src/foundation/kernel/color/oklch/index.ts",
       "packages/core/src/foundation/kernel/color/oklch/ramp/index.ts",
       "packages/core/src/foundation/kernel/cryptography/sha-256/index.ts",
+      "packages/core/src/foundation/kernel/geometry/css-length/index.ts",
       "packages/core/src/foundation/kernel/geometry/radius-dial/index.ts",
       "packages/core/src/foundation/kernel/math/index.ts",
       "packages/core/src/foundation/kernel/performance/index.ts",
@@ -1905,6 +1912,14 @@
       "packages/core/src/infrastructure/compilers/runtime/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/tenant-css/artifact-renderer/index.ts",
       "packages/core/src/infrastructure/compilers/runtime/tenant-css/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/modern/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/rustic/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts",
+      "packages/core/src/infrastructure/compilers/runtime/theme/runtime/resolution/index.ts",
       "packages/core/src/infrastructure/runtime/adapters/presentation/react/compound-components/index.ts",
       "packages/core/src/infrastructure/runtime/adapters/presentation/react/focus-mode/index.tsx",
       "packages/core/src/infrastructure/runtime/adapters/presentation/react/navigation/index.tsx",

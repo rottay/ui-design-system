@@ -2164,59 +2164,12 @@ export {
   apcaContrast,
 } from "@/foundation/kernel/accessibility/branding-contrast";
 
-/**
- * `BrandCompilerInput` plus the optional tenant authorship record.
- *
- * Widened HERE rather than on the contract because provenance is a property of
- * one COMPILE, not of the BrandTheme shape the contract describes, and because
- * every existing caller stays valid: the field is optional, so omitting it is
- * the documented "no provenance supplied" case that must reproduce today's
- * bytes exactly.
- */
-type BrandCompilerProvenanceInput = BrandCompilerInput & {
-  tenantAuthoredPaths?: TenantAuthoredPaths;
-  /**
-   * The TENANT floor, separate from the vertical baseline in `brandTheme`: the
-   * ingestion step the DB transport already has at
-   * `composition/tenant-theme:1900-1948`. ABSENT => IDENTITY.
-   */
-  tenantPatch?: Partial<BrandTheme>;
-  /**
-   * Status-seed authorship is a sibling of `tenantPatch`, never a
-   * widening of it. `tenantPatch` on the DB door is `tenantPostureFloors`'s
-   * projection of exactly six posture keypaths (typography/surfaces/motion);
-   * `palette` and `modes` are excluded from it BY DESIGN, so `tenantPatch`
-   * can never carry status-seed authorship on that door. This field is the
-   * explicit, closed, boolean-only channel that does: computed by the
-   * caller directly off the raw `ThemePatch` (`migrateV1`'s output), BEFORE
-   * any projection, reading the actual VALUE (`!== undefined`) rather than
-   * `authoredPaths` Set membership -- `migrate-v1`'s `paletteFields()`
-   * always constructs all four `{tone}Color` keys (tenant-set or not), so
-   * Set membership alone cannot tell authorship from construction.
-   *
-   * ABSENT => the base/mode-block sites fall back to reading
-   * `tenantPatch.palette` / `tenantPatch.modes` directly, exactly as before
-   * this field existed. That is what keeps the static resolution-probe arm
-   * and this file's own synthetic `compileBrandTheme` fixtures (guard-2/
-   * guard test in `status-tint-derivation/index.test.ts`, which hands a
-   * full BrandTheme-shaped `tenantPatch` straight to this function)
-   * byte-for-byte unchanged.
-   */
-  tenantStatusSeedAuthorship?: TenantStatusSeedAuthorship;
-};
+import type {
+  BrandCompilerProvenanceInput,
+  TenantStatusSeedAuthorship,
+} from "@/foundation/contracts/composition/tenants/themes/resolved";
 
-/**
- * See `tenantStatusSeedAuthorship` above for why this exists as a
- * sibling of `tenantPatch` rather than a widening of it.
- */
-export interface TenantStatusSeedAuthorship {
-  /** Whether the BASE block's own patch carries this tone's seed. */
-  readonly base: Readonly<Record<OnToneRole, boolean>>;
-  /** Whether EACH mode overlay's own patch carries this tone's seed. */
-  readonly modes: Readonly<
-    Partial<Record<BrandThemeMode, Readonly<Record<OnToneRole, boolean>>>>
-  >;
-}
+export type { TenantStatusSeedAuthorship };
 
 /**
  * Deep-merges the tenant floor over the vertical baseline, mirroring

@@ -122,6 +122,15 @@ test('default macro roots match the governed graphics and UI taxonomy', () => {
       runtime: 1,
       composition: 2,
     },
+    'foundation/contracts/composition/tenants/themes': {
+      iso: 0,
+      'tenant-theme': 1,
+      intent: 2,
+      resolved: 3,
+      compiled: 4,
+      emission: 5,
+      'engine-adapter': 6,
+    },
     foundation: { contracts: 0, presets: 1 },
     'foundation/i18n/runtime': { catalog: 0, resolution: 1 },
     'foundation/kernel': { color: 0, accessibility: 1 },
@@ -196,8 +205,8 @@ test('every scoped owner and ranked child resolves to a real directory', () => {
 
   // Pinned before the loop: an entry silently deleted from the table would
   // otherwise leave a passing loop over whatever survived.
-  assert.equal(owners.length, 19);
-  assert.equal(rankedChildren.length, 48);
+  assert.equal(owners.length, 20);
+  assert.equal(rankedChildren.length, 55);
 
   for (const path of [...owners, ...rankedChildren]) {
     assert.equal(
@@ -1121,6 +1130,126 @@ test('outer layer taxonomy wins across nested component families', () => {
     assert(ids.has(
       'local-layer-inversion:layered/public/surfaces/foundation/contracts/index.ts->layered/public/surfaces/runtime/widget/index.ts',
     ));
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the theme contract chain is a directed ladder, and the reversed edge still inverts', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'foundation/contracts/composition/tenants/themes';
+
+    // The rank entry is a DIRECTED law, not an exemption: iso is the floor and
+    // every later owner may read downward, but nothing may read back up.
+    assert.deepEqual(SCOPED_OWNER_RANKS[owner], {
+      iso: 0,
+      'tenant-theme': 1,
+      intent: 2,
+      resolved: 3,
+      compiled: 4,
+      emission: 5,
+      'engine-adapter': 6,
+    });
+
+    write(resolve(sourceRoot, `${owner}/iso/index.ts`), 'export const theme = true;\n');
+    write(
+      resolve(sourceRoot, `${owner}/intent/index.ts`),
+      "import { theme } from '../iso';\nexport const intent = theme;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/resolved/index.ts`),
+      "import { intent } from '../intent';\nimport { theme } from '../iso';\nexport const resolved = intent && theme;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/compiled/index.ts`),
+      "import { resolved } from '../resolved';\nexport const compiled = resolved;\n",
+    );
+    write(
+      resolve(sourceRoot, `${owner}/engine-adapter/index.ts`),
+      "import { compiled } from '../compiled';\nexport const adapter = compiled;\n",
+    );
+
+    const downward = auditCoreStructure({ packageRoot, sourceRoot });
+    const downwardIds = new Set(downward.findings.map(({ id }) => id));
+    for (const edge of [
+      `${owner}/intent/index.ts->${owner}/iso/index.ts`,
+      `${owner}/resolved/index.ts->${owner}/intent/index.ts`,
+      `${owner}/resolved/index.ts->${owner}/iso/index.ts`,
+      `${owner}/engine-adapter/index.ts->${owner}/compiled/index.ts`,
+    ]) {
+      assert(!downwardIds.has(`sibling-owner-dependency:${edge}`), `downward edge must be legal: ${edge}`);
+      assert(!downwardIds.has(`local-layer-inversion:${edge}`), `downward edge must be legal: ${edge}`);
+    }
+
+    // Reverse one edge: iso reading its own consumer is an inversion, so the
+    // entry can never be read as a blanket exemption for the whole group.
+    write(
+      resolve(sourceRoot, `${owner}/iso/index.ts`),
+      "import { resolved } from '../resolved';\nexport const theme = resolved;\n",
+    );
+    const reversed = auditCoreStructure({ packageRoot, sourceRoot });
+    assert(
+      reversed.findings.some(
+        ({ rule, id }) =>
+          rule === 'local-layer-inversion' && id.includes(`${owner}/iso/index.ts`),
+      ),
+      'iso -> resolved must stay an inversion',
+    );
+  } finally {
+    rmSync(packageRoot, { recursive: true, force: true });
+  }
+});
+
+test('the theme compiler owner is layer-closed downward, and an unlayered peer under compilers still fails', () => {
+  const { packageRoot, sourceRoot } = fixture();
+  try {
+    const owner = 'infrastructure/compilers/runtime/theme';
+
+    // Runtime may not name a type declared under presentation. This is why the
+    // adapter CONTRACT lives in foundation/contracts and there is no
+    // `presentation/adapters/contract/` owner.
+    write(resolve(sourceRoot, `${owner}/presentation/adapters/index.ts`), 'export const adapters = true;\n');
+    write(
+      resolve(sourceRoot, `${owner}/runtime/lowering/index.ts`),
+      "import { adapters } from '../../presentation/adapters';\nexport const lowering = adapters;\n",
+    );
+
+    const inverted = auditCoreStructure({ packageRoot, sourceRoot });
+    assert(
+      inverted.findings.some(
+        ({ rule, id }) =>
+          rule === 'local-layer-inversion' && id.includes(`${owner}/runtime/lowering/index.ts`),
+      ),
+      'runtime -> presentation under the theme owner must be an inversion',
+    );
+
+    write(resolve(sourceRoot, `${owner}/runtime/lowering/index.ts`), 'export const lowering = true;\n');
+    assert(
+      !auditCoreStructure({ packageRoot, sourceRoot }).findings.some(
+        ({ rule }) => rule === 'local-layer-inversion',
+      ),
+      'removing the upward edge must clear the inversion',
+    );
+
+    // `infrastructure/compilers` declares four local layers, so it is
+    // layer-closed. A fifth, unlayered capability child is the exact shape a
+    // capability owner placed at `infrastructure/compilers/theme/` would take.
+    write(
+      resolve(sourceRoot, 'infrastructure/compilers/composition/index.ts'),
+      'export const composition = true;\n',
+    );
+    write(resolve(sourceRoot, 'infrastructure/compilers/facade/index.ts'), 'export const facade = true;\n');
+    write(resolve(sourceRoot, 'infrastructure/compilers/kernel/index.ts'), 'export const kernel = true;\n');
+    write(resolve(sourceRoot, 'infrastructure/compilers/theme/index.ts'), 'export const misplaced = true;\n');
+
+    const closed = auditCoreStructure({ packageRoot, sourceRoot });
+    assert(
+      closed.findings.some(
+        ({ id }) => id === 'mixed-layer-and-capability-peers:infrastructure/compilers',
+      ),
+      'an unlayered capability peer under infrastructure/compilers must fail',
+    );
   } finally {
     rmSync(packageRoot, { recursive: true, force: true });
   }

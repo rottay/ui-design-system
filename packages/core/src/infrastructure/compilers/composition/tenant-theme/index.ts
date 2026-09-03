@@ -16,6 +16,7 @@ import {
 import type { FirstPartyVerticalId } from "@/foundation/contracts/kernel/verticals";
 import { contrastRatio } from "@/foundation/kernel/accessibility/branding-contrast";
 import { enforceTextContrast } from "@/foundation/kernel/accessibility/branding-contrast/text-contrast-autocorrect";
+import { dimensionToPx } from "@/foundation/kernel/geometry/css-length";
 import {
   canonicalizeJsonValue as canonicalizeTenantThemeValue,
   compareCodeUnits,
@@ -447,12 +448,6 @@ function countGradientStops(value: string): number {
       first
     );
   return Math.max(0, args.length - (hasPreamble ? 1 : 0));
-}
-
-function dimensionToPx(value: number, unit: string): number | null {
-  if (unit === "px" || unit === "") return value;
-  if (unit === "rem" || unit === "em") return value * 16;
-  return null;
 }
 
 function respectsDimensionCap(value: string, capPx: number): boolean {
@@ -1793,118 +1788,12 @@ function isoLowering<T>(run: () => T, path: string): T {
   }
 }
 
-/**
- * E-1 / W-B: the tenant's POSTURE FLOORS, projected out of a migrated patch.
- *
- * EXPORTED so the DB leg and anything that reconstructs it read ONE definition.
- * `provenance-acceptance` case G1 rebuilds this compiler's own inputs to prove
- * the artifact is the direct lowering; a private copy there would be a second
- * authority for the same projection, and the two would drift.
- *
- * E-2 widened it: the floor also lowers the tenant's own font families.
- *
- * NOT the whole patch, and the compiler settled that: a `ThemePatch` makes every
- * nested leaf optional where `Partial<BrandTheme>` keeps it required, so the
- * whole patch does not assign (`appearance.defaultMode`, then
- * `palette.primaryColor` -- a pattern, not a pair), and casting across would be
- * the silent narrowing this programme refuses. Only the paths the floor is READ
- * at cross: `resolveTenantPosture` consults nine keypaths, and these six scalars
- * are the ones that carry across unchanged. `undefined` leaves cost nothing --
- * `mergeBrandThemeFloors` skips them and `resolveTenantPosture` collapses an
- * all-undefined posture to `undefined` -- so no guard is needed.
- *
- * `motion.dial` (F4B-13): `motion` now projects too. It arrives WRAPPED
- * (`Theme.motion: Governed<BrandMotion>`, so a migrated patch is
- * `{motion:{value:{intensity,...}}}`) -- the posture reader
- * (`resolveTenantPosture`, `brand-theme/index.ts:1976`) reads `patch.motion`
- * AS-IS: its expression is `patch.motion ?? profile?.motion`, no `.value`
- * unwrap anywhere, and its only fallback is the expressive profile, not this
- * projection's own floor. That is exactly why this projection must hand it
- * the BARE spec -- if the reader unwrapped on its own, a wrapped floor could
- * pass through undetected; because it does not, the unwrap has to happen
- * HERE. The causal probe's own patch (built leaf-by-leaf by
- * `buildIngressInput` walking `motion.intensity`) never carries the wrapper
- * at all, so `patch.motion?.value ?? patch.motion` has to cover both shapes
- * with one expression. Preaudited (independent audit, ACCEPT with binding correction
- * W-B): the fence
- * this projection closes is STRUCTURAL, not behavioural -- no first-party
- * vertical today authors a motion "ladder" that would out-rank the tenant's
- * own floor post-merge (unlike `surfaces.elevation`'s history), so there is
- * no before/after flip to assert. The drill below is a unit test of the
- * projection's SHAPE (both wrapped and unwrapped inputs unwrap the same
- * way, and a mutation that removes the unwrap reddens it), not a claim about
- * any vertical's baseline moving.
- *
- * One keypath deliberately NOT projected:
- *   - `expressive.*` is already expanded into `expressiveExpansion` above and
- *     applied at its own position; routing it again would lower one selection
- *     twice.
- */
-export function tenantPostureFloors(patch: ThemePatch): Partial<BrandTheme> {
-  const ty = patch.typography;
-  const su = patch.surfaces;
-  const mo = patch.motion;
-  return {
-    typography: {
-      typePairing: ty?.typePairing,
-      scale: ty?.scale,
-      /* E-2: the floor's second half reads these two; schema v1 rejects
-       * mono/letterSpacing/lineHeight, so those come only via the static arm. */
-      fontFamilyBase: ty?.fontFamilyBase,
-      fontFamilyHeading: ty?.fontFamilyHeading,
-    },
-    surfaces: {
-      buttonStyle: su?.buttonStyle,
-      radiusScale: su?.radiusScale,
-      density: su?.density,
-      elevation: su?.elevation,
-    },
-    motion: (mo?.value ?? mo) as BrandMotion | undefined,
-  };
-}
+import {
+  deriveTenantStatusSeedAuthorship,
+  tenantPostureFloors,
+} from "@/foundation/contracts/composition/tenants/themes/resolved";
 
-/**
- * COH-1 D1 — the closed status-seed AUTHORSHIP channel this door hands to
- * `compileTheme`, SIBLING of `tenantPostureFloors` and never a widening of
- * it: `tenantPostureFloors` projects exactly six posture keypaths and
- * excludes `palette`/`modes` BY DESIGN (its own docblock), so it can never
- * carry status-seed authorship. Without a separate channel,
- * `applyTenantStatusSeedDerivations` reads `tenantPatch.palette`, which is
- * always `undefined` on this door -- every tone stays
- * `toneSeedIsTenantAuthored=false` and a tenant that sets only
- * `palette.status.success` never re-derives the `-bg`/`-border`/alpha family
- * against a vertical baseline that still bakes those as literals (independent audit 5
- * audit, D1, `coh-1-fable-audit.md`).
- *
- * Reads the RAW `envelope.patch` (post-`migrateV1`, pre-`tenantPostureFloors`
- * projection) and the actual VALUE, never `authoredPaths` Set membership:
- * `migrateV1`'s `paletteFields()` always constructs all four `{tone}Color`
- * keys on the patch object it returns (tenant-set or not), so Set membership
- * alone cannot distinguish "the tenant wrote this" from "the builder always
- * emits this key" -- the same trap `collectPatchAuthoredPaths` falls into
- * for the primary family's own pre-existing, out-of-scope false positive
- * (independent audit 5 audit, B.1).
- */
-function deriveTenantStatusSeedAuthorship(
-  patch: ThemePatch
-): TenantStatusSeedAuthorship {
-  const toneRecord = (
-    palette: ThemePatch["palette"]
-  ): Record<OnToneRole, boolean> =>
-    Object.fromEntries(
-      ON_TONE_ROLES.map((role) => [
-        role,
-        palette?.[`${role}Color`] !== undefined,
-      ])
-    ) as Record<OnToneRole, boolean>;
-  return {
-    base: toneRecord(patch.palette),
-    modes: {
-      light: toneRecord(patch.modes?.light?.palette),
-      dark: toneRecord(patch.modes?.dark?.palette),
-    },
-  };
-}
+export { tenantPostureFloors };
 
 export function compileTenantThemeConfig(
   input: unknown,

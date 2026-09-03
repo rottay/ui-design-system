@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "generatedBy": "Reconciled with the public CSS hook contract after retiring the unused segmented selected-border channel.",
-  "basedOnManifestDigest": "a0f8da07175b1b885d0ded98aeb5ebc7eaabc68be83a9357b6e627351bbb3a59",
+  "basedOnManifestDigest": "71d73ce198a3fb9f3effc6791f7508b6fc71958e405821d9dd842ec38762d9ba",
   "laws": [
     "a read without an owner classification cannot ship: every name in hooks-manifest.unadjudicatedReads has exactly one row here",
     "MODERN_PRIVATE includes engine-agnostic private channels (fallback-governed, single owning reader) — the non-modern-reader:foundation-tokens flag preserves the distinction without widening the closed vocabulary",

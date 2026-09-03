@@ -12,7 +12,7 @@
   "live": {
     "evidence": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/evidence/index.json",
     "digest": "ui-design-system/packages/core/artifacts/quality/certification/claims/exactness-live/digest/index.txt",
-    "semanticHash": "e270b0faf4bf1defb8a196b44132762904128b0777f84ee8c2a77de58b0f207c"
+    "semanticHash": "bec7964cdac3e421d1c911e3b3c0f4301a40f716c3717f8615e739d15550bfa4"
   },
   "divergentInputs": [
     {
@@ -291,6 +291,94 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/compiled/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1541,
+        "sha256": "9a1dd41bc3bcebc399aa24c4492de2cd2dc1c17c57702435691f35abdf076795"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/emission/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 413,
+        "sha256": "8851ec2ddfc0cd541a36358bb38e49553c99c141144ee5f738075eaf5e16d26b"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/engine-adapter/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 2811,
+        "sha256": "62c8533198e2f0d5e1538f719aa2692157eb3324fc072bd1dcd0d8e754a6ad75"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/engine-adapter/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 2457,
+        "sha256": "36a41ad474b930520402ce8e82d386ab0e62a681b91c18a83f283b62c931f572"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/intent/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1633,
+        "sha256": "6c61926295d4b434712c5772ef36b4acc6187350f8dc50a7000d59579248e472"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/resolved/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 9418,
+        "sha256": "e72ff78ecd56e33045c151fc94dbad232a00d35d3a4b8b59009038fdf15d45cd"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/composition/tenants/themes/resolved/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 9446,
+        "sha256": "41ae491ac0b562cd131917cc805ff79e97fc95634bd77ed86df940e8ed21fb36"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/kernel/tokens/engine-tokens/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1024,
+        "sha256": "cc965bc83a95cfad823e024908a90779b9810e739b6f5dfed9fc9ca964f8160d"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/contracts/kernel/tokens/engine-tokens/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1997,
+        "sha256": "4e2d9d99c5d8d6824e412c3ca84f120082bbc1b54b6d95370ed8839f8adc5eab"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/kernel/geometry/css-length/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 2676,
+        "sha256": "62a64702c000cbe90706da4d40b1ced1299c1dfaf83815e65b6b56f0764c6cfd"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/foundation/kernel/geometry/css-length/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3930,
+        "sha256": "53b06048689d6bdcb3236aba120ec35da47089bc520d09826e666f667aeda165"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/foundation/tokens/css/foundation/base/tests/a11y-floors-contract.test.ts",
       "archive": {
         "bytes": 3136,
@@ -412,6 +500,17 @@
       }
     },
     {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/index.ts",
+      "archive": {
+        "bytes": 83435,
+        "sha256": "069403eaf09aa2cf729aaa0d1619629ebd5bdd83ec3c7cdffd46a584453a1ee1"
+      },
+      "live": {
+        "bytes": 78024,
+        "sha256": "da94860a5e391ebfc662ed9a977cbf19a7f0a44628b9155757446aff6835a3f3"
+      }
+    },
+    {
       "path": "ui-design-system/packages/core/src/infrastructure/compilers/composition/tenant-theme/tests/canonical-digest-identity.test.ts",
       "archive": {
         "bytes": 33985,
@@ -442,6 +541,17 @@
       "live": {
         "bytes": 65364,
         "sha256": "798536f6796b89b82c9f5e509c11a77ddaa2547d3cc675e354812c670d6c8cdf"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts",
+      "archive": {
+        "bytes": 108562,
+        "sha256": "d47a993b0d1b589284da028fa581b9c3551099adc29b5f8b43c5509d110cf47e"
+      },
+      "live": {
+        "bytes": 106150,
+        "sha256": "844983146ecfc1c47c55743a0342528c4b3905c4d7173c3bee852797a52dc4e3"
       }
     },
     {
@@ -486,6 +596,102 @@
       "live": {
         "bytes": 47274,
         "sha256": "565350fd5364bba67c92dfb576ae42dee067914cc67709adac029c2627cf38a0"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1059,
+        "sha256": "c0cdd4bf90f696487e5f4e2af915929fb2e92c2a42bef15c0cf05b6194d093a8"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/classic/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 5286,
+        "sha256": "4a7b392b54d1f1ea1038d1d61d955d1eeb11fa3316aba3b93f55ef4b07362399"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1435,
+        "sha256": "69182c530c56ccef29d491582a13652675a36bd4a9892a395fde230bddf602f4"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/modern/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1248,
+        "sha256": "26bce76342803ff669eb3f15755ff20ebe3e2dd0e5c8b6584d6fdfc67423b82b"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/rustic/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1600,
+        "sha256": "f581487eea3651f635861e6dd9c79ed6b138fd8b6c2c8d7e1e5c3d0922f8b28f"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/presentation/adapters/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 25085,
+        "sha256": "51f4416a10e813d68f0076ce4dc74a01e07597faaec283d2328ceda21a8b2206"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 3024,
+        "sha256": "ed216599881ab8ad91546f2e6d9dd52144b878698df6d69e188d0e61887351f1"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/emission/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 4259,
+        "sha256": "d90198fca4fa1088d8356832962ce4f877b71fecbc4ba10a980011a73380ef1d"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 2002,
+        "sha256": "11b08e9ed588a04206406d48815c4f89a3e43a1edeb1f1b3455039037d8fb9a2"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/lowering/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 4647,
+        "sha256": "f3e79d208d2bd4d8f3ef3377e1910816cfe959ea42ca934c8d129eeca8c10e7a"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/resolution/index.ts",
+      "archive": null,
+      "live": {
+        "bytes": 1148,
+        "sha256": "ef3315cef9f46b28e6f490a47f7d6efb1c06ad2f8c93c434b170b096f9349ac9"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/compilers/runtime/theme/runtime/resolution/tests/index.test.ts",
+      "archive": null,
+      "live": {
+        "bytes": 5803,
+        "sha256": "5a6105b9485cc5ba39f6a2886ddaacfbdf2984587f47aabfa1f6f299ddbb89ed"
       }
     },
     {
@@ -552,6 +758,17 @@
       "live": {
         "bytes": 12771,
         "sha256": "7cdeb398bca8f3e00562f6323d99cb29aa4ae0ff6a60583bd0c2105b9c761b17"
+      }
+    },
+    {
+      "path": "ui-design-system/packages/core/src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
+      "archive": {
+        "bytes": 5324,
+        "sha256": "983fbc5232a7a61505c1439587149b370be09baede7f98c4f8d8cda315c1583f"
+      },
+      "live": {
+        "bytes": 5050,
+        "sha256": "8fdb94e18a427d7d2f2cbf5fbccd43acabe7cf67e31c64ca1d0b27de36a1bc63"
       }
     },
     {

@@ -41,7 +41,7 @@
     "ts-token-utils"
   ],
   "summary": {
-    "filesScanned": 2475,
+    "filesScanned": 2490,
     "channels": 7514,
     "channelsDs": 7116,
     "channelsBridge": 398,
@@ -106643,14 +106643,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 96,
+          "line": 77,
           "prop": "lg",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 97,
+          "line": 78,
           "prop": "xl",
           "scalars": []
         },
@@ -107690,14 +107690,14 @@
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 94,
+          "line": 75,
           "prop": "sm",
           "scalars": []
         },
         {
           "plane": "ts-other",
           "file": "src/infrastructure/runtime/theming/foundation/engine-tokens/index.ts",
-          "line": 95,
+          "line": 76,
           "prop": "md",
           "scalars": []
         },

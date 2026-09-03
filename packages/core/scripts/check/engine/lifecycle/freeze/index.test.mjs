@@ -21,9 +21,11 @@ import test from 'node:test';
 
 import {
   BASELINE_SCHEMA_VERSION,
+  DISCHARGED,
   FROZEN,
   OBLIGATIONS,
   blankModuleSpecifiers,
+  evaluateDischarged,
   deriveRelocationSubstitutions,
   evaluateFreeze,
   evaluateObligations,
@@ -751,8 +753,25 @@ test('DRILL: substitutions are DERIVED from proven pairs, and a single pair mint
 });
 
 test('DRILL: the obligation has three mechanical states and no override', () => {
-  const [obligation] = OBLIGATIONS;
-  assert.ok(obligation, 'the obligation roster must not be empty while the contract is open');
+  // Every REAL entry must be well formed. The roster is legitimately empty once
+  // every obligation has been discharged, so the three-state law is drilled
+  // against a synthetic entry rather than against whatever happens to be left.
+  for (const entry of OBLIGATIONS) {
+    for (const field of ['id', 'owner', 'phase', 'expires', 'assertion', 'symbolFile', 'symbol', 'why']) {
+      assert.ok(entry[field], `obligation ${entry.id ?? '<unnamed>'} is missing "${field}"`);
+    }
+  }
+
+  const obligation = Object.freeze({
+    id: 'synthetic-three-state-probe',
+    owner: 'DT / coordinator seat',
+    phase: 'drill',
+    expires: '2026-12-31',
+    assertion: 'a synthetic symbol is exported from a synthetic file.',
+    symbolFile: 'packages/core/src/synthetic/index.ts',
+    symbol: 'SyntheticProbeSymbol',
+    why: 'the three-state law must stay drilled after the roster empties.',
+  });
 
   const pending = evaluateObligations([obligation], { readRepoFile: () => null, today: '2026-01-01' });
   assert.equal(pending[0].state, 'pending');
@@ -768,6 +787,68 @@ test('DRILL: the obligation has three mechanical states and no override', () => 
   });
   assert.equal(satisfied[0].state, 'satisfied');
   assert.equal(satisfied[0].blocking, true, 'a satisfied obligation must be deleted, not carried');
+});
+
+test('DRILL: engine-posture-totality was migrated to the foundation owner, not dropped', () => {
+  const repoRoot = join(scriptDir, '../../../../../../..');
+  const readRepoFile = (relativePath) => {
+    try {
+      return readFileSync(join(repoRoot, relativePath), 'utf8');
+    } catch {
+      return null;
+    }
+  };
+
+  // 1. it left the roster
+  assert.ok(OBLIGATIONS.every((o) => o.id !== 'engine-posture-totality'));
+
+  // 2. exactly one ledger row carries it, with the retired text intact
+  const rows = DISCHARGED.filter((row) => row.id === 'engine-posture-totality');
+  assert.equal(rows.length, 1);
+  const [row] = rows;
+  assert.match(row.assertion, /TOTAL posture record/);
+  assert.equal(row.expires, '2026-12-31');
+  assert.ok(row.why.length > 0);
+  assert.ok(row.relocationReason.length > 0);
+
+  // 3. the rejected path was never created
+  assert.equal(readRepoFile(row.pinnedSymbolFile), null);
+
+  // 4. the obligation's OWN regex, re-pointed at the successor owner
+  assert.match(
+    readRepoFile(row.successorSymbolFile) ?? '',
+    new RegExp(`\\bexport\\b[^\\n]*\\b${row.symbol}\\b`),
+  );
+
+  // 5. every named successor assertion exists
+  for (const path of row.successorAssertions) {
+    assert.ok(readRepoFile(path) !== null, `successor assertion missing: ${path}`);
+  }
+
+  // 6. the successors are the files that carry the totality claim, not merely
+  //    files that happen to exist
+  assert.match(readRepoFile(row.successorAssertions[0]) ?? '', /TENANT_CAPABILITY_REGISTRY/);
+  assert.match(readRepoFile(row.successorAssertions[1]) ?? '', /posture/);
+
+  // 7. the ledger is EVALUATED, not merely stored: a vanished successor and a
+  //    vanished successor assertion each produce exactly one blocking finding
+  assert.deepEqual(evaluateDischarged(DISCHARGED, { readRepoFile }), []);
+
+  const wrongSymbolFile = evaluateDischarged(
+    [{ ...row, successorSymbolFile: 'packages/core/package.json' }],
+    { readRepoFile },
+  );
+  assert.equal(wrongSymbolFile.length, 1);
+  assert.equal(wrongSymbolFile[0].state, 'successor-missing');
+  assert.equal(wrongSymbolFile[0].blocking, true);
+
+  const missingAssertion = evaluateDischarged(
+    [{ ...row, successorAssertions: ['packages/core/src/does-not-exist/index.ts'] }],
+    { readRepoFile },
+  );
+  assert.equal(missingAssertion.length, 1);
+  assert.equal(missingAssertion[0].state, 'successor-assertion-missing');
+  assert.equal(missingAssertion[0].blocking, true);
 });
 
 test('the relocation normalizer keeps behaviour and drops only layout, comments and specifiers', () => {

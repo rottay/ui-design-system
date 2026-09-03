@@ -3,12 +3,12 @@
   "generatedBy": "scripts/generate/tokens/customization/surface/index.mjs --write",
   "meta": {
     "scopeLaw": "DS-SCOPED PROJECTION (core+showroom). deadWriters is a projection for gates and catalogs, NEVER the instrument behind a deletion: on the same population an app-aware inverted index found 53 census-dead channels with LIVE app readers (F5 reconciliation, 2026-08-02 — the --ds-text-eyebrow failure at scale). Death verdicts require the app-inclusive index plus the raw-mention gate.",
-    "inputsDigest": "fc37f46fd74f8b8b56c81f9f213e6171a3e43c6674d36a245ce9882fb3ba7820",
+    "inputsDigest": "42c41a70528505ff8382625f5e18239b36ead3cc66a309c0026d96b2a25513e3",
     "manifestSchemaVersion": 4,
     "corpus": {
       "authoredCssFiles": 466,
-      "productionTsFiles": 2009,
-      "testFiles": 1331,
+      "productionTsFiles": 2024,
+      "testFiles": 1339,
       "artifactFiles": 3
     }
   },
@@ -25,7 +25,7 @@
     "modernConsumedUnique": 3672,
     "tsReadNames": 2693,
     "tsWriteNames": 1223,
-    "tsMetadataNames": 712,
+    "tsMetadataNames": 713,
     "unclassified": 0,
     "prototypeLedgerRows": 80
   },
@@ -26316,7 +26316,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 16
+      "tsMetadataMentions": 17
     },
     "--ds-color-bg-secondary": {
       "category": "compiler-derived-channel",
@@ -26556,7 +26556,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 9
+      "tsMetadataMentions": 10
     },
     "--ds-color-error-100": {
       "category": "canonical-authority",
@@ -26826,7 +26826,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 6
+      "tsMetadataMentions": 7
     },
     "--ds-color-info-100": {
       "category": "canonical-authority",
@@ -27591,7 +27591,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 10
+      "tsMetadataMentions": 12
     },
     "--ds-color-primary-": {
       "category": "consumed-external-origin",
@@ -28086,7 +28086,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 7
+      "tsMetadataMentions": 8
     },
     "--ds-color-success-100": {
       "category": "canonical-authority",
@@ -28476,7 +28476,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 5
+      "tsMetadataMentions": 6
     },
     "--ds-color-text-on-success": {
       "category": "generated-artifact-only",
@@ -28521,7 +28521,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 16
+      "tsMetadataMentions": 17
     },
     "--ds-color-text-secondary": {
       "category": "tenant-raw-override",
@@ -28581,7 +28581,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 6
+      "tsMetadataMentions": 7
     },
     "--ds-color-warning-100": {
       "category": "canonical-authority",
@@ -69490,7 +69490,7 @@
         "artifact": true
       },
       "tsWriteSites": 1,
-      "tsMetadataMentions": 0
+      "tsMetadataMentions": 1
     },
     "--ds-radius-modal": {
       "category": "canonical-authority",
@@ -69565,7 +69565,7 @@
         "artifact": true
       },
       "tsWriteSites": 2,
-      "tsMetadataMentions": 2
+      "tsMetadataMentions": 3
     },
     "--ds-radius-sm": {
       "category": "tenant-raw-override",

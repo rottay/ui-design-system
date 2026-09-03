@@ -149,6 +149,20 @@ export const SCOPED_OWNER_RANKS = Object.freeze({
     runtime: 1,
     composition: 2,
   }),
+  // The theme contract chain is a dependency ladder, not a bag of peers:
+  // iso owns Theme/ThemePatch, tenant-theme owns the persisted transport,
+  // intent narrows one ingress onto a patch, resolved adds the provenance the
+  // merge destroys, compiled is the lowering product, emission is scope, and
+  // engine-adapter is the posture/projection contract over the product.
+  'foundation/contracts/composition/tenants/themes': Object.freeze({
+    iso: 0,
+    'tenant-theme': 1,
+    intent: 2,
+    resolved: 3,
+    compiled: 4,
+    emission: 5,
+    'engine-adapter': 6,
+  }),
   foundation: Object.freeze({
     contracts: 0,
     presets: 1,
