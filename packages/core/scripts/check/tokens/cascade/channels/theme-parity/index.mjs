@@ -70,6 +70,84 @@ const emitterFiles = [
 ];
 const compilersDir = join(srcDir, 'infrastructure', 'compilers');
 const baselinePath = join(here, 'baseline/index.json');
+const obligationsPath = join(here, 'obligations/index.json');
+
+/**
+ * TRANSITIONAL OBLIGATIONS, evaluated AFTER the ratchet and never inside it.
+ *
+ * A ceiling is the wrong instrument for a bucket like
+ * `declared-but-unemitted.BrandSegmentedChrome`: `evaluateParityBaseline` reads
+ * only `baseline.ceilings`, so a number there makes the red vanish and records
+ * nothing -- no owner, no reason, no target, and, since the test is
+ * `count > ceiling`, no expiry either. The baseline file is also the wrong
+ * PLACE: `--update-baseline` rewrites it as `{version,_comment,ceilings}`, so
+ * the reviewed `_adoptions` prose is not preserved and an obligation stored
+ * there would not survive the next tighten.
+ *
+ * So an obligation lives in a sibling folder, suppresses exactly one bucket,
+ * and only under all five conditions below. It is exact in both directions:
+ * growth is a regression and shrinkage is an unrecorded partial drain.
+ */
+export function loadObligations(path = obligationsPath) {
+  if (!existsSync(path)) return { obligations: [] };
+  return JSON.parse(readFileSync(path, 'utf8'));
+}
+
+export function evaluateObligations(ledger, counters, { resolveOwner }) {
+  const failures = [];
+  const consumed = new Map();
+  for (const obligation of ledger.obligations ?? []) {
+    const label = obligation.id ?? '<unnamed>';
+    for (const field of ['id', 'ownerLot', 'resolution', 'reason', 'declaringOwner']) {
+      if (typeof obligation[field] !== 'string' || obligation[field].trim() === '') {
+        failures.push(`obligation ${label} is missing ${field}`);
+      }
+    }
+    if (!obligation.expiry || typeof obligation.expiry.kind !== 'string') {
+      failures.push(`obligation ${label} is missing an expiry`);
+    }
+    if (typeof obligation.count !== 'number') {
+      failures.push(`obligation ${label} is missing an exact count`);
+      continue;
+    }
+
+    // O1 — every legacy emitter owner still exists. When C2 moves one, the
+    // obligation expires by construction and the declarations must be swept.
+    for (const owner of obligation.legacyEmitterOwners ?? []) {
+      if (!existsSync(join(root, owner))) {
+        failures.push(
+          `obligation ${label} EXPIRED: legacy owner ${owner} no longer exists — `
+          + `its owner lot ${obligation.ownerLot} has run; delete the declarations and the obligation`,
+        );
+      }
+    }
+    // O2 — the declaring owner still exists.
+    if (obligation.declaringOwner && !existsSync(join(root, obligation.declaringOwner))) {
+      failures.push(`obligation ${label} EXPIRED: declaring owner moved — re-anchor or resolve`);
+    }
+    // O3 — the live counter is EXACTLY the recorded count.
+    const live = counters[obligation.id];
+    if (live === undefined) {
+      failures.push(`obligation ${label} names a bucket the census no longer reports; delete the entry`);
+      continue;
+    }
+    if (live !== obligation.count) {
+      failures.push(`obligation ${label} count mismatch: expected ${obligation.count}, measured ${live}`);
+      continue;
+    }
+    // O4 — every named field is still in the live issue list.
+    const owners = resolveOwner();
+    for (const field of obligation.fields ?? []) {
+      if (!owners.has(field)) {
+        failures.push(`obligation ${label} names a field that is no longer unemitted: ${field}`);
+      }
+    }
+    if (failures.length === 0) consumed.set(obligation.id, obligation);
+  }
+  return { failures, consumed };
+}
+
+
 
 const SKIP_DIRS = new Set([
   '__fixtures__',
@@ -199,7 +277,24 @@ function main() {
   const baseline = loadBaseline();
   const evaluation = evaluateParityBaseline(result.counters, baseline);
   const dataOnlyViolations = result.dataOnly.violations;
-  const ok = evaluation.ok && dataOnlyViolations.length === 0;
+
+  // Obligations are consulted AFTER the ratchet, never inside it. Each one
+  // suppresses exactly one `new unbaselined bucket` error and nothing else; an
+  // id that also appears in `ceilings` is an error, because that is the opaque
+  // route this instrument exists to close.
+  const ledger = loadObligations();
+  const { failures: obligationFailures, consumed } = evaluateObligations(ledger, result.counters, {
+    resolveOwner: () => new Set(result.graph.issues.declaredButUnemitted.map((issue) => issue.id)),
+  });
+  for (const id of consumed.keys()) {
+    if (Object.hasOwn(baseline.ceilings ?? {}, id)) {
+      obligationFailures.push(`obligation is not a ceiling: ${id} also appears in baseline.ceilings`);
+    }
+  }
+  const suppressed = new Set([...consumed.keys()].map((id) => `new unbaselined bucket: ${id}=${consumed.get(id).count}`));
+  const ratchetErrors = evaluation.errors.filter((error) => !suppressed.has(error));
+  const ratchetOk = ratchetErrors.length === 0;
+  const ok = ratchetOk && dataOnlyViolations.length === 0 && obligationFailures.length === 0;
 
   if (currentJson) {
     process.stdout.write(`${JSON.stringify(result, null, 2)}\n`);
@@ -207,6 +302,20 @@ function main() {
   }
 
   if (update) {
+    if ((ledger.obligations ?? []).length > 0) {
+      process.stderr.write(
+        '[theme-channel-parity-gate] refusing to tighten while a transitional obligation is open:\n',
+      );
+      for (const obligation of ledger.obligations) {
+        process.stderr.write(`  - ${obligation.id} (owner ${obligation.ownerLot})\n`);
+      }
+      process.stderr.write(
+        '  Tightening rewrites the baseline as {version,_comment,ceilings} and does not preserve\n'
+        + '  _adoptions; resolve the obligation in its owner lot first.\n',
+      );
+      process.exitCode = 1;
+      return;
+    }
     if (!ok) {
       process.stderr.write(
         '[theme-channel-parity-gate] refusing to absorb a regression/new bucket into the baseline:\n',
@@ -263,9 +372,18 @@ function main() {
     process.stderr.write('[theme-channel-parity-gate] data-only projection roster failed:\n');
     for (const violation of dataOnlyViolations) process.stderr.write(`  - ${violation}\n`);
   }
-  if (!evaluation.ok) {
+  for (const [id, obligation] of consumed) {
+    process.stdout.write(
+      `  obligation (owner ${obligation.ownerLot}, expires on ${obligation.expiry.kind}): ${id}=${obligation.count}\n`,
+    );
+  }
+  if (!ratchetOk) {
     process.stderr.write('[theme-channel-parity-gate] parity ratchet failed:\n');
-    for (const error of evaluation.errors) process.stderr.write(`  - ${error}\n`);
+    for (const error of ratchetErrors) process.stderr.write(`  - ${error}\n`);
+  }
+  if (obligationFailures.length > 0) {
+    process.stderr.write('[theme-channel-parity-gate] transitional obligation failed:\n');
+    for (const failure of obligationFailures) process.stderr.write(`  - ${failure}\n`);
   }
   if (!ok) {
     if (check) process.exitCode = 1;

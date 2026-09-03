@@ -13,7 +13,7 @@ import { join } from 'node:path';
 import test from 'node:test';
 
 import { assertDistFresh } from './index.mjs';
-import { writeBuildStamp } from '../../../build/stamp/index.mjs';
+import { SENTINEL_ARTIFACTS, writeBuildSession, writeBuildStamp } from '../../../build/stamp/index.mjs';
 import { computeBuildInputHash } from '../../../libraries/build/input-hash/index.mjs';
 
 function scaffold({ version = '2.19.34', withDist = true } = {}) {
@@ -37,16 +37,29 @@ function scaffold({ version = '2.19.34', withDist = true } = {}) {
   write('src/components/button/index.test.tsx', 'test stub\n');
   write('src/components/button/README.md', '# button\n');
   if (withDist) {
-    for (const name of ['index.js', 'index.cjs', 'index.d.ts']) write(`dist/${name}`, '// built\n');
+    // The sentinel set is the package `files` allowlist minus its globs: a
+    // partial build that emitted only the three JS entrypoints used to stamp
+    // successfully.
+    for (const name of SENTINEL_ARTIFACTS) write(`dist/${name}`, '// built\n');
+    // A build opens a session marker after the bundler step; the stamp requires
+    // it, embeds it and deletes it. Without one, `build:stamp` is a standalone
+    // re-stamp of whatever dist happens to be there.
+    writeBuildSession({ dist: join(root, 'dist') });
   }
   const stampPath = join(root, 'dist/build-stamp.json');
   return { root, write, stampPath, cleanup: () => rmSync(root, { recursive: true, force: true }) };
 }
 
+/** Open a session and stamp, exactly as the build chain does. */
+function stampFixture(f) {
+  writeBuildSession({ dist: join(f.root, 'dist') });
+  return writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+}
+
 test('a stamp written from a source state verifies against that same state', () => {
   const f = scaffold();
   try {
-    const result = writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    const result = stampFixture(f);
     assert.equal(result.ok, true, result.message);
     const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
     assert.equal(ok, true, failures.join('\n'));
@@ -58,7 +71,7 @@ test('a stamp written from a source state verifies against that same state', () 
 test('editing a shippable source file after the stamp is written flags STALE', () => {
   const f = scaffold();
   try {
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     f.write('src/components/button/index.tsx', 'export const Button = () => "changed";\n');
     const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
     assert.equal(ok, false);
@@ -72,7 +85,7 @@ test('editing a shippable source file after the stamp is written flags STALE', (
 test('editing a test/story/markdown input does NOT flag stale (non-shipping input)', () => {
   const f = scaffold();
   try {
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     f.write('src/components/button/index.test.tsx', 'different test body\n');
     f.write('src/components/button/README.md', '# button changed\n');
     const { ok } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
@@ -85,7 +98,7 @@ test('editing a test/story/markdown input does NOT flag stale (non-shipping inpu
 test('a version bump after the build flags the stamp as stale', () => {
   const f = scaffold({ version: '2.19.34' });
   try {
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     f.write('package.json', JSON.stringify({ name: '@rottay/design-system', version: '2.19.35', scripts: { build: 'tsc' } }));
     const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
     assert.equal(ok, false);
@@ -122,7 +135,7 @@ test('a corrupt stamp fails closed', () => {
 test('write-build-stamp refuses to stamp an unbuilt dist (no sentinel artifacts)', () => {
   const f = scaffold({ withDist: false });
   try {
-    const result = writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    const result = stampFixture(f);
     assert.equal(result.ok, false);
     assert.match(result.message, /unbuilt dist/);
     assert.match(result.message, /index\.js/);
@@ -149,7 +162,7 @@ test('editing pnpm-lock.yaml invalidates build inputs without changing sourceHas
   const f = scaffold();
   try {
     const before = computeBuildInputHash(f.root);
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     f.write('pnpm-lock.yaml', "lockfileVersion: '9.0'\n# dependency drift\n");
     const after = computeBuildInputHash(f.root);
     assert.equal(after.sourceHash, before.sourceHash);
@@ -165,7 +178,7 @@ test('editing pnpm-lock.yaml invalidates build inputs without changing sourceHas
 test('editing a producer script invalidates the build-input fingerprint', () => {
   const f = scaffold();
   try {
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     f.write('scripts/build/stamp/index.mjs', '// changed stamp producer\n');
     const { ok, failures } = assertDistFresh({ packageRoot: f.root, stampPath: f.stampPath });
     assert.equal(ok, false);
@@ -178,7 +191,7 @@ test('editing a producer script invalidates the build-input fingerprint', () => 
 test('a legacy stamp without the build-input attestation fails closed', () => {
   const f = scaffold();
   try {
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     const stamp = JSON.parse(readFileSync(f.stampPath, 'utf8'));
     delete stamp.buildInputFingerprint;
     delete stamp.buildInputManifest;
@@ -194,7 +207,7 @@ test('a legacy stamp without the build-input attestation fails closed', () => {
 test('a stamp whose embedded manifest was altered fails closed', () => {
   const f = scaffold();
   try {
-    writeBuildStamp({ packageRoot: f.root, dist: join(f.root, 'dist') });
+    stampFixture(f);
     const stamp = JSON.parse(readFileSync(f.stampPath, 'utf8'));
     stamp.buildInputManifest.package.sha256 = 'tampered';
     writeFileSync(f.stampPath, `${JSON.stringify(stamp)}\n`);

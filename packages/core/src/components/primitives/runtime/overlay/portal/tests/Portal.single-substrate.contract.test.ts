@@ -25,7 +25,7 @@ import { describe, expect, it } from 'vitest';
 const SOURCE_ROOT = resolve(process.cwd(), 'src');
 
 /** The one module allowed to reach `react-dom`'s portal API. */
-const SUBSTRATE = 'ui/primitives/runtime/overlay/portal/index.tsx';
+const SUBSTRATE = 'components/primitives/runtime/overlay/portal/index.tsx';
 
 /**
  * Engines that predate the substrate and still portal privately.
@@ -36,32 +36,32 @@ const SUBSTRATE = 'ui/primitives/runtime/overlay/portal/index.tsx';
  * to the substrate, or adding one more private portal to it, both fail here.
  */
 const RUSTIC_ALLOWLIST: Readonly<Record<string, { sites: number; owner: string; reason: string }>> = {
-  'ui/primitives/overlay/tour/engines/rustic/index.tsx': {
+  'components/primitives/overlay/tour/engines/rustic/index.tsx': {
     sites: 1,
     owner: 'engine:rustic',
     reason: 'Frozen engine. Spotlight overlay portals to body directly; predates the substrate.',
   },
-  'ui/primitives/overlay/sheet/engines/rustic/index.tsx': {
+  'components/primitives/overlay/sheet/engines/rustic/index.tsx': {
     sites: 1,
     owner: 'engine:rustic',
     reason: 'Frozen engine. Sheet root portals to body directly; predates the substrate.',
   },
-  'ui/primitives/inputs/tree-select/engines/rustic/index.tsx': {
+  'components/primitives/inputs/tree-select/engines/rustic/index.tsx': {
     sites: 1,
     owner: 'engine:rustic',
     reason: 'Frozen engine. Fixed-position dropdown panel; predates the substrate.',
   },
-  'ui/primitives/inputs/date-picker/engines/rustic/index.tsx': {
+  'components/primitives/inputs/date-picker/engines/rustic/index.tsx': {
     sites: 3,
     owner: 'engine:rustic',
     reason: 'Frozen engine. Date, range and time panels each portal separately.',
   },
-  'ui/primitives/inputs/cascader/engines/rustic/index.tsx': {
+  'components/primitives/inputs/cascader/engines/rustic/index.tsx': {
     sites: 1,
     owner: 'engine:rustic',
     reason: 'Frozen engine. Fixed-position cascade panel; predates the substrate.',
   },
-  'ui/primitives/inputs/color-picker/engines/rustic/index.tsx': {
+  'components/primitives/inputs/color-picker/engines/rustic/index.tsx': {
     sites: 1,
     owner: 'engine:rustic',
     reason: 'Frozen engine. Fixed-position picker panel; predates the substrate.',
@@ -154,7 +154,7 @@ describe('portal substrate authority', () => {
   it('flags a planted private portal instead of passing over it', () => {
     // Runs the real detector over a synthetic corpus, proving the census would
     // catch a regression rather than merely describing today's tree.
-    const planted = 'ui/primitives/overlay/Planted/engines/modern/index.tsx';
+    const planted = 'components/primitives/overlay/planted/engines/modern/index.tsx';
     const plantedCensus = new Map(CENSUS).set(planted, 1);
 
     const unauthorized = Array.from(plantedCensus.keys()).filter(

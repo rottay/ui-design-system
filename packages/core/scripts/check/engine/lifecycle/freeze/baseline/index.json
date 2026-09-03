@@ -1,397 +1,475 @@
 {
   "_comment": "Written exceptions to the Classic/Rustic engine freeze (policy 2026-07-25). Each entry authorizes ONE reviewed byte-state of ONE path: the next edit to an authorized file fails again until it is re-authorized. Entries are added only by `engine-freeze-gate.mjs --authorize <path> --reason \"<text>\"`; there is no bulk snapshot mode, and generated files are never authorizable.",
   "policy": "Classic/Rustic are read-only; implementation effort is exclusively Modern. Every difference between baseRevision and the worktree under engines/classic or engines/rustic — committed history included — must be listed here with a matching content pin.",
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "baseRevision": "ef269d71db916d0063ea8a87b08240f8b13e99ca",
   "entries": {
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css": {
-      "blob": "9cd6059545f319475928d6b289f77a1ca3b29a1499ca4fddfd4377d7ab37433f",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css": {
-      "blob": "1c53b1fca678b8069183a8260ec1a8f300c9e9c238d152d45e383ed70f183172",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css": {
-      "blob": "67a1800827e12699c9818ca9b596587116765c9b9f1d72bd01dad56ed1db55b9",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css": {
-      "blob": "4ad33ec5a9cf36caafdfdd7e37cf5463ff11867837e41d870f99201f42d5313c",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/divider/index.css": {
-      "blob": "c27e8ea9091a0961aabec6ba231d252b109a70f864b8510def6e7c4386d155fe",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css": {
-      "blob": "cacb47ae57cbfd4300f52f2157d7a64be096cb7324638c7a5fb1e288cc9d2ac1",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-builder/index.css": {
-      "blob": "32ebb3ac47f514025f80f9557a30db57b39ce98a2b2c548b5ff759c44232d1d0",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal/index.css": {
-      "blob": "73fcf840db3e48cc948ca3c1a48619020b835e5cdef35577b380e6662ce12e8d",
-      "reason": "Move Rustic Modal backdrop and blur paint out of inline styles while reusing the canonical --ds-glass-blur-sm hook; no new public channel and no API change.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/overlay-modal.css": {
-      "blob": null,
-      "reason": "Remove superseded Rustic overlay Modal skin after overlay/Modal became a compatibility adapter to the single feedback/Modal owner; no Rustic visual change beyond eliminating the unreachable duplicate system.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/saved-views/index.css": {
-      "blob": "832409c6eb211b0b0b94614b7445ea06e5c14594b28e4611f0ff6e6164614f86",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css": {
-      "blob": "140ba0b5876da39555728e2d0c46ae24f2b9a53993938229d557a5407d9c3a99",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree-select/index.css": {
-      "blob": "0de3061e02b93ac370b49214f19ea5db1bf91f5d6fc637b9432462b163ef0463",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css": {
-      "blob": "dda490f1c47bafccd52a6abbf848f3f226e134226d14484c0b32ffc59c1edf02",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css": {
-      "blob": "aa9c42f18d99b5196fd2791adb223b5be4bb5caf2d5c5bb6fd5d550e73a35028",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/watermark/index.css": {
-      "blob": "04bc0a50483df3249a3fddd115de27effb30db254ce0431735defb180385e204",
-      "reason": "fix(skin) 646151dc4: vocabulario DS para las familias de dead-paint — cambio sancionado de la era de remediacion",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher/index.css": {
-      "blob": "57aad601b3895959f40f2dffc86e7bd23efe0a75fb5ba5c701e8633b3f220ee3",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
     "packages/core/src/components/patterns/data/data-table/engines/classic/index.tsx": {
       "blob": "bd5a4574a0a02cb9d0ccec425a08e822944a50ecdc194053d70c434c2328cf68",
+      "relocationDigest": "11f034645be3cbde962a594a1aa7a3881fc1aa295da29b22e6b26cd22d6eda0e",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/data-table/engines/rustic/index.tsx": {
       "blob": "59d405b18caa8e7a7c7ad2d2f4257928444e58db8a4d1e6c2b9d1d9924ec717a",
+      "relocationDigest": "4a34cfb5e581bb9fddbbf5f696633e8ecb0847e90d35eaa368e6a163c8d42686",
       "reason": "d593af75b: drain de las 18 violaciones de fallback-parity — sancionado; re-autoriza el byte-state nuevo",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/decision-comparison/engines/classic/index.tsx": {
       "blob": "d1fb778672fb877c97054fad946542d195e391c06f71e7ec91a2459ed75961d5",
+      "relocationDigest": "427bd42551af1995f38ffe89d3eb427d27084b46d9c6c7129495cc9c19e3ea5d",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/decision-comparison/engines/rustic/index.tsx": {
       "blob": "961c7de4ab552745f18aed53259a8d883a16ef21e538bcaed60e2f48215b628f",
+      "relocationDigest": "4eee4648a5e9f17e659b882310c0616e117293fc53f0acfc6003776e9b84719f",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/decision-panorama/engines/classic/index.tsx": {
       "blob": "68d7415da815df13606e2415809733df968f2798b9662e747fd89a1d27c8238c",
+      "relocationDigest": "ed6b495d2b5783da0e1275b05396d4f46b6d87c94a6d2a6365d035d272a58607",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/decision-panorama/engines/rustic/index.tsx": {
       "blob": "ade1009607a8e0c07124686d06d56bd0172cf8f9d8e384e8648dc53ce0d08c02",
+      "relocationDigest": "8154f9ad92822ac39b7f7772539a9d4f2de0a598bb01adbcae4847bdfdf0e1f8",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/list-toolbar/engines/classic/index.tsx": {
       "blob": "d780d64d5b13b76fd9857079e37254e4db51bc0b62f24e46705b78f24cc676ad",
+      "relocationDigest": "a40bc8d93bb36b142e07fb0141cf6cad7d220a8e0adbc4fe4b8fe80e179b6c33",
       "reason": "Re-authorized after the governed direct-entrypoint migration (fa0efd3b6) rewrote its barrel import into per-family deep imports. Mechanical import-path change plus a header comment; no classic behaviour, markup or paint was altered.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/record-facts/engines/classic/index.tsx": {
       "blob": "8bf4cd09d3b20f023073ecc6b1e0eb20f954d3ac0f0aa479a96e71445381eed5",
+      "relocationDigest": "bb533e14b15b947ec4ebd9da61828cd67a2251a27b124465345d2898cf1dc911",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/record-facts/engines/rustic/index.tsx": {
       "blob": "3f163b4eebb635e2c51a25adf5d2e27ecefc7b2d180706740223c413cc173b9e",
+      "relocationDigest": "1dafa8b2707cd83b93ed625fc03610feed05d7157bcb9803381720329bfb509a",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/saved-views/engines/classic/index.tsx": {
       "blob": "a98d11919391e670f2c4ee8ab271315c45f66dd3d0f3ae6b1b7d697f7abfcdb3",
+      "relocationDigest": "7c8f59d1a888e216027b1fd10db33a7b9d277dd3e0e18a37982a948151ee403f",
       "reason": "independent code audit blocker 1: visibility law enforcement — actions without handlers are OMITTED per the contract's own declared law; behavioral by design, mandated 2026-08-02",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/saved-views/engines/rustic/index.tsx": {
       "blob": "6ad33ac30ca8c2db7282cd92715991c58705e49f252a56712f856ef6741ee810",
+      "relocationDigest": "e2b09290eab153c0f2afb73837f4bdece215f303f5476e5cddb3e8f66c0160a1",
       "reason": "independent code audit blocker 1: visibility law enforcement — actions without handlers are OMITTED per the contract's own declared law; behavioral by design, mandated 2026-08-02",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/widget-board/engines/classic/index.tsx": {
       "blob": "4391729958cbefa985cba3dcb4b5f15e043a7b70d23b1a81463052fd4093e9c1",
+      "relocationDigest": "cade1346746dca5d924aaab7db0dbc66ca1b0c3ce47586afb33e2f2f4007c45a",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/data/widget-board/engines/rustic/index.tsx": {
       "blob": "dd352ed8becfffe1c993cfef044d4610e9c6be450f13dec5afb39f7e622e2771",
+      "relocationDigest": "8d6e9013d395f666d890b780cecb387e577a4db1a209c56f3cbbc807de256bb9",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/forms/invoice-template/engines/classic/index.tsx": {
       "blob": "724fb01f3b940e75b88c53a2a7b710dca81cf572ddd1217c3c53b30b711ca04b",
+      "relocationDigest": "47fcd9e5cab62191fd8dcf613da7de85527ae7930cb39fefb5377e136193b69f",
       "reason": "Shared data contract: invoice.taxRate is a fraction, so the label needed *100 to read as a percent. Correcting it only in modern would leave classic rendering a hundred-fold wrong number from the same prop.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/forms/invoice-template/engines/rustic/index.tsx": {
       "blob": "05156c3cd5d65bc222fa7fd329be850cacfe8e77a342f419c3486b34dadda119",
+      "relocationDigest": "bdc3ff00c5e37c85f4fdf71072df33d4c84721f703063825457c93b65aa03acd",
       "reason": "Shared data contract: invoice.taxRate is a fraction, so the label needed *100 to read as a percent. Correcting it only in modern would leave rustic rendering a hundred-fold wrong number from the same prop.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/shell/feature-workspace-frame/engines/classic/index.tsx": {
       "blob": "c8d5be96a1780b6d0772f48b629161348cc36a3522f04c682029b235be9fb881",
+      "relocationDigest": "8b91712fa62a969d30fbab67411388021bf550a3901219664d35256aa63b3ab2",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/patterns/shell/feature-workspace-frame/engines/rustic/index.tsx": {
       "blob": "27041e8b4fe7118087b162f207dcf13d613aa3b66b4587e73aaaf23131c44378",
+      "relocationDigest": "f766a6b836d370b059dfe880b36bdb3e8f586581192cebd8d1fb1c791134a71d",
       "reason": "Relocalización estructural necesaria para cerrar flat-authored-module y missing-folder-index. En cada archivo congelado cambia únicamente una línea de import, de `../shared` a `../foundation`; cero líneas funcionales, cero cambio de render, comportamiento o API.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/display/Tag/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/display/tag/engines/classic/index.tsx": {
       "blob": "5d943bababf89e30f81e6120682d7d0c218ed77e79ab41dbe6aff2f102c66d58",
+      "relocationDigest": "a19d9263ec2a591eb75a0976ce5ea705cd2ee313ee1b125396661c71a506f4b7",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/display/Tag/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/display/tag/engines/rustic/index.tsx": {
       "blob": "8649c0427d6099de6518eb78932ec767e43e6de105a535906810d4cef80b8bab",
+      "relocationDigest": "bd994ae7cb3b31cc3b1cc8ac137c25797ff4b41dc31fe38f72318e1eef82e242",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/display/Tooltip/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/display/tooltip/engines/classic/index.tsx": {
       "blob": "35881b3c2ca3425389d19c85baac15f195a736e3a93eb05e5379dece751ae4ab",
+      "relocationDigest": "d7dcab3cc1ca0d17743b482c70a8584d24ab3164d58561812cbed4655e98c84b",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/display/Tooltip/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/display/tooltip/engines/rustic/index.tsx": {
       "blob": "b5f6d5fb28d3fabf042ff1865fe607515f8975776bfd3b20bda8dead2797e8de",
+      "relocationDigest": "f5fff6bb8ee2c719d3f57fae4c6d8a9df44fc6d2e77aa79c098a8784f528aac7",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/display/Typography/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/display/typography/engines/classic/index.tsx": {
       "blob": "f53ee9018af20bfbcc4530e44de344a908417c92482ac525f5406b192f863d25",
+      "relocationDigest": "429a3985a79881b9357e3d015bbf1351a1bd4c8c21b11f0af7c14555410ae179",
       "reason": "cambio sancionado de la era de remediacion (Typography craft); classic queda congelado desde aca",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/display/Typography/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/display/typography/engines/rustic/index.tsx": {
       "blob": "ad5ab7c78544bde747082f22a00e8f55fa9e69146955d40d16ce1c0b518127e1",
+      "relocationDigest": "33d5c11ee9c85e33f3b3a09086ddaa0b4f2999fcedc4b3d6135b4df7ca3d76c4",
       "reason": "idem classic — sancionado",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/feedback/Message/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/feedback/message/engines/rustic/index.tsx": {
       "blob": "e82a76391d70d777957ef79f0f1b3c99785299eb79bc63beb61ae13e4e888f11",
+      "relocationDigest": "66fa4cef1ef4068c0e737c12c4e6cfaa8af995d3dad953c3bc981cd72779967e",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/feedback/Modal/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/feedback/modal/engines/classic/index.tsx": {
       "blob": "4f65b9da29d984fb3ed14f25235c609d1ef15dc7f6dd1722c0be84ced87002c1",
+      "relocationDigest": "c11c7823ab77b00b789abecd42d19e37e335f118b6c2abe9575f1d867e59c2a9",
       "reason": "Preserve the canonical Modal identity and ARIA contract through Ant panelRef after consolidating Modal ownership; adapter-only parity fix, no Classic paint change.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/feedback/Modal/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/feedback/modal/engines/rustic/index.tsx": {
       "blob": "6a61784b883a37055ecf8f4ca410219dbcd91a7ec820de1ae3ac817de3e7bc1b",
+      "relocationDigest": "b8ceda48270cc18f43cc38b2d7e2c7ea95d95ff4dfe9650da951d432daa77b29",
       "reason": "Preserve the consolidated legacy Rustic Modal API while removing internal inline paint; behavior covered by Modal lifecycle, motion, and branch tests.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/feedback/Notification/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/feedback/notification/engines/rustic/index.tsx": {
       "blob": "b17e40a1f04db2cbd02b93bd9d86990165c088ab94db75a62580ed89752051bb",
+      "relocationDigest": "40d880e18181955dfc05aad82af4d9562cf80c51086c3044757a9b6870750048",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/feedback/Progress/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/feedback/progress/engines/rustic/index.tsx": {
       "blob": "62997f563ec81bcb6fd1ba147f4f43646282a6092e2e28b49f4dcf7f82ba8583",
+      "relocationDigest": "c87dd2fc18fec1c034b757d39ab61b565208536ee0bfd3d739ad8370f8f25a06",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/inputs/Button/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/inputs/button/engines/classic/index.tsx": {
       "blob": "8c9b450284e0f9c7f1a640ce996cffbfb7375fdbf32b63c808d8be9bed7b31c5",
+      "relocationDigest": "3d44410ab45a62627976e004baafb6dd5f836f5111e8aafb4731001d2ed2ae45",
       "reason": "1c5d58c76/093671457: data-part por la frontera imperativa canonica y ley de pass-through — sancionado",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/inputs/Button/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/inputs/button/engines/rustic/index.tsx": {
       "blob": "62b895e96f4ad25f1f22159205f8ec5bbd1fdf9e5db72c7389cec98c12676ed6",
+      "relocationDigest": "b3a18db32720c25917765976075f31aa9b745ff012d5a5e9c5ac8d35ddd90809",
       "reason": "misma ley de pass-through data-part que classic — sancionado",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/inputs/Mentions/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/inputs/mentions/engines/classic/index.tsx": {
       "blob": "58f81e2da73a10c16b0b591782d5babe1033f9929ad59a351d5a218839827121",
+      "relocationDigest": "dcdf85abcba4f4aba12149cb970a7ea390633840ec91093393d5323a4a4f7ddc",
       "reason": "Shared props contract: id and aria-labelledby were added to MentionsProps. An engine that accepts the prop and drops it loses the accessible name, so the passthrough belongs in every engine, not only modern.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/inputs/Mentions/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/inputs/mentions/engines/rustic/index.tsx": {
       "blob": "6990ba07dd99694896f657635e8ea9b2ccc57340a8b79c7e70a37c84e7b6dd4b",
+      "relocationDigest": "3c4c45a9bdeada48968d89d30794ab0117278b5ca1485575bf74959a8ef7c07f",
       "reason": "Shared props contract: id and aria-labelledby were added to MentionsProps. An engine that accepts the prop and drops it loses the accessible name, so the passthrough belongs in every engine, not only modern.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/inputs/TreeSelect/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/inputs/tree-select/engines/rustic/index.tsx": {
       "blob": "e801e777021ed4ae08a85e0d1c66a35d5aadf669e8e7000d4c5053337c1b2e21",
+      "relocationDigest": "a9551c329c35f6c2b44e1ba8eb2a86c3d6ab31a207919529db41fe89bc1e91d8",
       "reason": "Shared-contract compile fix (439-lane): TreeSelectDataProps pairs treeData+fieldNames as one discriminated decision; the engine signature follows the shared contract types (readonly node union + TreeSelectFieldNames). normalizeNodes remap logic unchanged — type-only alignment, no render change.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/AspectRatio/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/aspect-ratio/engines/classic/index.tsx": {
       "blob": "258cb10fd375cb94b7927614643846b3b36c6db9fb9f7c0f2e78666099048b09",
+      "relocationDigest": "709e17795c8f5797e1d4b72d7d5852b2947c38bcc73b7abe00f4820cf9249658",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/AspectRatio/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/aspect-ratio/engines/rustic/index.tsx": {
       "blob": "10194df1fb8266e8542b4abe1b9e2b2bc4921440b0c938c6b10477be33fd3f96",
+      "relocationDigest": "6ea5b279fc36c9de6a6218dd0dbd55329aba52e1c705d2488079aa63d51d831b",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Box/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/box/engines/classic/index.tsx": {
       "blob": "e69dbfa595ce5f4a5b824f71df09c4521f3d18780ceb5ba34042187e36dfe263",
+      "relocationDigest": "651a292331e3fed859ee4a556a92f2d265745099100d6ac19dfa25b4951ac658",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Box/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/box/engines/rustic/index.tsx": {
       "blob": "fe84c4593455d490c8998e38a77b54e24220d66da15b8ec1860468418229d0aa",
+      "relocationDigest": "25aaefb750932d0254c3f48b7a68bd83ca09ceb54ff1d8f0f309467f4f49794f",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Collapse/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/collapse/engines/rustic/index.tsx": {
       "blob": "672f4fdf0c9818a4406db8b7a080902b2e3cf2d476a7815127fadff1474499b3",
+      "relocationDigest": "7b372165fdc6c39cb38bd7d8c11677be71006cf4e9d4203b17ebedb7b08535c4",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Container/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/container/engines/classic/index.tsx": {
       "blob": "93c9b25c563a6b5adbb0dd8d5f662d0db0679a31fb379b83249b9f0f82b6e7c8",
+      "relocationDigest": "3ca5bfc47eb72bf8ddab09ed1995289304e3c29b1fc92c3baad56b55b09dfa3e",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Container/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/container/engines/rustic/index.tsx": {
       "blob": "d528bc7ebe406b77a7d598493cc4d9a3271bf44c1efc2e7146c1f03279943f4e",
+      "relocationDigest": "b2c92f23c8b8257c26c6cbd2114a161b02ae490226254ce795d8513e8fbd6d67",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Divider/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/divider/engines/classic/index.tsx": {
       "blob": "51b757512cd1bcd52fc24bcfb815ec0567186cf12bf9e5b0964057980969fa3d",
+      "relocationDigest": "6817203b8b3c22b2aaea3a3ff77c252ed3cc5d54e256a7e03c9e7a87b1fe939c",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Divider/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/divider/engines/rustic/index.tsx": {
       "blob": "e621f431804ae54823d26bed3fc65bf8fd6b655168877e34da1764be45ba0007",
+      "relocationDigest": "60cd67ed72303f8442a74f8868a463d2a864b0778ea994d5faf6284edc8a11cf",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Flex/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/flex/engines/classic/index.tsx": {
       "blob": "eda0be0ec3f9d44f6ae18250894130d6b2378ac2827d405ea36c3a687513f7aa",
+      "relocationDigest": "fd0f8d1037518b57db6bfd11f1e2725574c4717f07be631dd09f521b654ca0ea",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Flex/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/flex/engines/rustic/index.tsx": {
       "blob": "86d7ff28fea03d541a5393fd33f3ef72b7abf8aa1ae7e9abe4b23dd433e2b5e9",
+      "relocationDigest": "449609e05b46a38b4c360ffd3a04f794a6faf61a92e7681e86f1239d5e79f406",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Grid/engines/classic/index.tsx": {
-      "blob": "684b4fcf2f5e7c35a7aab16405262edc7ca3492f8ffe5fc221efc0b0ecd0f5d3",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+    "packages/core/src/components/primitives/layout/grid/engines/classic/index.tsx": {
+      "blob": "ab7ce5579916879f9a0db7d7cf93c4d29f46799b5a23f5638d9a6c0c0545593a",
+      "relocationDigest": "63f04dc539722f2f892b51599a05e7fc013b344bcb0c6ebe59c5dde6c6daaa20",
+      "reason": "Modern-led shared-contract migration (C0, 2026-09-02): Grid moved from the injected <style> block produced by generateResponsiveGridCSS to the projectResponsiveGrid + inline --_ds-grid-* channel contract that modern, classic and rustic all consume; generateResponsiveGridCSS has zero remaining references, so leaving the two frozen adapters on the retired helper would not compile. This is the minimal shared-contract compile fix the freeze policy permits, not Classic/Rustic product work. Owner C3; expires when the adapter posture contract lands and the obligation engine-posture-totality is satisfied.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Grid/engines/rustic/index.tsx": {
-      "blob": "a997e7ead8892c4f97b73c649d25d0e35fa8cd314652720700732cbec5e8434d",
-      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+    "packages/core/src/components/primitives/layout/grid/engines/rustic/index.tsx": {
+      "blob": "bd27b82d2161fd58d6ad562d99e10f0d7131ea333cf241974072815d8d06f385",
+      "relocationDigest": "70a09dde10acb25aee4e403e77608bb992235b11af928ffbedb2e531d352b4d6",
+      "reason": "Modern-led shared-contract migration (C0, 2026-09-02): Grid moved from the injected <style> block produced by generateResponsiveGridCSS to the projectResponsiveGrid + inline --_ds-grid-* channel contract that modern, classic and rustic all consume; generateResponsiveGridCSS has zero remaining references, so leaving the two frozen adapters on the retired helper would not compile. This is the minimal shared-contract compile fix the freeze policy permits, not Classic/Rustic product work. Owner C3; expires when the adapter posture contract lands and the obligation engine-posture-totality is satisfied.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Space/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/space/engines/classic/index.tsx": {
       "blob": "36a57f0f695dfa9d27e629c8297b5a8df06cb695ce97b89f07a803e4eb43af65",
+      "relocationDigest": "9856eb1f17df415a52166d39970e3294273eaed1ed96ca3f92524df9a301fdc2",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Space/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/space/engines/rustic/index.tsx": {
       "blob": "48d39d2e142eab9557b841e30296ef5cec9b6c749e6cc776f0887104dffcbc7c",
+      "relocationDigest": "e73a6f7f1a0343be9f02379151f4dcede1266b64c2a38d57288a833b9d930b00",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Stack/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/layout/stack/engines/classic/index.tsx": {
       "blob": "8f723f431d5b1413422a12df98b448bc9452788ac575e4464567566078728f73",
+      "relocationDigest": "da83818519ac689842205dd84dc158983999554741ac8f81c17c1ee7d6d740bf",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/layout/Stack/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/layout/stack/engines/rustic/index.tsx": {
       "blob": "f3610a1a1343ae2cba1725a6af75b0a531cd65e8c4cc2d1f931759c328d73307",
+      "relocationDigest": "12eb967f109dbbfd5ce2bba885226caedcfbdfb66f52c4c25913c7348df08a5a",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/navigation/Link/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/navigation/link/engines/classic/index.tsx": {
       "blob": "d0cf9fddb9d545fb3ddbf86f8271855cf8b58427457ce31c15b411b2ba292331",
+      "relocationDigest": "21c9cb6aecd8cee2f8c0b1abc55ae242e50d7497ef9ae7482471f878e09d99ff",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/navigation/Link/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/navigation/link/engines/rustic/index.tsx": {
       "blob": "17655753c695547c3afff31405fbfab536c97df09012a353a26ebcddd02d5a3b",
+      "relocationDigest": "86fd258cd76022149c4dbe9e333323044501b46866d7c2ba25cc10b42bf0ac75",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/navigation/Menu/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/navigation/menu/engines/rustic/index.tsx": {
       "blob": "04efe1ba5cdcb6aa4342378ac190b407e20ea588d598752cd343321077205c43",
+      "relocationDigest": "7c92a2246a14aa4724ceaaf45706ff36975c9b595227856c59d9454b9bfcb7a9",
       "reason": "Shared-contract compile fix (439-lane): MenuItem became a discriminated union (MenuEntry | MenuDivider) because a divider with required label was unrepresentable. One narrowing guard added (item.type !== 'divider' before reading children); dividers have no children, so behavior is identical for every previously-typeable input. Divider render path untouched.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/navigation/Tabs/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/navigation/tabs/engines/classic/index.tsx": {
       "blob": "fdde425f05441f510aaa0cd2cd4bc984313a317f1aadcf68607e36cd0c3d7eb3",
+      "relocationDigest": "a3b11abf65a1b9d1a2d5b8997987308dca154a01ce425762ff96f0665a4bb098",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/navigation/Tabs/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/navigation/tabs/engines/rustic/index.tsx": {
       "blob": "ec502be38e528bb3873535dbf902889c204af5245f5ea76365f83b966936f7a1",
+      "relocationDigest": "24be1524f357f81fa69ace7e5f7ed9580c73fd01e7f8afefa53fca44a8fb4236",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/overlay/AlertDialog/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/overlay/alert-dialog/engines/rustic/index.tsx": {
       "blob": "6c17d77b15add4f6007493d7762386f4701ccb5d20489b485406af97e4bfd613",
+      "relocationDigest": "caa9ec918bdc39103b0ecc43d6124aee38a51474a86d1e0315a2816cd201d8d7",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/overlay/ConfirmDialog/engines/rustic/index.tsx": {
+    "packages/core/src/components/primitives/overlay/confirm-dialog/engines/rustic/index.tsx": {
       "blob": "0bac165747e284704adb5e3888939a36f7d1ac8f0309a9ca554bc9725dc7fada",
+      "relocationDigest": "19fda6666ee6799fc054cab3ce0de4b5406982872e502185d97d6d40b1ca5627",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
-    "packages/core/src/components/primitives/overlay/Modal/engines/classic/index.tsx": {
-      "blob": null,
-      "reason": "Modal se movio de overlay/ a feedback/ con sus 3 engines intactos; la ruta vieja no existe — borrado del move sancionado",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/components/primitives/overlay/Modal/engines/rustic/index.tsx": {
-      "blob": null,
-      "reason": "idem — move overlay→feedback sancionado",
-      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
-    },
-    "packages/core/src/components/primitives/overlay/Popover/engines/classic/index.tsx": {
+    "packages/core/src/components/primitives/overlay/popover/engines/classic/index.tsx": {
       "blob": "489b9efab3c295e93cb9dbd65b87e923edcad2b494a16cae1a58673e48698c9e",
+      "relocationDigest": "8ed8f41f15699ca8e6379368950a13636d840b20cdade1a38916dfb8d2c2aa28",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/structures/workspace/action-dock/engines/classic/index.tsx": {
       "blob": "96d3f9aabaf7c79ec0aea9e4ae3f646141b0edf0cb29a7533528f0da83bfb888",
+      "relocationDigest": "f40650e3b322646ab397a1954b702f2458f0d1e4ee3b81afee629548e47a72d0",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     },
     "packages/core/src/components/structures/workspace/action-dock/engines/rustic/index.tsx": {
       "blob": "7141e7a0592f3eab60798529f9b0eb1e24899256ee57840538ae12bde46cee66",
+      "relocationDigest": "f40650e3b322646ab397a1954b702f2458f0d1e4ee3b81afee629548e47a72d0",
       "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/anchor/index.css": {
+      "blob": "9cd6059545f319475928d6b289f77a1ca3b29a1499ca4fddfd4377d7ab37433f",
+      "relocationDigest": "0b66784d6699cb81a6aa373c2c007dd31c03dfd829c0a4be5d7aba26edb11c19",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/cascader/index.css": {
+      "blob": "1c53b1fca678b8069183a8260ec1a8f300c9e9c238d152d45e383ed70f183172",
+      "relocationDigest": "678400bfd2a6c4d2a545fe1602798a2bf124d709ca3f91d50bcf90ba8bb7f29b",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/command-palette/index.css": {
+      "blob": "67a1800827e12699c9818ca9b596587116765c9b9f1d72bd01dad56ed1db55b9",
+      "relocationDigest": "b2611630ec3442fafe69cc4518a3a363cf4e940f41d7a3f441a32392170a0d39",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/data-table/index.css": {
+      "blob": "4ad33ec5a9cf36caafdfdd7e37cf5463ff11867837e41d870f99201f42d5313c",
+      "relocationDigest": "2fc9fcf766e37efb1dcdbf7e560d9ce057edd7422c07a8a48108032eb448c53f",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/divider/index.css": {
+      "blob": "c27e8ea9091a0961aabec6ba231d252b109a70f864b8510def6e7c4386d155fe",
+      "relocationDigest": "207f81dd8bd8b619ce568d1f20c3c635c79d67a0c5ba0c31ed3e3c4ce1752fb5",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/filter-builder/index.css": {
+      "blob": "cacb47ae57cbfd4300f52f2157d7a64be096cb7324638c7a5fb1e288cc9d2ac1",
+      "relocationDigest": "3d8257ae63bcd04b9bbac7689cdfc572913a2f2046fb447401e238eaec68bf59",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/form-builder/index.css": {
+      "blob": "32ebb3ac47f514025f80f9557a30db57b39ce98a2b2c548b5ff759c44232d1d0",
+      "relocationDigest": "34f2606cc50616c07b7f70b901a522fcc57595ee26fe5d1dc1b231da092de012",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/modal/index.css": {
+      "blob": "73fcf840db3e48cc948ca3c1a48619020b835e5cdef35577b380e6662ce12e8d",
+      "relocationDigest": "7455ab2889590ab2ed942108c7f9edb9cda538574bb0395ba57c3d18e6404b9c",
+      "reason": "Move Rustic Modal backdrop and blur paint out of inline styles while reusing the canonical --ds-glass-blur-sm hook; no new public channel and no API change.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/overlay-modal.css": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "Remove superseded Rustic overlay Modal skin after overlay/Modal became a compatibility adapter to the single feedback/Modal owner; no Rustic visual change beyond eliminating the unreachable duplicate system.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/saved-views/index.css": {
+      "blob": "832409c6eb211b0b0b94614b7445ea06e5c14594b28e4611f0ff6e6164614f86",
+      "relocationDigest": "a08b514a23658e7244bf69bf97cc30fe3ceb039fdccd23cc716a5608c0583c68",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/select/index.css": {
+      "blob": "140ba0b5876da39555728e2d0c46ae24f2b9a53993938229d557a5407d9c3a99",
+      "relocationDigest": "dc6197ad5bdeda1743f4c24b8bfe7ee9eb004430388dbb67b90627b1c59dad7c",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree-select/index.css": {
+      "blob": "0de3061e02b93ac370b49214f19ea5db1bf91f5d6fc637b9432462b163ef0463",
+      "relocationDigest": "f55cf3edb033b10904c400883838789fb6f6b9414a7c70d03277c46a79dd3957",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/tree/index.css": {
+      "blob": "dda490f1c47bafccd52a6abbf848f3f226e134226d14484c0b32ffc59c1edf02",
+      "relocationDigest": "cfdc1bbeab8f820960f9b78697fabbf8a9b2bfde038cf0aab6f44cb8b0f89efb",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/typography/index.css": {
+      "blob": "aa9c42f18d99b5196fd2791adb223b5be4bb5caf2d5c5bb6fd5d550e73a35028",
+      "relocationDigest": "1e058b7d2af3826b8d95d967627d8df449167153d286552eea85ef965aaab30b",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/watermark/index.css": {
+      "blob": "04bc0a50483df3249a3fddd115de27effb30db254ce0431735defb180385e204",
+      "relocationDigest": "10148c2706389bf7471543166f49dd389b6770870ce5c0a8db69c0bade5f7615",
+      "reason": "fix(skin) 646151dc4: vocabulario DS para las familias de dead-paint — cambio sancionado de la era de remediacion",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/foundation/tokens/css/runtime/engines/rustic/skin/workspace-switcher/index.css": {
+      "blob": "57aad601b3895959f40f2dffc86e7bd23efe0a75fb5ba5c701e8633b3f220ee3",
+      "relocationDigest": "7421558436262bf6a4deba68f260f26c3d95cc138eb989cb44c3b6333e0a742f",
+      "reason": "Sealed at the freeze revision 6ce8cd54 (policy 2026-07-25): pre-existing Classic/Rustic WIP that predates the freeze. Content-pinned, so any further edit to these files fails until it is re-authorized.",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/overlay/Modal/engines/classic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "Modal se movio de overlay/ a feedback/ con sus 3 engines intactos; la ruta vieja no existe — borrado del move sancionado",
+      "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
+    },
+    "packages/core/src/ui/primitives/overlay/Modal/engines/rustic/index.tsx": {
+      "blob": null,
+      "relocationDigest": null,
+      "reason": "idem — move overlay→feedback sancionado",
       "authorizedAgainst": "ef269d71db916d0063ea8a87b08240f8b13e99ca"
     }
   }

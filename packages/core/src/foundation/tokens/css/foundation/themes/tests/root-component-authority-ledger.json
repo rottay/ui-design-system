@@ -35,7 +35,7 @@
     }
   ],
   "owners": {
-    "avatar.css": {
+    "avatar/index.css": {
       "same": [
         "--ds-avatar-2xl-font-size",
         "--ds-avatar-2xl-size",
@@ -73,7 +73,7 @@
         "--ds-avatar-warning-color"
       ]
     },
-    "badge.css": {
+    "badge/index.css": {
       "same": [
         "--ds-badge-border-width",
         "--ds-badge-font-weight",
@@ -124,7 +124,7 @@
         "--ds-badge-warning-color"
       ]
     },
-    "button.css": {
+    "button/index.css": {
       "same": [
         "--ds-button-focus-ring",
         "--ds-button-ghost-bg",
@@ -185,7 +185,6 @@
         "--ds-button-primary-border",
         "--ds-button-primary-color",
         "--ds-button-primary-shadow",
-        "--ds-button-primary-shadow-hover",
         "--ds-button-secondary-bg",
         "--ds-button-secondary-bg-active",
         "--ds-button-secondary-bg-hover",
@@ -216,7 +215,7 @@
         "--ds-button-xs-radius"
       ]
     },
-    "card.css": {
+    "card/index.css": {
       "same": [
         "--ds-card-subtitle-font-size",
         "--ds-card-title-font-size"
@@ -241,7 +240,7 @@
         "--ds-card-transition"
       ]
     },
-    "checkbox.css": {
+    "checkbox/index.css": {
       "same": [],
       "different": [
         "--ds-checkbox-error-border",
@@ -250,7 +249,7 @@
         "--ds-checkbox-transition"
       ]
     },
-    "empty.css": {
+    "empty/index.css": {
       "same": [
         "--ds-empty-description-color",
         "--ds-empty-icon-color",
@@ -258,7 +257,7 @@
       ],
       "different": []
     },
-    "input.css": {
+    "input/index.css": {
       "same": [
         "--ds-input-helper-font-size",
         "--ds-input-label-font-size",
@@ -312,7 +311,7 @@
         "--ds-textarea-radius"
       ]
     },
-    "list.css": {
+    "list/index.css": {
       "same": [],
       "different": [
         "--ds-list-border-color",
@@ -320,7 +319,7 @@
         "--ds-list-split-color"
       ]
     },
-    "modal.css": {
+    "modal/index.css": {
       "same": [
         "--ds-modal-2xl-width",
         "--ds-modal-body-padding",
@@ -352,13 +351,13 @@
         "--ds-modal-title-font-weight"
       ]
     },
-    "patterns.css": {
+    "patterns/index.css": {
       "same": [],
       "different": [
         "--ds-skeleton-bg"
       ]
     },
-    "radio.css": {
+    "radio/index.css": {
       "same": [],
       "different": [
         "--ds-radio-error-border",
@@ -367,7 +366,7 @@
         "--ds-radio-transition"
       ]
     },
-    "select.css": {
+    "select/index.css": {
       "same": [
         "--ds-select-dropdown-shadow"
       ],
@@ -391,7 +390,7 @@
         "--ds-select-transition"
       ]
     },
-    "spinner.css": {
+    "spinner/index.css": {
       "same": [
         "--ds-spinner-lg-size",
         "--ds-spinner-md-size"
@@ -401,7 +400,7 @@
         "--ds-spinner-xl-size"
       ]
     },
-    "statistic.css": {
+    "statistic/index.css": {
       "same": [],
       "different": [
         "--ds-statistic-prefix-color",
@@ -410,7 +409,7 @@
         "--ds-statistic-value-color"
       ]
     },
-    "tag.css": {
+    "tag/index.css": {
       "same": [
         "--ds-tag-font-weight",
         "--ds-tag-lg-font-size",
@@ -438,14 +437,14 @@
         "--ds-tag-xs-height"
       ]
     },
-    "timeline.css": {
+    "timeline/index.css": {
       "same": [],
       "different": [
         "--ds-timeline-content-color",
         "--ds-timeline-line-color"
       ]
     },
-    "toggle.css": {
+    "toggle/index.css": {
       "same": [],
       "different": [
         "--ds-toggle-description-color",
@@ -468,7 +467,7 @@
         "--ds-toggle-warning-bg"
       ]
     },
-    "tree.css": {
+    "tree/index.css": {
       "same": [
         "--ds-tree-node-bg-hover",
         "--ds-tree-node-bg-selected",
@@ -477,5 +476,15 @@
       ],
       "different": []
     }
+  },
+  "retired": {
+    "_comment": "Rows that left the root-authority corpus entirely: no component family and no foundation theme declares them any more, so there is no owner for the law to check. They stay enumerated here so the drain accounting still closes against measurement.sourceBeforeThisDrain.shared instead of shrinking by one silently.",
+    "channels": [
+      {
+        "channel": "--ds-button-primary-shadow-hover",
+        "formerOwner": "button/index.css",
+        "reason": "The root default was retired in favour of an in-place fallback at the only reader: runtime/engines/modern/skin/button/index.css declares box-shadow: var(--ds-button-primary-shadow-hover, var(--ds-material-control-shadow-hover)), so the channel resolves without a component-layer declaration. It is still declared by a tenant artifact (facade/artifacts/evnto/index.css), which is the tenant layer and outside this law. Verified: zero declarations across presentation/ and foundation/."
+      }
+    ]
   }
 }

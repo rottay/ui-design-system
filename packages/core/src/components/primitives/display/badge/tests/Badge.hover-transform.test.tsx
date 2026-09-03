@@ -163,10 +163,10 @@ describe('Badge hover transform (P-43)', () => {
 
       for (const sheet of [base, entry]) {
         expect(sheet).toMatch(
-          /@import ["']\.\.\/\.\.\/runtime\/engines\/modern\/skin\/badge\.css["'] layer\(rottay-engines\);/
+          /@import ["']\.\.\/\.\.\/\.\.\/runtime\/engines\/modern\/skin\/badge\/index\.css["'] layer\(rottay-engines\);/
         );
         expect(sheet).toMatch(
-          /@import ["']\.\.\/\.\.\/runtime\/engines\/rustic\/skin\/badge\.css["'] layer\(rottay-engines\);/
+          /@import ["']\.\.\/\.\.\/\.\.\/runtime\/engines\/rustic\/skin\/badge\/index\.css["'] layer\(rottay-engines\);/
         );
       }
     });

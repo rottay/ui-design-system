@@ -29,7 +29,7 @@ const SKIN_DIR = join(
 );
 const SKINS = {
   modern: readFileSync(join(SKIN_DIR, 'modern/skin/table/index.css'), 'utf8'),
-  rustic: readFileSync(join(SKIN_DIR, 'rustic/skin/table.css'), 'utf8'),
+  rustic: readFileSync(join(SKIN_DIR, 'rustic/skin/table/index.css'), 'utf8'),
 } as const;
 
 /** Strip comments and `@keyframes` blocks, then return every `{selector, body}` rule. */

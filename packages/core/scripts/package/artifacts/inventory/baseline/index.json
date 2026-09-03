@@ -4,7 +4,7 @@
   "producer": "@rottay/design-system",
   "producerVersion": "2.19.36",
   "entryCount": 7095,
-  "unpackedSize": 41693457,
+  "unpackedSize": 41693898,
   "files": [
     {
       "path": "contracts/css/hooks/index.d.ts",
@@ -28376,11 +28376,11 @@
     },
     {
       "path": "package.json",
-      "size": 50740
+      "size": 51268
     },
     {
       "path": "README.md",
-      "size": 8440
+      "size": 8353
     },
     {
       "path": "THIRD_PARTY_NOTICES.md",

@@ -21,9 +21,27 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot, repoRoot as findRepoRoot } from '../../../../libraries/repo-root/index.mjs';
+import {
+  SymbolAbsentError,
+  SymbolAmbiguousError,
+  requireExactlyOneExportedDeclaration,
+} from '../../../../libraries/exported-symbol/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
-const SRC_ROOT = join(findPackageRoot(HERE), 'src');
+
+/**
+ * `--package-root` exists so the drills can point the audit at a fixture. The
+ * roots were frozen at module load from the real package, which meant no drill
+ * could run without mutating real source -- and a fence nobody can plant a
+ * defect in is a fence nobody has tested. The flag mirrors the precedent in
+ * `scripts/package/artifacts/freshness/index.mjs`.
+ */
+function argValue(flag) {
+  const index = process.argv.indexOf(flag);
+  return index >= 0 && process.argv[index + 1] ? process.argv[index + 1] : null;
+}
+const PACKAGE_ROOT = resolve(argValue('--package-root') ?? findPackageRoot(HERE));
+const SRC_ROOT = resolve(argValue('--emitter-root') ?? join(PACKAGE_ROOT, 'src'));
 
 const violations = [];
 
@@ -71,23 +89,18 @@ function relPath(abs) {
 const CHROME_EMITTERS = [
   {
     path: join(SRC_ROOT, 'infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts'),
-    extract: (source) => source,
+    whole: true,
   },
   {
     path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/brand-theme/index.ts'),
-    extract: (source) => {
-      const start = source.indexOf('export function brandThemeToChromeVariables');
-      const end = source.indexOf('export const compileBrandTheme', start);
-      return start >= 0 ? source.slice(start, end >= 0 ? end : undefined) : '';
-    },
+    // `compileBrandTheme` is scanned too, which closes the gap the old comment
+    // above described but the old window did not cover: its body is the largest
+    // export in the file and sat entirely outside the marker slice.
+    symbols: ['brandThemeToChromeVariables', 'compileBrandTheme'],
   },
   {
     path: join(SRC_ROOT, 'infrastructure/compilers/kernel/runtime/appearance/index.ts'),
-    extract: (source) => {
-      const start = source.indexOf('export function appearanceAdvancedToVariables');
-      const end = source.indexOf('// ── Combined', start);
-      return start >= 0 ? source.slice(start, end >= 0 ? end : undefined) : '';
-    },
+    symbols: ['appearanceAdvancedToVariables'],
   },
 ];
 
@@ -107,8 +120,44 @@ for (const emitter of CHROME_EMITTERS) {
     });
     continue;
   }
-  const scoped = emitter.extract(readSafe(emitter.path));
-  if (!scoped) continue;
+  // There is no code path that skips an emitter. A missing PATH already failed
+  // loud; a missing MARKER used to degrade to an empty scope and exit 0, which
+  // is the asymmetry that made this fence vacuous.
+  const source = readSafe(emitter.path);
+  let scoped;
+  if (emitter.whole) {
+    scoped = source;
+  } else {
+    const parts = [];
+    let failed = false;
+    for (const symbol of emitter.symbols) {
+      try {
+        const declaration = requireExactlyOneExportedDeclaration(emitter.path, symbol, source);
+        if (declaration.text.trim() === '') {
+          violations.push({
+            rule: 'emitter-symbol-empty',
+            path: relPath(emitter.path),
+            message: `Emitter symbol ${symbol} resolves to an empty body; the chrome channel cannot be certified.`,
+          });
+          failed = true;
+          continue;
+        }
+        parts.push(declaration.text);
+      } catch (error) {
+        violations.push({
+          rule: error instanceof SymbolAmbiguousError ? 'emitter-symbol-ambiguous' : 'emitter-symbol-missing',
+          path: relPath(emitter.path),
+          message:
+            error instanceof SymbolAbsentError || error instanceof SymbolAmbiguousError
+              ? error.message
+              : `Emitter symbol ${symbol} could not be resolved: ${error.message}`,
+        });
+        failed = true;
+      }
+    }
+    if (failed) continue;
+    scoped = parts.join('\n');
+  }
 
   for (const pattern of [varPattern, directVarPattern]) {
     pattern.lastIndex = 0;

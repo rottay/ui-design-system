@@ -37,7 +37,9 @@ describe('Chart components integration', () => {
     // The renderer owns the plot SVG; the scaffold exposes the accessible
     // summary through its default-active item (first row) rather than the
     // legacy focusable-fallback roving handler.
-    expect(screen.getByRole('img', { name: 'Revenue' })).toBeInTheDocument();
+    // Interactive charts publish `group` rather than `img` (see the catalog
+    // suite): the name is the invariant, the role follows the interaction.
+    expect(screen.getByRole('group', { name: 'Revenue' })).toBeInTheDocument();
     expect(screen.getByText(/line chart containing 5 data items/i)).toBeInTheDocument();
     expect(screen.getByText(/Active data point: Series: Revenue, X: Mon, Y: 14/i)).toBeInTheDocument();
 

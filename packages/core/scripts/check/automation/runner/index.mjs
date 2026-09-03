@@ -11,9 +11,17 @@
  * the exit code; they are also never run, so an excluded gate cannot cost CI
  * time while pretending to protect something.
  *
+ * `--continue` is a DIAGNOSTIC mode: it runs every blocking gate instead of
+ * stopping at the first red, so a full `id -> PASS/FAIL` matrix can be measured
+ * in one pass. It never softens the verdict -- one red gate still exits 1. It
+ * is deliberately absent from `pretest` and from `ci.yml`, which use the
+ * fail-fast default, because a mode that keeps going past a red gate would let
+ * later gates read artifacts an earlier one was supposed to guard.
+ *
  * Usage:
  *   node scripts/check/automation/runner/index.mjs            # run every blocking gate
  *   node scripts/check/automation/runner/index.mjs --list     # print the plan, run nothing
+ *   node scripts/check/automation/runner/index.mjs --continue # full matrix, still exits 1 on red
  */
 
 import { spawnSync } from 'node:child_process';
@@ -26,6 +34,7 @@ import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/ind
 const HERE = dirname(fileURLToPath(import.meta.url));
 const packageRoot = findPackageRoot(HERE);
 const listOnly = process.argv.includes('--list');
+const continueOnFailure = process.argv.includes('--continue');
 
 const problems = validateManifest();
 if (problems.length > 0) {
@@ -45,8 +54,12 @@ if (listOnly) {
   process.exit(0);
 }
 
+if (continueOnFailure) {
+  console.log('ci-gates: --continue (diagnostic full matrix; a red gate still exits 1)\n');
+}
+
 const results = [];
-let failed = null;
+const failures = [];
 
 for (const gate of blocking) {
   const startedAt = process.hrtime.bigint();
@@ -63,8 +76,8 @@ for (const gate of blocking) {
   results.push({ id: gate.id, ok, status, ms });
 
   if (!ok) {
-    failed = { id: gate.id, status, run: gate.run.join(' ') };
-    break; // fail fast: later gates read artifacts this one guards
+    failures.push({ id: gate.id, status, run: gate.run.join(' ') });
+    if (!continueOnFailure) break; // fail fast: later gates read artifacts this one guards
   }
 }
 
@@ -79,9 +92,21 @@ for (const gate of excluded) {
   console.log(`        owner=${gate.excluded.owner} since=${gate.excluded.trackedSince ?? 'unrecorded'}`);
 }
 
-if (failed) {
-  console.error(`\nci-gates FAILED at ${failed.id} (exit ${failed.status})`);
-  console.error(`  reproduce: ${failed.run}`);
+if (continueOnFailure) {
+  const passed = results.filter((result) => result.ok).length;
+  console.log(
+    `\nci-gates matrix: ${passed} PASS, ${failures.length} FAIL, of ${blocking.length} blocking gate(s).`,
+  );
+}
+
+if (failures.length > 0) {
+  const first = failures[0];
+  console.error(`\nci-gates FAILED at ${first.id} (exit ${first.status})`);
+  console.error(`  reproduce: ${first.run}`);
+  for (const failure of failures.slice(1)) {
+    console.error(`  also FAILED ${failure.id} (exit ${failure.status})`);
+    console.error(`  reproduce: ${failure.run}`);
+  }
   process.exit(1);
 }
 

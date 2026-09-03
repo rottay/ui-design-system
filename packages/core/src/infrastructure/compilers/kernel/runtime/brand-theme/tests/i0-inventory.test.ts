@@ -567,8 +567,11 @@ describe("H3 contract: rottay", () => {
       expect(rottayBrandTheme.palette?.backgroundColor).toBe("#0C0C0E"));
     it("sidebar is dark-authored", () =>
       expect(rottayBrandTheme.chrome?.sidebar?.bg).toBe("#0D0D10"));
-    it("layout is dark-authored", () =>
-      expect(rottayBrandTheme.chrome?.layout?.bg).toBe("#0C0C0E"));
+    // A2-16 idiom (alias + resolution): the page ground moved onto the cascade
+    // root, so the layout channel reads it and the literal is asserted where it
+    // is DECLARED -- `palette.backgroundColor`, pinned two lines above.
+    it("layout reads the page-ground root", () =>
+      expect(rottayBrandTheme.chrome?.layout?.bg).toBe("var(--ds-color-bg-primary)"));
     it("controls are dark-authored", () =>
       expect(rottayBrandTheme.chrome?.controls?.buttonDefault?.bg).toBe(
         "#18181B"
@@ -675,8 +678,17 @@ describe("H3 contract: bithire", () => {
       expect(bithireBrandTheme.surfaces?.borderRadius?.lg).toBe("14px"));
     it("shadows.sm", () =>
       expect(bithireBrandTheme.surfaces?.shadows?.sm).toBeTruthy());
-    it("glass", () =>
-      expect(bithireBrandTheme.surfaces?.glass?.blur).toBe("12px"));
+    // Owner decision 19 (F2A-1 Lote F-prima) REMOVED this literal: it was the
+    // already-multiplied result, so authoring it here erased the
+    // surfaces.effect-intensity factor the base layer applies. Leaving it
+    // unauthored is the decision, and this asserts the decision rather than the
+    // value it retired -- the sibling channels that stayed are pinned too.
+    it("glass blur is left to the effect-intensity dial", () => {
+      expect(bithireBrandTheme.surfaces?.glass?.blur).toBeUndefined();
+      expect(bithireBrandTheme.surfaces?.glass?.background).toContain(
+        "var(--ds-effect-intensity)"
+      );
+    });
     it("gradients", () =>
       expect(bithireBrandTheme.surfaces?.gradients?.primary).toContain(
         "linear-gradient"
@@ -1096,7 +1108,8 @@ describe("H3 contract: evnto", () => {
   });
 
   describe("evnto chrome.layout (filled I6)", () => {
-    it("bg", () => expect(evntoBrandTheme.chrome?.layout?.bg).toBe("#FFFFFF"));
+    it("bg reads the page-ground root", () =>
+      expect(evntoBrandTheme.chrome?.layout?.bg).toBe("var(--ds-color-bg-primary)"));
     it("headerBg", () =>
       expect(evntoBrandTheme.chrome?.layout?.headerBg).toBeTruthy());
     it("headerBackdrop", () =>
@@ -1128,7 +1141,7 @@ describe("H3 contract: evnto", () => {
     it("sidebar authored (light-first)", () =>
       expect(evntoBrandTheme.chrome?.sidebar?.bg).toBe("#fafafa"));
     it("layout authored", () =>
-      expect(evntoBrandTheme.chrome?.layout?.bg).toBe("#FFFFFF"));
+      expect(evntoBrandTheme.chrome?.layout?.bg).toBe("var(--ds-color-bg-primary)"));
     it("controls authored", () =>
       expect(evntoBrandTheme.chrome?.controls?.buttonPrimary?.bg).toBeTruthy());
     it("table authored", () =>
@@ -1167,7 +1180,8 @@ describe("H3 contract: evnto", () => {
       expect(artifact).toContain(`--ds-shadow-sm: ${authored.sm}`);
     });
     it("artifact: layout vars present", () => {
-      expect(artifact).toContain("--ds-layout-bg: #FFFFFF");
+      expect(artifact).toContain("--ds-layout-bg: var(--ds-color-bg-primary)");
+      expect(artifact).toContain("--ds-color-bg-primary: #FFFFFF");
       // R-1 re-anchor (D-1): F2.4 (cf61da8bb) rewired the BASE sider ground
       // from the literal to the governed root. The base literal does not come
       // back -- D-1 restitutes the dark OVERLAY, asserted below. The colour
@@ -1202,8 +1216,12 @@ describe("H3 contract: evnto", () => {
       expect(dark("--ds-shadow-sm")).toBe(authored.sm);
     });
     it("dark: layout carries its own ground", () => {
-      expect(dark("--ds-layout-bg")).toBe("#131210");
-      expect(dark("--ds-layout-sider-bg")).toBe("#0E0D0B");
+      // The channel is declared once, on the base; the dark mode moves the ROOT
+      // it reads. That is the ground carrying over, expressed through the root.
+      expect(dark("--ds-layout-bg")).toBe("var(--ds-color-bg-primary)");
+      expect(dark("--ds-color-bg-primary")).toBe("#131210");
+      expect(dark("--ds-layout-sider-bg")).toBe("var(--ds-sidebar-bg)");
+      expect(dark("--ds-sidebar-bg")).toBe("#0E0D0B");
     });
     it("dark: shell stays minimal", () => {
       expect(dark("--ds-shell-grid-size")).toBe("0px");
@@ -1231,7 +1249,8 @@ describe("H3 contract: evnto", () => {
         brandTheme: evntoBrandTheme,
         tenantSlug: "evnto",
       }).cssString;
-      expect(css).toContain("--ds-layout-bg: #FFFFFF");
+      expect(css).toContain("--ds-layout-bg: var(--ds-color-bg-primary)");
+      expect(css).toContain("--ds-color-bg-primary: #FFFFFF");
       expect(css).toContain("--ds-shell-grid-size: 0px");
       expect(css).toContain("--ds-button-default-bg: #FFFFFF");
       expect(css).toContain("--ds-button-disabled-opacity: 0.4");

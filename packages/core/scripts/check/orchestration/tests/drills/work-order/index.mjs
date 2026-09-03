@@ -27,6 +27,18 @@ const ROOT = execFileSync('git', ['rev-parse', '--show-toplevel'], { encoding: '
 const CHECKER = `${ROOT}/packages/core/scripts/check/orchestration/public/work-order/index.mjs`;
 const EXAMPLE = `${ROOT}/packages/core/scripts/check/orchestration/public/work-order/examples/index.json`;
 
+/**
+ * The claim is "no gate-shaped file lives under this directory today", and the
+ * directory itself is not part of it. `readdirSync` on an absent directory
+ * throws, so the drill crashed the whole aggregator the moment the structural
+ * refactor removed `maintain/codemods` -- a tree change taking down the check
+ * whose own comment says it must survive the tree changing under it.
+ */
+function noGateShapedFileUnder(directory) {
+  if (!existsSync(directory)) return true;
+  return readdirSync(directory).every((entry) => !entry.endsWith('-gate.mjs'));
+}
+
 export function runDrills() {
   const suite = createDrillSuite('work-order drills');
   const base = JSON.parse(readFileSync(EXAMPLE, 'utf8'));
@@ -378,7 +390,7 @@ export function runDrills() {
         ANCHORED_ABOVE.output.includes('packages/core/scripts/**/*-gate.mjs') &&
         ANCHORED_ABOVE.output.includes('anchored above this pathspec') &&
         /packages\/core\/scripts\/maintain\/codemods\/\S*gate\.mjs would be staged/.test(ANCHORED_ABOVE.output) &&
-        readdirSync(`${ROOT}/packages/core/scripts/maintain/codemods`).every((entry) => !entry.endsWith('-gate.mjs')),
+        noGateShapedFileUnder(`${ROOT}/packages/core/scripts/maintain/codemods`),
       details: [
         'the excluded region is anchored at packages/core/scripts — NOT under the committed directory, which is why the prefix test called it disjoint',
         'no gate-shaped file lives in codemods today; the witness is synthesised from the filter, so the refusal survives the tree changing under it',

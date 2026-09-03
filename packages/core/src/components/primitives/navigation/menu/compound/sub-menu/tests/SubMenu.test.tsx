@@ -24,7 +24,7 @@ const TEST_DIR = dirname(fileURLToPath(import.meta.url));
 const SKIN_CSS_PATH = resolve(
   TEST_DIR,
   '..', '..', '..', '..', '..', '..', '..',
-  'foundation', 'tokens', 'css', 'presentation', 'components', 'skin', 'menu-compounds.css'
+  'foundation', 'tokens', 'css', 'presentation', 'components', 'skin', 'menu-compounds', 'index.css'
 );
 
 describe('Menu.SubMenu grid-row auto-height (W6-E)', () => {

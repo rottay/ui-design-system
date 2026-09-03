@@ -9,7 +9,16 @@
 
 import { strict as assert } from 'node:assert';
 import { spawnSync } from 'node:child_process';
-import { dirname, resolve } from 'node:path';
+import {
+  copyFileSync,
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
@@ -115,7 +124,9 @@ test('a fully specified excluded gate is still representable', () => {
   const problems = validateManifest([
     {
       id: 'legitimately-excluded',
-      run: ['node', 'scripts/some-gate.mjs'],
+      // A real path: `validateManifest` now refuses a gate naming a script the
+      // tree does not carry, and an exclusion is not a licence to rot.
+      run: ['node', 'scripts/check/automation/gates/manifest/index.mjs'],
       blocking: false,
       excluded: {
         reason: 'the corpus it audits lives in a sibling repo that CI does not check out',
@@ -299,4 +310,136 @@ test('DRILL: a gate killed by a signal counts as a failure, not a pass', () => {
   const nullStatus = null;
   const ok = nullStatus === 0;
   assert.equal(ok, false, 'a signalled gate must never be treated as passing');
+});
+
+/**
+ * `--continue` drills.
+ *
+ * The mode exists so the whole matrix can be measured in one pass, which is a
+ * diagnostic need, not a policy change. These drills pin the two properties
+ * that keep it from becoming a policy change: the verdict never softens, and
+ * the default path is untouched.
+ *
+ * They run the real runner against a synthetic manifest in a temp tree rather
+ * than against the repo inventory, so a red row is planted rather than
+ * borrowed from whatever the tree happens to be doing today.
+ */
+const FIXTURE_ROOT = mkdtempSync(join(tmpdir(), 'ds-runner-drill-'));
+
+function plantRunnerFixture(gates) {
+  const root = mkdtempSync(join(FIXTURE_ROOT, 'case-'));
+  const runnerDir = join(root, 'scripts/check/automation/runner');
+  const manifestDir = join(root, 'scripts/check/automation/gates/manifest');
+  const repoRootDir = join(root, 'scripts/libraries/repo-root');
+  for (const dir of [runnerDir, manifestDir, repoRootDir]) mkdirSync(dir, { recursive: true });
+
+  writeFileSync(join(root, 'package.json'), '{"name":"runner-drill-fixture"}\n');
+  copyFileSync(runner, join(runnerDir, 'index.mjs'));
+  writeFileSync(
+    join(repoRootDir, 'index.mjs'),
+    `export function packageRoot() { return ${JSON.stringify(root)}; }\n`,
+  );
+  writeFileSync(
+    join(manifestDir, 'index.mjs'),
+    [
+      `export const CI_GATES = Object.freeze(${JSON.stringify(gates)});`,
+      'export function validateManifest() { return []; }',
+      'export function blockingGates() { return CI_GATES.filter((gate) => gate.blocking); }',
+      '',
+    ].join('\n'),
+  );
+  return join(runnerDir, 'index.mjs');
+}
+
+const PASSING_GATE = (id) => ({ id, run: [process.execPath, '-e', 'process.exit(0)'], blocking: true });
+const FAILING_GATE = (id) => ({ id, run: [process.execPath, '-e', 'process.exit(3)'], blocking: true });
+
+test('DRILL: --continue runs every blocking gate instead of stopping at the first red', () => {
+  const fixture = plantRunnerFixture([
+    PASSING_GATE('first-green'),
+    FAILING_GATE('planted-red'),
+    PASSING_GATE('after-the-red'),
+  ]);
+
+  const failFast = spawnSync(process.execPath, [fixture], { encoding: 'utf8' });
+  assert.equal(failFast.status, 1, 'the default path must still fail fast');
+  assert.ok(
+    failFast.stdout.includes('not reached (fail-fast)'),
+    'the default path must still report unreached gates',
+  );
+  assert.ok(
+    !failFast.stdout.includes('after-the-red'),
+    'fail-fast must not run the gate after the red one',
+  );
+
+  const full = spawnSync(process.execPath, [fixture, '--continue'], { encoding: 'utf8' });
+  for (const id of ['first-green', 'planted-red', 'after-the-red']) {
+    assert.ok(full.stdout.includes(id), `--continue omitted ${id} from the matrix`);
+  }
+  assert.ok(
+    !full.stdout.includes('not reached (fail-fast)'),
+    '--continue must leave no gate unreached',
+  );
+  assert.ok(
+    full.stdout.includes('ci-gates matrix: 2 PASS, 1 FAIL, of 3 blocking gate(s).'),
+    `--continue must print the derived matrix totals, got: ${full.stdout}`,
+  );
+});
+
+test('DRILL: --continue exits non-zero when any blocking gate failed', () => {
+  // A diagnostic mode that can exit 0 on a red tree is a fail-open gate with
+  // extra steps. The exit code is the whole reason this drill exists.
+  const red = plantRunnerFixture([PASSING_GATE('green-one'), FAILING_GATE('planted-red')]);
+  const redRun = spawnSync(process.execPath, [red, '--continue'], { encoding: 'utf8' });
+  assert.equal(redRun.status, 1, '--continue must exit 1 when a blocking gate failed');
+  assert.ok(redRun.stderr.includes('ci-gates FAILED at planted-red'));
+
+  // And the positive half: a fully green matrix must still be able to exit 0,
+  // or the drill above would pass on a mode that always fails.
+  const green = plantRunnerFixture([PASSING_GATE('green-one'), PASSING_GATE('green-two')]);
+  const greenRun = spawnSync(process.execPath, [green, '--continue'], { encoding: 'utf8' });
+  assert.equal(greenRun.status, 0, '--continue must exit 0 on a fully green matrix');
+  assert.ok(greenRun.stdout.includes('ci-gates matrix: 2 PASS, 0 FAIL, of 2 blocking gate(s).'));
+});
+
+test('DRILL: --continue reports every failure, not only the first', () => {
+  const fixture = plantRunnerFixture([
+    FAILING_GATE('red-one'),
+    PASSING_GATE('green-between'),
+    FAILING_GATE('red-two'),
+  ]);
+  const result = spawnSync(process.execPath, [fixture, '--continue'], { encoding: 'utf8' });
+  assert.equal(result.status, 1);
+  assert.ok(result.stderr.includes('ci-gates FAILED at red-one'));
+  assert.ok(
+    result.stderr.includes('also FAILED red-two'),
+    'a matrix that hides the second failure is not a matrix',
+  );
+});
+
+test('--continue is a local diagnostic and is never wired into CI or pretest', () => {
+  // The enforced path must stay fail-fast: later gates read artifacts earlier
+  // ones guard, so a CI job that continued past a red gate would report on
+  // state no gate vouched for.
+  const corePackageRoot = findPackageRoot(scriptsDir);
+  const pkg = JSON.parse(readFileSync(join(corePackageRoot, 'package.json'), 'utf8'));
+  for (const [name, body] of Object.entries(pkg.scripts ?? {})) {
+    assert.ok(
+      !String(body).includes('--continue'),
+      `package.json script ${name} must not carry --continue: ${body}`,
+    );
+  }
+  assert.equal(
+    pkg.scripts['gates:ci'],
+    'node scripts/check/automation/runner/index.mjs',
+    'gates:ci must stay the bare fail-fast invocation',
+  );
+
+  const workflow = join(corePackageRoot, '..', '..', '.github', 'workflows', 'ci.yml');
+  if (existsSync(workflow)) {
+    assert.ok(
+      !readFileSync(workflow, 'utf8').includes('--continue'),
+      'ci.yml must not invoke the runner in --continue mode',
+    );
+  }
 });

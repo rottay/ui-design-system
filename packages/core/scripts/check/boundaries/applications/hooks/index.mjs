@@ -134,7 +134,8 @@ export function resolveCorpusRoot(appRoot) {
   } catch {
     throw new Error(
       `app corpus MISSING at ${root}\n` +
-        '  pass --app-root <path> or set APP_DS_HOOK_APP_ROOT.\n' +
+        '  pass --app-root <path>, or set APP_BITHIRE_ROOT (which the CI workflow exports)\n' +
+        '  or the gate-private APP_DS_HOOK_APP_ROOT.\n' +
         '  a blocking gate must not treat an absent corpus as a pass.',
     );
   }
@@ -559,7 +560,7 @@ export function checkManifestFreshness({ manifest, manifestPath, packageJson }) 
 export function parseArgs(argv) {
   const args = {
     mode: 'check',
-    appRoot: process.env.APP_DS_HOOK_APP_ROOT ?? DEFAULT_APP_ROOT,
+    appRoot: process.env.APP_DS_HOOK_APP_ROOT ?? process.env.APP_BITHIRE_ROOT ?? DEFAULT_APP_ROOT,
     baselinePath: DEFAULT_BASELINE_PATH,
     manifestPath: null,
     verbose: false,

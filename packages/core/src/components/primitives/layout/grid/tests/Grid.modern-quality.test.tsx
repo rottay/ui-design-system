@@ -1,3 +1,7 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+
 import React from "react";
 import { describe, expect, it } from "vitest";
 import { render } from "@testing-library/react";
@@ -59,10 +63,26 @@ describe("Modern Grid quality contract", () => {
       <ModernGrid columns={{ xs: 1, md: 2, xl: 4 }} />
     );
 
-    const css = container.querySelector("style")?.textContent ?? "";
-    expect(css).toContain("repeat(1, minmax(0, 1fr))");
-    expect(css).toContain("repeat(2, minmax(0, 1fr))");
-    expect(css).toContain("repeat(4, minmax(0, 1fr))");
+    // The tracks travel as `--_ds-grid-columns-*` channels read by
+    // foundation/responsive/grid/index.css, not as an injected <style> element:
+    // one stylesheet owns the media queries instead of every Grid instance
+    // shipping its own. Both halves are pinned, so a channel that stopped being
+    // stamped and a stylesheet that stopped reading it are each red.
+    const style = (container.firstElementChild as HTMLElement).getAttribute("style") ?? "";
+    expect(container.querySelectorAll("style")).toHaveLength(0);
+    expect(style).toContain("--_ds-grid-columns-xs: repeat(1, minmax(0, 1fr))");
+    expect(style).toContain("--_ds-grid-columns-md: repeat(2, minmax(0, 1fr))");
+    expect(style).toContain("--_ds-grid-columns-xl: repeat(4, minmax(0, 1fr))");
+    const responsiveSheet = readFileSync(
+      join(
+        dirname(fileURLToPath(import.meta.url)),
+        "../../../../../foundation/tokens/css/foundation/responsive/grid/index.css"
+      ),
+      "utf8"
+    );
+    for (const breakpoint of ["xs", "md", "xl"]) {
+      expect(responsiveSheet).toContain(`var(--_ds-grid-columns-${breakpoint}`);
+    }
   });
 
   it("normalizes invalid counts, gaps, minimums, spans, and grid lines", () => {

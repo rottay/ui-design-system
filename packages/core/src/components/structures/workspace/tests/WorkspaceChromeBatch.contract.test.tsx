@@ -150,20 +150,23 @@ describe("list-toolbar -- data-part contract (workspace-chrome anatomy)", () => 
     ).toHaveLength(1);
     expect(q(container, '[data-part="filter-badge"]')).toHaveLength(1);
     expect(q(container, ".ds-list-toolbar__filter-trigger")).toHaveLength(2);
-    // Density + view use the canonical DS Segmented anatomy. The toolbar class
+    // The view switch uses the canonical DS Segmented anatomy. The toolbar class
     // identifies ownership while root/option/data-selected stay component-owned.
+    // EXACTLY ONE on desktop, not "at least two": the engine's own C1 priority
+    // grammar keeps density out of this cluster (it lives in the settings panel
+    // and in the mobile overflow), so a second segmented control here would be
+    // the twin-control regression that decision removed.
     await waitFor(() => {
       expect(
         q(container, '.ds-list-toolbar__segmented-control[data-part="root"]')
-          .length
-      ).toBeGreaterThanOrEqual(2);
+      ).toHaveLength(1);
     });
     expect(
       q(
         container,
         '.ds-list-toolbar__segmented-control [data-part="option"][data-selected="true"]'
-      ).length
-    ).toBeGreaterThanOrEqual(2);
+      )
+    ).toHaveLength(1);
     expect(
       q(container, '[data-part="icon-button"]').length
     ).toBeGreaterThanOrEqual(1); // export
@@ -1381,7 +1384,9 @@ const SKIN_DIR = join(
   dirname(fileURLToPath(import.meta.url)),
   "../../../../foundation/tokens/css/presentation/components/skin"
 );
-const readSkin = (name: string) => readFileSync(join(SKIN_DIR, name), "utf8");
+// Every skin family under presentation/components/skin is one folder with a
+// single `index.css` owner, so the family name resolves the owner.
+const readSkin = (family: string) => readFileSync(join(SKIN_DIR, family, "index.css"), "utf8");
 /** Strip var(...) escape hatches, then hunt for raw color literals. */
 function rawColorLiterals(css: string): string[] {
   const withoutComments = css.replace(/\/\*[\s\S]*?\*\//g, "");
@@ -1390,20 +1395,20 @@ function rawColorLiterals(css: string): string[] {
 }
 
 const MOTION_SKINS = [
-  "active-filters-bar.css",
-  "table-toolbar.css",
-  "column-menu.css",
-  "saved-views-menu.css",
-  "field-filters-panel.css",
-  "search-command-bar.css",
+  "active-filters-bar",
+  "table-toolbar",
+  "column-menu",
+  "saved-views-menu",
+  "field-filters-panel",
+  "search-command-bar",
 ] as const;
 
 const ALL_BATCH_SKINS = [
   ...MOTION_SKINS,
-  "scope-switcher.css",
-  "view-mode-switcher.css",
-  "export-button.css",
-  "selection-preview-rail.css",
+  "scope-switcher",
+  "view-mode-switcher",
+  "export-button",
+  "selection-preview-rail",
 ] as const;
 
 describe("workspace chrome skins — R2 structural contract", () => {
@@ -1423,26 +1428,26 @@ describe("workspace chrome skins — R2 structural contract", () => {
     }
   );
 
-  it("export-button.css uses a family feedback-lifetime channel and honors reduced motion", () => {
-    const css = readSkin("export-button.css");
+  it("export-button uses a family feedback-lifetime channel and honors reduced motion", () => {
+    const css = readSkin("export-button");
     expect(css).toContain("--ds-export-button-toast-duration");
     expect(css).toContain("prefers-reduced-motion");
   });
 
   it.each([
-    "column-menu.css",
-    "saved-views-menu.css",
-    "field-filters-panel.css",
-    "search-command-bar.css",
+    "column-menu",
+    "saved-views-menu",
+    "field-filters-panel",
+    "search-command-bar",
   ] as const)("%s carries a visible :focus-visible treatment", (name) => {
     expect(readSkin(name)).toContain(":focus-visible");
   });
 
   it.each([
-    "active-filters-bar.css",
-    "scope-switcher.css",
-    "view-mode-switcher.css",
-    "export-button.css",
+    "active-filters-bar",
+    "scope-switcher",
+    "view-mode-switcher",
+    "export-button",
   ] as const)(
     "%s delegates focus paint to its composed primitive instead of duplicating it",
     (name) => {
@@ -1453,25 +1458,25 @@ describe("workspace chrome skins — R2 structural contract", () => {
   );
 
   it.each([
-    "column-menu.css",
-    "scope-switcher.css",
-    "saved-views-menu.css",
-    "field-filters-panel.css",
+    "column-menu",
+    "scope-switcher",
+    "saved-views-menu",
+    "field-filters-panel",
   ] as const)("%s sets tabular-nums on its numeric readouts", (name) => {
     expect(readSkin(name)).toContain("tabular-nums");
   });
 
   it("numeric/RTL: rails and slots use logical borders, never physical left/right", () => {
-    expect(readSkin("selection-preview-rail.css")).toContain(
+    expect(readSkin("selection-preview-rail")).toContain(
       "border-inline-start"
     );
-    expect(readSkin("selection-preview-rail.css")).not.toContain("border-left");
-    expect(readSkin("search-command-bar.css")).toContain("border-inline-start");
-    expect(readSkin("search-command-bar.css")).not.toContain("border-left");
+    expect(readSkin("selection-preview-rail")).not.toContain("border-left");
+    expect(readSkin("search-command-bar")).toContain("border-inline-start");
+    expect(readSkin("search-command-bar")).not.toContain("border-left");
   });
 
-  it("selection-preview-rail.css owns the typography the engine stopped inlining", () => {
-    const css = readSkin("selection-preview-rail.css");
+  it("selection-preview-rail owns the typography the engine stopped inlining", () => {
+    const css = readSkin("selection-preview-rail");
     for (const part of [
       "identity-title",
       "match-reason-eyebrow",
@@ -1484,8 +1489,8 @@ describe("workspace chrome skins — R2 structural contract", () => {
     expect(css).toContain("font-style: italic");
   });
 
-  it("search-command-bar.css owns the listening pulse + transcribing spin (moved out of inline styles)", () => {
-    const css = readSkin("search-command-bar.css");
+  it("search-command-bar owns the listening pulse + transcribing spin (moved out of inline styles)", () => {
+    const css = readSkin("search-command-bar");
     expect(css).toContain("data-voice-status='listening']");
     expect(css).toContain("ds-search-command-bar__spinning-icon");
   });

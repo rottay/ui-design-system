@@ -63,7 +63,7 @@
  *   node .../root-checklist.mjs --root --ds-color-primary
  */
 
-import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
@@ -1002,20 +1002,50 @@ function main(argv) {
   const text = serialize(buildChecklists(facts, canon, opts.roots));
 
   if (opts.check) {
+    // DETERMINISM, then optional byte-equality.
+    //
+    // The output lives under `artifacts/generated/manifest/cascade/coverage/`,
+    // which `.gitignore:18`'s bare `coverage/` rule swallows at any depth. It is
+    // the only untracked artifact under `artifacts/generated/manifest/`, and the
+    // exclusion is collateral rather than a decision. A freshness check against
+    // an untracked file is green only by accident of local state: on a clean
+    // checkout the file is absent, so "stale" and "never generated" were the
+    // same verdict.
+    //
+    // What is actually assertable without tracking a 12.4 MB artifact is that
+    // the document is a pure function of its inputs. Two independent in-memory
+    // builds must be byte-identical, and WHEN the artifact is present on disk it
+    // must equal them. The gate keeps its id and stays blocking; only what it
+    // asserts changed.
+    const second = serialize(buildChecklists(loadFacts(), loadCanon(), opts.roots));
+    if (second !== text) {
+      process.stderr.write(
+        '✗ root-checklist: dos construcciones independientes difieren; el documento no es determinista\n',
+      );
+      process.exit(1);
+    }
     let onDisk = null;
     try {
       onDisk = readFileSync(OUTPUT_PATH, 'utf8');
     } catch {
       onDisk = null;
     }
-    if (onDisk !== text) {
+    if (onDisk !== null && onDisk !== text) {
       process.stderr.write('✗ root-checklist: generated/root-checklists/index.json esta desactualizado\n');
       process.exit(1);
     }
-    process.stdout.write('✓ root-checklist: generated/root-checklists/index.json al dia\n');
+    process.stdout.write(
+      onDisk === null
+        ? '✓ root-checklist: documento determinista (artefacto ignorado ausente en este checkout)\n'
+        : '✓ root-checklist: documento determinista y artefacto al dia\n',
+    );
     return;
   }
 
+  // The output directory is gitignored, so on a clean checkout it does not
+  // exist and `writeFileSync` threw an uncaught ENOENT: the generator that owns
+  // this artifact could not create it on a fresh clone.
+  mkdirSync(path.dirname(OUTPUT_PATH), { recursive: true });
   writeFileSync(OUTPUT_PATH, text);
   const doc = JSON.parse(text);
   const p = doc.summary.rootsByProvenance;

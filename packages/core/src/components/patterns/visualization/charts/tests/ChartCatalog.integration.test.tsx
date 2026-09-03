@@ -88,7 +88,11 @@ describe('chart catalog integration', () => {
       />
     );
 
-    expect(screen.getByRole('img', { name: 'Pipeline conversion' })).toBeInTheDocument();
+    // An INTERACTIVE chart publishes `group`, not `img`: it owns focusable
+    // datum children, and `img` would hide them from assistive technology.
+    // The accessible name is the part that must not move, so it is still
+    // asserted -- on the role the chart actually has.
+    expect(screen.getByRole('group', { name: 'Pipeline conversion' })).toBeInTheDocument();
 
     await waitFor(() => {
       expect(container.querySelectorAll('polygon').length).toBeGreaterThan(0);

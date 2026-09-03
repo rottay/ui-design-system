@@ -382,7 +382,7 @@ test.describe("canary · document claim lease is fail-closed and idempotent", ()
 
     release2();
     const release3 = claimShowroomTenantDocument(doc);
-    expect(release3).toBeTypeOf("function");
+    expect(typeof release3).toBe("function");
     release3();
   });
 });
@@ -422,7 +422,15 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
       await expect(root(page)).toHaveAttribute("data-canary-source", "bithire-static");
 
       const sentinel = await page.evaluate(
-        (artifactTestid: string, digestAttr: string, rootTestid: string) => {
+        ({
+          artifactTestid,
+          digestAttr,
+          rootTestid,
+        }: {
+          artifactTestid: string;
+          digestAttr: string;
+          rootTestid: string;
+        }) => {
           const id = Math.random().toString(36).slice(2) + Date.now().toString(36);
           window.__canaryDocSentinel = id;
           window.__canarySnapshots = [];
@@ -491,9 +499,11 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
 
           return id;
         },
-        SHOWROOM_TENANT_ARTIFACT_TESTID,
-        DIGEST_ATTR,
-        ROOT_TESTID,
+        {
+          artifactTestid: SHOWROOM_TENANT_ARTIFACT_TESTID,
+          digestAttr: DIGEST_ATTR,
+          rootTestid: ROOT_TESTID,
+        },
       );
 
       async function pushAndReport(
@@ -519,7 +529,15 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
         await expect(root(page)).toBeVisible();
 
         return page.evaluate(
-          (artifactTestid: string, digestAttr: string, rootTestid: string) =>
+          ({
+            artifactTestid,
+            digestAttr,
+            rootTestid,
+          }: {
+            artifactTestid: string;
+            digestAttr: string;
+            rootTestid: string;
+          }) =>
             new Promise<{
               snapshots: typeof window.__canarySnapshots;
               liveFinal: {
@@ -552,9 +570,11 @@ test.describe("canary · SPA transition keeps one Document and style-before-root
                 });
               });
             }),
-          SHOWROOM_TENANT_ARTIFACT_TESTID,
-          DIGEST_ATTR,
-          ROOT_TESTID,
+          {
+            artifactTestid: SHOWROOM_TENANT_ARTIFACT_TESTID,
+            digestAttr: DIGEST_ATTR,
+            rootTestid: ROOT_TESTID,
+          },
         );
       }
 

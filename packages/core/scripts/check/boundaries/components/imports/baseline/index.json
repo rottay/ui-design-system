@@ -11,7 +11,8 @@
     "undocumented-ds-writes": "Application declarations in the reserved --ds-* namespace that are not shipped by production DS CSS or compiler output.",
     "supplier-imports": "Direct imports/requires of visual or behavior suppliers instead of public Rottay contracts.",
     "tenant-style-branch": "CSS selectors that bind visual behavior to a concrete tenant identity.",
-    "i18n-bypass": "Declared but not yet implemented; this file does not claim i18n-boundary coverage."
+    "i18n-bypass": "Declared but not yet implemented; this file does not claim i18n-boundary coverage.",
+    "ds-module-boundary": "Application module specifiers naming @rottay/design-system. A specifier is public when it is the package root or a subpath the package publishes in its exports map, read live rather than copied. Anything else — an undeclared subpath, or a reach through /dist/, /src/ or /node_modules/ — is a violation. Ceiling 0: measured at the pinned corpus, ten distinct subpaths are imported and every one is declared."
   },
   "reaches": {
     "app-bithire/src/app/(dashboard)/scoring/skill-gaps/styles/index.css :: .rottay-stack": {
@@ -1278,6 +1279,7 @@
         "owner": "app-bithire/src/styles/tenant-component-defaults.css",
         "reason": "R1-P Phase-3 drain transfer (2026-07-27): migrated verbatim from the DS static extension (provenance-gate debt 822->9); same shipped paint, new census location. design authority visual wave tokenizes; do not grow."
       }
-    }
+    },
+    "ds-module-boundary": {}
   }
 }

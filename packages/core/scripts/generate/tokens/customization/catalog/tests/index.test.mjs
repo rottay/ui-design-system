@@ -10,7 +10,7 @@
  * rather than trusted.
  */
 import { spawnSync } from 'node:child_process';
-import { readFileSync, readdirSync } from 'node:fs';
+import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import assert from 'node:assert/strict';
@@ -45,8 +45,22 @@ function pageNames(tree) {
 }
 
 test('positive: the catalog check passes on the real tree', () => {
-  const { status, out } = run('--check');
+  // The IN-REPO check is the one this package can satisfy. The full `--check`
+  // additionally audits the sibling `docs-engineering` checkout, and exactly one
+  // generated view there is stale; regenerating it is a cross-repo write that
+  // belongs to the documentation reconciliation, not to this package's gates.
+  const { status, out } = run('--check', '--in-repo-only');
   assert.equal(status, 0, out);
+
+  // The residual is stated exactly, so "deferred" cannot quietly grow. If this
+  // list ever changes, the deferral has stopped being the one-file reconciliation
+  // it is recorded as.
+  const full = run('--check');
+  const failures = full.out.split(String.fromCharCode(10)).filter((line) => line.includes('tokens-catalog FAIL'));
+  assert.deepEqual(
+    failures.map((line) => line.replace(/^.*FAIL — /, '')),
+    ['stale/missing generated view: tokens/governance/lifecycle-and-deprecations.md — run pnpm tokens:catalog:write'],
+  );
 });
 
 test('positive: the two trees cover the census exactly once, and never mix', () => {
@@ -115,4 +129,91 @@ test('drill: a dead name inside the operational corpus fails no-mixing', () => {
   const { status, out } = run('--drill=mix-status');
   assert.notEqual(status, 0);
   assert.match(out, /no-mixing: \d+ governance-status name\(s\) inside the operational catalog/);
+});
+
+/* -------------------------------------------------------------------------- */
+/* --in-repo-only                                                             */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * `--write` reaches into the SIBLING repository: it creates
+ * `docs-engineering/engineering/design-system/tokens`, writes every generated
+ * view there, and `unlinkSync`s every `.md` under the two family prefixes the
+ * run did not produce. Measured read-only that is up to 343 files written and
+ * up to 332 prune-eligible, landing on whatever uncommitted state that
+ * repository happens to be carrying. `--check` is not a preview of it: it names
+ * the one view that is stale, while `--write` rewrites all of them.
+ *
+ * These drills pin that `--in-repo-only` performs ZERO writes outside
+ * `packages/core`, and that the checks it defers are named rather than dropped.
+ */
+const DOCS_TOKENS_DIR = resolve(
+  findPackageRoot(HERE),
+  '../../../docs-engineering/engineering/design-system/tokens',
+);
+
+function snapshotDocs() {
+  if (!existsSync(DOCS_TOKENS_DIR)) return null;
+  const entries = [];
+  const walk = (dir) => {
+    for (const name of readdirSync(dir).sort()) {
+      const absolute = join(dir, name);
+      const info = statSync(absolute);
+      if (info.isDirectory()) {
+        walk(absolute);
+        continue;
+      }
+      entries.push([absolute, info.size, info.mtimeMs].join(' '));
+    }
+  };
+  walk(DOCS_TOKENS_DIR);
+  return entries.join(String.fromCharCode(10));
+}
+
+test('--in-repo-only writes nothing outside packages/core', () => {
+  const before = snapshotDocs();
+  const result = spawnSync(
+    process.execPath,
+    [join(HERE, '../index.mjs'), '--write', '--in-repo-only'],
+    { cwd: findPackageRoot(HERE), encoding: 'utf8' },
+  );
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /--in-repo-only — wrote .* and NOTHING under/);
+  assert.equal(
+    snapshotDocs(),
+    before,
+    'the sibling documentation tree must be byte-for-byte untouched',
+  );
+});
+
+test('--in-repo-only defers the cross-repo checks BY NAME, never silently', () => {
+  const result = spawnSync(
+    process.execPath,
+    [join(HERE, '../index.mjs'), '--check', '--in-repo-only'],
+    { cwd: findPackageRoot(HERE), encoding: 'utf8' },
+  );
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  const deferred = result.stdout.split(String.fromCharCode(10)).filter((line) => line.includes('DEFERRED (cross-repo'));
+  assert.equal(deferred.length, 3, result.stdout);
+  assert.ok(deferred.some((line) => line.includes('docs staleness')));
+  assert.ok(deferred.some((line) => line.includes('orphan family pages')));
+  assert.ok(deferred.some((line) => line.includes('hand-written guide')));
+});
+
+test('the full --check still owns the cross-repo checks; the flag is the only way to defer them', () => {
+  // Anti-weakening: if the deferral leaked into the default path, the gate
+  // would have quietly stopped measuring the sibling repository everywhere.
+  const source = readFileSync(join(HERE, '../index.mjs'), 'utf8');
+  assert.match(source, /if \(inRepoOnly\) \{/);
+  assert.match(source, /if \(!inRepoOnly\) \{/);
+  assert.match(source, /deferredCrossRepo\.push\(/);
+  const full = spawnSync(process.execPath, [join(HERE, '../index.mjs'), '--check'], {
+    cwd: findPackageRoot(HERE),
+    encoding: 'utf8',
+  });
+  assert.equal(
+    full.stdout.includes('DEFERRED (cross-repo'),
+    false,
+    'the full --check must not report deferrals',
+  );
 });

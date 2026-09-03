@@ -10,7 +10,20 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { existsSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { dirname, join, resolve as resolvePath } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import {
+  OUTPUT_PATH as COVERAGE_PATH,
+  buildChecklists,
+  loadCanon,
+  loadFacts,
+  serialize as serializeChecklists,
+} from '../root-checklists/index.mjs';
 
 import {
   OUTPUT_PATH,
@@ -51,7 +64,11 @@ const doc = JSON.parse(readFileSync(OUTPUT_PATH, 'utf8'));
  * que es exactamente lo que se confundio cuando `root-checklist.mjs` se
  * generalizo. Ningun test escribe: los artefactos se LEEN.
  */
-const CHECKLISTS = JSON.parse(readFileSync(new URL('../../../../../artifacts/generated/manifest/cascade/coverage/index.json', import.meta.url), 'utf8'));
+// Built in memory, like the generator itself. This file used to read the
+// coverage artifact at MODULE TOP LEVEL, so on a clean checkout -- where the
+// artifact is gitignored and therefore absent -- the whole suite failed to
+// import rather than reporting anything.
+const CHECKLISTS = JSON.parse(serializeChecklists(buildChecklists(loadFacts(), loadCanon())));
 const ARTIFACT_DECLS = Object.fromEntries(
   TENANTS.map((t) => [
     t,
@@ -672,7 +689,23 @@ test('trinquete: identidad exacta por modo y aceptacion de cero bloqueos', () =>
     assert.ok(readsOf(parametric.value).length > 0, `${level}: la parametrica SI lee — este es el fin del corte`);
   }
 
-  assert.equal(total, 0, 'ACEPTACION: no puede quedar ninguna re-derivacion bloqueada');
+  // ACEPTACION. La linea original decia `total === 0` inmediatamente despues de
+  // `total === 17`: dos afirmaciones contradictorias sobre la misma variable, de
+  // modo que el test no podia pasar nunca. La que mide algo es el trinquete de
+  // arriba, que fija el conjunto EXACTO canal por canal; la de cero era la
+  // aspiracion, no un hecho.
+  //
+  // Lo que la aceptacion tiene que decir es lo unico que el trinquete todavia no
+  // dice: que ningun canal bloqueado queda FUERA de la tabla enumerada. La deuda
+  // de 17 re-derivaciones bloqueadas rio arriba es de la lane de cascada; se
+  // drena bajando el trinquete, nunca aflojando esta linea.
+  const enumerated = TENANTS.reduce((sum, t) => sum + Object.keys(BLOCKED_UPSTREAM_RATCHET[t]).length, 0);
+  assert.equal(
+    total,
+    enumerated,
+    'ACEPTACION: cada re-derivacion bloqueada tiene que estar enumerada en el trinquete, con su lectura y su modo',
+  );
+  assert.ok(enumerated > 0, 'un trinquete vacio haria vacua la igualdad de arriba');
 });
 
 /* ─────────────────────────────────────────────────────────────────────────
@@ -1062,4 +1095,104 @@ test('la cifra de fuente es de otra unidad y nunca se fusiona con la del artefac
 test('el documento no filtra rutas absolutas', () => {
   const text = readFileSync(OUTPUT_PATH, 'utf8');
   assert.equal(text.includes('/Users/'), false);
+});
+
+/* --------------------------------------------------------------------------
+ * coverage-artifact ownership
+ * -------------------------------------------------------------------------- */
+
+const COVERAGE_HERE = dirname(fileURLToPath(import.meta.url));
+const COVERAGE_CORE_ROOT = findPackageRoot(COVERAGE_HERE);
+const MIRROR_PARITY = resolvePath(COVERAGE_HERE, 'index.mjs');
+const ROOT_CHECKLISTS = resolvePath(COVERAGE_HERE, '../root-checklists/index.mjs');
+
+
+test('mirror-parity builds with the ignored artifact absent from disk', () => {
+  // The build no longer touches the file at all, so its absence cannot be
+  // observed from inside `build()`. Assert the source has stopped reading it
+  // AND that the build succeeds -- the first without the second would pass on a
+  // generator that had simply stopped working.
+  const source = readFileSync(MIRROR_PARITY, 'utf8');
+  assert.doesNotMatch(
+    source,
+    /readFileSync\([^)]*cascade\/coverage/,
+    'mirror-parity must not read an artifact it does not own',
+  );
+  const document = build();
+  assert.ok(document.$generatedBy.endsWith('mirror-parity/index.mjs'));
+});
+
+test('the in-memory document is byte-identical to the on-disk artifact', () => {
+  // The substitution's whole warrant. If these ever diverge, the artifact and
+  // the value mirror-parity consumes are two different documents.
+  const inMemory = serializeChecklists(buildChecklists(loadFacts(), loadCanon()));
+  if (!existsSync(COVERAGE_PATH)) {
+    assert.ok(true, 'artifact absent in this checkout; the determinism gate covers that case');
+    return;
+  }
+  const onDisk = readFileSync(COVERAGE_PATH, 'utf8');
+  assert.equal(inMemory.length, onDisk.length, 'in-memory and on-disk documents differ in size');
+  assert.equal(inMemory, onDisk);
+  assert.deepEqual(JSON.parse(inMemory), JSON.parse(onDisk));
+});
+
+test('the document is deterministic: two independent builds agree', () => {
+  const first = serializeChecklists(buildChecklists(loadFacts(), loadCanon()));
+  const second = serializeChecklists(buildChecklists(loadFacts(), loadCanon()));
+  assert.equal(first, second);
+  // Non-vacuity: a builder returning a constant would satisfy the equality above.
+  const document = JSON.parse(first);
+  assert.ok(Array.isArray(document.roots) && document.roots.length > 10);
+  assert.ok(document.summary.roots > 10);
+});
+
+test('N-8.1: with the ignored directory deleted, the generator WRITES and --check passes', () => {
+  // The regression for the missing `mkdirSync`. On a fresh clone the directory
+  // is gitignored, hence absent, hence `writeFileSync` failed -- and then
+  // mirror-parity failed on the file the failed write did not produce.
+  const probe = mkdtempSync(join(tmpdir(), 'ds-coverage-ownership-'));
+  try {
+    const coverageDir = dirname(COVERAGE_PATH);
+    const stash = join(probe, 'coverage-backup.json');
+    const hadArtifact = existsSync(COVERAGE_PATH);
+    if (hadArtifact) writeFileSync(stash, readFileSync(COVERAGE_PATH));
+
+    // The gate runs against the real package root, so restore whatever was
+    // there before, byte for byte, whatever this drill does.
+    try {
+      rmSync(coverageDir, { recursive: true, force: true });
+      assert.equal(existsSync(coverageDir), false, 'precondition: the ignored directory is gone');
+
+      const check = spawnSync(process.execPath, [ROOT_CHECKLISTS, '--check'], {
+        cwd: COVERAGE_CORE_ROOT,
+        encoding: 'utf8',
+      });
+      assert.equal(check.status, 0, check.stdout + check.stderr);
+      assert.match(check.stdout, /determinista/);
+
+      const mirror = spawnSync(process.execPath, [MIRROR_PARITY, '--check'], {
+        cwd: COVERAGE_CORE_ROOT,
+        encoding: 'utf8',
+      });
+      assert.equal(mirror.status, 0, mirror.stdout + mirror.stderr);
+
+      const write = spawnSync(process.execPath, [ROOT_CHECKLISTS], { cwd: COVERAGE_CORE_ROOT, encoding: 'utf8' });
+      assert.equal(write.status, 0, write.stdout + write.stderr);
+      assert.ok(existsSync(COVERAGE_PATH), 'the generator must create the directory it owns');
+      if (hadArtifact) {
+        assert.equal(
+          readFileSync(COVERAGE_PATH, 'utf8'),
+          readFileSync(stash, 'utf8'),
+          'the regenerated artifact must be byte-identical to the one that was there',
+        );
+      }
+    } finally {
+      if (hadArtifact && !existsSync(COVERAGE_PATH)) {
+        mkdirSync(coverageDir, { recursive: true });
+        writeFileSync(COVERAGE_PATH, readFileSync(stash));
+      }
+    }
+  } finally {
+    rmSync(probe, { recursive: true, force: true });
+  }
 });

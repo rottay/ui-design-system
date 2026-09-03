@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "_comment": "Bounded transitional obligations for the DS-A003 parity census. NOT a ceiling: an obligation has one owner lot, an exact count, and a structural expiry, and it expires by being resolved rather than by being tolerated. It is a SIBLING of baseline/ and never a key inside it, because --update-baseline rewrites the baseline payload as {version,_comment,ceilings} and would erase anything else it carried. --update-baseline must never write this file, and must refuse to run while any obligation is open.",
+  "obligations": [
+    {
+      "id": "declared-but-unemitted.BrandSegmentedChrome",
+      "count": 2,
+      "fields": [
+        "BrandSegmentedChrome.itemShadowSelected",
+        "BrandSegmentedChrome.focusRing"
+      ],
+      "ownerLot": "C2",
+      "resolution": "DELETE_DECLARATION",
+      "reason": "Not unimplemented vocabulary: a completed retirement with an unswept residue. c2833a517 (2026-08-30, R1 unit 1) removed both emitters, both artifact declarations and both skin reads under two adjudicated laws, and left the two contract fields behind. focusRing is superseded by the canonical --ds-focus-ring (F12 item 10); its own retired read site was var(--ds-segmented-focus-ring, var(--ds-focus-ring)), so the duplication is source-proven. itemShadowSelected is PROHIBITED rather than duplicated, by the one-dominant-boundary law (F6/G4 item 8) -- a different justification, flagged here rather than filed under a duplication clause it does not fit. Both channels have zero declarations and zero reads across src, are absent from the DB ingress schema, and are absent from every shipped ground. C0 does not implement a lowering and does not delete a public type; C2 sweeps the declarations in the lot that already moves the emitter.",
+      "declaringOwner": "src/foundation/contracts/composition/tenants/themes/index.ts",
+      "legacyEmitterOwners": [
+        "src/infrastructure/compilers/kernel/foundation/css/chrome-variables/index.ts",
+        "src/infrastructure/compilers/kernel/runtime/brand-theme/index.ts"
+      ],
+      "expiry": {
+        "kind": "legacy-owner-relocation",
+        "note": "Fires when either legacy emitter owner ceases to exist at its recorded path -- that is, the moment C2 relocates the lowering. Also fires if the declaring owner moves (C3 renames themes/ to theme/), or if the count stops being exactly 2. The anchor is not decorative: the gate reads those two paths with readFileSync and no guard, so it cannot outlive its owner by accident."
+      }
+    }
+  ]
+}

@@ -28,11 +28,35 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 const REPO_ROOT = findRepoRoot(HERE);
 
+/**
+ * A channel may name a script through a GLOB rather than a literal path:
+ * `test:scripts` runs `node --test` over a recursive test glob, which executes
+ * 119 suites and, through them, everything those suites import. The literal-path
+ * matcher cannot see a `*`, so every one of those files read as an orphan and
+ * the gate demanded manifest entries for scripts CI already runs -- the
+ * decorative-reference failure this gate exists to prevent, produced by the
+ * gate itself.
+ *
+ * The glob is expanded against the real tree, so it wires exactly what it
+ * executes: a pattern that matches nothing wires nothing.
+ */
+const GLOB_CHANNEL = /(?:^|["'\s])(scripts\/[\w./*-]*\*[\w./*-]*\.m?js)(?:["'\s]|$)/g;
+
+function globToRegExp(pattern) {
+  const escaped = pattern.replace(/[.+?^${}()|[\]\\]/g, '\\$&');
+  const body = escaped.replace(/\*\*\//g, '\u0000').replace(/\*/g, '[^/]*').replace(/\u0000/g, '(?:.*/)?');
+  return new RegExp(`^${body}$`);
+}
+
 /** All script paths named by any of the three channels. */
 function collectWiredPaths() {
   const wired = new Set();
   const addMatches = (text) => {
     for (const match of text.matchAll(/(?:scripts|src)\/[\w./-]+\.mjs/g)) wired.add(match[0]);
+    for (const match of text.matchAll(GLOB_CHANNEL)) {
+      const matcher = globToRegExp(match[1]);
+      for (const file of allScriptFiles()) if (matcher.test(file)) wired.add(file);
+    }
   };
 
   // Channel 1: the CI gates manifest. Resolved from the package root (not
@@ -68,6 +92,26 @@ function collectWiredPaths() {
     /* workflow absent locally; channels 1-2 still apply */
   }
   return wired;
+}
+
+/** Every .mjs under scripts/, tests included -- the corpus a glob channel matches against. */
+let scriptFileCache = null;
+function allScriptFiles() {
+  if (scriptFileCache) return scriptFileCache;
+  const out = [];
+  const walk = (rel) => {
+    for (const entry of readdirSync(join(CORE_ROOT, 'scripts', rel), { withFileTypes: true })) {
+      const entryRel = rel ? `${rel}/${entry.name}` : entry.name;
+      if (entry.isDirectory()) {
+        walk(entryRel);
+        continue;
+      }
+      if (entry.name.endsWith('.mjs')) out.push(`scripts/${entryRel}`);
+    }
+  };
+  walk('');
+  scriptFileCache = out;
+  return out;
 }
 
 /** Production scripts: every non-test .mjs under scripts/, recursively. */

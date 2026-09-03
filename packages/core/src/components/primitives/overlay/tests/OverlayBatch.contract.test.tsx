@@ -305,7 +305,29 @@ describe('Overlay-primitives data-part contract (WO-SKIN-04 checkpoint P)', () =
           : await waitForPart(container, 'surface');
       const confirmAction = surface.querySelector("[data-part='action'][data-action='confirm']") as HTMLElement;
       expect(confirmAction.getAttribute('data-loading')).toBe('true');
-      expect(confirmAction.querySelectorAll("[data-part='spinner']")).toHaveLength(1);
+      // The Button's width-stable pending posture stacks two rows in one grid
+      // cell: the LIVE busy row and an aria-hidden RESERVE copy that only
+      // reserves width. So two spinner nodes is correct, and exactly one of
+      // them is announced. Counting nodes alone would pass a posture that had
+      // lost its live row and kept only the hidden measurement copy.
+      const spinners = [...confirmAction.querySelectorAll("[data-part='spinner']")];
+      if (engine === 'modern') {
+        // Modern composes the Button primitive, whose width-stable pending
+        // posture stacks two rows in one grid cell: the LIVE busy row and an
+        // aria-hidden RESERVE copy that only reserves width. Rustic paints its
+        // own inline spinner and has one. Either way exactly one is announced,
+        // which is the assertion a bare count would lose: a posture that kept
+        // only the hidden measurement copy would still count two.
+        expect(spinners).toHaveLength(2);
+        expect(
+          spinners.filter((spinner) => spinner.closest("[data-layer='reserve']") !== null),
+        ).toHaveLength(1);
+      } else {
+        expect(spinners).toHaveLength(1);
+      }
+      expect(
+        spinners.filter((spinner) => spinner.closest("[data-layer='reserve']") === null),
+      ).toHaveLength(1);
     });
   });
 

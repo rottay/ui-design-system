@@ -52,13 +52,13 @@ function parseDeclaredLayerOrder(css: string): string[] {
 
 /** The three first-party vertical entrypoints and the artifact each mounts. */
 const VERTICAL_ENTRYPOINTS = [
-  { entrypoint: 'rottay.css', artifact: 'rottay' },
-  { entrypoint: 'bithire.css', artifact: 'bithire' },
-  { entrypoint: 'evnto.css', artifact: 'evnto' },
+  { entrypoint: 'rottay/index.css', artifact: 'rottay' },
+  { entrypoint: 'bithire/index.css', artifact: 'bithire' },
+  { entrypoint: 'evnto/index.css', artifact: 'evnto' },
 ] as const;
 
 describe('cascade layer order', () => {
-  it.each(['base.css', 'styles.css'])(
+  it.each(['base/index.css', 'styles/index.css'])(
     'mirrors the order declared by %s',
     (file) => {
       const declared = parseDeclaredLayerOrder(readCss(`${ENTRYPOINTS}/${file}`));
@@ -120,7 +120,7 @@ describe('vertical entrypoint parity', () => {
     // occupies, and readers reason about the cascade from it. `rottay-tenants`
     // was exactly that in every shipped bundle.
     expect(ROTTAY_CASCADE_LAYER_ORDER).not.toContain('rottay-tenants');
-    for (const file of ['base.css', 'styles.css']) {
+    for (const file of ['base/index.css', 'styles/index.css']) {
       const css = readCss(`${ENTRYPOINTS}/${file}`);
       expect(parseDeclaredLayerOrder(css), file).not.toContain('rottay-tenants');
       // An @import DIRECTIVE, not a mention. Prose explaining why the layer

@@ -107,9 +107,16 @@ describe('OTPInput real engines', () => {
   });
 
   it('modern skin pins: Pass-2 state grammar -- filled border step, focus halo, coarse floor, motion guard', () => {
-    // Filled slots read one border step stronger than empty.
+    // Filled slots read one border step stronger than empty, and the step is now
+    // carried by a keyline as well as the border colour -- the fallback moved
+    // from `--ds-color-border-hover` to `--ds-color-border` when the gradient
+    // keyline took over the emphasis. Both halves are pinned, so losing either
+    // one is red rather than compensated by the other.
     expect(
-      /\[data-part='slot'\]\[data-part='slot'\]\[data-filled='true'\]\s*\{[^}]*border-color:\s*var\(--ds-otp-slot-border-filled,\s*var\(--ds-color-border-hover\)\)/.test(SKIN_NC)
+      /\[data-part='slot'\]\[data-part='slot'\]\[data-filled='true'\]\s*\{[^}]*border-color:\s*var\(--ds-otp-slot-border-filled,\s*var\(--ds-color-border\)\)/.test(SKIN_NC)
+    ).toBe(true);
+    expect(
+      /\[data-part='slot'\]\[data-part='slot'\]\[data-filled='true'\]\s*\{[^}]*--_ds-otp-filled-keyline/.test(SKIN_NC)
     ).toBe(true);
     // Focus shows the Input grammar's halo; error slots halo in the error channel.
     expect(

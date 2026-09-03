@@ -35,47 +35,39 @@ import {
 } from '@/foundation/tokens/ts/foundation/base/density';
 import { compileBrandTheme } from '@/infrastructure/compilers/kernel/runtime/brand-theme';
 import { compileAppearanceVariables } from '@/infrastructure/compilers/kernel/runtime/appearance';
+import {
+  compileTenantThemeConfig,
+  getTenantThemeVerticalEnvelope,
+  hydrateTenantThemeConfig,
+} from '@/infrastructure/compilers/composition/tenant-theme';
+import {
+  TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE,
+  TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE,
+} from '@/infrastructure/runtime/theming';
 import { DesignSystemProvider } from '@/infrastructure/runtime/bootstrap/facade/react/provider';
 import { DensityScope, useDensity } from '../index';
 
 /**
- * CI-3 (cluster DesignSystemProvider): the first two `it()` blocks below
- * render through the provider with `brandTheme.surfaces.{densityScale,
- * density}` and/or `appearance.general.density` on `TenantConfig` --
- * `resolveVisualAuthority`'s barrier (`358ce9188`) refuses both by mere
- * PRESENCE of the `brandTheme`/`appearance` keys (content-independent; a
- * `brandTheme` carrying zero colour still trips it), so `DesignSystemProvider`
- * renders `<LoadingScreen />` and both tests fail.
+ * The provider render carries only what it MEASURES.
  *
- * Neither of the cluster's two documented fixes applies here, and this file
- * is deliberately left UNFIXED rather than forcing one through:
- *   (a) strip the config -- the config IS the subject. The test's own title
- *       ("resolves one effective scale from static BrandTheme, DB Appearance,
- *       CSS, JS context and a nested scope") names five authorities it
- *       exists to cross-check; `brandTheme.surfaces.density*` and
- *       `appearance.general.density` are the two runtime ones being
- *       compared. Removing them leaves nothing to compare.
- *   (b) mount a verified artifact + declare `visualAuthority` -- doesn't
- *       help: `payload.brandTheme` is REFUSED unconditionally in the
- *       conflict list even under a compiled-artifact declaration
- *       (`admission/index.ts`'s `resolveVisualAuthority`, same treatment as
- *       `payload.personality`), and this suite measures RUNTIME AUTHORITY
- *       RESOLUTION across five authorities, not rendering of compiled CSS --
- *       mounting an artifact would be scaffolding to dodge a barrier this
- *       config should arguably never trip in the first place.
+ * `resolveVisualAuthority` refuses a bare render whose config carries a runtime
+ * visual payload, and it refuses `brandTheme` unconditionally -- even under a
+ * compiled-artifact declaration -- because a runtime BrandTheme is a second
+ * visual authority competing with the compiled one. That barrier is correct and
+ * is not touched here.
  *
- * This is the barrier-asymmetry product question, not a stale fixture: three
- * of the five census channels (`visualBranding`, `tokenOverrides`, and
- * implicitly the *content* of `appearance`/`brandTheme` when matched against
- * an artifact) are content-gated, but `appearance` and `brandTheme` are
- * PRESENCE-gated for a bare (no-authority) render, and neither test config
- * carries a single byte of colour, font, or token override. Registered as a
- * question for the DT/product owner (see the CI-3 diagnosis,
- * `/private/tmp/dsprovider-cluster-opus-diagnosis.md` §4.a/§5.2): whether the
- * barrier's `appearance`/`brandTheme`/`personality` channels should be
- * content-gated the way `visualBranding`/`tokenOverrides` already are. Not
- * touched here -- the barrier predicate is explicitly out of this packet's
- * write-set.
+ * What was wrong was the fixture: the tree carried `brandTheme` while measuring
+ * nothing from it. Legs (1) and (2) below call `compileBrandTheme` and
+ * `compileAppearanceVariables` DIRECTLY, so the static-BrandTheme and
+ * DB-Appearance authorities are compared without the provider ever seeing a
+ * BrandTheme. The tree is needed for exactly three of the five: the `<html>`
+ * boundary, the JS context, and the nested scope -- and those need the
+ * appearance posture, which arrives the way production delivers it, as a
+ * compiled artifact with a matching declaration (the same shape
+ * `provider/tests/density-authority.integration.test.tsx` uses).
+ *
+ * So all five authorities are still compared, and none of them is scaffolding.
  */
 
 const densityCss = readFileSync(
@@ -107,6 +99,19 @@ function cssLocalFactor(posture: string): number | undefined {
   return match ? Number(match[1]) : undefined;
 }
 
+const POSTURE_ARTIFACT = compileTenantThemeConfig(
+  hydrateTenantThemeConfig(
+    { schemaVersion: 1, mode: 'simple', appearance: { density: POSTURE } },
+    {
+      tenantId: 'tenant_density_equivalence',
+      slug: 'density-equivalence',
+      verticalKey: 'rottay',
+      rowVersion: 1,
+    },
+  ),
+  { verticalEnvelope: getTenantThemeVerticalEnvelope('rottay')! },
+);
+
 function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
   return {
     slug: 'density-equivalence',
@@ -119,6 +124,17 @@ function tenantConfig(overrides: Partial<TenantConfig> = {}): TenantConfig {
   };
 }
 
+/** The verified mount production ships; the barrier reads it, not the config. */
+function mountPostureArtifact(): void {
+  const style = document.createElement('style');
+  style.id = 'density-equivalence-artifact';
+  style.setAttribute(TENANT_THEME_ARTIFACT_DIGEST_ATTRIBUTE, POSTURE_ARTIFACT.digest);
+  style.setAttribute(TENANT_THEME_ARTIFACT_SLUG_ATTRIBUTE, POSTURE_ARTIFACT.slug);
+  style.setAttribute(TENANT_THEME_ARTIFACT_VERTICAL_ATTRIBUTE, POSTURE_ARTIFACT.verticalKey);
+  style.textContent = POSTURE_ARTIFACT.css;
+  document.head.appendChild(style);
+}
+
 function PostureProbe() {
   const { posture } = useDensity();
   return <output data-testid="js-posture">{posture}</output>;
@@ -126,6 +142,7 @@ function PostureProbe() {
 
 afterEach(() => {
   cleanup();
+  document.getElementById('density-equivalence-artifact')?.remove();
   document.documentElement.removeAttribute('data-density');
   document.documentElement.style.removeProperty(DENSITY_MODE_FACTOR_VARIABLE);
 });
@@ -135,16 +152,14 @@ describe('density posture equivalence across every authority', () => {
     const expected = resolveEffectiveDensityScale(STRUCTURAL_SCALE, POSTURE);
 
     // ── One tree carrying the runtime authorities ────────────────────────────
+    mountPostureArtifact();
     const view = render(
       <DesignSystemProvider
         tenantConfig={tenantConfig({
-          brandTheme: {
-            id: 'density-equivalence',
-            name: 'Density equivalence',
-            surfaces: { densityScale: STRUCTURAL_SCALE, density: POSTURE },
-          },
-          appearance: { general: { density: POSTURE } },
+          appearance: POSTURE_ARTIFACT.normalizedAppearance as TenantConfig['appearance'],
         })}
+        vertical="rottay"
+        visualAuthority={{ authority: 'compiled-artifact', artifact: POSTURE_ARTIFACT }}
         skipCssLoading
       >
         <PostureProbe />
@@ -207,11 +222,14 @@ describe('density posture equivalence across every authority', () => {
     // root posture from it. If the root boundary wrote the LOCAL channel, :root
     // would multiply mode × local and produce 0.85² — the regression the
     // :not(:root) guard was protecting against.
+    mountPostureArtifact();
     const view = render(
       <DesignSystemProvider
         tenantConfig={tenantConfig({
-          appearance: { general: { density: POSTURE } },
+          appearance: POSTURE_ARTIFACT.normalizedAppearance as TenantConfig['appearance'],
         })}
+        vertical="rottay"
+        visualAuthority={{ authority: 'compiled-artifact', artifact: POSTURE_ARTIFACT }}
         skipCssLoading
       >
         <PostureProbe />

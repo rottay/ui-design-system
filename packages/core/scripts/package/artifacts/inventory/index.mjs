@@ -44,6 +44,7 @@ import { existsSync, readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
+import { assertDistFresh } from '../freshness/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
 const packageRootDefault = findPackageRoot(scriptDir);
@@ -228,10 +229,22 @@ export function auditPackInventory({
         notes.push(`stale additions review entry (no longer packed): ${path}`);
       }
     }
+    // A baselined PUBLIC DECLARATION that disappears is not a shrink, it is a
+    // missing declaration. Eight `compound/index.d.ts` files were absent from
+    // dist and this gate waved all eight through as an "allowed shrink" while
+    // printing an invitation to run `packinv:write`, which would have lowered
+    // the tracked baseline to the stale pack and removed the requirement for
+    // them permanently.
     for (const path of baselinePaths) {
-      if (!currentPaths.has(path)) {
-        notes.push(`packed entry removed since baseline (allowed shrink): ${path}`);
+      if (currentPaths.has(path)) continue;
+      if (/\.d\.ts$/.test(path)) {
+        failures.push(
+          `baselined public declaration is no longer packed: ${path}. ` +
+          'A missing .d.ts is a broken public surface, not a size shrink; rebuild before packing.',
+        );
+        continue;
       }
+      notes.push(`packed entry removed since baseline (allowed shrink): ${path}`);
     }
     if (pack.unpackedSize > baseline.unpackedSize) {
       failures.push(
@@ -285,6 +298,19 @@ function run() {
   const readPackedFile = (path) => readFileSync(resolve(packageRoot, path), 'utf8');
 
   if (mode === 'write') {
+    // A baseline seeded over a STALE dist bakes the staleness in permanently:
+    // the ratchet is decrease-only, so whatever the stale pack was missing
+    // stops being required. `distfresh` is the only gate that detects that, so
+    // the writer refuses while it is red.
+    const freshness = assertDistFresh({
+      packageRoot,
+      stampPath: resolve(packageRoot, 'dist/build-stamp.json'),
+    });
+    if (!freshness.ok) {
+      console.error('pack-inventory-gate: refusing to seed a baseline over a STALE dist:');
+      for (const failure of freshness.failures) console.error(`  - ${failure}`);
+      return 1;
+    }
     // Never bless a dirty pack: run the forbidden scans (no baseline) and refuse
     // to seed if the current tarball ships anything it must not.
     const { failures } = auditPackInventory({

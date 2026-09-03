@@ -40,28 +40,28 @@ const OWNER = 'infrastructure/runtime/foundation/density/index.ts';
 const WRITERS: Readonly<
   Record<string, { sites: number; kind: 're-stamp' | 'deviation'; owner: string; reason: string }>
 > = {
-  'ui/primitives/runtime/overlay/portal-scope/index.tsx': {
+  'components/primitives/runtime/overlay/portal-scope/index.tsx': {
     sites: 1,
     kind: 're-stamp',
     owner: 'overlay-substrate',
     reason:
       'Projects the anchor lineage snapshot onto portaled content. Reads an existing boundary, never declares one.',
   },
-  'ui/primitives/display/Tooltip/engines/modern/index.tsx': {
+  'components/primitives/display/tooltip/engines/modern/index.tsx': {
     sites: 3,
     kind: 're-stamp',
     owner: 'engine:modern',
     reason:
       'Portaled tooltip surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`).',
   },
-  'ui/primitives/overlay/popover/engines/modern/index.tsx': {
+  'components/primitives/overlay/popover/engines/modern/index.tsx': {
     sites: 4,
     kind: 're-stamp',
     owner: 'engine:modern',
     reason:
       'Portaled popover surfaces re-stamp the anchor posture (`density ?? portalScope["data-density"]`).',
   },
-  'ui/structures/workspace/action-dock/runtime/rendering/index.tsx': {
+  'components/structures/workspace/action-dock/runtime/rendering/index.tsx': {
     sites: 1,
     kind: 'deviation',
     owner: 'structures/workspace',
@@ -125,12 +125,12 @@ describe('data-density writer ratchet', () => {
 
     expect(deviationSites).toBe(1);
     expect(deviations.map(([path]) => path)).toEqual([
-      'ui/structures/workspace/action-dock/runtime/rendering/index.tsx',
+      'components/structures/workspace/action-dock/runtime/rendering/index.tsx',
     ]);
   });
 
   it('flags a planted ad-hoc writer instead of passing over it', () => {
-    const planted = 'ui/structures/workspace/planted-dock/index.tsx';
+    const planted = 'components/structures/workspace/planted-dock/index.tsx';
     const plantedCensus = new Map(CENSUS).set(planted, 1);
 
     const unknown = Array.from(plantedCensus.keys()).filter(

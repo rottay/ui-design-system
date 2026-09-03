@@ -425,11 +425,23 @@ describe("TenantThemeConfig v1 server contract", () => {
     // changed type or format, same law as the sentinel note above this one.
     // Both pins re-derived from the tree and verified directly against the
     // published digests (dist/server.js) before writing, not copied blind.
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // C0 re-anchor: a3ba2e479 withdrew `segmented.itemShadowSelected` and
+    // `segmented.focusRing` -- the pair whose emitters, artifact declarations
+    // and skin reads were already retired. A NARROWING this time, and the
+    // superseded pins stay asserted so the ratchet keeps its history. Both
+    // values re-derived from the tree; `canonical-digest-identity.test.ts`
+    // carries the same move with the full supersession chain.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       "sha256-9b9d5b8d32a90805d9a52998d9e94b2fa586491063a19055d94b713a8b53a739"
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       "sha256-e893268074cc59e4acdeaf27a0986d71104c98df67c12bf643031ed615caa952"
+    );
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      "sha256-c35633aea90299acc841fc8e62221622e44083941761dfd4e71d80ef642f5c45"
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      "sha256-576975600674f58a3e3f2a1a8d12e51f6ff0294df84da40c7e379e7c72ef9188"
     );
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA)).toBe(true);
     expect(Object.isFrozen(TENANT_THEME_CONFIG_SCHEMA.documents.simple)).toBe(

@@ -752,7 +752,12 @@ describe('React-owned SVG renderers', () => {
     const clientY = Number(firstTarget.getAttribute('cy'));
 
     expect(targets).toHaveLength(20);
-    expect(targets.every((target) => target.getAttribute('r') === '12')).toBe(true);
+    // r=22 is the 44px coarse-pointer diameter the renderer states in place,
+    // asserted as the floor rather than as a number: a target that shrinks
+    // below it stops meeting the touch-target minimum, which is the whole
+    // reason these invisible circles exist over the painted dots.
+    expect(targets.every((target) => Number(target.getAttribute('r')) * 2 >= 44)).toBe(true);
+    expect([...new Set(targets.map((target) => target.getAttribute('r')))]).toEqual(['22']);
     fireEvent.pointerDown(paintedLastTarget, {
       pointerType: 'mouse',
       pointerId: 12,

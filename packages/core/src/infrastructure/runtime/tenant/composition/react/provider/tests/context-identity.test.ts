@@ -532,6 +532,18 @@ describe('tenant context consumer inventory', () => {
 
   it('is exactly the six registered live consumers -- a seventh, or a reverted specifier, fails', () => {
     expect(inventory).toEqual([
+      // The inventory is sorted by path, and the UI tier now lives under
+      // `components/`, which sorts before `infrastructure/`.
+      {
+        file: 'components/patterns/runtime/adaptive-layout/presentation/react/index.ts',
+        binding: 'TenantContext',
+        specifier: '@/infrastructure/runtime/tenant/foundation/context',
+      },
+      {
+        file: 'components/patterns/visualization/charts/runtime/chart-engine/runtime/grammar/index.ts',
+        binding: 'TenantContext',
+        specifier: '@/infrastructure/runtime/tenant/foundation/context',
+      },
       {
         file: 'infrastructure/runtime/engines/presentation/adapters/antd/index.tsx',
         binding: 'useTenantContext',
@@ -551,16 +563,6 @@ describe('tenant context consumer inventory', () => {
         file: 'infrastructure/runtime/theming/composition/react/tokens/index.ts',
         binding: 'useTenantContext',
         specifier: '../../../../tenant/foundation/context',
-      },
-      {
-        file: 'ui/patterns/runtime/adaptive-layout/presentation/react/index.ts',
-        binding: 'TenantContext',
-        specifier: '@/infrastructure/runtime/tenant/foundation/context',
-      },
-      {
-        file: 'ui/patterns/visualization/charts/runtime/chart-engine/runtime/grammar/index.ts',
-        binding: 'TenantContext',
-        specifier: '@/infrastructure/runtime/tenant/foundation/context',
       },
     ]);
   });

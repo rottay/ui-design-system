@@ -98,10 +98,31 @@ const FIRST_PARTY = [
  * applies identically to bithire and evnto, which did not move and are not
  * re-anchored.
  */
+// C0 re-anchor. These pin the WHOLE leg-A surface, so they move whenever a
+// first-party theme moves -- which is what makes them a tripwire and also what
+// obliges a written reason on every re-anchor. The cause here is not the
+// typography compaction they guard: the three themes rewired their chrome
+// grounds onto cascade roots (`layout.bg: "var(--ds-color-bg-primary)"` in
+// rottay and evnto, and the sider/table/button grounds in all three), so the
+// compiled surface carries the alias where it used to carry the literal. The
+// resolved colour is unchanged -- the root declares it in the same block --
+// and the T2 cross-lowering equality above still holds byte for byte, which is
+// the property this file actually exists to defend.
 const LEG_A_SURFACE_DIGEST: Record<string, string> = {
-  rottay: "07cd0f14943ffeb78202ad70409e9e4dfbe1c52a8a503b1a42f5fca31ec21113",
-  bithire: "621205167d0261ce960f4fb160965311282ea206f28c57ea031afca3dffb19e6",
-  evnto: "7e545d8968466f17a3b7b347da9f3a6a68ee80580b85b1ed0e7f1c5e6b45e980",
+  rottay: "16d10f6d0e31078f8c1270c9aa8b901893840d9b3d07eeffce80197bda9b63dd",
+  bithire: "cdff418d6a48c82fbeacbbee11ea728489b9903bee20e7514d223168d0d75205",
+  evnto: "4a6019fb9ddf808c4113de7b083b3cf4fa1e281f279481653d1da0c78d5e06b6",
+};
+
+/**
+ * The re-anchor's own evidence: the aliases the surface now carries. Without
+ * this a future re-anchor could restate a number with no way to see whether the
+ * cause was the compaction this file guards or something else entirely.
+ */
+const CASCADE_ROOT_ALIASES: Record<string, ReadonlyArray<readonly [string, string]>> = {
+  rottay: [["--ds-layout-bg", "var(--ds-color-bg-primary)"]],
+  bithire: [["--ds-button-primary-bg", "var(--ds-color-primary)"]],
+  evnto: [["--ds-layout-bg", "var(--ds-color-bg-primary)"]],
 };
 
 /** Every own key of a role, materialized with no value — the bridge skeleton. */
@@ -315,6 +336,10 @@ describe("cross-lowering equality of the first-party themes", () => {
     // T6 — the static path is untouched by the compaction (zero pixel).
     it(`${slug}: the leg-A surface digest is unchanged by the compaction`, () => {
       expect(surfaceDigest(legA(brandTheme))).toBe(LEG_A_SURFACE_DIGEST[slug]);
+      // The re-anchor is only legible while its stated cause is still true.
+      for (const [channel, alias] of CASCADE_ROOT_ALIASES[slug]) {
+        expect(legA(brandTheme).cssVariables[channel]).toBe(alias);
+      }
     });
 
     // T5 — permanent tripwire. `String(undefined)` must never reach a value,

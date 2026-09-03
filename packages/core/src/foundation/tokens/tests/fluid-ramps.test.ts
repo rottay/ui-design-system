@@ -12,8 +12,8 @@
  * intercept do not reproduce its own bounds is a ramp that lies about where it
  * starts and stops.
  *
- * THE CORPUS IS THE SHIPPED RAMP, NOT ONE FILE. `base/*.css` and
- * `themes/default.css` land in the same `rottay-tokens` layer, default.css
+ * THE CORPUS IS THE SHIPPED RAMP, NOT ONE FILE. The `base/` families and
+ * `themes/default/index.css` land in the same `rottay-tokens` layer, the theme
  * second, so where both declare a step the theme wins. Reading only the base
  * file measured the LOSING ramp: it passed until `edf91a41f` deleted the inert
  * base declarations, and the bounds it had been certifying turned out never to
@@ -33,7 +33,7 @@
  * not chosen -- which is why it could land as an edit rather than a wave.
  *
  * It is not free: 3xl's ceiling, 4xl's floor and ceiling, and 5xl's floor all
- * move (see the causal note above the declarations in `base/typography.css` for
+ * move (see the causal note above the declarations in `base/typography/index.css` for
  * the exact deltas and the affected consumers). The corpus floor below is what
  * keeps that honest -- the membership check gets easier as the ladder shrinks,
  * so a future deletion cannot quietly re-legalise a bound by removing its rival.
@@ -47,8 +47,8 @@ import { describe, expect, it } from 'vitest';
 const FOUNDATION = join(__dirname, '../css/foundation/base');
 const THEME = join(__dirname, '../css/foundation/themes/default/index.css');
 
-const typography = readFileSync(join(FOUNDATION, 'typography.css'), 'utf-8');
-const spacing = readFileSync(join(FOUNDATION, 'spacing.css'), 'utf-8');
+const typography = readFileSync(join(FOUNDATION, 'typography/index.css'), 'utf-8');
+const spacing = readFileSync(join(FOUNDATION, 'spacing/index.css'), 'utf-8');
 /** The later declarer in the same layer, and therefore the winner. */
 const theme = readFileSync(THEME, 'utf-8');
 

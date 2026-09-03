@@ -133,10 +133,14 @@ describe("modern skins honor the surface layer they declare", () => {
       /background-image:\s*linear-gradient\(var\(--ds-elevation-surface-4\), var\(--ds-elevation-surface-4\)\)/,
     );
     expect(MODAL_CSS).toContain(
-      // C2b re-pin: the material role is the documented middle fallback —
-      // chrome.material.card now reaches Modal, and the floor aliases the
-      // same surface token so an unset material stays byte-identical.
-      "background-color: var(--ds-modal-bg, var(--ds-material-card-background, var(--ds-surface-card)))",
+      // C0 re-pin: the middle fallback is the OVERLAY material role, not the
+      // card one. The skin states the reason in place: hoisting the overlay
+      // role above --ds-modal-bg would resolve unconditionally (it is declared
+      // on :root and in the BitHire artifact) and override the modal grounds
+      // Rottay and BitHire author, so it stays in the fallback position until
+      // the :root default is retired. Pinning the card role here asserted a
+      // chain the skin deliberately does not have.
+      "background-color: var(--ds-modal-bg, var(--ds-material-overlay-background, var(--ds-surface-card)))",
     );
   });
 

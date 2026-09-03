@@ -10,7 +10,8 @@ import { TOAST_KEYFRAMES } from '../feedback/toast/runtime/animation';
 
 const srcRoot = resolve(dirname(fileURLToPath(import.meta.url)), '../../..');
 const readSource = (path: string) => readFileSync(resolve(srcRoot, path), 'utf8');
-const readSkin = (name: string) => readSource(`foundation/tokens/css/presentation/components/skin/${name}`);
+const readSkin = (family: string) =>
+  readSource(`foundation/tokens/css/presentation/components/skin/${family}/index.css`);
 /**
  * The engine-scoped owner. A later lane re-homed the modern half of two
  * recovered families out of the shared `presentation/components/skin` bucket
@@ -19,30 +20,35 @@ const readSkin = (name: string) => readSource(`foundation/tokens/css/presentatio
  * shrink — it moved — so this contract follows it instead of asserting that
  * the shared file still owns paint it deliberately gave up.
  */
-const readEngineSkin = (name: string) =>
-  readSource(`foundation/tokens/css/runtime/engines/modern/skin/${name}`);
+const readEngineSkin = (family: string) =>
+  readSource(`foundation/tokens/css/runtime/engines/modern/skin/${family}/index.css`);
 
 // CI-1 re-pin: data-table-interactions.css's hash moved (6c9f6ccf1e, 2026-08-05,
 // dropped the non-rendering <tr> box-shadow -- see the ruleContract re-pin
 // below -- this test file's own last touch predates it, a97ddd736 2026-08-03).
 // Verified against the tree today with `shasum -a 256` before writing.
 const SKIN_HASHES = {
-  'data-table-interactions.css': '41eeae3e2bcc8a9602d509e1f3f671328bc7328ec9aced15c52495ffc12279f3',
+  // C0 re-pin: a3ba2e479 folded every skin family into `<family>/index.css` and
+  // rewrote one header line ('WO-SKIN-06' -> 'skin ownership migration'). That is
+  // the WHOLE diff against the previous pin -- no rule, selector or paint property
+  // moved -- so paintCount and every ruleContract below are unaffected and only
+  // this byte-exact hash changes. Verified with `shasum -a 256` against the tree.
+  'data-table-interactions': '22634a0c6f8a2fd9b50261a2bb35f56b474a299a11acd97782e0b17e12a1cbbd',
   // CI-1 re-pin: same commit as the paint-count and rule-content re-pins
   // below (4afa74b353, 2026-08-11) -- the file's whole content changed when
   // the Input placeholder rule and its header comment moved out. Verified
   // with `shasum -a 256` against the tree today before writing.
-  'form-placeholders.css': 'a78148b905f491e1ad561ea34455a623a47a4375e1c0a2c648cfd8ed3961437b',
-  'navigation-static.css': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
-  'primitive-motion.css': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
+  'form-placeholders': 'a78148b905f491e1ad561ea34455a623a47a4375e1c0a2c648cfd8ed3961437b',
+  'navigation-static': 'a35d19035d60d802a89771759fe3a584deea6e982ac4fba08bfd6a52f5884d12',
+  'primitive-motion': '6b88cc713c2552a668c6c056bbf8ba1dae05d44a827078a0e942b74a7d847e7a',
   // CI-1 re-pin: 449ad4ba9 (2026-08-10) added a `@media
   // (prefers-reduced-motion: reduce)` block for the classic thumb -- purely
   // additive, no PAINT_PROPERTIES member touched (transition/animation
   // timing only), so `paintCount` and every individual `ruleContract` below
   // are unaffected; only this byte-exact hash moves. Verified with
   // `shasum -a 256` against the tree today.
-  'scroll-area.css': '6dfac96aa06cb593864c66d9993da7564a2c340c8f9af62d5c6ccaedba277ded',
-  'toast-animation-keyframes.css': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
+  'scroll-area': '6dfac96aa06cb593864c66d9993da7564a2c340c8f9af62d5c6ccaedba277ded',
+  'toast-animation-keyframes': 'a18d974060652fda28e40aa14d46173de1f766ac067cec4a689b43124c33c62a',
 } as const;
 
 const PAINT_PROPERTIES = new Set([
@@ -161,19 +167,19 @@ function expectKeyframeContracts(css: string, expected: Record<string, Record<st
 }
 
 const SKINS = {
-  dataTable: readSkin('data-table-interactions.css'),
-  primitiveMotion: readSkin('primitive-motion.css'),
-  toast: readSkin('toast-animation-keyframes.css'),
-  scrollArea: readSkin('scroll-area.css'),
-  navigation: readSkin('navigation-static.css'),
-  formPlaceholders: readSkin('form-placeholders.css'),
+  dataTable: readSkin('data-table-interactions'),
+  primitiveMotion: readSkin('primitive-motion'),
+  toast: readSkin('toast-animation-keyframes'),
+  scrollArea: readSkin('scroll-area'),
+  navigation: readSkin('navigation-static'),
+  formPlaceholders: readSkin('form-placeholders'),
 };
 
 /** New owners of the relocated modern payload. */
 const RELOCATED = {
-  scrollAreaModern: readEngineSkin('scroll-area.css'),
-  tabsModern: readEngineSkin('tabs.css'),
-  inputModern: readEngineSkin('input.css'),
+  scrollAreaModern: readEngineSkin('scroll-area'),
+  tabsModern: readEngineSkin('tabs'),
+  inputModern: readEngineSkin('input'),
   foundationKeyframes: readSource('foundation/tokens/css/foundation/animations/keyframes/index.css'),
 };
 
@@ -697,15 +703,15 @@ describe('skin ownership migration embedded CSS recovery — exact static payloa
 
 describe('skin ownership migration embedded CSS recovery — producer and hook contract', () => {
   const producerFreeSources = [
-    'ui/patterns/data/data-table/engines/modern/index.tsx',
-    'ui/patterns/data/data-table/engines/rustic/index.tsx',
-    'ui/primitives/display/Timeline/engines/rustic/index.tsx',
-    'ui/primitives/display/Tree/engines/modern/index.tsx',
-    'ui/primitives/display/Tree/engines/rustic/index.tsx',
-    'ui/primitives/layout/scroll-area/engines/modern/index.tsx',
-    'ui/primitives/layout/scroll-area/engines/classic/index.tsx',
-    'ui/primitives/layout/scroll-area/engines/rustic/index.tsx',
-    'ui/primitives/navigation/menu/engines/modern/index.tsx',
+    'components/patterns/data/data-table/engines/modern/index.tsx',
+    'components/patterns/data/data-table/engines/rustic/index.tsx',
+    'components/primitives/display/timeline/engines/rustic/index.tsx',
+    'components/primitives/display/tree/engines/modern/index.tsx',
+    'components/primitives/display/tree/engines/rustic/index.tsx',
+    'components/primitives/layout/scroll-area/engines/modern/index.tsx',
+    'components/primitives/layout/scroll-area/engines/classic/index.tsx',
+    'components/primitives/layout/scroll-area/engines/rustic/index.tsx',
+    'components/primitives/navigation/menu/engines/modern/index.tsx',
   ];
 
   it.each(producerFreeSources)('%s no longer creates a stylesheet', (path) => {
@@ -716,9 +722,9 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
   });
 
   it('keeps only certified responsive producers in Input, Select and Tabs', () => {
-    const input = readSource('ui/primitives/inputs/input/engines/modern/index.tsx');
-    const select = readSource('ui/primitives/inputs/select/engines/modern/index.tsx');
-    const tabs = readSource('ui/primitives/navigation/tabs/engines/modern/index.tsx');
+    const input = readSource('components/primitives/inputs/input/engines/modern/index.tsx');
+    const select = readSource('components/primitives/inputs/select/engines/modern/index.tsx');
+    const tabs = readSource('components/primitives/navigation/tabs/engines/modern/index.tsx');
 
     expect(input).not.toContain('ds-input-ph-');
     expect(input).not.toContain('::placeholder');
@@ -736,7 +742,7 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
 
   it('stamps every ScrollArea engine with the closed state contract', () => {
     for (const engine of ['modern', 'classic', 'rustic']) {
-      const source = readSource(`ui/primitives/layout/scroll-area/engines/${engine}/index.tsx`);
+      const source = readSource(`components/primitives/layout/scroll-area/engines/${engine}/index.tsx`);
       expect(source).toContain(`rottay-scroll-area-${engine}`);
       expect(source).toContain('data-scrollbar-size={scrollbarSize}');
       expect(source).toMatch(/data-hide-scrollbar=\{hideScrollbar \? ["']true["'] : ["']false["']\}/);
@@ -751,44 +757,44 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
     // must always stay reachable from a real consumer.
     const families = [
       [
-        `${SKIN_DIR}/data-table-interactions.css`,
-        'ui/patterns/data/data-table/engines/modern/index.tsx',
+        `${SKIN_DIR}/data-table-interactions/index.css`,
+        'components/patterns/data/data-table/engines/modern/index.tsx',
         ['ds-inline-edit-enter', 'ds-data-table-shimmer'],
       ],
       [
-        `${SKIN_DIR}/data-table-interactions.css`,
-        'ui/patterns/data/data-table/engines/rustic/index.tsx',
+        `${SKIN_DIR}/data-table-interactions/index.css`,
+        'components/patterns/data/data-table/engines/rustic/index.tsx',
         ['ds-spin', 'ds-bulk-slide-down'],
       ],
       [
-        `${SKIN_DIR}/primitive-motion.css`,
-        'ui/primitives/display/Timeline/engines/rustic/index.tsx',
+        `${SKIN_DIR}/primitive-motion/index.css`,
+        'components/primitives/display/timeline/engines/rustic/index.tsx',
         ['rottay-timeline-pulse'],
       ],
       // Tree's modern paint moved to its engine skin, so the skin — not the
       // .tsx — is now what plays the frame. The component connection is
       // re-proved below through the part the skin targets.
       [
-        `${SKIN_DIR}/primitive-motion.css`,
+        `${SKIN_DIR}/primitive-motion/index.css`,
         'foundation/tokens/css/runtime/engines/modern/skin/tree/index.css',
         ['rottay-drop-indicator'],
       ],
       [
-        `${SKIN_DIR}/primitive-motion.css`,
-        'ui/primitives/display/Tree/engines/rustic/index.tsx',
+        `${SKIN_DIR}/primitive-motion/index.css`,
+        'components/primitives/display/tree/engines/rustic/index.tsx',
         ['rottay-tree-spin', 'rottay-tree-drop-line-in'],
       ],
       // Relocated: the frames are foundation-owned and the surviving consumer
       // is the rustic engine.
       [
         'foundation/tokens/css/foundation/animations/keyframes/index.css',
-        'ui/primitives/navigation/tabs/engines/rustic/index.tsx',
+        'components/primitives/navigation/tabs/engines/rustic/index.tsx',
         ['ds-tabs-fade-in'],
       ],
       // Modern's replacement frame is defined and consumed in one owner.
       [
         'foundation/tokens/css/runtime/engines/modern/skin/tabs/index.css',
-        'ui/primitives/navigation/tabs/engines/modern/index.tsx',
+        'components/primitives/navigation/tabs/engines/modern/index.tsx',
         ['ds-tabs-panel-reveal'],
       ],
     ] as const;
@@ -810,13 +816,13 @@ describe('skin ownership migration embedded CSS recovery — producer and hook c
     expect(readSource('foundation/tokens/css/runtime/engines/modern/skin/tree/index.css')).toMatch(
       /\[data-part='drop-indicator'\][^{]*\{[^}]*animation:\s*rottay-drop-indicator/
     );
-    expect(readSource('ui/primitives/display/Tree/engines/modern/index.tsx')).toContain(
+    expect(readSource('components/primitives/display/tree/engines/modern/index.tsx')).toContain(
       'data-part="drop-indicator"'
     );
   });
 
   it('retains the legacy Toast injector as a document-mutation-free no-op', () => {
-    const source = readSource('ui/primitives/feedback/Toast/runtime/animation/index.ts');
+    const source = readSource('components/primitives/feedback/toast/runtime/animation/index.ts');
     const implementation = source.slice(source.indexOf('export function injectToastStyles'));
     expect(implementation).not.toContain('document.createElement');
     expect(implementation).not.toContain('appendChild');

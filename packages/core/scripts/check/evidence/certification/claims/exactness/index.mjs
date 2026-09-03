@@ -61,9 +61,32 @@ const DATA_PART_DOC = join(
   DOCS_ROOT,
   'engineering/design-system/runtime/skins/data-part-contracts/README.md',
 );
-const ARTIFACT_DIR = join(CORE_ROOT, 'artifacts/quality/certification/claims/exactness');
-const ARTIFACT_PATH = join(ARTIFACT_DIR, 'evidence/index.json');
-const HASH_PATH = join(ARTIFACT_DIR, 'digest/index.txt');
+// TWO OWNERS, ON PURPOSE.
+//
+// `exactness/` is the SEALED ARCHIVE: the WO-GAT-07 record as it was written,
+// at the documentation revision and the input hashes of its own day. It is
+// historical evidence. This gate reads it and never writes it -- there is no
+// code path here that opens it for writing, and `--write` refuses if the
+// archive bytes move under it.
+//
+// `exactness-live/` is the LIVE proof: the same two deterministic runs against
+// TODAY's tree, plus a provenance record that names, input by input, where the
+// archive and the live tree disagree. That third file is what keeps the archive
+// visible instead of quietly superseded.
+//
+// Before this split there was one owner doing both jobs, and it could not do
+// them at once: four of its five divergent inputs (`ci.yml`, root
+// `package.json`, `CLAUDE.md`, `keyframe-namespace-contract.test.ts`) are
+// byte-identical between HEAD and the worktree, so the archive was already
+// stale AT HEAD and the only ways to green it were to overwrite historical
+// evidence or to leave a blocking gate red forever.
+const ARCHIVE_DIR = join(CORE_ROOT, 'artifacts/quality/certification/claims/exactness');
+const ARCHIVE_EVIDENCE_PATH = join(ARCHIVE_DIR, 'evidence/index.json');
+const ARCHIVE_DIGEST_PATH = join(ARCHIVE_DIR, 'digest/index.txt');
+const LIVE_DIR = join(CORE_ROOT, 'artifacts/quality/certification/claims/exactness-live');
+const LIVE_EVIDENCE_PATH = join(LIVE_DIR, 'evidence/index.json');
+const LIVE_DIGEST_PATH = join(LIVE_DIR, 'digest/index.txt');
+const LIVE_PROVENANCE_PATH = join(LIVE_DIR, 'provenance/index.json');
 const ROOT_PACKAGE_PATH = join(UI_ROOT, 'package.json');
 const CORE_PACKAGE_PATH = join(CORE_ROOT, 'package.json');
 const PNPM_LOCK_PATH = join(UI_ROOT, 'pnpm-lock.yaml');
@@ -1361,6 +1384,72 @@ function printDocumentationAllowlist() {
   process.stdout.write(`${JSON.stringify(allowlist, null, 2)}\n`);
 }
 
+/**
+ * The archive, hashed as bytes. Historical evidence is a fact about a file, so
+ * it is pinned as a file: two sha256 values and the semantic hash the archive
+ * recorded for itself. Nothing here parses it for meaning.
+ */
+export function readSealedArchive() {
+  if (!existsSync(ARCHIVE_EVIDENCE_PATH) || !existsSync(ARCHIVE_DIGEST_PATH)) return null;
+  const evidence = readFileSync(ARCHIVE_EVIDENCE_PATH);
+  const digest = readFileSync(ARCHIVE_DIGEST_PATH);
+  return {
+    evidenceSha256: sha256(evidence),
+    digestSha256: sha256(digest),
+    semanticHash: digest.toString('utf8').trim(),
+    inputs: JSON.parse(evidence.toString('utf8')).inputManifest?.entries ?? [],
+  };
+}
+
+/**
+ * Where the archive and the live tree disagree, input by input. This is the
+ * bridge between the two owners: it is what stops the live proof from being a
+ * fresh start that forgets the seal, and it reproduces on every run, so a
+ * changed divergence is a red until the record is regenerated.
+ */
+export function diffInputManifests(archiveInputs, liveInputs) {
+  const byPath = (rows) => new Map(rows.map((row) => [row.path, row]));
+  const archive = byPath(archiveInputs);
+  const live = byPath(liveInputs);
+  const rows = [];
+  for (const path of [...new Set([...archive.keys(), ...live.keys()])].sort()) {
+    const a = archive.get(path);
+    const b = live.get(path);
+    if (a && b && a.sha256 === b.sha256) continue;
+    rows.push({
+      path,
+      archive: a ? { bytes: a.bytes ?? null, sha256: a.sha256 ?? null } : null,
+      live: b ? { bytes: b.bytes ?? null, sha256: b.sha256 ?? null } : null,
+    });
+  }
+  return rows;
+}
+
+function buildProvenance(result, archive) {
+  return {
+    schemaVersion: 1,
+    authority: 'WO-GAT-07',
+    _comment:
+      'The live proof and the sealed archive, side by side. `exactness/` is never written by this ' +
+      'gate: it is the record of what WO-GAT-07 measured on its own day, kept byte-exact. This file ' +
+      'names every input the two disagree on, so the archive stays visible rather than superseded in ' +
+      'silence, and so a drifted divergence reddens the gate instead of passing unnoticed.',
+    sealedArchive: {
+      evidence: workspacePath(ARCHIVE_EVIDENCE_PATH),
+      digest: workspacePath(ARCHIVE_DIGEST_PATH),
+      evidenceSha256: archive?.evidenceSha256 ?? null,
+      digestSha256: archive?.digestSha256 ?? null,
+      semanticHash: archive?.semanticHash ?? null,
+    },
+    live: {
+      evidence: workspacePath(LIVE_EVIDENCE_PATH),
+      digest: workspacePath(LIVE_DIGEST_PATH),
+      semanticHash: result.semanticHash,
+    },
+    divergentInputs: diffInputManifests(archive?.inputs ?? [], result.artifact.inputManifest.entries),
+  };
+}
+
 function main() {
   if (process.argv.includes('--print-doc-allowlist')) {
     printDocumentationAllowlist();
@@ -1373,20 +1462,48 @@ function main() {
   const result = buildArtifact({ allowUnsealedDocumentation });
   const artifactBytes = `${JSON.stringify(result.artifact, null, 2)}\n`;
   const hashBytes = `${result.semanticHash}\n`;
+  const archiveBefore = readSealedArchive();
+  if (archiveBefore === null) {
+    throw new Error(`WO-GAT-07 sealed archive is missing: ${workspacePath(ARCHIVE_EVIDENCE_PATH)}`);
+  }
+  const provenanceBytes = `${JSON.stringify(buildProvenance(result, archiveBefore), null, 2)}\n`;
   if (process.argv.includes('--write')) {
-    writeAtomic(ARTIFACT_PATH, artifactBytes);
-    writeAtomic(HASH_PATH, hashBytes);
+    writeAtomic(LIVE_EVIDENCE_PATH, artifactBytes);
+    writeAtomic(LIVE_DIGEST_PATH, hashBytes);
+    writeAtomic(LIVE_PROVENANCE_PATH, provenanceBytes);
+    const archiveAfter = readSealedArchive();
+    if (
+      archiveAfter.evidenceSha256 !== archiveBefore.evidenceSha256 ||
+      archiveAfter.digestSha256 !== archiveBefore.digestSha256
+    ) {
+      throw new Error('WO-GAT-07 sealed archive changed during a live write; the archive is read-only');
+    }
   }
   if (process.argv.includes('--check-artifact')) {
-    const mismatches = [];
-    if (!existsSync(ARTIFACT_PATH) || readFileSync(ARTIFACT_PATH, 'utf8') !== artifactBytes) {
-      mismatches.push(workspacePath(ARTIFACT_PATH));
+    // The archive is checked FIRST and by itself. A tampered archive would also
+    // move `provenanceBytes` and would otherwise be reported as a stale live
+    // proof -- the true error, under the wrong name.
+    if (existsSync(LIVE_PROVENANCE_PATH)) {
+      const recorded = JSON.parse(readFileSync(LIVE_PROVENANCE_PATH, 'utf8')).sealedArchive;
+      if (
+        recorded.evidenceSha256 !== archiveBefore.evidenceSha256 ||
+        recorded.digestSha256 !== archiveBefore.digestSha256
+      ) {
+        throw new Error(
+          `WO-GAT-07 sealed archive no longer hashes to the bytes the live proof recorded: ${workspacePath(ARCHIVE_EVIDENCE_PATH)}; the archive is historical evidence and is not rewritten`,
+        );
+      }
     }
-    if (!existsSync(HASH_PATH) || readFileSync(HASH_PATH, 'utf8') !== hashBytes) {
-      mismatches.push(workspacePath(HASH_PATH));
+    const mismatches = [];
+    for (const [path, bytes] of [
+      [LIVE_EVIDENCE_PATH, artifactBytes],
+      [LIVE_DIGEST_PATH, hashBytes],
+      [LIVE_PROVENANCE_PATH, provenanceBytes],
+    ]) {
+      if (!existsSync(path) || readFileSync(path, 'utf8') !== bytes) mismatches.push(workspacePath(path));
     }
     if (mismatches.length > 0) {
-      throw new Error(`WO-GAT-07 authoritative artifact is stale/missing: ${mismatches.join(', ')}; run claim-exactness:write after the documentation seal is committed`);
+      throw new Error(`WO-GAT-07 live proof is stale/missing: ${mismatches.join(', ')}; run claim-exactness:write`);
     }
   }
   console.log(

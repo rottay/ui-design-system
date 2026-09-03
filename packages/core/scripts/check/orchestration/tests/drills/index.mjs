@@ -13,6 +13,7 @@ import { runDrills as containment } from './containment/index.mjs';
 import { runDrills as workOrder } from './work-order/index.mjs';
 import { runDrills as programState } from './program-state/index.mjs';
 import { runDrills as tenantReachability } from './tenant-reachability/index.mjs';
+import { runDrills as reservedPaths } from './reserved-paths/index.mjs';
 
 const SUITES = [
   ['write-set intersection', intersection],
@@ -20,6 +21,7 @@ const SUITES = [
   ['work-order', workOrder],
   ['program-state', programState],
   ['tenant-reachability', tenantReachability],
+  ['reserved-paths', reservedPaths],
 ];
 
 const results = [];

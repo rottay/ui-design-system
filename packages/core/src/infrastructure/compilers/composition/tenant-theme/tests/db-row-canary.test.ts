@@ -275,9 +275,18 @@ describe('tenant theme — divergence from the static vertical baseline', () => 
     const baselineDensity = read(bithireCss, '--ds-density-mode-factor');
 
     expect(tenantDensity, 'DB tenant must emit --ds-density-mode-factor').toBeDefined();
-    expect(baselineDensity, 'bithire must emit --ds-density-mode-factor').toBeDefined();
-    expect(tenantDensity).not.toBe(baselineDensity);
+    // bithire authors `surfaces.densityScale: 0.9` and NO posture, so there is
+    // no posture for it to lower. Requiring the channel on both sides required
+    // bithire to author a posture it deliberately does not have; the vocabulary
+    // law is the real subject, and it is stated in both directions: the
+    // structural factor is present and separate, and the posture channel is
+    // absent exactly because the posture is.
+    expect(baselineDensity, 'bithire authors no posture, so it emits none').toBeUndefined();
     expect(read(bithireCss, '--ds-density-scale')).toBeDefined();
+    expect(read(bithireCss, '--ds-density-scale')).not.toBe(tenantDensity);
+    // The posture never travels on a second channel: `--ds-density-scale` on
+    // the DB side stays the structural factor, never the posture the tenant set.
+    expect(read(tenantCss, '--ds-density-scale')).not.toBe(tenantDensity);
   });
 
   it('elevation is concrete on both paths and diverges without a vocabulary split', () => {

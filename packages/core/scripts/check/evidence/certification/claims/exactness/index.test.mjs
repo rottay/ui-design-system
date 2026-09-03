@@ -26,11 +26,13 @@ import {
   DOCS_ROOT,
   SEALED_REFERENCE_DOCS,
   componentDirectoryFromDoc,
+  diffInputManifests,
   discoverStaleTypescriptFiles,
   evaluateDataPartUnresolved,
   evaluateClaimAuthority,
   evaluateClaimFloor,
   projectGat07RegistryDefinition,
+  readSealedArchive,
   sealedDocumentationContentMatches,
 } from './index.mjs';
 import {
@@ -2038,4 +2040,68 @@ test('GAT07 surface-profile authority: the shipped claim floor mirrors the measu
   for (const consumer of claim.productionConsumers) {
     assert.ok(existsSync(join(CORE_ROOT, consumer)), `phantom claim-floor consumer: ${consumer}`);
   }
+});
+
+
+/* ============================================================================
+ * The sealed archive and the live proof are two owners, and this is the law
+ * that keeps them two. Before the split one owner carried both jobs: the
+ * archive was already stale AT HEAD -- four of its six divergent inputs are
+ * byte-identical between HEAD and the worktree -- so the only ways to green a
+ * blocking gate were to overwrite historical evidence or to leave it red.
+ * ==========================================================================*/
+
+test('the gate has no code path that writes the sealed archive', () => {
+  const source = readFileSync(join(HERE, 'index.mjs'), 'utf8');
+  const writes = [...source.matchAll(/writeAtomic\(\s*([A-Z_]+)/gu)].map((match) => match[1]);
+  assert.ok(writes.length > 0, 'the gate must still write something');
+  assert.deepEqual(
+    writes.filter((name) => name.startsWith('ARCHIVE_')),
+    [],
+    'writeAtomic must never target an ARCHIVE_ path',
+  );
+  assert.deepEqual(
+    [...new Set(writes)].sort(),
+    ['LIVE_DIGEST_PATH', 'LIVE_EVIDENCE_PATH', 'LIVE_PROVENANCE_PATH'],
+  );
+});
+
+test('the sealed archive is pinned by its own bytes, and the live provenance records them', () => {
+  const archive = readSealedArchive();
+  assert.ok(archive, 'the sealed archive must exist');
+  const provenance = JSON.parse(
+    readFileSync(
+      join(CORE_ROOT, 'artifacts/quality/certification/claims/exactness-live/provenance/index.json'),
+      'utf8',
+    ),
+  );
+  assert.equal(provenance.sealedArchive.evidenceSha256, archive.evidenceSha256);
+  assert.equal(provenance.sealedArchive.digestSha256, archive.digestSha256);
+  assert.equal(provenance.sealedArchive.semanticHash, archive.semanticHash);
+  // The two owners are genuinely different states -- otherwise the split would
+  // be ceremony rather than a separation.
+  assert.notEqual(provenance.live.semanticHash, archive.semanticHash);
+  assert.ok(
+    provenance.divergentInputs.length > 0,
+    'a live proof identical to the archive would need no provenance record',
+  );
+});
+
+test('the archive/live input diff is exact in both directions', () => {
+  const row = (path, sha256) => ({ path, roles: ['r'], bytes: 1, sha256 });
+  assert.deepEqual(diffInputManifests([row('a', 'x')], [row('a', 'x')]), []);
+  assert.deepEqual(
+    diffInputManifests([row('a', 'x')], [row('a', 'y')]),
+    [{ path: 'a', archive: { bytes: 1, sha256: 'x' }, live: { bytes: 1, sha256: 'y' } }],
+  );
+  // A path only the archive had is a divergence, not a silent drop.
+  assert.deepEqual(
+    diffInputManifests([row('a', 'x')], []),
+    [{ path: 'a', archive: { bytes: 1, sha256: 'x' }, live: null }],
+  );
+  // And so is a path only the live tree has.
+  assert.deepEqual(
+    diffInputManifests([], [row('b', 'z')]),
+    [{ path: 'b', archive: null, live: { bytes: 1, sha256: 'z' } }],
+  );
 });

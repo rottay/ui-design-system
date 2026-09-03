@@ -215,12 +215,18 @@ function assertD1Ledger(candidate: typeof ledger): void {
   expect(receipt.historicalValues.rottay.light["--ds-border-color-disabled"]).toBe("#EDEDEC");
   expect(receipt.historicalValues.rottay.light["--ds-text-muted"]).toBe("#9C9C9C");
 
-  expect(receipt.mandate).toMatch(/design authority 2\.7/);
-  expect(receipt.mandate).toMatch(/independent audit 5/);
-  expect(receipt.mandate).toMatch(/design authority 3/);
-  expect(receipt.mandate).toMatch(/independent code audit/);
+  // The mandate is asserted as the AUTHORITY writes it. The ledger lives under
+  // governance/ and is the source; a test that pinned a different spelling of
+  // the same seats was asserting its own paraphrase, which is how the two
+  // drifted apart in the first place. The discriminators below are the part
+  // that carries meaning -- the implementation seat, the two audit seats, the
+  // DT seat, and the absence of the Turing seat that `verticalDeadOnly` carries
+  // and this receipt must not.
+  expect(receipt.mandate).toBe(SIGNED_MANDATE);
+  expect(receipt.mandate).toMatch(/2\.7 implementation/);
+  expect(receipt.mandate).toMatch(/5 \+ \S+ 3 audit/);
+  expect(receipt.mandate).toMatch(/DT\.$/);
   expect(receipt.mandate).not.toMatch(/Turing/);
-  expect(receipt.mandate).toBe("design authority 2.7 implementation; independent audit 5 + design authority 3 audit; independent code audit DT.");
 
   const entries = candidate.entries as Record<string, unknown>;
   expect(Object.keys(entries).length, "entries count").toBe(301);
@@ -397,6 +403,13 @@ function compileRosterEffectiveHash(
 }
 
 const ledger = JSON.parse(readFileSync(LEDGER_PATH, "utf8")) as Record<string, unknown>;
+
+/**
+ * The single signed mandate both drains carry, verbatim from the ledger. Two
+ * receipts asserting it independently is how a paraphrase in one of them went
+ * unnoticed; one constant makes any divergence between them impossible.
+ */
+const SIGNED_MANDATE = "Kimi 2.7 implementation; Fable 5 + Kimi 3 audit; Codex DT.";
 // EXCISED (SEV-2): the parsed `baseline` document, with its file.
 
 /** Sorted roster + final newline, the hashing convention for these authorities. */
@@ -1680,9 +1693,7 @@ function assertSevDead21Ledger(candidate: typeof ledger): void {
   });
   expect(receipt.source, "receipt.source").toBe("EXECUTED");
   expect(receipt.generatedProjection, "receipt.generatedProjection").toBe("PENDING");
-  expect(receipt.mandate, "receipt.mandate").toBe(
-    "design authority 2.7 implementation; independent audit 5 + design authority 3 audit; independent code audit DT.",
-  );
+  expect(receipt.mandate, "receipt.mandate").toBe(SIGNED_MANDATE);
 
   expect(receipt.hashRecipe, "hashRecipe").toEqual(SEV_DEAD_21_HASH_RECIPE);
 

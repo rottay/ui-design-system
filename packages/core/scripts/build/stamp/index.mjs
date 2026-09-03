@@ -21,8 +21,9 @@
 //   node scripts/builders/write-build-stamp/index.mjs            (writes dist/build-stamp.json)
 //   node scripts/builders/write-build-stamp/index.mjs --dist <dir> --package-root <dir>
 
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { createHash } from 'node:crypto';
+import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 import { computeBuildInputHash } from '../../libraries/build/input-hash/index.mjs';
@@ -41,11 +42,102 @@ function parseArgs(argv) {
   return options;
 }
 
-// Root artifacts a real build always emits. Their absence means `dist/` was not
-// built (or only partially), and stamping it would be a lie.
-const SENTINEL_ARTIFACTS = ['index.js', 'index.cjs', 'index.d.ts'];
+/**
+ * Root artifacts a real build always emits. Their absence means `dist/` was not
+ * built (or only partially), and stamping it would be a lie.
+ *
+ * The set is the package `files` allowlist minus its globs. It used to be three
+ * entries, so a build that produced `index.{js,cjs,d.ts}` and nothing else --
+ * no vertical CSS, no modern engine bundle -- stamped successfully.
+ */
+export const SENTINEL_ARTIFACTS = [
+  'index.js',
+  'index.cjs',
+  'index.d.ts',
+  'styles.css',
+  'modern-engine.css',
+  'rottay.css',
+  'bithire.css',
+  'evnto.css',
+];
 
-export function writeBuildStamp({ packageRoot, dist }) {
+/**
+ * The build session marker.
+ *
+ * `build:stamp` is a first-class npm script, so it can be run against an
+ * arbitrarily old `dist/`: it stamps the CURRENT source hash onto it and the
+ * freshness gate turns green. The gate proved "source now equals source when
+ * stamped", never "dist was produced from that source".
+ *
+ * The build writes this nonce after the bundler step (which empties `dist/`);
+ * the stamp REQUIRES it, embeds it, and deletes it. A standalone `build:stamp`
+ * therefore fails loud, and the nonce cannot be reused for a second stamp.
+ *
+ * The bound is stated rather than implied: chaining `build:session` by hand
+ * would still open one. What that cannot forge is the `distManifest` the stamp
+ * embeds, which pins the exact dist bytes that were stamped and is re-verified
+ * by the freshness gate -- so a forged session over an old dist still has to
+ * match every byte of it against the current source.
+ */
+export const BUILD_SESSION_FILE = '.build-session.json';
+
+export function writeBuildSession({ dist, nonce }) {
+  if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
+  const session = { nonce: nonce ?? createHash('sha256').update(`${process.pid}:${Date.now()}:${Math.random()}`).digest('hex') };
+  writeFileSync(resolve(dist, BUILD_SESSION_FILE), `${JSON.stringify(session, null, 2)}\n`);
+  return session.nonce;
+}
+
+/**
+ * Every shipped file under `dist/`, with its digest. Embedded in the stamp and
+ * re-verified by the gate, so a dist byte mutated after stamping -- or a dist
+ * emptied down to the stamp itself -- is detectable. The gate previously read
+ * only the stamp and never enumerated dist at all.
+ */
+const SHIPPED_DIST = /\.(js|cjs|d\.ts|css)$/;
+
+export function collectDistManifest(dist) {
+  const files = [];
+  const walk = (directory) => {
+    for (const entry of readdirSync(directory, { withFileTypes: true })) {
+      if (entry.name.startsWith('.')) continue;
+      const absolute = join(directory, entry.name);
+      if (entry.isDirectory()) { walk(absolute); continue; }
+      if (!SHIPPED_DIST.test(entry.name)) continue;
+      if (entry.name.endsWith('.d.ts.map')) continue;
+      files.push({
+        path: relative(dist, absolute).split(sep).join('/'),
+        sha256: createHash('sha256').update(readFileSync(absolute)).digest('hex'),
+      });
+    }
+  };
+  if (existsSync(dist) && statSync(dist).isDirectory()) walk(dist);
+  files.sort((left, right) => left.path.localeCompare(right.path));
+  return files;
+}
+
+export function writeBuildStamp({ packageRoot, dist, requireSession = true }) {
+  const sessionPath = resolve(dist, BUILD_SESSION_FILE);
+  let sessionNonce = null;
+  if (requireSession) {
+    if (!existsSync(sessionPath)) {
+      return {
+        ok: false,
+        message:
+          `write-build-stamp: refusing to stamp without a build session marker (${BUILD_SESSION_FILE} in ${dist}). ` +
+          'A stamp written outside a build proves only that the source hash was recomputed, not that dist came ' +
+          'from it. Run the full build: pnpm --filter @rottay/design-system build',
+      };
+    }
+    try {
+      sessionNonce = JSON.parse(readFileSync(sessionPath, 'utf8')).nonce;
+    } catch {
+      sessionNonce = null;
+    }
+    if (typeof sessionNonce !== 'string' || sessionNonce.length === 0) {
+      return { ok: false, message: `write-build-stamp: build session marker at ${sessionPath} is malformed.` };
+    }
+  }
   const missing = SENTINEL_ARTIFACTS.filter((name) => !existsSync(resolve(dist, name)));
   if (missing.length > 0) {
     return {
@@ -74,7 +166,9 @@ export function writeBuildStamp({ packageRoot, dist }) {
     };
   }
   const stamp = {
-    schemaVersion: 2,
+    schemaVersion: 3,
+    buildSession: sessionNonce,
+    distManifest: collectDistManifest(dist),
     producer: '@rottay/design-system',
     producerVersion: pkg.version,
     sourceHash,
@@ -90,12 +184,20 @@ export function writeBuildStamp({ packageRoot, dist }) {
   };
   if (!existsSync(dist)) mkdirSync(dist, { recursive: true });
   writeFileSync(resolve(dist, 'build-stamp.json'), `${JSON.stringify(stamp, null, 2)}\n`);
+  // The nonce is single-use: leaving it behind would let the next standalone
+  // `build:stamp` reuse this build's session and re-stamp a stale dist.
+  if (requireSession) rmSync(sessionPath, { force: true });
   return { ok: true, stamp };
 }
 
 const invokedDirectly = resolve(process.argv[1] ?? '') === resolve(fileURLToPath(import.meta.url));
 if (invokedDirectly) {
   const options = parseArgs(process.argv.slice(2));
+  if (process.argv.includes('--open-session')) {
+    const nonce = writeBuildSession({ dist: options.dist });
+    console.log(`write-build-stamp: build session opened (${nonce.slice(0, 12)})`);
+    process.exit(0);
+  }
   const result = writeBuildStamp(options);
   if (!result.ok) {
     console.error(result.message);

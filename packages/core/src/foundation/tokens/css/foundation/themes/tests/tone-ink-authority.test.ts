@@ -70,22 +70,35 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const THEME_CSS = readFileSync(resolve(HERE, '../default/index.css'), 'utf8');
 
 /**
- * The pre-authority mixes, per vertical, exactly as callout.css resolved them
- * before P1. Recorded as literals so this file is the baseline: if the seeds or
- * the mix ratios move, this goes red rather than re-deriving to agree.
+ * The per-vertical mixes, recorded as literals so this file is the baseline: if
+ * the seeds or the mix ratios move, this goes red rather than re-deriving to
+ * agree.
+ *
+ * C0 re-anchor, and the shape of the move is the point. The pre-P1 table used
+ * the DS default neutral `#171717` for all three verticals, which was true only
+ * while no vertical authored its own. Two now do: bithire authors
+ * `--ds-color-neutral-900: #191919`, and rottay -- a dark-DEFAULT vertical --
+ * resolves the neutral partner to its own light ink `#ECECEC`, which is what an
+ * ink-over-a-tinted-well mix must do when the well is dark. Rottay's info seed
+ * likewise reads its own dark-block `#60A5FA` rather than the pre-P1 `#3B82F6`.
+ * Evnto is byte-unchanged, which is the control: this is the derivation
+ * following each vertical's channels, not a global constant moving. The ratio
+ * of every mix (55/45, 78/22, 60/40) is identical to the pre-P1 table, so no
+ * mix ratio moved -- and the `three distinct values` test below still proves
+ * the authority did not flatten.
  */
 const EXPECTED_LIGHT = {
   bithire: {
     '--ds-color-info-ink': '#3A6FB0',
-    '--ds-color-warning-ink': 'color-mix(in srgb, #D6A04E 55%, #171717 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #C5504C 78%, #171717 22%)',
-    '--ds-color-success-ink': 'color-mix(in srgb, #327CA8 60%, #171717 40%)',
+    '--ds-color-warning-ink': 'color-mix(in srgb, #D6A04E 55%, #191919 45%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #C5504C 78%, #191919 22%)',
+    '--ds-color-success-ink': 'color-mix(in srgb, #327CA8 60%, #191919 40%)',
   },
   rottay: {
-    '--ds-color-info-ink': '#3B82F6',
-    '--ds-color-warning-ink': 'color-mix(in srgb, #F59E0B 55%, #171717 45%)',
-    '--ds-color-error-ink': 'color-mix(in srgb, #EF4444 78%, #171717 22%)',
-    '--ds-color-success-ink': 'color-mix(in srgb, #22C55E 60%, #171717 40%)',
+    '--ds-color-info-ink': '#60A5FA',
+    '--ds-color-warning-ink': 'color-mix(in srgb, #F59E0B 55%, #ECECEC 45%)',
+    '--ds-color-error-ink': 'color-mix(in srgb, #F87171 78%, #ECECEC 22%)',
+    '--ds-color-success-ink': 'color-mix(in srgb, #22C55E 60%, #ECECEC 40%)',
   },
   evnto: {
     '--ds-color-info-ink': '#475569',

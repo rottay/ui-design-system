@@ -16,9 +16,11 @@
  * legacy arm, so it still wins over the engine baseline together with later source
  * order. A @layer wrapper is intentionally NOT used.
  *
- * styles/{index,modern,rottay,bithire,evnto}.css are committed to git.
+ * artifacts/generated/css/{all-verticals,engines/modern,verticals/rottay,
+ * verticals/bithire,verticals/evnto}/index.css are committed to git.
  * They are the gate-checked source-of-truth mirrors; the npm tarball ships the
- * dist/ copies only (package.json `files` excludes styles/). dist and styles
+ * dist/ copies only (package.json `files` lists dist/ artifacts;
+ * artifacts/generated/ is not in the allowlist). dist and artifacts/generated/css
  * copies are written from the same in-memory bundle, so each shipped dist file
  * is byte-identical to its committed mirror. dist/modern-engine.css is the
  * shipping target of the ./styles/modern export and therefore receives the
@@ -28,8 +30,8 @@
  * writing.
  *
  * Usage:
- *   node scripts/build/verticals/css-build/index.mjs           # write dist/ and styles/ bundles
- *   node scripts/build/verticals/css-build/index.mjs --check    # fail if any styles/*.css is stale
+ *   node scripts/build/verticals/css-build/index.mjs           # write dist/ and artifacts/generated/css/ bundles
+ *   node scripts/build/verticals/css-build/index.mjs --check    # fail if any committed mirror under artifacts/generated/css is stale
  *
  * Run after build:modern-css so dist/modern-engine.css exists; both modes fail
  * loudly (exit 1) if it is missing.

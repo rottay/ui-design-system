@@ -45,6 +45,12 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+import {
+  buildChecklists,
+  loadCanon,
+  loadFacts,
+  serialize as serializeChecklists,
+} from '../root-checklists/index.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 /** The programme folder stays under `scripts/`; only the manifest graduated. */
@@ -920,7 +926,11 @@ export function build() {
   const byTenant = Object.fromEntries(TENANTS.map((t) => [t, declarationsOf(artifactText[t])]));
 
   const surface = surfaceParity(byTenant);
-  const checklists = JSON.parse(readFileSync(path.join(PACKAGE_ROOT, 'artifacts/generated/manifest/cascade/coverage/index.json'), 'utf8'));
+  // Built in memory, not read from disk. The coverage artifact is gitignored
+  // and mirror-parity does not own it, so this bare read (the sibling read at
+  // the tracked output below IS guarded) made a generator depend on an artifact
+  // a clean checkout does not have -- and it threw an uncaught ENOENT there.
+  const checklists = JSON.parse(serializeChecklists(buildChecklists(loadFacts(), loadCanon())));
 
   return {
     $generatedBy: 'scripts/generate/tokens/manifest/mirror-parity/index.mjs',

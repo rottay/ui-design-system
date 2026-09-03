@@ -379,11 +379,28 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_F4A6_TEXT_PAGE_ROOT_CONFIG_DIGEST
     );
-    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+    // C0 re-anchor: a3ba2e479 removed `itemShadowSelected` and `focusRing` from
+    // the `segmented` schema -- the two channels whose emitters, artifact
+    // declarations and skin reads were already retired, leaving only the
+    // declarations behind (the same pair the theme-parity obligation carries as
+    // DELETE_DECLARATION). This is a NARROWING of the closed field set, the
+    // first one since the dark-token narrowing, and the ratchet keeps every
+    // superseded value asserted rather than replacing them.
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).not.toBe(
       POST_P0_STATUS_SEEDS_DOCUMENT_DIGEST
     );
-    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).not.toBe(
       POST_P0_STATUS_SEEDS_CONFIG_DIGEST
+    );
+    const POST_SEGMENTED_RETIREMENT_DOCUMENT_DIGEST =
+      "sha256-c35633aea90299acc841fc8e62221622e44083941761dfd4e71d80ef642f5c45";
+    const POST_SEGMENTED_RETIREMENT_CONFIG_DIGEST =
+      "sha256-576975600674f58a3e3f2a1a8d12e51f6ff0294df84da40c7e379e7c72ef9188";
+    expect(TENANT_THEME_DOCUMENT_SCHEMA_DIGEST).toBe(
+      POST_SEGMENTED_RETIREMENT_DOCUMENT_DIGEST
+    );
+    expect(TENANT_THEME_CONFIG_SCHEMA_DIGEST).toBe(
+      POST_SEGMENTED_RETIREMENT_CONFIG_DIGEST
     );
   });
 
@@ -542,11 +559,28 @@ describe("digest identity across the canonicalization extraction", () => {
     expect(artifact.digest).not.toBe(PINNED.populatedSimpleDigest);
     expect(artifact.digest).not.toBe(POST_INTERACTION_FLOOR_DIGEST);
     expect(artifact.digest).not.toBe(POST_ISO_DELTA_DIGEST);
-    expect(artifact.digest).toBe(POST_TENANT_SEED_DERIVATION_DIGEST);
+    // C0 re-anchor, fifth declared move: bithire's chrome grounds were rewired
+    // from per-field literals onto cascade roots, so the compiled artifact
+    // carries the alias where it carried the colour. The resolved colours are
+    // unchanged -- the roots declare them in the same blocks -- and the census
+    // below still pins the values two-sided, so this is a move in HOW the same
+    // paint is expressed, not in what a customer sees. Every prior pin stays
+    // asserted, so this reads as a fifth declared move rather than a refresh.
+    expect(artifact.digest).not.toBe(POST_TENANT_SEED_DERIVATION_DIGEST);
+    const POST_CASCADE_ROOT_CHROME_DIGEST =
+      "sha256-c1f17c868ecab5efa9c4de51c46153c74c0080a0c049d6967a6c2d33ee9f1bba";
+    expect(artifact.digest).toBe(POST_CASCADE_ROOT_CHROME_DIGEST);
 
     // Cause 2, two-sided. What the tenant authored survives the subtraction...
     expect(artifact.variables["--ds-color-primary"]).toBe("#0F766E");
-    expect(Object.keys(artifact.variables)).toHaveLength(66);
+    // 66 -> 65: `--ds-button-primary-bg` left the delta. Both the tenant and
+    // the bithire baseline now emit the same alias for it -- the channel reads
+    // `--ds-color-primary`, which the delta DOES carry -- so the ISO
+    // subtraction removes it while the tenant seed still reaches it through the
+    // root. Pinned two-sided so a channel that stopped tracking the seed and a
+    // channel that merely stopped being restated cannot be confused.
+    expect(Object.keys(artifact.variables)).toHaveLength(65);
+    expect(artifact.variables["--ds-button-primary-bg"]).toBeUndefined();
 
     const baseline = compileTheme(FIRST_PARTY_THEMES.bithire, {
       tenantSlug: IDENTITY.slug,
@@ -652,7 +686,15 @@ describe("digest identity across the canonicalization extraction", () => {
     // proof that they LOSE rather than a vacuous absence.
     const bithireDark = FIRST_PARTY_THEMES.bithire.modes?.dark?.chrome?.sidebar;
     expect(bithireDark?.bg).toBe("#0a0f18");
-    expect(bithireDark?.text).toBe("#9aacbf");
+    // Alias + resolution: the dark ink reads the text root, and the root's dark
+    // reading is the colour this block has always pinned.
+    expect(bithireDark?.text).toBe("var(--ds-color-text-secondary)");
+    expect(
+      FIRST_PARTY_THEMES.bithire.modes?.dark?.palette?.textSecondaryColor ??
+        compileTheme(FIRST_PARTY_THEMES.bithire, { tenantSlug: IDENTITY.slug })
+          .modeBlocks?.find((block) => block.mode === "dark")
+          ?.cssVariables["--ds-color-text-secondary"],
+    ).toBe("#9aacbf");
     const darkDelta = artifact.modeDeltas?.find((d) => d.mode === "dark");
     expect(darkDelta, "the document still produces a dark delta").toBeDefined();
     expect(darkDelta!.variables["--ds-sidebar-bg"]).toBeUndefined();

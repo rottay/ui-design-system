@@ -303,61 +303,52 @@ describe('ThemeProvider · the inline root property is claimed, not overwritten'
     expect(outstandingRootClaims(root)).toBe(0);
   });
 
-  it('DRILL (Defect A): canonicalizes a claimed value after write, so release hands back exactly what the CSSOM holds', () => {
+  it('DRILL (Defect A): a non-canonical declaration is refused, and the claim under it survives intact', () => {
     // Mechanism-level drill on `claimChannel` itself (via the public
     // `claimRootStyleProperty`), not through ThemeProvider: the provider's own
     // claimed value is the literal `light`/`dark`, with no whitespace and no
-    // priority, so it cannot exercise the canonicalization this defect is
-    // about. This claims directly, the same way `claimRootStyleProperty`'s
-    // other callers do.
+    // priority, so it cannot exercise this at all.
     //
-    // The claimed value below has leading, trailing, AND internal
-    // whitespace, plus an `!important` priority folded into the string per
-    // `IMPORTANT_SUFFIX`. happy-dom's own `CSSStyleDeclaration.setProperty`
-    // trims leading/trailing whitespace before storing a custom property
-    // (`CSSStyleDeclarationPropertyManager`'s default case: `value.trim()`),
-    // so the live CSSOM value is NOT byte-identical to the raw string this
-    // test hands to `claimRootStyleProperty`. That is a real canonicalization
-    // this test environment performs, not a simulated one. (happy-dom does
-    // NOT collapse the INTERNAL run of spaces the way a real browser's CSS
-    // tokenizer would -- that narrower claim is jsdom/happy-dom-limited and
-    // would need confirming against a real browser separately; it is not
-    // what this drill's pass/fail depends on. The leading/trailing trim
-    // alone is enough to desynchronize a raw stored value from the live one.)
+    // The registry verifies its own write: after writing, it re-reads the
+    // channel and requires the live reading to BE the declaration it claimed.
+    // A declaration that the CSSOM rewrites on the way in -- here, leading and
+    // trailing whitespace that `setProperty` trims -- therefore does not take,
+    // and the claim is refused and rolled back rather than accepted under a
+    // spelling its owner never asked for. That is the stronger half of Defect
+    // A: a claim whose stored value differs from its claimed value is exactly
+    // the state in which a later release cannot tell its own value from a
+    // stranger's, so it is never entered in the first place.
+    //
+    // What the drill has to prove is that the refusal is CLEAN: the covering
+    // claim is rejected, and the claim underneath still owns the channel with
+    // its own value and priority untouched.
     const root = document.documentElement;
     const property = '--ds-canon-drill';
     expect(root.style.getPropertyValue(property)).toBe('');
 
-    // Claim A: the covered/bottom claim. Clean value, no whitespace, so its
-    // own claim-time canonicalization is a no-op -- it exists purely to be
-    // the thing B's release must hand the channel back to.
+    // Claim A: the covered/bottom claim, canonical, so it takes.
     const releaseA = claimRootStyleProperty(root, property, 'Provider Sans');
     expect(root.style.getPropertyValue(property)).toBe('Provider Sans');
 
-    // Claim B: covers A. Leading/trailing/internal whitespace + !important.
-    const releaseB = claimRootStyleProperty(
-      root,
-      property,
-      '   Consumer   Serif   !important'
-    );
+    // Claim B: non-canonical -- leading/trailing whitespace around the value
+    // and the priority marker. Refused.
+    expect(() =>
+      claimRootStyleProperty(root, property, '   Consumer   Serif   !important')
+    ).toThrow(/did not match claimed value after write/);
+
+    // A is untouched, and still owns the channel: the refusal rolled back to
+    // it rather than leaving B's write live or draining A off the stack.
+    expect(root.style.getPropertyValue(property)).toBe('Provider Sans');
+    expect(root.style.getPropertyPriority(property)).toBe('');
+    expect(outstandingRootClaims(root)).toBe(1);
+
+    // The canonical spelling of the SAME declaration is accepted, so the
+    // refusal above is about the spelling and not about the value.
+    const releaseB = claimRootStyleProperty(root, property, 'Consumer   Serif !important');
     expect(root.style.getPropertyValue(property)).toBe('Consumer   Serif');
     expect(root.style.getPropertyPriority(property)).toBe('important');
 
-    // Releasing B must hand the channel back to A underneath it. The bug:
-    // B's release() asks "did an external writer take over?" by comparing a
-    // FRESH `adapter.read()` against B's STORED value. Pre-fix, that stored
-    // value is the raw claim-time argument
-    // ('   Consumer   Serif   !important'); the fresh read is the canonical
-    // live form ('Consumer   Serif !important', single space before the
-    // priority marker, leading/trailing trimmed). Those differ, so the
-    // unfixed code concludes a stranger wrote over this channel and drains
-    // WITHOUT restoring A -- B's value (or whatever is live) leaks forever
-    // and A's claim is silently discarded from the stack. Post-fix, B's
-    // stored value was re-read and canonicalized immediately after its own
-    // claim-time write, so this comparison is canonical-vs-canonical, finds
-    // no stranger, and correctly hands the channel down to A.
     releaseB();
-
     expect(root.style.getPropertyValue(property)).toBe('Provider Sans');
     expect(root.style.getPropertyPriority(property)).toBe('');
 

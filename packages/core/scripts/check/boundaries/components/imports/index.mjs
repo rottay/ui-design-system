@@ -30,10 +30,40 @@ import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/
 const HERE = dirname(fileURLToPath(import.meta.url));
 const CORE_ROOT = findPackageRoot(HERE);
 const BASELINE_PATH = join(HERE, "baseline/index.json");
+const OBLIGATIONS_PATH = join(HERE, "obligations/index.json");
+
+function argValue(flag) {
+  const index = process.argv.indexOf(flag);
+  return index >= 0 && process.argv[index + 1] ? process.argv[index + 1] : null;
+}
+
+/**
+ * CORPUS RESOLUTION, FAIL-CLOSED.
+ *
+ * This gate hardcoded a sibling-of-workspace path and never read
+ * `APP_BITHIRE_ROOT`, the variable `ci.yml` exports for exactly this purpose.
+ * On a runner that path does not exist, and `if (!existsSync(root)) continue`
+ * emptied all six censuses -- so the gate printed "tighten opportunity: 56" and
+ * exited 0. It has never run against a corpus in CI.
+ *
+ * Precedence is the one already reviewed in
+ * `boundaries/applications/styles/index.mjs`: `--app-root` > `APP_BITHIRE_ROOT`
+ * > sibling of the workspace. An explicit-but-broken root fails; it never falls
+ * back, because a fallback is how a gate ends up auditing the wrong tree.
+ */
+const nonEmpty = (value) => (typeof value === "string" && value.trim() !== "" ? value : null);
+const APP_BITHIRE_ROOT = resolve(
+  nonEmpty(argValue("--app-root"))
+    ?? nonEmpty(process.env.APP_BITHIRE_ROOT)
+    ?? resolve(CORE_ROOT, "../../../app-bithire"),
+);
+
+/** Stable logical prefix for baseline keys, independent of where the corpus is mounted. */
+const CORPUS_KEY_PREFIX = "app-bithire";
 
 /** Sibling application repositories scanned by this gate (gat-09 precedent). */
 const APPLICATIONS = {
-  "app-bithire": resolve(CORE_ROOT, "../../../app-bithire/src"),
+  [CORPUS_KEY_PREFIX]: join(APP_BITHIRE_ROOT, "src"),
 };
 
 /** DS-shipped class anatomy detectable in application selectors. */
@@ -438,8 +468,224 @@ function evaluateCategory(name, current, baselineEntries, failures) {
   }
 }
 
+/* -------------------------------------------------------------------------- */
+/* ds-module-boundary                                                         */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The Law-1 member that did not exist anywhere in this repository: does the
+ * application reach past the DS's PUBLISHED contract?
+ *
+ * The five existing categories measure class anatomy, white-label reachability
+ * and supplier leakage. None of them classifies an application's module
+ * specifiers against `package.json#exports`, which is the boundary the
+ * ownership contract actually states. The map is read live rather than copied,
+ * so a subpath the package stops publishing becomes a violation the same day.
+ *
+ * Ships at ceiling 0: measured today, the corpus imports ten distinct DS
+ * subpaths and every one is declared, with zero `/dist/` and zero `/src/`
+ * reaches. A real falsifiable law from day one, with no debt absorbed.
+ */
+const DS_PACKAGE = "@rottay/design-system";
+const DEEP_REACH = /(^|\/)(dist|src|node_modules)(\/|$)/;
+
+export function declaredExportSubpaths(exportsMap) {
+  const keys = [];
+  const walk = (node) => {
+    if (!node || typeof node !== "object") return;
+    for (const key of Object.keys(node)) {
+      if (key.startsWith(".")) keys.push(key);
+    }
+  };
+  walk(exportsMap);
+  return keys;
+}
+
+export function classifyDsSpecifier(specifier, declaredSubpaths) {
+  if (specifier === DS_PACKAGE) return "public";
+  if (!specifier.startsWith(`${DS_PACKAGE}/`)) return null;
+  const subpath = `.${specifier.slice(DS_PACKAGE.length)}`;
+  if (DEEP_REACH.test(subpath)) return "deep-reach";
+  for (const declared of declaredSubpaths) {
+    if (declared === subpath) return "public";
+    if (declared.includes("*")) {
+      const [head, tail] = declared.split("*");
+      if (subpath.startsWith(head) && subpath.endsWith(tail) && subpath.length >= head.length + tail.length) {
+        return "public";
+      }
+    }
+  }
+  return "undeclared-subpath";
+}
+
+export function censusDsSpecifiers(source, declaredSubpaths, { css = false } = {}) {
+  const text = css ? stripCssComments(source) : stripTsComments(source);
+  const found = [];
+  const patterns = css
+    ? [/@import\s+(['"])([^'"]+)\1/g, /url\(\s*(['"])([^'"]+)\1\s*\)/g]
+    : [
+        /\bfrom\s*(['"])([^'"]+)\1/g,
+        /\bimport\s*(['"])([^'"]+)\1/g,
+        /\brequire\s*\(\s*(['"])([^'"]+)\1\s*\)/g,
+        /\bimport\s*\(\s*(['"])([^'"]+)\1\s*\)/g,
+      ];
+  for (const pattern of patterns) {
+    for (const match of text.matchAll(pattern)) {
+      const verdict = classifyDsSpecifier(match[2], declaredSubpaths);
+      if (verdict && verdict !== "public") found.push({ specifier: match[2], verdict });
+    }
+  }
+  return found;
+}
+
+function* moduleFiles(root) {
+  for (const entry of readdirSync(root)) {
+    const absolute = join(root, entry);
+    const info = statSync(absolute);
+    if (info.isDirectory()) {
+      if (entry === "node_modules" || entry.startsWith(".")) continue;
+      yield* moduleFiles(absolute);
+    } else if (/\.(ts|tsx|js|jsx|mjs|cjs)$/.test(entry)) {
+      yield absolute;
+    }
+  }
+}
+
+/** Site list -> id->count map, the shape every category census returns. */
+export function tally(sites) {
+  const map = new Map();
+  for (const site of sites) map.set(site, (map.get(site) ?? 0) + 1);
+  return map;
+}
+
+export function censusDsModuleBoundary() {
+  const manifest = JSON.parse(readFileSync(join(CORE_ROOT, "package.json"), "utf8"));
+  const declaredSubpaths = declaredExportSubpaths(manifest.exports);
+  const sites = [];
+  for (const [application, root] of Object.entries(APPLICATIONS)) {
+    const appPrefix = resolve(root, "..");
+    for (const file of moduleFiles(root)) {
+      const relativeFile = `${application}/${relative(appPrefix, file)}`;
+      for (const { specifier } of censusDsSpecifiers(readFileSync(file, "utf8"), declaredSubpaths)) {
+        sites.push(`${relativeFile} :: ${specifier}`);
+      }
+    }
+    for (const file of cssFiles(root)) {
+      const relativeFile = `${application}/${relative(appPrefix, file)}`;
+      for (const { specifier } of censusDsSpecifiers(readFileSync(file, "utf8"), declaredSubpaths, { css: true })) {
+        sites.push(`${relativeFile} :: ${specifier}`);
+      }
+    }
+  }
+  return sites;
+}
+
+/* -------------------------------------------------------------------------- */
+/* obligations                                                                */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * Bounded, expiring cross-repo obligations. NOT the decrease-only baseline.
+ *
+ * Removing the false green surfaces ten pre-existing signatures in
+ * `app-bithire/src/components/landing/**` that this repository cannot fix. They
+ * may not enter `baseline.categories`, which is the decrease-only ceiling, and
+ * they may not be excluded: the landing CSS reads `var(--ds-*)` 96 times, a
+ * sibling landing file is already baselined in the same category, and the
+ * landing surface is tenant-branded at runtime.
+ *
+ * So they are recorded with an owner, a reason, the corpus SHA they were
+ * measured at, and an EXECUTABLE expiry. An obligation is exact in both
+ * directions: growth is a regression and shrinkage is an unrecorded partial
+ * drain, so the ledger can neither absorb new debt nor fossilise.
+ */
+export function loadObligations() {
+  if (!existsSync(OBLIGATIONS_PATH)) return { corpusPin: null, obligations: [] };
+  return JSON.parse(readFileSync(OBLIGATIONS_PATH, "utf8"));
+}
+
+export function resolveCorpusSha(appRoot) {
+  const headFile = resolve(appRoot, ".git/HEAD");
+  if (!existsSync(headFile)) return null;
+  const head = readFileSync(headFile, "utf8").trim();
+  if (!head.startsWith("ref: ")) return head;
+  const refFile = resolve(appRoot, ".git", head.slice(5));
+  return existsSync(refFile) ? readFileSync(refFile, "utf8").trim() : null;
+}
+
+export function evaluateObligations(ledger, censusById, corpusSha) {
+  const failures = [];
+  const consumed = new Set();
+  const entries = ledger.obligations ?? [];
+  if (entries.length === 0) return { failures, consumed };
+
+  if (!corpusSha) {
+    failures.push(
+      "[obligations] the corpus SHA could not be resolved, so the pin cannot be verified; " +
+        "an obligation ledger without a verifiable pin is an unbounded excuse",
+    );
+  } else if (ledger.corpusPin !== corpusSha) {
+    failures.push(
+      `[obligations] corpus pin moved from ${ledger.corpusPin} to ${corpusSha}; ` +
+        "every obligation must be re-derived or drained",
+    );
+  }
+
+  for (const entry of entries) {
+    for (const field of ["id", "category", "owner", "reason", "measuredAt", "expiresWhen"]) {
+      if (typeof entry[field] !== "string" || entry[field].trim() === "") {
+        failures.push(`[obligations] ${entry.id ?? "<unnamed>"} is missing ${field}`);
+      }
+    }
+    if (typeof entry.count !== "number") {
+      failures.push(`[obligations] ${entry.id ?? "<unnamed>"} is missing an exact count`);
+      continue;
+    }
+    const live = censusById.get(entry.id);
+    if (live === undefined) {
+      failures.push(`[obligations] drained; delete the entry: ${entry.id}`);
+      continue;
+    }
+    if (live !== entry.count) {
+      failures.push(`[obligations] count mismatch for ${entry.id}: expected ${entry.count}, measured ${live}`);
+      continue;
+    }
+    consumed.add(entry.id);
+  }
+  return { failures, consumed };
+}
+
 function main() {
   const check = process.argv.includes("--check");
+
+  // FAIL-CLOSED PREFLIGHT. A blocking gate that returns 0 because it could not
+  // find its corpus is green for the worst possible reason: it did not look.
+  // `--optional` is deliberately absent -- `validateManifest` forbids it in a
+  // blocking run array, so offering it here would only invite the half-state.
+  if (!existsSync(APP_BITHIRE_ROOT)) {
+    console.error(
+      `application-boundary-gate: corpus missing — ${APP_BITHIRE_ROOT} is not checked out.`,
+    );
+    console.error("  Check out app-bithire beside ui-design-system, pass --app-root <dir>,");
+    console.error("  or export APP_BITHIRE_ROOT as the CI workflow does.");
+    process.exit(1);
+  }
+  if (!statSync(APP_BITHIRE_ROOT).isDirectory() || !existsSync(join(APP_BITHIRE_ROOT, "src"))) {
+    console.error(
+      `application-boundary-gate: corpus at ${APP_BITHIRE_ROOT} has no src/ — it is not an application checkout.`,
+    );
+    process.exit(1);
+  }
+
+  // Print WHAT was audited. A cross-repo gate whose corpus is invisible cannot
+  // be reviewed: the reader has no way to tell which revision produced the
+  // numbers below.
+  const corpusSha = resolveCorpusSha(APP_BITHIRE_ROOT);
+  console.log(`application-boundary-gate: corpus ${APP_BITHIRE_ROOT}`);
+  console.log(
+    `application-boundary-gate: corpus SHA ${corpusSha ?? "unavailable (no .git — exported tree)"}`,
+  );
+
   const current = censusApplicationReaches();
   const baseline = loadBaseline();
   const { added, grown, removed } = diffCensus(current, baseline.reaches);
@@ -462,13 +708,40 @@ function main() {
 
   const failures = [];
   const categories = censusBoundaryCategories();
+  categories["ds-module-boundary"] = tally(censusDsModuleBoundary());
+  const liveById = new Map();
   for (const [name, categoryCensus] of Object.entries(categories)) {
+    for (const [id, count] of categoryCensus) liveById.set(id, count);
     evaluateCategory(
       name,
       categoryCensus,
       baseline.categories?.[name],
       failures
     );
+  }
+
+  // Obligations are consulted AFTER the baseline diff, never inside it. An id
+  // present in both files is an error: the ledger may not be used to launder
+  // new debt into the decrease-only ceiling.
+  const ledger = loadObligations();
+  const baselinedIds = new Set(
+    Object.values(baseline.categories ?? {}).flatMap((entries) => Object.keys(entries ?? {})),
+  );
+  for (const entry of ledger.obligations ?? []) {
+    if (baselinedIds.has(entry.id)) {
+      failures.push(`[obligations] ${entry.id} also appears in baseline.categories; it is not a ceiling`);
+    }
+  }
+  const { failures: obligationFailures, consumed } = evaluateObligations(ledger, liveById, corpusSha);
+  failures.push(...obligationFailures);
+  const remaining = failures.filter(
+    (failure) => !(/^\[[a-z-]+\] new: /.test(failure) && consumed.has(failure.replace(/^\[[a-z-]+\] new: /, "").replace(/ \(x\d+\)$/, ""))),
+  );
+  failures.length = 0;
+  failures.push(...remaining);
+  for (const id of consumed) {
+    const entry = ledger.obligations.find((candidate) => candidate.id === id);
+    console.log(`  obligation (owner ${entry.owner}, expires on ${entry.expiresWhen}): ${id} = ${entry.count}`);
   }
 
   if (newReaches.length > 0 || failures.length > 0) {

@@ -4,7 +4,7 @@
   "sourceId": "DS-IMP-106",
   "scope": "ParticleField plus governed Canvas and WebGL lifecycle hardening",
   "package": "@rottay/design-system@2.19.36",
-  "sourceFingerprint": "1f9937cd1737707cb38834e3a70628a39d8033cdc8d32e5c4202124b4f2e270c",
+  "sourceFingerprint": "bc4a16f8349739d24cb94e4e6cc43f80dd88764144c3cfb6f876f8497d73df45",
   "structurallyPassed": true,
   "completionEligible": false,
   "checks": {
@@ -37,7 +37,7 @@
       "certifiedEffects": 1
     },
     "realBrowserPerformanceAndBundle": {
-      "status": "pass",
+      "status": "pending",
       "summary": {
         "reportSha256": "8d164797039ee1bb139aeb287e8764d8f81c0f1a1b44548329b79dab51690ea1",
         "passedTests": 8,
@@ -48,7 +48,8 @@
     }
   },
   "pending": [
-    "Phase 2C remains locked without structured owner GO"
+    "Phase 2C remains locked without structured owner GO",
+    "the sealed browser receipt is superseded and covers 1f9937cd1737707cb38834e3a70628a39d8033cdc8d32e5c4202124b4f2e270c, not the live bc4a16f8349739d24cb94e4e6cc43f80dd88764144c3cfb6f876f8497d73df45; cra-15/browser-receipt-superseded-by-canonical-path-refactor holds it open for C1 (RECAPTURE_INTO_A_LIVE_OWNER)"
   ],
   "governance": {
     "sharedContinuousRuntimeBudget": 1,

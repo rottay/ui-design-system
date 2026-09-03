@@ -28,6 +28,30 @@ import { FIRST_PARTY_THEMES } from "../ts/presentation/brand-themes";
 import { rottayBrandTheme } from "../ts/presentation/brand-themes/rottay";
 
 const ROOT = process.cwd();
+
+/**
+ * A mode-scoped root reading, from the shipped artifact. Several typed chrome
+ * fields moved from a per-mode literal onto a cascade root, so the divergence
+ * they used to state directly is now stated by the root they read: the alias is
+ * one string in both modes and the ROOT carries the two values. Both halves are
+ * asserted wherever that happened, which keeps the exact colours pinned.
+ */
+function rootValue(slug: string, mode: "dark" | "light", channel: string): string {
+  const css = readFileSync(
+    join(ROOT, `src/foundation/tokens/css/facade/artifacts/${slug}/index.css`),
+    "utf8",
+  );
+  const declarations = [...css.matchAll(new RegExp(`^\\s*${channel}:\\s*([^;]+);`, "gm"))].map(
+    (match) => match[1].trim(),
+  );
+  // The base block is the vertical's default mode; rottay's default is dark, so
+  // the first reading is dark and the second is the light overlay.
+  const index = mode === "dark" ? 0 : 1;
+  if (declarations.length < 2) {
+    throw new Error(`${channel} must be declared for both modes in ${slug}`);
+  }
+  return declarations[index];
+}
 // EXCISED (SEV-2): `ARTIFACTS_DIR` — its only readers were the deleted
 // extension helpers below.
 const CORE_SRC = join(ROOT, "src");
@@ -375,18 +399,23 @@ describe("C2 targets live in typed owners", () => {
       rottayBrandTheme.modes.light?.chrome?.controls?.buttonDefault
         ?.borderActive
     ).toBe("#C4C4C2");
+    // Alias + resolution: the field now reads the brand root, so the mode
+    // divergence lives on the root and the painted colours are unchanged.
     expect(rottayBrandTheme.chrome?.controls?.buttonGhost?.colorActive).toBe(
-      "#FFFFFF"
+      "var(--ds-color-primary)"
     );
     expect(
       rottayBrandTheme.modes.light?.chrome?.controls?.buttonGhost?.colorActive
-    ).toBe("#0A0A0A");
+    ).toBeUndefined();
+    expect(rootValue("rottay", "dark", "--ds-color-primary")).toBe("#FFFFFF");
+    expect(rootValue("rottay", "light", "--ds-color-primary")).toBe("#0A0A0A");
     expect(rottayBrandTheme.chrome?.controls?.buttonText?.colorHover).toBe(
       "#ECECEC"
     );
     expect(
       rottayBrandTheme.modes.light?.chrome?.controls?.buttonText?.colorHover
-    ).toBe("#1A1A1A");
+    ).toBe("var(--ds-color-text-primary)");
+    expect(rootValue("rottay", "light", "--ds-color-text-primary")).toBe("#1A1A1A");
   });
 
   it("Rottay dark/light card image loading and divider diverge", () => {
@@ -401,7 +430,8 @@ describe("C2 targets live in typed owners", () => {
     );
     expect(
       rottayBrandTheme.modes.light?.chrome?.cardComponent?.imageLoadingActive
-    ).toBe("#0A0A0A");
+    ).toBe("var(--ds-color-primary)");
+    expect(rootValue("rottay", "light", "--ds-color-primary")).toBe("#0A0A0A");
     expect(rottayBrandTheme.chrome?.layout?.dividerColor).toBe("#2A2A2F");
     expect(rottayBrandTheme.modes.light?.chrome?.layout?.dividerColor).toBe(
       "#E5E5E3"
@@ -419,7 +449,8 @@ describe("C2 targets live in typed owners", () => {
     expect(
       rottayBrandTheme.modes.light?.chrome?.controls?.segmented
         ?.itemColorSelected
-    ).toBe("#1A1A1A");
+    ).toBe("var(--ds-color-text-primary)");
+    expect(rootValue("rottay", "light", "--ds-color-text-primary")).toBe("#1A1A1A");
   });
 
   it("Rottay migrated breadcrumb values are in chrome.breadcrumb", () => {

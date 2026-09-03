@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "_comment": "Bounded supersession record for the WO-CRA-15 sealed browser receipt. NOT a ceiling and NOT an exclusion: it authorises exactly ONE (receiptSha256, recordedFingerprint, liveFingerprint) triple. Editing the sealed receipt, editing any of the 14 roster sources, or changing the roster itself moves one of the three pins and the gate is red again. It is exact in the other direction too: while an obligation is open, a run in which the receipt DOES cover the live source is an error, because an obligation that no longer applies is a stale note, and a stale note authorises nothing. It expires by being resolved -- a fresh capture written to a live owner -- never by being tolerated. Obligations are consulted ONLY for the sealed receipt read from disk; a caller-supplied browserEvidenceOverride never reaches them.",
+  "obligations": [
+    {
+      "id": "cra-15/browser-receipt-superseded-by-canonical-path-refactor",
+      "receiptPath": "test-artifacts/craft/cra-15/browser-evidence.json",
+      "receiptSha256": "66d26c6d0041203a6adf57097472f2791fdd30211abf689686f881ac097ccf3e",
+      "recordedFingerprint": "1f9937cd1737707cb38834e3a70628a39d8033cdc8d32e5c4202124b4f2e270c",
+      "liveFingerprint": "bc4a16f8349739d24cb94e4e6cc43f80dd88764144c3cfb6f876f8497d73df45",
+      "ownerLot": "C1",
+      "resolution": "RECAPTURE_INTO_A_LIVE_OWNER",
+      "reason": "The receipt is a real Chromium 149.0.7827.55 production-build capture with a raw Playwright report, and it is historical evidence: it must not be overwritten, and its numbers must not be rewritten. What it can no longer do is certify TODAY's source. Measured history, one row per commit that carried the receipt: d2bc6a6ef / 0a38a362a / ef269d71d recorded 41ed296f and the tree computed 41ed296f; f3720ea87 recorded cd292c5f and the tree computed cd292c5f; b6896c4f6 recorded 1f9937cd while the tree computed bc4a16f8, and b4a435d14 (HEAD) still computes bc4a16f8. So the receipt agreed with its own tree at every commit up to and including f3720ea87, and stopped agreeing at b6896c4f6 -- the structural-refactor reconcile commit, whose own provenance block records workingTreeClean:false with 6228 uncommitted files and showroomBuildId:null. The capture was taken from that in-flight worktree, so 1f9937cd is a coordinate NO commit reproduces and no live run can ever match. Two independent causes are enumerated below: three roster entries were relocated (the fingerprint hashes path\\0content, so a pure move invalidates it) and five changed content. A fresh capture from THIS worktree would reproduce the same defect -- it would pin a coordinate of a dirty tree -- which is why the resolution is a capture into a live owner after the tree freeze, owned outside this lot.",
+      "rosterDriftSinceReceipt": {
+        "lastAgreeingCommit": "f3720ea87",
+        "pathMovedContentIdentical": [
+          "packages/core/src/ui/primitives/display/QRCode/runtime/encoded-symbol/index.tsx -> packages/core/src/components/primitives/display/qr-code/runtime/encoded-symbol/index.tsx",
+          "packages/core/src/ui/primitives/overlay/Watermark/runtime/canvas-pattern/index.ts -> packages/core/src/components/primitives/overlay/watermark/runtime/canvas-pattern/index.ts"
+        ],
+        "pathMovedAndContentChanged": [
+          "packages/core/src/ui/patterns/visualization/charts/runtime/exporting/foundation/file/index.ts -> packages/core/src/components/patterns/visualization/charts/runtime/exporting/foundation/file/index.ts"
+        ],
+        "contentChangedInPlace": [
+          "packages/core/src/infrastructure/runtime/effects/runtime/registry/index.ts",
+          "packages/showroom/e2e/responsive/particle-runtime.spec.ts",
+          "packages/showroom/e2e/responsive/spatial-runtime.spec.ts",
+          "packages/core/src/graphics/motion/react/presentation/effects/particles/runtime/canvas/tests/ParticleField.test.tsx"
+        ],
+        "unchanged": 7,
+        "rosterSize": 14
+      },
+      "expiry": {
+        "kind": "live-fingerprint-change",
+        "note": "Fires the moment the live fingerprint stops being bc4a16f8 -- that is, on any edit to any of the 14 REQUIRED_SOURCE_ASSERTIONS paths or to the roster itself -- and also the moment the sealed receipt's bytes stop hashing to 66d26c6d. Neither anchor is decorative: the gate recomputes both on every run with no guard, so this record cannot outlive the state it describes."
+      }
+    }
+  ]
+}

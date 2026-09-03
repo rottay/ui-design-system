@@ -1,5 +1,11 @@
 import assert from "node:assert/strict";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import test from "node:test";
+
+import { packageRoot as findPackageRoot } from "../../../../../libraries/repo-root/index.mjs";
+import { evaluateObligations } from "./index.mjs";
 
 import {
   auditDataOnlyProjections,
@@ -450,4 +456,143 @@ test("mutant: a CSS field disguised as data-only is red", () => {
     rerouted.violations.join("\n"),
     /chrome\.cardComponent\.anatomy: resolves to BrandTableChrome\.anatomy, not rostered BrandCardChrome\.anatomy/
   );
+});
+
+/* -------------------------------------------------------------------------- */
+/* transitional obligations                                                   */
+/* -------------------------------------------------------------------------- */
+
+/**
+ * The instrument that replaced an opaque ceiling for
+ * `declared-but-unemitted.BrandSegmentedChrome`. A ceiling would have made the
+ * red vanish and recorded nothing; these drills pin that the obligation is
+ * exact, expires structurally, and cannot be used as a second baseline.
+ */
+const HERE = dirname(fileURLToPath(import.meta.url));
+const CORE_ROOT = findPackageRoot(HERE);
+const ledger = JSON.parse(readFileSync(join(HERE, "obligations/index.json"), "utf8"));
+const baseline = JSON.parse(readFileSync(join(HERE, "baseline/index.json"), "utf8"));
+
+const LIVE_FIELDS = new Set([
+  "BrandSegmentedChrome.itemShadowSelected",
+  "BrandSegmentedChrome.focusRing",
+]);
+const options = { resolveOwner: () => LIVE_FIELDS };
+const COUNTERS = { "declared-but-unemitted.BrandSegmentedChrome": 2 };
+
+test("Q1: the shipped obligation is complete, exact, and anchored to real owners", () => {
+  assert.equal(ledger.obligations.length, 1);
+  const [obligation] = ledger.obligations;
+  for (const field of ["id", "ownerLot", "resolution", "reason", "declaringOwner"]) {
+    assert.ok(typeof obligation[field] === "string" && obligation[field].trim().length > 0, field);
+  }
+  assert.equal(obligation.count, 2);
+  assert.ok(obligation.expiry && typeof obligation.expiry.kind === "string");
+  assert.ok(obligation.legacyEmitterOwners.length >= 1);
+  for (const owner of [...obligation.legacyEmitterOwners, obligation.declaringOwner]) {
+    assert.ok(existsSync(join(CORE_ROOT, owner)), `${owner} must exist while the obligation is open`);
+  }
+  const { failures, consumed } = evaluateObligations(ledger, COUNTERS, options);
+  assert.deepEqual(failures, []);
+  assert.equal(consumed.size, 1);
+});
+
+test("Q3/M8/M10: an obligation id may never also be a ceiling", () => {
+  assert.equal(
+    Object.hasOwn(baseline.ceilings, "declared-but-unemitted.BrandSegmentedChrome"),
+    false,
+    "the opaque-ceiling route must stay closed",
+  );
+  assert.ok(baseline._adoptions, "the reviewed adoption prose must still be in the baseline");
+});
+
+test("M4/M5/M6: the count is exact in BOTH directions", () => {
+  const grew = evaluateObligations(ledger, { "declared-but-unemitted.BrandSegmentedChrome": 3 }, options);
+  assert.match(grew.failures.join(""), /count mismatch: expected 2, measured 3/);
+  const shrank = evaluateObligations(ledger, { "declared-but-unemitted.BrandSegmentedChrome": 1 }, options);
+  assert.match(shrank.failures.join(""), /count mismatch: expected 2, measured 1/);
+  const bogus = {
+    obligations: [{ ...ledger.obligations[0], count: 99 }],
+  };
+  assert.match(evaluateObligations(bogus, COUNTERS, options).failures.join(""), /expected 99, measured 2/);
+});
+
+test("M1/M2/M11: a missing or fabricated legacy owner expires the obligation immediately", () => {
+  const moved = {
+    obligations: [{ ...ledger.obligations[0], legacyEmitterOwners: ["src/infrastructure/compilers/gone/index.ts"] }],
+  };
+  assert.match(
+    evaluateObligations(moved, COUNTERS, options).failures.join(""),
+    /EXPIRED: legacy owner .* no longer exists/,
+  );
+});
+
+test("M3: a moved declaring owner expires the obligation", () => {
+  const renamed = {
+    obligations: [{ ...ledger.obligations[0], declaringOwner: "src/foundation/contracts/composition/tenants/theme/index.ts" }],
+  };
+  assert.match(
+    evaluateObligations(renamed, COUNTERS, options).failures.join(""),
+    /EXPIRED: declaring owner moved/,
+  );
+});
+
+test("M7: an obligation stripped of its metadata is rejected, not skipped", () => {
+  const stripped = { obligations: [{ id: "x", count: 1 }] };
+  const failures = evaluateObligations(stripped, { x: 1 }, options).failures.join("");
+  assert.match(failures, /is missing ownerLot/);
+  assert.match(failures, /is missing reason/);
+  assert.match(failures, /is missing an expiry/);
+});
+
+test("Q2/Q6: the obligation suppresses exactly one bucket and nothing else", () => {
+  // Resolution path: with the fields gone, the bucket disappears and the
+  // obligation reports itself as needing deletion rather than passing silently.
+  const resolved = evaluateObligations(ledger, {}, options);
+  assert.match(resolved.failures.join(""), /names a bucket the census no longer reports/);
+
+  // And a field that stops being unemitted is reported by name.
+  const partially = evaluateObligations(ledger, COUNTERS, {
+    resolveOwner: () => new Set(["BrandSegmentedChrome.focusRing"]),
+  });
+  assert.match(partially.failures.join(""), /no longer unemitted: BrandSegmentedChrome.itemShadowSelected/);
+});
+
+test("Q7: both retired channels are dead across src, asserted rather than assumed", () => {
+  // The retirement is enforced, not merely documented: if either channel came
+  // back, the obligation's reason would be false and the C2 sweep wrong.
+  const roots = [join(CORE_ROOT, "src")];
+  const found = { "--ds-segmented-focus-ring": 0, "--ds-segmented-item-shadow-selected": 0 };
+  const walk = (dir) => {
+    for (const entry of readdirSync(dir, { withFileTypes: true })) {
+      if (entry.name.startsWith(".") || entry.name === "node_modules") continue;
+      const absolute = join(dir, entry.name);
+      if (entry.isDirectory()) { walk(absolute); continue; }
+      if (!/\.(ts|tsx|css)$/.test(entry.name)) continue;
+      const source = readFileSync(absolute, "utf8");
+      for (const channel of Object.keys(found)) {
+        // A prose mention in a comment is not a declaration or a read.
+        const declared = source.includes(`${channel}:`);
+        const read = source.includes(`var(${channel}`);
+        if (declared || read) found[channel] += 1;
+      }
+    }
+  };
+  for (const root of roots) walk(root);
+  assert.deepEqual(found, {
+    "--ds-segmented-focus-ring": 0,
+    "--ds-segmented-item-shadow-selected": 0,
+  });
+});
+
+test("Q8: the canonical channel that supersedes focusRing is real and read", () => {
+  const themes = join(CORE_ROOT, "src/foundation/tokens/css/foundation/themes/default/index.css");
+  assert.ok(existsSync(themes), "the default theme must exist for the duplication proof to hold");
+  assert.match(readFileSync(themes, "utf8"), /--ds-focus-ring\s*:/);
+  const segmented = join(
+    CORE_ROOT,
+    "src/foundation/tokens/css/runtime/engines/modern/skin/segmented/index.css",
+  );
+  assert.ok(existsSync(segmented));
+  assert.match(readFileSync(segmented, "utf8"), /var\(--ds-focus-ring/);
 });

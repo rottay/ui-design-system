@@ -22,6 +22,23 @@ describe('touch-target floor (44px coarse pointer)', () => {
     expect(css('foundation/themes/default/index.css')).toContain(
       '--ds-touch-target-min: 44px'
     );
+    // A skin may read the canonical root directly or a per-component channel
+    // that resolves to it -- `button` reads only `--ds-button-touch-target-min`
+    // now. Naming the root was never the floor; RESOLVING to it is, so every
+    // channel a skin reads is followed to its declaration and required to carry
+    // the 44px floor. A component channel declared at anything less would fail
+    // here even though the old substring check would have passed it.
+    const declarations = [
+      css('foundation/themes/default/index.css'),
+      css('presentation/components/button/index.css'),
+      css('presentation/components/input/index.css'),
+      css('presentation/components/select/index.css'),
+      css('foundation/responsive/button/index.css'),
+      css('runtime/engines/modern/skin/input/index.css'),
+      css('runtime/engines/modern/skin/select/index.css'),
+      css('runtime/engines/modern/skin/menu/index.css'),
+    ].join('\n');
+    const CANONICAL_FLOOR = /(?:44px|2\.75rem)/;
     for (const skin of [
       'runtime/engines/modern/skin/button/index.css',
       'runtime/engines/modern/skin/input/index.css',
@@ -30,7 +47,26 @@ describe('touch-target floor (44px coarse pointer)', () => {
     ]) {
       const content = css(skin);
       expect(content, skin).toMatch(/pointer:\s*coarse/);
-      expect(content, skin).toContain('--ds-touch-target-min');
+      const reads = [
+        ...content.matchAll(/var\((--ds-[a-z-]*touch-target-min)\s*(,\s*[^)]+)?\)/g),
+      ].map((match) => ({ channel: match[1], fallback: (match[2] ?? '').slice(1).trim() }));
+      expect(reads.length, `${skin} reads no touch-target channel`).toBeGreaterThan(0);
+      for (const { channel, fallback } of reads) {
+        // Either the read carries the floor in place, or the channel it names
+        // is declared somewhere in the cascade with the floor. One of the two,
+        // never neither -- that is what makes the 44px reachable.
+        if (CANONICAL_FLOOR.test(fallback)) continue;
+        const declared = [
+          ...declarations.matchAll(new RegExp(`${channel}:\\s*([^;]+);`, 'g')),
+        ].map((match) => match[1].trim());
+        expect(
+          declared.length,
+          `${channel} is read by ${skin} with no in-place floor and no declaration`
+        ).toBeGreaterThan(0);
+        for (const value of declared) {
+          expect(value, `${channel} in ${skin}`).toMatch(CANONICAL_FLOOR);
+        }
+      }
     }
   });
 });

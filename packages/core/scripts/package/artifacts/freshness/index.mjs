@@ -25,6 +25,7 @@ import {
   computeBuildInputHash,
   fingerprintBuildInputManifest,
 } from '../../../libraries/build/input-hash/index.mjs';
+import { collectDistManifest } from '../../../build/stamp/index.mjs';
 import { packageRoot as findPackageRoot } from '../../../libraries/repo-root/index.mjs';
 
 const scriptDir = dirname(fileURLToPath(import.meta.url));
@@ -32,12 +33,14 @@ const packageRootDefault = findPackageRoot(scriptDir);
 const BUILD_COMMAND = 'pnpm --filter @rottay/design-system build';
 
 function parseArgs(argv) {
-  const options = { packageRoot: packageRootDefault, stampPath: null };
+  const options = { packageRoot: packageRootDefault, stampPath: null, dist: null };
   for (let i = 0; i < argv.length; i += 1) {
     if (argv[i] === '--package-root') options.packageRoot = resolve(argv[i + 1]);
     if (argv[i] === '--stamp') options.stampPath = resolve(argv[i + 1]);
+    if (argv[i] === '--dist') options.dist = resolve(argv[i + 1]);
   }
   if (!options.stampPath) options.stampPath = resolve(options.packageRoot, 'dist/build-stamp.json');
+  if (!options.dist) options.dist = dirname(options.stampPath);
   return options;
 }
 
@@ -45,8 +48,9 @@ function parseArgs(argv) {
  * Assert that `dist/` was built from the current source. Pure: returns
  * `{ ok, failures }` and reads only the filesystem it is pointed at.
  */
-export function assertDistFresh({ packageRoot, stampPath }) {
+export function assertDistFresh({ packageRoot, stampPath, dist = null }) {
   const failures = [];
+  const distRoot = dist ?? dirname(stampPath);
   const rel = (p) => relative(packageRoot, p).split(sep).join('/');
 
   if (!existsSync(stampPath)) {
@@ -110,6 +114,43 @@ export function assertDistFresh({ packageRoot, stampPath }) {
       `(stamp ${stamp.buildInputFingerprint.slice(0, 12)}, inputs now ${buildInputFingerprint.slice(0, 12)}). ` +
       `This includes the workspace lockfile, package/config, and producer scripts. ` +
       `Rebuild before packing/publishing: ${BUILD_COMMAND}`,
+    );
+  }
+
+  // DIST IDENTITY. The gate used to read only the stamp, so a dist byte mutated
+  // after a legitimate build, or a dist emptied down to `build-stamp.json`,
+  // left it green: it never enumerated or hashed dist at all.
+  if (!Array.isArray(stamp.distManifest)) {
+    failures.push(
+      `build stamp has no distManifest (${rel(stampPath)}); it predates dist-identity verification. ` +
+      `Rebuild: ${BUILD_COMMAND}`,
+    );
+  } else {
+    const observed = new Map(collectDistManifest(distRoot).map((entry) => [entry.path, entry.sha256]));
+    const declared = new Map(stamp.distManifest.map((entry) => [entry.path, entry.sha256]));
+    const missing = [...declared.keys()].filter((path) => !observed.has(path));
+    const added = [...observed.keys()].filter((path) => !declared.has(path));
+    const mutated = [...declared.entries()]
+      .filter(([path, digest]) => observed.has(path) && observed.get(path) !== digest)
+      .map(([path]) => path);
+    const report = (label, paths) => {
+      if (paths.length === 0) return;
+      failures.push(
+        `dist ${label} since it was stamped (${paths.length}): ${paths.slice(0, 5).join(', ')}` +
+        `${paths.length > 5 ? `, +${paths.length - 5} more` : ''}. Rebuild: ${BUILD_COMMAND}`,
+      );
+    };
+    report('files disappeared', missing);
+    report('files appeared', added);
+    report('files were modified', mutated);
+  }
+
+  // The build session proves dist came FROM this source, not merely that the
+  // source hash was recomputed against it.
+  if (typeof stamp.buildSession !== 'string' || stamp.buildSession.length === 0) {
+    failures.push(
+      `build stamp carries no buildSession (${rel(stampPath)}); it cannot distinguish a real build from a ` +
+      `standalone re-stamp of an old dist. Rebuild: ${BUILD_COMMAND}`,
     );
   }
 

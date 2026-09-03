@@ -19,8 +19,8 @@ const SKIN_DIR = join(
   here,
   '../../../../../foundation/tokens/css/runtime/engines/modern/skin'
 );
-const inputSkin = readFileSync(join(SKIN_DIR, 'input.css'), 'utf8');
-const residual = readFileSync(join(SKIN_DIR, 'input-residual.css'), 'utf8');
+const inputSkin = readFileSync(join(SKIN_DIR, 'input/index.css'), 'utf8');
+const residual = readFileSync(join(SKIN_DIR, 'input-residual/index.css'), 'utf8');
 
 /** Rules (selector + body) of a stylesheet, comments stripped. */
 function cssRules(css: string): Array<{ selector: string; body: string }> {

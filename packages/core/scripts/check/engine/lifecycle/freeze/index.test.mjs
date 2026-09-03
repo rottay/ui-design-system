@@ -20,8 +20,18 @@ import { fileURLToPath } from 'node:url';
 import test from 'node:test';
 
 import {
+  BASELINE_SCHEMA_VERSION,
   FROZEN,
+  OBLIGATIONS,
+  blankModuleSpecifiers,
+  deriveRelocationSubstitutions,
   evaluateFreeze,
+  evaluateObligations,
+  relocationDigestOf,
+  relocationKey,
+  relocationNormalize,
+  resolveMisKeyed,
+  resolveRelocations,
   isGeneratedPath,
   mergeChangeSets,
   parseNameStatus,
@@ -196,7 +206,7 @@ function fixture() {
   const writeBaseline = (entries, baseRevision = base) =>
     writeFileSync(
       baselinePath,
-      `${JSON.stringify({ schemaVersion: 2, baseRevision, entries }, null, 2)}\n`,
+      `${JSON.stringify({ schemaVersion: BASELINE_SCHEMA_VERSION, baseRevision, entries }, null, 2)}\n`,
     );
   writeBaseline({});
 
@@ -506,11 +516,11 @@ test('coverage boundary: the shared module a frozen stub delegates to is NOT fro
   assert.ok(!FROZEN.test('packages/core/src/components/patterns/data/widget-board/engines/shared.tsx'));
 });
 
-test('the real baseline is schema v2, pinned to the sealed base, and every entry carries a reason', () => {
+test('the real baseline is schema v3, pinned to the sealed base, and every entry carries a reason', () => {
   const baseline = JSON.parse(
     readFileSync(join(scriptDir, 'baseline/index.json'), 'utf8'),
   );
-  assert.equal(baseline.schemaVersion, 2);
+  assert.equal(baseline.schemaVersion, BASELINE_SCHEMA_VERSION);
   assert.match(baseline.baseRevision, /^[0-9a-f]{40}$/);
   const entries = Object.entries(baseline.entries);
   assert.ok(entries.length > 0);
@@ -521,5 +531,257 @@ test('the real baseline is schema v2, pinned to the sealed base, and every entry
       `${path} has neither a content pin nor an explicit deletion pin`,
     );
     assert.ok(entry.reason.length >= 12, `${path} has no written reason`);
+    // v3 adds the relocation pin. It is what lets a written exception survive
+    // its file moving without being re-reviewed, so an entry without one is
+    // half-migrated rather than merely older.
+    assert.ok(
+      entry.relocationDigest === null || /^[0-9a-f]{64}$/.test(entry.relocationDigest),
+      `${path} has no relocation pin`,
+    );
+    assert.equal(
+      entry.blob === null,
+      entry.relocationDigest === null,
+      `${path} pins one of the two digests and not the other`,
+    );
   }
+});
+
+/* ------------------------------------------------------------------------ */
+/* relocation identity, mis-keyed entries, obligations                       */
+/* ------------------------------------------------------------------------ */
+
+const OLD_FROZEN_FILE = 'packages/core/src/ui/primitives/layout/Box/engines/classic/index.tsx';
+
+/**
+ * Two moves in one window: a pair of byte-identical siblings, which is the
+ * evidence the root substitution is DERIVED from, and the pair under test.
+ * Without the proven siblings there is no substitution, and the subject reads
+ * as two unrelated changes -- which is itself the correct behaviour and is
+ * asserted separately below.
+ */
+const PROVEN_OLD = [
+  'packages/core/src/ui/primitives/layout/Flex/engines/rustic/index.tsx',
+  'packages/core/src/ui/primitives/layout/Stack/engines/rustic/index.tsx',
+];
+const PROVEN_NEW = [
+  'packages/core/src/components/primitives/layout/flex/engines/rustic/index.tsx',
+  'packages/core/src/components/primitives/layout/stack/engines/rustic/index.tsx',
+];
+const PROVEN_SOURCE = 'export const Proven = () => null;\n';
+
+function relocationVerdict({ before, after, entries = {}, proven = true }) {
+  const changes = [
+    { status: 'D', path: OLD_FROZEN_FILE, untracked: false },
+    { status: 'A', path: FROZEN_FILE, untracked: false },
+  ];
+  if (proven) {
+    for (const path of PROVEN_OLD) changes.push({ status: 'D', path, untracked: false });
+    for (const path of PROVEN_NEW) changes.push({ status: 'A', path, untracked: false });
+  }
+  const current = new Map([[FROZEN_FILE, after], ...PROVEN_NEW.map((path) => [path, PROVEN_SOURCE])]);
+  const sealed = new Map([[OLD_FROZEN_FILE, before], ...PROVEN_OLD.map((path) => [path, PROVEN_SOURCE])]);
+  return evaluateFreeze({
+    changes,
+    entries,
+    read: (path) => current.get(path) ?? null,
+    readBase: (path) => sealed.get(path) ?? null,
+    tracked: new Set([FROZEN_FILE, ...PROVEN_NEW]),
+  });
+}
+
+test('DRILL: a byte-identical move is ONE relocation and zero violations', () => {
+  const source = 'export const Box = () => null;\n';
+  const verdict = relocationVerdict({ before: source, after: source });
+  const subject = verdict.relocations.find((pair) => pair.added === FROZEN_FILE);
+  assert.ok(subject);
+  assert.equal(subject.identity, 'byte-identical');
+  assert.deepEqual(verdict.unauthorized, []);
+  assert.deepEqual(verdict.drifted, []);
+});
+
+test('DRILL: a rename carrying a ONE-BYTE functional change still demands a written exception', () => {
+  // The anti-laundering property. If a rename could absorb an edit, every
+  // frozen-engine change would be one `git mv` away from invisible. The pairing
+  // removes the DOUBLE COUNT, never the requirement.
+  const verdict = relocationVerdict({
+    before: 'export const Box = () => null;\n',
+    after: 'export const Box = () => 1;\n',
+  });
+  const subject = verdict.relocationPairs.find((pair) => pair.added === FROZEN_FILE);
+  assert.equal(subject.identity, 'content-changed');
+  assert.equal(
+    verdict.relocations.some((pair) => pair.added === FROZEN_FILE),
+    false,
+    'an edited file must not be resolved as a relocation',
+  );
+  assert.deepEqual(
+    verdict.unauthorized.map((change) => change.path),
+    [FROZEN_FILE],
+    'the new path must still demand a written exception',
+  );
+});
+
+test('DRILL: without a proven substitution a rename is two independent changes', () => {
+  // The pairing is evidence-bound. With nothing in the window proving the root
+  // moved, the gate refuses to guess: the deletion and the addition are two
+  // changes, and both are reported.
+  const verdict = relocationVerdict({
+    before: 'export const Box = () => null;\n',
+    after: 'export const Box = () => 1;\n',
+    proven: false,
+  });
+  assert.deepEqual(verdict.substitutions, []);
+  assert.deepEqual(
+    verdict.unauthorized.map((change) => change.path).sort(),
+    [FROZEN_FILE, OLD_FROZEN_FILE].sort(),
+  );
+});
+
+test('DRILL: a move that only rewrites module specifiers and comments is mechanical', () => {
+  const verdict = relocationVerdict({
+    before: "import { Box } from '../../layout/Box';\n// old note\nexport const Box = () => null;\n",
+    after: "import { Box } from '../../layout/box';\n// new note\nexport const Box = () => null;\n",
+  });
+  const subject = verdict.relocations.find((pair) => pair.added === FROZEN_FILE);
+  assert.ok(subject, 'the specifier-and-comment-only move must resolve as a relocation');
+  assert.equal(subject.identity, 'mechanical');
+  assert.deepEqual(verdict.unauthorized, []);
+
+  // The BINDING is not blanked: importing a different symbol is a real change.
+  const bindingChanged = relocationVerdict({
+    before: "import { Box } from '../../layout/Box';\nexport const Box = () => null;\n",
+    after: "import { Flex } from '../../layout/box';\nexport const Box = () => null;\n",
+  });
+  assert.equal(
+    bindingChanged.relocations.some((pair) => pair.added === FROZEN_FILE),
+    false,
+  );
+  assert.deepEqual(bindingChanged.unauthorized.map((c) => c.path), [FROZEN_FILE]);
+});
+
+test('DRILL: a mis-keyed exception is a VIOLATION, and a case-only difference is mis-keyed', () => {
+  // The defect that hid 43 written exceptions. `.../layout/Box/...` resolves to
+  // `.../layout/box/...` on a case-insensitive filesystem, so `existsSync`
+  // called it present while git had never contained it. Judged against the
+  // index, the key authorizes nothing.
+  const verdict = evaluateFreeze({
+    changes: [{ status: 'M', path: FROZEN_FILE, untracked: false }],
+    entries: {
+      'packages/core/src/components/primitives/layout/BOX/engines/classic/index.tsx': {
+        blob: sha256('x'),
+        relocationDigest: relocationDigestOf('x', FROZEN_FILE),
+        reason: 'a key git has never contained',
+      },
+    },
+    read: () => 'x',
+    tracked: new Set([FROZEN_FILE]),
+  });
+  assert.equal(verdict.misKeyed.length, 1);
+  assert.match(verdict.misKeyed[0].reason, /not a tracked path/);
+  assert.deepEqual(verdict.stale, [], 'a mis-keyed entry must not degrade to a stale note');
+  assert.deepEqual(verdict.unauthorized.map((c) => c.path), [FROZEN_FILE]);
+});
+
+test('DRILL: an ambiguous canonical fold is reported, never silently resolved', () => {
+  const tracked = new Set([
+    'packages/core/src/components/primitives/layout/box/engines/classic/index.tsx',
+    'packages/core/src/components/primitives/layout/b-ox/engines/classic/index.tsx',
+  ]);
+  const ambiguous = resolveMisKeyed(
+    'packages/core/src/components/primitives/layout/BOX/engines/classic/index.tsx',
+    tracked,
+  );
+  assert.equal(ambiguous.ambiguous, true);
+  assert.equal(ambiguous.resolved, null);
+  assert.equal(ambiguous.candidates.length, 2);
+
+  const unique = resolveMisKeyed(
+    'packages/core/src/components/primitives/layout/BOX/engines/classic/index.tsx',
+    new Set(['packages/core/src/components/primitives/layout/box/engines/classic/index.tsx']),
+  );
+  assert.equal(unique.ambiguous, false);
+  assert.equal(unique.resolved, 'packages/core/src/components/primitives/layout/box/engines/classic/index.tsx');
+});
+
+test('DRILL: a blob:null entry on a path that is not a deletion is mis-keyed', () => {
+  const verdict = evaluateFreeze({
+    changes: [{ status: 'M', path: FROZEN_FILE, untracked: false }],
+    entries: {
+      [FROZEN_FILE]: { blob: null, relocationDigest: null, reason: 'authorizes an absence' },
+    },
+    read: () => 'x',
+    tracked: new Set([FROZEN_FILE]),
+  });
+  assert.equal(verdict.misKeyed.length, 1);
+  assert.match(verdict.misKeyed[0].reason, /not a deletion in this window/);
+});
+
+test('DRILL: every stale and mis-keyed entry is emitted, never a truncated head', () => {
+  // The report used to print `stale.slice(0, 20)`, which is how 43 findings
+  // read as 20 and why nobody re-derived them.
+  const entries = {};
+  for (let index = 0; index < 25; index += 1) {
+    entries[`packages/core/src/components/primitives/layout/box${index}/engines/classic/index.tsx`] = {
+      blob: sha256('x'),
+      relocationDigest: relocationDigestOf('x', FROZEN_FILE),
+      reason: 'sealed at the freeze revision',
+    };
+  }
+  const verdict = evaluateFreeze({
+    changes: [],
+    entries,
+    read: () => 'x',
+    tracked: new Set(Object.keys(entries)),
+  });
+  assert.equal(verdict.stale.length, 25);
+  assert.equal(verdict.misKeyed.length, 0);
+});
+
+test('DRILL: substitutions are DERIVED from proven pairs, and a single pair mints nothing', () => {
+  const proven = deriveRelocationSubstitutions([
+    { deleted: 'a/ui/x/index.ts', added: 'a/components/x/index.ts' },
+    { deleted: 'a/ui/y/index.ts', added: 'a/components/y/index.ts' },
+    { deleted: 'a/ui/z/index.ts', added: 'a/elsewhere/z/index.ts' },
+  ]);
+  assert.deepEqual(
+    proven.map(({ oldPrefix, newPrefix }) => [oldPrefix, newPrefix]),
+    [['a/ui', 'a/components']],
+    'a substitution seen once is a coincidence, not a proven relocation',
+  );
+});
+
+test('DRILL: the obligation has three mechanical states and no override', () => {
+  const [obligation] = OBLIGATIONS;
+  assert.ok(obligation, 'the obligation roster must not be empty while the contract is open');
+
+  const pending = evaluateObligations([obligation], { readRepoFile: () => null, today: '2026-01-01' });
+  assert.equal(pending[0].state, 'pending');
+  assert.equal(pending[0].blocking, false);
+
+  const expired = evaluateObligations([obligation], { readRepoFile: () => null, today: '2099-01-01' });
+  assert.equal(expired[0].state, 'expired');
+  assert.equal(expired[0].blocking, true);
+
+  const satisfied = evaluateObligations([obligation], {
+    readRepoFile: () => `export type ${obligation.symbol} = 'native';`,
+    today: '2026-01-01',
+  });
+  assert.equal(satisfied[0].state, 'satisfied');
+  assert.equal(satisfied[0].blocking, true, 'a satisfied obligation must be deleted, not carried');
+});
+
+test('the relocation normalizer keeps behaviour and drops only layout, comments and specifiers', () => {
+  const path = 'packages/core/src/components/primitives/layout/box/engines/classic/index.tsx';
+  assert.equal(relocationKey('a/b/index.tsx'), 'a/b.tsx');
+  assert.equal(relocationKey('a/B_c/index.tsx'), 'a/bc.tsx');
+  assert.match(blankModuleSpecifiers("from './x'", 'tsx'), /RELOCATED_SPECIFIER/);
+  assert.equal(
+    relocationNormalize("const a = 1;\n/* note */\nconst b = 'x';\n", path),
+    relocationNormalize('const a = 1;   const b = "x";', path),
+  );
+  assert.notEqual(
+    relocationNormalize('const a = 1;', path),
+    relocationNormalize('const a = 2;', path),
+    'a value change must survive normalization, or the ladder launders edits',
+  );
 });

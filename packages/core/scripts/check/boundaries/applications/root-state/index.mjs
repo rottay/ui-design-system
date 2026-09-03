@@ -146,7 +146,8 @@ export function resolveCorpusRoot(appRoot) {
   } catch {
     throw new Error(
       `app corpus MISSING at ${root}\n` +
-        '  pass --app-root <path> or set APP_ROOT_WRITER_APP_ROOT.\n' +
+        '  pass --app-root <path>, or set APP_BITHIRE_ROOT (which the CI workflow exports)\n' +
+        '  or the gate-private APP_ROOT_WRITER_APP_ROOT.\n' +
         '  a blocking gate must not treat an absent corpus as a pass.',
     );
   }
@@ -545,7 +546,7 @@ export function formatReport(result) {
 export function parseArgs(argv) {
   const args = {
     mode: 'check',
-    appRoot: process.env.APP_ROOT_WRITER_APP_ROOT ?? DEFAULT_APP_ROOT,
+    appRoot: process.env.APP_ROOT_WRITER_APP_ROOT ?? process.env.APP_BITHIRE_ROOT ?? DEFAULT_APP_ROOT,
   };
   for (let index = 0; index < argv.length; index += 1) {
     const token = argv[index];

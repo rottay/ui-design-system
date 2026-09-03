@@ -20,6 +20,10 @@ const DEFAULT_BROWSER_EVIDENCE_PATH = resolve(
   DEFAULT_REPOSITORY_ROOT,
   "test-artifacts/craft/cra-15/browser-evidence.json"
 );
+const SUPERSESSION_OBLIGATIONS_PATH = resolve(
+  SCRIPT_DIRECTORY,
+  "obligations/index.json"
+);
 
 const COMPLETION_BROWSER_LIMITS = Object.freeze({
   maxConcurrentContinuousRuntimes: 1,
@@ -263,11 +267,97 @@ function auditRoadmapAuthority(repositoryRoot) {
   };
 }
 
+function readSupersessionObligations(errors) {
+  if (!existsSync(SUPERSESSION_OBLIGATIONS_PATH)) return { obligations: [] };
+  try {
+    return JSON.parse(readFileSync(SUPERSESSION_OBLIGATIONS_PATH, "utf8"));
+  } catch (error) {
+    errors.push(`supersession record is not valid JSON (${String(error)})`);
+    return null;
+  }
+}
+
+/**
+ * The sealed receipt records WHICH source state a real browser measured. When
+ * that coordinate stops matching the live one the receipt is superseded: it is
+ * still true about its own tree and still historical evidence, and it is no
+ * longer a claim about today. Separating those two is the whole job here.
+ *
+ * A supersession is admissible only against a written record that pins all
+ * three coordinates -- the receipt's own bytes, what it recorded, and what the
+ * tree computes -- so it authorises exactly one state and expires by moving.
+ * Everything else, including a receipt that is stale with no record at all, is
+ * an error exactly as before.
+ */
+export function resolveSupersededReceipt({
+  obligations,
+  receiptSha256,
+  recorded,
+  live,
+  rosterSize,
+}) {
+  const errors = [];
+  const open = Array.isArray(obligations?.obligations)
+    ? obligations.obligations
+    : [];
+  const stale = recorded === live;
+  const matches = open.filter(
+    (entry) =>
+      entry?.receiptSha256 === receiptSha256 &&
+      entry?.recordedFingerprint === recorded &&
+      entry?.liveFingerprint === live
+  );
+
+  if (!stale && matches.length === 0) {
+    errors.push("browser evidence source fingerprint is stale");
+    return { errors, pending: [] };
+  }
+  if (stale && open.length > 0) {
+    errors.push(
+      "the sealed browser receipt covers the live source, so the open supersession " +
+        `record is stale and authorises nothing: ${open
+          .map((entry) => entry?.id ?? "<unnamed>")
+          .join(", ")}`
+    );
+    return { errors, pending: [] };
+  }
+  if (stale) return { errors, pending: [] };
+  if (matches.length > 1) {
+    errors.push(
+      `${matches.length} supersession records claim the same receipt coordinate; exactly one may`
+    );
+    return { errors, pending: [] };
+  }
+
+  const [entry] = matches;
+  const drift = entry.rosterDriftSinceReceipt;
+  const enumerated =
+    (drift?.pathMovedContentIdentical?.length ?? 0) +
+    (drift?.pathMovedAndContentChanged?.length ?? 0) +
+    (drift?.contentChangedInPlace?.length ?? 0) +
+    (drift?.unchanged ?? -1);
+  if (drift?.rosterSize !== rosterSize || enumerated !== rosterSize) {
+    errors.push(
+      `supersession record ${entry.id} accounts for ${enumerated} of ${rosterSize} roster sources; ` +
+        "the drift enumeration must close exactly"
+    );
+    return { errors, pending: [] };
+  }
+  return {
+    errors,
+    pending: [
+      `the sealed browser receipt is superseded and covers ${recorded}, not the live ${live}; ` +
+        `${entry.id} holds it open for ${entry.ownerLot} (${entry.resolution})`,
+    ],
+  };
+}
+
 function auditBrowserEvidence({
   evidence,
   packageIdentity,
   readSource,
   sourceFingerprint,
+  supersession,
 }) {
   const errors = [];
   const pending = [];
@@ -293,7 +383,11 @@ function auditBrowserEvidence({
   if (evidence.package !== packageIdentity) {
     errors.push(`browser evidence package must be ${packageIdentity}`);
   }
-  if (evidence.sourceFingerprint !== sourceFingerprint) {
+  if (supersession) {
+    const verdict = supersession(evidence.sourceFingerprint);
+    errors.push(...verdict.errors);
+    pending.push(...verdict.pending);
+  } else if (evidence.sourceFingerprint !== sourceFingerprint) {
     errors.push("browser evidence source fingerprint is stale");
   }
 
@@ -515,6 +609,7 @@ export function auditCra15RuntimeHardening({
   packageRoot = resolve(repositoryRoot, "packages/core"),
   sourceOverrides,
   browserEvidenceOverride,
+  supersessionObligationsOverride,
 } = {}) {
   const errors = [];
   const pending = [];
@@ -595,11 +690,32 @@ export function auditCra15RuntimeHardening({
       errors.push(`browser evidence is not valid JSON (${String(error)})`);
     }
   }
+  // The supersession record governs ONE object: the sealed receipt this gate
+  // read from disk. A caller-supplied fixture is a different object and never
+  // reaches it, so a drill can still assert the plain stale-fingerprint law.
+  const sealedReceiptBytes =
+    browserEvidenceOverride === undefined && existsSync(browserEvidencePath)
+      ? readFileSync(browserEvidencePath)
+      : null;
+  const supersession =
+    sealedReceiptBytes === null
+      ? null
+      : (recorded) =>
+          resolveSupersededReceipt({
+            obligations:
+              supersessionObligationsOverride ??
+              readSupersessionObligations(errors),
+            receiptSha256: sha256(sealedReceiptBytes),
+            recorded,
+            live: sourceFingerprint,
+            rosterSize: REQUIRED_SOURCE_ASSERTIONS.length,
+          });
   const browser = auditBrowserEvidence({
     evidence: browserEvidence,
     packageIdentity,
     readSource,
     sourceFingerprint,
+    supersession,
   });
   errors.push(...browser.errors);
   pending.push(...browser.pending);

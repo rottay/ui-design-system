@@ -121,12 +121,18 @@ describe('DesignSystemProvider visual authority barrier', () => {
 
     await waitFor(() => expect(screen.getByTestId('resolved-config')).toBeTruthy());
     const resolved = JSON.parse(screen.getByTestId('resolved-config').textContent ?? '{}') as TenantConfig;
+    // No `engine` key on the config, by the registry's own rule: `resolveEngine`
+    // reads the vertical preset before the tenant, and every first-party preset
+    // declares `modern`, so a tenant `engine` would be a second authority over a
+    // decision the vertical already owns. The engine is asserted where it is
+    // decided instead -- on the root the provider stamps.
     expect(resolved).toMatchObject({
       slug: 'rottay',
-      engine: 'modern',
       vertical: 'rottay',
       branding: { companyName: 'Rottay' },
     });
+    expect(resolved).not.toHaveProperty('engine');
+    expect(document.documentElement).toHaveAttribute('data-engine', 'modern');
     expect(resolved).not.toHaveProperty('brandTheme');
     expect(resolved).not.toHaveProperty('personality');
     expect(resolved).not.toHaveProperty('tokenOverrides');

@@ -3,7 +3,7 @@
  *
  * `foundation/themes/default/index.css` owns foundation channels and tenant-neutral
  * fallbacks. A component family owns its root defaults in exactly one
- * `presentation/components/<family>.css` file. Re-authoring the same public
+ * `presentation/components/<family>/index.css` file. Re-authoring the same public
  * channel in both layers makes cascade order, rather than the contract, the
  * authority.
  *
@@ -11,7 +11,7 @@
  * adversarial drills: each detector must prove that a planted violation turns
  * the property red before a green result is meaningful.
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { basename, resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -34,6 +34,12 @@ interface OwnerRows {
   different: string[];
 }
 
+interface RetiredRow {
+  channel: string;
+  formerOwner: string;
+  reason: string;
+}
+
 interface AuthorityLedger {
   measurement: {
     sourceBeforeThisDrain: {
@@ -48,6 +54,7 @@ interface AuthorityLedger {
     };
   };
   owners: Record<string, OwnerRows>;
+  retired: { channels: RetiredRow[] };
 }
 
 const read = (path: string): string => readFileSync(path, "utf8");
@@ -89,16 +96,24 @@ function rootChannels(css: string): Set<string> {
   return channels;
 }
 
+/**
+ * One component family is one folder with a single `index.css` owner, keyed by
+ * the owner path the entrypoints import. `skin/` is not a family -- it is the
+ * bucket of engine-scoped skins and has no `index.css` of its own, so it drops
+ * out by the same rule rather than by a name exception.
+ */
 function componentSources(
   override: Readonly<Record<string, string>> = {},
 ): Map<string, string> {
   const sources = new Map<string, string>();
-  for (const filename of readdirSync(COMPONENTS_DIR).sort()) {
-    if (!filename.endsWith(".css") || filename === "index.css") continue;
-    sources.set(
-      filename,
-      override[filename] ?? read(resolve(COMPONENTS_DIR, filename)),
-    );
+  for (const entry of readdirSync(COMPONENTS_DIR, { withFileTypes: true }).sort(
+    (a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0),
+  )) {
+    if (!entry.isDirectory()) continue;
+    const owner = `${entry.name}/index.css`;
+    const path = resolve(COMPONENTS_DIR, owner);
+    if (!existsSync(path)) continue;
+    sources.set(owner, override[owner] ?? read(path));
   }
   return sources;
 }
@@ -154,7 +169,9 @@ describe("root component-token authority", () => {
   });
 
   it("keeps every drained channel in its declared component owner", () => {
-    expect(ownerRows).toHaveLength(
+    // The accounting still closes on the measured total: a row that left the
+    // corpus is enumerated as retired, with its reason, rather than dropped.
+    expect(ownerRows.length + ledger.retired.channels.length).toBe(
       ledger.measurement.sourceBeforeThisDrain.shared,
     );
     expect(new Set(ownerRows.map(({ channel }) => channel)).size).toBe(
@@ -171,13 +188,13 @@ describe("root component-token authority", () => {
     for (const entrypoint of ENTRYPOINTS) {
       const source = read(entrypoint);
       const defaultIndex = source.indexOf(
-        '@import "../../foundation/themes/default/index.css"',
+        '@import "../../../foundation/themes/default/index.css"',
       );
       expect(defaultIndex, basename(entrypoint)).toBeGreaterThan(-1);
 
       for (const filename of Object.keys(ledger.owners)) {
         const ownerIndex = source.indexOf(
-          `@import "../../presentation/components/${filename}"`,
+          `@import "../../../presentation/components/${filename}"`,
         );
         expect(ownerIndex, `${basename(entrypoint)} -> ${filename}`).toBeGreaterThan(
           defaultIndex,
@@ -188,6 +205,17 @@ describe("root component-token authority", () => {
 
   it("keeps foundation-prefixed channels out of component-family roots", () => {
     expect(componentFoundationChannels()).toEqual([]);
+  });
+
+  it("keeps every retired channel genuinely unowned in both authority layers", () => {
+    const liveOwners = componentOwners();
+    const foundation = rootChannels(defaultCss);
+    for (const { channel, formerOwner } of ledger.retired.channels) {
+      expect(liveOwners.get(channel), channel).toBeUndefined();
+      expect(foundation.has(channel), channel).toBe(false);
+      expect(ownerRows.some((row) => row.channel === channel)).toBe(false);
+      expect(Object.keys(ledger.owners)).toContain(formerOwner);
+    }
   });
 });
 

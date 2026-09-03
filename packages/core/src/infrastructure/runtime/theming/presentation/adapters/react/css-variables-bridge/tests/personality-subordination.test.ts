@@ -63,7 +63,12 @@ const TENANT_DOCUMENT = {
   visualFoundation: {
     general: { palette: { primary: '#2F6B9A', backgroundMode: 'dark' } },
     advanced: {
-      chrome: { sidebar: { bg: '#101014' } },
+      // The ink travels WITH the ground it sits on: the compiler enforces the
+      // governed APCA floor over the composed pair, and a dark sidebar ground
+      // over bithire's light-mode ink is exactly the unreadable combination
+      // that floor exists to refuse. This fixture is about personality
+      // subordination, not sidebar colour, so it authors a legible pair.
+      chrome: { sidebar: { bg: '#101014', text: '#E8ECF1' } },
       tokenOverrides: { '--ds-radius-md': '10px' },
     },
   },
@@ -168,7 +173,19 @@ describe('personality subordination — contention is unreachable by contract', 
     ).toBe(true);
     expect(BRIDGE_KEYS).not.toContain('--ds-card-border');
     expect(TENANT_THEME_OVERRIDE_TOKENS.length).toBeGreaterThan(40);
-    expect(Object.keys(ARTIFACT.variables).length).toBeGreaterThan(10);
+    // The tenant document declares `backgroundMode: 'dark'`, so its palette and
+    // token overrides land in the DARK delta and the base carries exactly the
+    // chrome the tenant authored outside a mode. Both surfaces are named, which
+    // is what "two real, non-empty emission surfaces" was reaching for: a bare
+    // count on the base alone would report vacuity for a correctly-partitioned
+    // artifact, and would miss a delta that emptied.
+    expect(Object.keys(ARTIFACT.variables).sort()).toEqual([
+      '--ds-sidebar-bg',
+      '--ds-sidebar-text',
+    ]);
+    const darkDelta = ARTIFACT.modeDeltas?.find((delta) => delta.mode === 'dark');
+    expect(darkDelta, 'the dark mode delta is the second surface').toBeDefined();
+    expect(Object.keys(darkDelta!.variables).length).toBeGreaterThan(10);
   });
 
   it('leaves no key a tenant could publish that the bridge also declares', () => {

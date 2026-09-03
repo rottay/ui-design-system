@@ -82,7 +82,19 @@ describe('modern Button skin reachability', () => {
     // Parsed, never grepped: this file's own prose names the predicate, and a
     // text scan cannot tell a comment from a selector.
     expect(RULES.filter((r) => r.selector.includes("[data-part='trigger']"))).toEqual([]);
-    expect(rootRules).toHaveLength(7);
+    // The count is a census, not the law, and it grows when the skin gains a
+    // root rule -- 7 -> 9 here. What the count was standing in for is asserted
+    // directly instead: every root rule is anchored on `[data-variant]`, the
+    // attribute the component stamps unconditionally, and none of them reaches
+    // for a caller-replaceable part. A census alone would have to be re-pinned
+    // on every legitimate rule and says nothing about the anchor.
+    expect(rootRules).toHaveLength(9);
+    expect(
+      rootRules.every((rule) => rule.selector.includes('[data-variant]')),
+    ).toBe(true);
+    expect(
+      rootRules.filter((rule) => /\[data-part=/.test(rule.selector)),
+    ).toEqual([]);
   });
 
   it('stamps data-variant on every root a caller can produce, and the caller cannot remove it', async () => {

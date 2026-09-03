@@ -76,15 +76,15 @@ const METRICS: KeyMetric[] = [
 ];
 
 const LEAVES = [
-  { name: 'metrics-cards', scope: 'ds-metrics-cards', file: 'metrics-cards.css', Component: MetricsCards },
-  { name: 'metrics-rows', scope: 'ds-metrics-rows', file: 'metrics-rows.css', Component: MetricsRows },
-  { name: 'metrics-minimal', scope: 'ds-metrics-minimal', file: 'metrics-minimal.css', Component: MetricsMinimal },
+  { name: 'metrics-cards', scope: 'ds-metrics-cards', file: 'metrics-cards/index.css', Component: MetricsCards },
+  { name: 'metrics-rows', scope: 'ds-metrics-rows', file: 'metrics-rows/index.css', Component: MetricsRows },
+  { name: 'metrics-minimal', scope: 'ds-metrics-minimal', file: 'metrics-minimal/index.css', Component: MetricsMinimal },
 ] as const;
 
 /** The two leaves whose caption shares a line with the figure. Cards is
  *  excluded on purpose: its eyebrow is a deliberate two-line clamp that keeps
  *  values optically aligned across a row of cards (K-7). */
-const TRUNCATING_LEAVES = ['metrics-rows.css', 'metrics-minimal.css'] as const;
+const TRUNCATING_LEAVES = ['metrics-rows/index.css', 'metrics-minimal/index.css'] as const;
 
 function parseSkin(file: string): Root {
   const path = `${SKIN_DIR}${file}`;

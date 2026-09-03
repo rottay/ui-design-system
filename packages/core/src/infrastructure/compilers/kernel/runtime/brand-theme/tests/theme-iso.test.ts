@@ -149,7 +149,6 @@ function cssRuleVariables(
  * must be argued at the compiler, not absorbed here.
  */
 const SEED_DERIVED_CHANNELS = [
-  "--ds-button-primary-bg",
   "--ds-button-primary-bg-hover",
   "--ds-color-border-focus",
   "--ds-color-link",
@@ -157,6 +156,20 @@ const SEED_DERIVED_CHANNELS = [
   "--ds-input-border-focus",
   "--ds-input-shadow-focus",
 ] as const;
+
+/**
+ * `--ds-button-primary-bg` LEFT the set, and it is not a shrink of the law.
+ *
+ * The themes now author the brand ground once on `--ds-color-primary` and let
+ * the button channel read it (`var(--ds-color-primary)`). A channel that reads
+ * the seed root tracks the tenant seed by CASCADE, so it needs no
+ * re-derivation and its text is identical in both arms -- which is why it stops
+ * being a divergent channel while staying, in effect, seed-derived. Asserted
+ * below rather than merely removed, so the removal cannot be mistaken for the
+ * channel quietly falling out of the tenant's reach.
+ */
+const SEED_ROOT_READERS = ["--ds-button-primary-bg"] as const;
+const SEED_ROOT = "var(--ds-color-primary)";
 
 /**
  * `--ds-button-primary-color` joins them only inside a mode the tenant seeds.
@@ -694,7 +707,11 @@ describe("T0 DB mode projection through the common compiler", () => {
       const noProvenance = effectiveModeVariables(compiled, mode);
       const expectedDerived =
         mode === "dark"
-          ? [...SEED_DERIVED_CHANNELS, MODE_SEEDED_DERIVED_CHANNEL].sort()
+          ? [
+              ...SEED_DERIVED_CHANNELS,
+              MODE_SEEDED_DERIVED_CHANNEL,
+              ...SEED_ROOT_READERS,
+            ].sort()
           : [...SEED_DERIVED_CHANNELS].sort();
       const divergent = [
         ...new Set([...Object.keys(projected), ...Object.keys(noProvenance)]),
@@ -702,6 +719,15 @@ describe("T0 DB mode projection through the common compiler", () => {
         .filter((channel) => projected[channel] !== noProvenance[channel])
         .sort();
       expect(divergent).toEqual(expectedDerived);
+      // In the body -- the mode whose seed the vertical already satisfies --
+      // the channel is the same alias text in both arms, which is exactly why
+      // it drops out of the divergent set there and only there.
+      if (mode !== "dark") {
+        for (const channel of SEED_ROOT_READERS) {
+          expect(projected[channel]).toBe(SEED_ROOT);
+          expect(noProvenance[channel]).toBe(SEED_ROOT);
+        }
+      }
 
       // Causal, per mode: the projection tracks the seed THIS mode was given,
       // and the un-arbitrated compile is still on the vertical's blue.
@@ -932,9 +958,19 @@ describe("T0 static/DB convergence (negative mutant)", () => {
     expect(dbArtifact.variables["--ds-color-border-focus"]).toBe(
       CUSTOMER_DOCUMENT.visualFoundation!.general!.palette!.primary
     );
-    expect(dbArtifact.variables["--ds-button-primary-bg"]).toBe(
-      "var(--ds-color-primary)"
-    );
+    // The delta does NOT restate the button ground, and that absence is the
+    // point: the channel reads `--ds-color-primary`, which the delta DOES
+    // restate, so the tenant seed reaches it through the vertical's own alias
+    // instead of through a second copy. Both halves are asserted, because
+    // "absent from the delta" alone would also describe a channel that had
+    // simply stopped tracking the seed.
+    expect(dbArtifact.variables["--ds-button-primary-bg"]).toBeUndefined();
+    for (const channel of SEED_ROOT_READERS) {
+      expect(baseCompiled.cssVariables[channel]).toBe(SEED_ROOT);
+      expect(dbArtifact.variables["--ds-color-primary"]).toBe(
+        CUSTOMER_DOCUMENT.visualFoundation!.general!.palette!.primary
+      );
+    }
     for (const channel of SEED_DERIVED_CHANNELS) {
       expect(baseCompiled.cssVariables[channel]).toBeTruthy();
       expect(baseCompiled.cssVariables[channel]).not.toBe(

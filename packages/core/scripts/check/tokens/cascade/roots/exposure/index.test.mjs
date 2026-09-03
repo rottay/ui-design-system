@@ -1,7 +1,16 @@
 /**
- * Drills for root-exposure-gate. Every one plants a real defect in the real
- * tree and restores it, because a gate whose drills only ever feed it a fixture
- * proves the fixture, not the tree.
+ * Drills for root-exposure-gate. Every one plants a real defect in a byte-exact
+ * copy of the real tree's own authority files, because a gate whose drills only
+ * ever feed it a hand-written fixture proves the fixture, not the tree.
+ *
+ * The copy is not a weakening: the mutated document is `JSON.parse` of the live
+ * catalog (or control), so the drill still runs against today's 64 roots and 21
+ * controls. What it removes is the in-place write. `node --test` runs test FILES
+ * in parallel processes against ONE working tree, so a drill that mutated
+ * `governance/manifest/cascade/catalog/index.json` and restored it published a
+ * window in which every other suite reading that file saw the planted defect --
+ * measured: `cascade-producers`' determinism drill compared two builds of the
+ * same tree and got two different `inputsDigest.rootCatalog` values.
  *
  * The three laws each get a planted red, and the two escape hatches that make
  * the live tree green -- `representativeOnly` channel lists and the written
@@ -11,7 +20,7 @@
 
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
@@ -31,29 +40,34 @@ function expectFinding(findings, fragment, message) {
   );
 }
 
-/** Plant a mutated catalog, run the gate, restore -- always. */
+/** Plant a mutated copy of the LIVE catalog and point the gate at it. */
 function withCatalog(mutate, run) {
-  const original = readFileSync(CATALOG_PATH, 'utf8');
+  const box = mkdtempSync(join(tmpdir(), 'root-exposure-catalog-'));
   try {
-    const doc = JSON.parse(original);
+    const doc = JSON.parse(readFileSync(CATALOG_PATH, 'utf8'));
     mutate(doc);
-    writeFileSync(CATALOG_PATH, `${JSON.stringify(doc, null, 2)}\n`);
-    run(collectFindings());
+    const catalogPath = join(box, 'index.json');
+    writeFileSync(catalogPath, `${JSON.stringify(doc, null, 2)}\n`);
+    run(collectFindings({ catalogPath }));
   } finally {
-    writeFileSync(CATALOG_PATH, original);
+    rmSync(box, { recursive: true, force: true });
   }
 }
 
+/** Same, for one control inside a byte-exact copy of the LIVE controls tree. */
 function withControl(controlId, mutate, run) {
-  const target = join(CONTROLS_DIR, pathForManifestId(controlId), 'index.json');
-  const original = readFileSync(target, 'utf8');
+  const box = mkdtempSync(join(tmpdir(), 'root-exposure-controls-'));
+  const controlsDir = join(box, 'controls');
   try {
-    const doc = JSON.parse(original);
+    cpSync(CONTROLS_DIR, controlsDir, { recursive: true });
+    const target = join(controlsDir, pathForManifestId(controlId), 'index.json');
+    const doc = JSON.parse(readFileSync(target, 'utf8'));
     mutate(doc);
+    mkdirSync(join(target, '..'), { recursive: true });
     writeFileSync(target, `${JSON.stringify(doc, null, 2)}\n`);
-    run(collectFindings());
+    run(collectFindings({ controlsDir }));
   } finally {
-    writeFileSync(target, original);
+    rmSync(box, { recursive: true, force: true });
   }
 }
 

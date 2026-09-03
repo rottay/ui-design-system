@@ -389,8 +389,14 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   });
 
   it('bithire generates button variant vars with correct values', () => {
-    expect(bithireCss).toContain('--ds-button-primary-bg: #3A6FB0');
-    expect(bithireCss).toContain('--ds-button-secondary-color: #3A6FB0');
+    // A2-16 idiom (alias + resolution): the brand ground is authored once on
+    // the cascade root and the button channel reads it, so the literal is
+    // asserted where it is DECLARED, not duplicated on the channel.
+    expect(bithireCss).toContain('--ds-button-primary-bg: var(--ds-color-primary)');
+    expect(bithireCss).toContain('--ds-color-primary: #3A6FB0');
+    // Same root, read with its authored literal as the in-place fallback --
+    // the fallback is asserted verbatim so a silent widening is still red.
+    expect(bithireCss).toContain('--ds-button-secondary-color: var(--ds-color-primary, #3A6FB0)');
     // Control ink and brand border route through the semantic control tokens.
     // The artifact extension used to override both here; R1-P moved the value
     // that actually shipped into the theme, so these are what production paints.
@@ -616,7 +622,11 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   });
 
   it('rottay generates layout vars with correct values', () => {
-    expect(rottayCss).toContain('--ds-layout-bg: #0C0C0E');
+    // Same A2-16 idiom as the sider ground below: the page ground is authored
+    // on --ds-color-bg-primary and the layout channel reads it, which is what
+    // lets the light mode block move one root instead of every channel.
+    expect(rottayCss).toContain('--ds-layout-bg: var(--ds-color-bg-primary)');
+    expect(rottayCss).toContain('--ds-color-bg-primary: #0C0C0E');
     expect(rottayCss).toContain('--ds-layout-header-bg: rgba(12, 12, 14, 0.82)');
     // R-1 re-anchor (D-1): F2.4 (a7929df5a) rewired the BASE sider ground from
     // the literal to the governed root; the base literal does not come back.
@@ -657,7 +667,8 @@ describe('shared pipeline: chrome vars NOW generated (G1)', () => {
   it('DB-backed tenant with BrandTheme gets same chrome vars', () => {
     const css = compileBrandTheme({ brandTheme: rottayBrandTheme, tenantSlug: 'db-premium' }).cssString;
     expect(css).toContain('--ds-sidebar-bg: #0D0D10');
-    expect(css).toContain('--ds-layout-bg: #0C0C0E');
+    expect(css).toContain('--ds-layout-bg: var(--ds-color-bg-primary)');
+    expect(css).toContain('--ds-color-bg-primary: #0C0C0E');
     expect(css).toContain('--ds-shell-grid-size: 28px');
     expect(css).toContain("html[data-tenant='db-premium']");
   });
@@ -682,7 +693,7 @@ describe('mode blocks: chrome vars stay in their own scope', () => {
     expect(lightMatch, 'expected a compiled light mode block').not.toBeNull();
     const lightBlock = lightMatch![1];
     expect(lightBlock).not.toContain('--ds-sidebar-bg: #0D0D10');
-    expect(lightBlock).not.toContain('--ds-layout-bg: #0C0C0E');
+    expect(lightBlock).not.toContain('--ds-color-bg-primary: #0C0C0E');
   });
 
   it("rottay's light mode block carries its OWN authored chrome", () => {
@@ -690,13 +701,17 @@ describe('mode blocks: chrome vars stay in their own scope', () => {
     const lightMatch = css.match(/\[data-theme='light'\][^{]*\{([^}]+)\}/s);
     const lightBlock = lightMatch![1];
     expect(lightBlock).toContain('--ds-sidebar-bg: #F4F4F3');
-    expect(lightBlock).toContain('--ds-layout-bg: #FAFAF9');
+    // The layout channel is not redeclared per mode: the light block moves the
+    // root it reads, which is the whole point of routing it through the root.
+    expect(lightBlock).toContain('--ds-color-bg-primary: #FAFAF9');
+    expect(lightBlock).not.toContain('--ds-layout-bg:');
   });
 
   it('the base (dark) block carries the default chrome directly, unscoped', () => {
     const base = CSS_BY_TENANT.rottay;
     expect(base).toContain('--ds-sidebar-bg: #0D0D10');
-    expect(base).toContain('--ds-layout-bg: #0C0C0E');
+    expect(base).toContain('--ds-layout-bg: var(--ds-color-bg-primary)');
+    expect(base).toContain('--ds-color-bg-primary: #0C0C0E');
     expect(base).toContain('--ds-shell-grid-size: 28px');
   });
 
@@ -737,7 +752,7 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
     // for dynamic tenants (skipCssLoading=false)
     const vars = brandThemeToChromeVariables(rottayBrandTheme);
     expect(vars['--ds-sidebar-bg']).toBe('#0D0D10');
-    expect(vars['--ds-layout-bg']).toBe('#0C0C0E');
+    expect(vars['--ds-layout-bg']).toBe('var(--ds-color-bg-primary)');
     expect(vars['--ds-button-primary-color']).toBe('#0C0C0E');
     expect(vars['--ds-shell-grid-size']).toBe('28px');
     expect(vars['--ds-table-header-bg']).toBe('#131316');
@@ -751,7 +766,7 @@ describe('dynamic tenant runtime chrome: scoped <style> path', () => {
 
     // Scoped selector — will NOT override dark-mode tenant CSS
     expect(scopedCss).toContain("html[data-tenant='db-customer']");
-    expect(scopedCss).toContain('--ds-button-primary-bg: #3A6FB0');
+    expect(scopedCss).toContain('--ds-button-primary-bg: var(--ds-color-primary)');
     expect(scopedCss).toContain('--ds-sidebar-bg: #ffffff');
     expect(scopedCss).toContain('--ds-command-home-panel-border: #A9C9EA');
     expect(scopedCss).toContain('--ds-command-home-meter-fill: linear-gradient(90deg, #315F86, #6F98BC)');

@@ -445,7 +445,13 @@ export const TECHNICAL_DARK_DOCUMENT = {
         "--ds-material-card-foreground": "#F3F8FF",
         "--ds-material-inset-foreground": "#D5E5F5",
         "--ds-material-control-foreground": "#F3F8FF",
-        "--ds-material-raised-foreground": "#F3F8FF",
+        // `--ds-material-raised-foreground` is NOT authored here, for the same
+        // reason the muted note below already gives about this exact role: the
+        // dark `--ds-surface-raised` is not a plain hex ground the law can
+        // resolve, so an authored ink on it is a pair the compiler refuses
+        // outright. Leaving it derived was measured, not assumed -- the derived
+        // ink clears the floor on this fixture's own ground, which is why the
+        // Lc 0.0 that forced the other seven does not apply to this one.
         "--ds-material-overlay-foreground": "#F7FAFF",
         // The muted step of exactly three of those roles, because exactly three
         // failed: the derived muted ink measured about Lc -27 on the authored

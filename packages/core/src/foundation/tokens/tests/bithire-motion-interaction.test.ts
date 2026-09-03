@@ -94,9 +94,27 @@ describe('bithire artifact carries the ledger interaction defaults (§8.2)', () 
     expect(artifact).not.toMatch(/\[data-bithire-/);
   });
 
-  it('zeroes the motion tokens under reduced motion', () => {
-    expect(artifact).toMatch(
-      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?--ds-motion-calm: 0ms/,
+  it('zeroes the motion tokens under reduced motion, from the shared owners', () => {
+    // The zeroing is NOT re-declared per tenant: it lives once in the OS-media
+    // owner and once in the runtime-policy owner, both `!important` so they
+    // outrank the `html[data-tenant]` cadence this artifact authors. A tenant
+    // copy would be a second authority for the same accessibility law, so its
+    // absence is asserted alongside the two owners that carry it.
+    expect(artifact).not.toMatch(/@media \(prefers-reduced-motion: reduce\)/);
+    const cssRoot = resolve(TEST_DIR, '../css');
+    const mediaOwner = readFileSync(
+      resolve(cssRoot, 'foundation/animations/transitions/index.css'),
+      'utf8',
+    );
+    expect(mediaOwner).toMatch(
+      /@media \(prefers-reduced-motion: reduce\)[\s\S]*?--ds-motion-calm: 0s !important/,
+    );
+    const runtimeOwner = readFileSync(
+      resolve(cssRoot, 'runtime/personality/index.css'),
+      'utf8',
+    );
+    expect(runtimeOwner).toMatch(
+      /html\[data-ds-motion='reduced'\][\s\S]*?--ds-motion-calm: 0s !important/,
     );
   });
 });

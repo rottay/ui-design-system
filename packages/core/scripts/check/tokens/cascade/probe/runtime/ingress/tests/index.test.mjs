@@ -15,8 +15,9 @@
  */
 
 import assert from 'node:assert/strict';
-import { readdirSync, readFileSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join, resolve } from 'node:path';
 import { test } from 'node:test';
 import { pathToFileURL } from 'node:url';
 
@@ -1156,6 +1157,82 @@ function dataTerminalControlIds() {
   return ids;
 }
 
+/* =====================================================================
+ * THE WITHDRAWAL, AND WHY AN EMPTY COHORT IS NOT A GREEN BY ITSELF.
+ *
+ * Both fences below select from the CONTROL manifests: one on
+ * `assessmentState === 'COMPUTED_VERIFIED'`, the other on a non-empty active
+ * evidence list. b6896c4f6 emptied both selectors at once -- it downgraded the
+ * nine COMPUTED_VERIFIED controls to IMPLEMENTED and cleared every
+ * staticDbParity/exactRestore id -- and wrote the reason into each manifest it
+ * touched: `RERUN_CAUSAL_PROOF_AFTER_TREE_FREEZE. Previous receipts remain
+ * append-only historical evidence but no longer support an active claim after
+ * the canonical-path refactor.` The receipts were measured at paths the
+ * refactor moved, so the withdrawal is correct and `governance/manifest` is not
+ * this lot's to edit.
+ *
+ * That leaves the two fences with nothing to select, and `checked > 0` cannot
+ * tell "the authority withdrew every claim" apart from "somebody broke the
+ * selector". So the law is stated in two halves, and BOTH are asserted:
+ *
+ *   (a) an empty cohort is legal only while the authority itself says why --
+ *       the same sentence already load-bearing in
+ *       probe/foundation/negative-controls/tests/index.test.mjs; and
+ *   (b) the selector and the comparison loop are proven live on a planted
+ *       tree that restores the withdrawn state, so a broken selector is red
+ *       even while the real cohort is empty.
+ *
+ * Half (b) is what keeps this from being a disabled drill. When the re-run
+ * lands and the manifests close again, (a) goes quiet on its own and the
+ * original `checked > 0` is back in force with no edit here.
+ * ===================================================================== */
+const WITHDRAWN_AFTER_TREE_FREEZE = /^RERUN_(?:DATA_)?CAUSAL_PROOF_AFTER_TREE_FREEZE/u;
+
+const CONTROLS_DIR = resolve(CORE_ROOT, 'governance/manifest/controls');
+
+/**
+ * Assert that an empty cohort is explained by the authority, not by an
+ * accident. `stopBearing` is every control the fence could ever select.
+ */
+function assertWithdrawalExplainsEmptyCohort(controlsDir, fence) {
+  const stopBearing = readManifestRecords(controlsDir, 'controlId').filter(
+    ({ document }) => (document.calibration?.normalizedStops ?? []).length > 0,
+  );
+  const unexplained = stopBearing
+    .filter(({ document }) => !WITHDRAWN_AFTER_TREE_FREEZE.test(document.calibration?.nextAction ?? ''))
+    .map(({ id }) => id);
+  const withdrawn = stopBearing.filter(({ document }) =>
+    WITHDRAWN_AFTER_TREE_FREEZE.test(document.calibration?.nextAction ?? ''),
+  );
+  assert.ok(
+    withdrawn.length > 0,
+    `${fence}: the cohort is empty and no control declares the post-refactor withdrawal; ` +
+      'an unexplained empty cohort is a broken selector, not a pass',
+  );
+  // The cohort is empty because the RANK is empty, never because the by-design
+  // exclusions ate it. Without this line a fence whose exclusion list grew to
+  // swallow every closed control would read as a quiet withdrawal.
+  assert.deepEqual(
+    readManifestRecords(controlsDir, 'controlId')
+      .filter(({ document }) => document.calibration?.assessmentState === 'COMPUTED_VERIFIED')
+      .map(({ id }) => id),
+    [],
+    `${fence}: a control still claiming COMPUTED_VERIFIED must be inside the cohort`,
+  );
+}
+
+/** A one-control controls tree, byte-derived from a live manifest. */
+function plantControlsTree(controlId, mutate) {
+  const box = mkdtempSync(join(tmpdir(), 'ingress-cohort-'));
+  const document = mutate(
+    JSON.parse(readFileSync(resolve(CONTROLS_DIR, pathForManifestId(controlId), 'index.json'), 'utf8')),
+  );
+  const target = resolve(box, pathForManifestId(controlId));
+  mkdirSync(target, { recursive: true });
+  writeFileSync(resolve(target, 'index.json'), `${JSON.stringify(document, null, 2)}\n`);
+  return box;
+}
+
 const BASE_SENSITIVE_BY_DESIGN = new Map([
   [
     'experience.profile',
@@ -1186,15 +1263,13 @@ const BASE_SENSITIVE_BY_DESIGN = new Map([
   ],
 ]);
 
-test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically with and without a base', async () => {
-  const { readdirSync } = await import('node:fs');
+async function runH1InvarianceFence(controlsDir) {
   const arms = await loadCompilerArms();
   const baselines = await loadStaticBaselines();
-  const dir = resolve(CORE_ROOT, 'governance/manifest/controls');
   const dataTerminals = dataTerminalControlIds();
   let checked = 0;
   const covered = [];
-  for (const { document: manifest } of readManifestRecords(dir, 'controlId')) {
+  for (const { document: manifest } of readManifestRecords(controlsDir, 'controlId')) {
     const id = manifest.controlId;
     const stops = manifest.calibration?.normalizedStops ?? [];
     // "Closed" = it has stops to lower AND a state that made it evidence-bearing.
@@ -1252,7 +1327,33 @@ test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically wi
       }
     }
   }
-  assert.ok(checked > 0, `the invariance fence must actually check something; covered: ${covered.join(', ')}`);
+  return { checked, covered };
+}
+
+test('H-1 drill 3 [needs dist]: every OTHER closed control lowers identically with and without a base', async () => {
+  const { checked, covered } = await runH1InvarianceFence(CONTROLS_DIR);
+  if (covered.length > 0) {
+    assert.ok(checked > 0, `the invariance fence must actually check something; covered: ${covered.join(', ')}`);
+    return;
+  }
+  assertWithdrawalExplainsEmptyCohort(CONTROLS_DIR, 'H-1 drill 3');
+});
+
+test('H-1 drill 3 CONTROL [needs dist]: the cohort selector and the comparison loop are live', async () => {
+  // Restore ONE withdrawn control on a planted copy. If the selector or the
+  // loop stops working, this goes red while the real tree stays empty -- which
+  // is the whole reason the empty cohort above is allowed to be quiet.
+  const box = plantControlsTree('shape.radius-scale', (document) => ({
+    ...document,
+    calibration: { ...document.calibration, assessmentState: 'COMPUTED_VERIFIED' },
+  }));
+  try {
+    const { checked, covered } = await runH1InvarianceFence(box);
+    assert.deepEqual(covered, ['shape.radius-scale']);
+    assert.ok(checked > 0, 'the planted cohort must produce real comparisons');
+  } finally {
+    rmSync(box, { recursive: true, force: true });
+  }
 });
 
 test('H-1 drill 4 [needs dist]: a tenant-selected profile reaches the channel, and OUTRANKS every baseline', async () => {
@@ -1526,14 +1627,13 @@ test('H-2 drill 4 [needs dist]: the predicate is EXISTS, not FOR-ALL', async () 
   assert.deepEqual(verdict.constant, ['--ds-density-scale']);
 });
 
-test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both arms', async () => {
-  const { readdirSync } = await import('node:fs');
-  const dir = resolve(CORE_ROOT, 'governance/manifest/controls');
+async function runH2ReceiptedFence(controlsDir) {
   const dataTerminals = dataTerminalControlIds();
   let checked = 0;
   let routed = 0;
   let seenDataTerminals = 0;
-  for (const { document: manifest } of readManifestRecords(dir, 'controlId')) {
+  let selected = 0;
+  for (const { document: manifest } of readManifestRecords(controlsDir, 'controlId')) {
     // "Carries receipts" read from the manifest state, not a hardcoded list, so
     // a control closing later is covered the day it closes (the V3 pattern).
     const evidence = [
@@ -1541,6 +1641,7 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
       ...(manifest.calibration?.exactRestoreEvidenceIds ?? []),
     ];
     if (evidence.length === 0) continue;
+    selected += 1;
     if (dataTerminals.has(manifest.controlId)) seenDataTerminals += 1;
     for (const armId of INGRESS_ARM_IDS) {
       for (const vertical of FIRST_PARTY) {
@@ -1568,7 +1669,11 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
       }
     }
   }
-  assert.ok(checked >= 12, `the invariance fence must cover the receipted catalogue; checked ${checked}`);
+  return { checked, routed, seenDataTerminals, selected };
+}
+
+test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both arms', async () => {
+  const { checked, routed, seenDataTerminals, selected } = await runH2ReceiptedFence(CONTROLS_DIR);
   // Both counters are asserted. If the DATA leg ever silently stops selecting
   // anything, this is what says so.
   assert.equal(
@@ -1576,6 +1681,28 @@ test('H-2 drill 5 [needs dist]: every control that carries receipts passes, both
     seenDataTerminals * INGRESS_ARM_IDS.length * FIRST_PARTY.length,
     'every receipted DATA terminal must be routed on every arm and vertical',
   );
+  if (selected > 0) {
+    assert.ok(checked >= 12, `the invariance fence must cover the receipted catalogue; checked ${checked}`);
+    return;
+  }
+  assertWithdrawalExplainsEmptyCohort(CONTROLS_DIR, 'H-2 drill 5');
+});
+
+test('H-2 drill 5 CONTROL [needs dist]: the receipted selector and the guard loop are live', async () => {
+  const box = plantControlsTree('shape.radius-scale', (document) => ({
+    ...document,
+    calibration: {
+      ...document.calibration,
+      staticDbParityEvidenceIds: ['planted/control/receipt.json'],
+    },
+  }));
+  try {
+    const { checked, selected } = await runH2ReceiptedFence(box);
+    assert.equal(selected, 1);
+    assert.equal(checked, INGRESS_ARM_IDS.length * FIRST_PARTY.length);
+  } finally {
+    rmSync(box, { recursive: true, force: true });
+  }
 });
 
 test('H-2 drill 6 [needs dist]: the verdict is PER ARM — a broken door on ONE arm proves it', async () => {

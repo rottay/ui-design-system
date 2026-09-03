@@ -62,14 +62,14 @@ const SKIN_DIRECTORY = resolvePath(
  * the selector is derived rather than retyped.
  */
 const PANEL_ROOTS = [
-  { file: 'activity-cards.css', scope: 'ds-activity-cards' },
-  { file: 'activity-compact.css', scope: 'ds-activity-compact' },
-  { file: 'activity-ticker.css', scope: 'ds-activity-ticker' },
-  { file: 'activity-timeline.css', scope: 'ds-activity-timeline' },
-  { file: 'metrics-cards.css', scope: 'ds-metrics-cards' },
-  { file: 'metrics-chart.css', scope: 'ds-metrics-chart' },
-  { file: 'metrics-minimal.css', scope: 'ds-metrics-minimal' },
-  { file: 'metrics-rows.css', scope: 'ds-metrics-rows' },
+  { file: 'activity-cards/index.css', scope: 'ds-activity-cards' },
+  { file: 'activity-compact/index.css', scope: 'ds-activity-compact' },
+  { file: 'activity-ticker/index.css', scope: 'ds-activity-ticker' },
+  { file: 'activity-timeline/index.css', scope: 'ds-activity-timeline' },
+  { file: 'metrics-cards/index.css', scope: 'ds-metrics-cards' },
+  { file: 'metrics-chart/index.css', scope: 'ds-metrics-chart' },
+  { file: 'metrics-minimal/index.css', scope: 'ds-metrics-minimal' },
+  { file: 'metrics-rows/index.css', scope: 'ds-metrics-rows' },
 ] as const;
 
 function rootSelector(scope: string): string {

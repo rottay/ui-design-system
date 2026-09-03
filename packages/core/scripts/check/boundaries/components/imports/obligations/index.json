@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "_comment": "Bounded, expiring cross-repo obligations. NOT the decrease-only baseline. Every entry names an owner outside this repository, the corpus SHA it was measured at, and an executable expiry. An obligation is not debt acceptance: the gate fails when the pin moves, when the count changes in EITHER direction, or when the entry no longer reproduces. An id present here and in baseline.categories is an error.",
+  "corpusPin": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+  "obligations": [
+    {
+      "id": "app-bithire/src/components/landing/content/styles/index.css :: color:#000",
+      "category": "raw-shared-chrome-literals",
+      "count": 20,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/content/styles/index.css :: radius-literal",
+      "category": "raw-shared-chrome-literals",
+      "count": 8,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/content/styles/index.css :: raw-duration",
+      "category": "raw-shared-chrome-literals",
+      "count": 59,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/content/styles/index.css :: shadow-literal",
+      "category": "raw-shared-chrome-literals",
+      "count": 2,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/footer/styles/index.css :: radius-literal",
+      "category": "raw-shared-chrome-literals",
+      "count": 3,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/footer/styles/index.css :: raw-duration",
+      "category": "raw-shared-chrome-literals",
+      "count": 1,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/footer/styles/index.css :: shadow-literal",
+      "category": "raw-shared-chrome-literals",
+      "count": 2,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/public-header/styles/index.css :: radius-literal",
+      "category": "raw-shared-chrome-literals",
+      "count": 8,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/public-header/styles/index.css :: raw-duration",
+      "category": "raw-shared-chrome-literals",
+      "count": 9,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    },
+    {
+      "id": "app-bithire/src/components/landing/public-header/styles/index.css :: shadow-literal",
+      "category": "raw-shared-chrome-literals",
+      "count": 3,
+      "owner": "app-bithire — lint:ux-budget (scripts/white-label-token-audit.mjs --strict) and roadmap/registry.json:3354, which already holds this exact debt open",
+      "reason": "A tenant-branded landing surface carrying pre-DS literals. Not excludable: the three files read var(--ds-*) 96 times between them, a sibling landing file is already baselined in this same category, and brand-presentation/index.ts:112 names landing as one of the surfaces that consume tenant branding at runtime — so a hardcoded value here is exactly the white-label leak this category exists to catch. Draining it is app-bithire work; this repository cannot fix it, and raising the decrease-only ceiling to hide it is the forbidden move.",
+      "measuredAt": "8abd05578d04cd3cf1c82ca8d777f0ca1ef6925f",
+      "expiresWhen": "corpus-pin-change"
+    }
+  ]
+}

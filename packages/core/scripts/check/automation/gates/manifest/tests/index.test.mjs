@@ -20,7 +20,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CI_GATES } from '../index.mjs';
+import { CI_GATES, manifestScriptTargets, validateManifest } from '../index.mjs';
 import { packageRoot as findPackageRoot } from '../../../../../libraries/repo-root/index.mjs';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -110,4 +110,79 @@ test('no gate passes a flag its target script does not recognise', () => {
     [],
     `the manifest passes flags no target script parses:\n  ${phantom.join('\n  ')}`,
   );
+});
+
+test('DRILL: a planted missing path makes validateManifest refuse the inventory', () => {
+  // The test above walks CI_GATES, but it lives in `test:scripts`, which
+  // `gates:ci` never runs. Eight gates therefore pointed at deleted scripts
+  // through a whole refactor while the runner reported the FIRST of them as an
+  // ordinary gate failure and never reached the other seven. Existence is now
+  // structural validation, so the runner refuses the manifest before running
+  // anything.
+  const planted = validateManifest([
+    { id: 'ghost', run: ['node', 'scripts/check/automation/does-not-exist/index.mjs'], blocking: true },
+  ]);
+  assert.ok(
+    planted.some((problem) => problem.includes('names a script that does not exist')),
+    `expected a missing-path problem, got: ${JSON.stringify(planted)}`,
+  );
+
+  // The positive half: the same shape with a real path is accepted, so the
+  // refusal above is about existence and not about the argv shape.
+  assert.deepEqual(
+    validateManifest([
+      { id: 'real', run: ['node', 'scripts/check/automation/gates/manifest/index.mjs'], blocking: true },
+    ]),
+    [],
+  );
+});
+
+test('DRILL: the existence law reads argv, not flag values or npm aliases', () => {
+  // A loose predicate would report a phantom on `--repositories ui-design-system`
+  // or on a `pnpm run` alias, and a manifest that cannot be validated without
+  // false positives gets its validator disabled.
+  assert.deepEqual(manifestScriptTargets(['pnpm', 'run', 'lint:folders']), []);
+  assert.deepEqual(manifestScriptTargets(['node', 'a/b.mjs', '--repositories', 'ui-design-system']), ['a/b.mjs']);
+  assert.deepEqual(manifestScriptTargets(['node', '--test', 'a.test.mjs', 'b.test.mjs']), ['a.test.mjs', 'b.test.mjs']);
+  assert.deepEqual(manifestScriptTargets(['true']), []);
+});
+
+test('the recreated evidence-framework drills are carried by exactly one gate, and all eight run', () => {
+  // The monolith this replaces was one file; the recreation is eight owners.
+  // Carrying them under one id keeps the gate's identity, but it also means a
+  // silently dropped suite would be invisible -- hence the exact roster.
+  const OWNERS = [
+    'admission',
+    'craft-scoring',
+    'eligibility',
+    'integration',
+    'inventory-correspondence',
+    'ownership-overlap',
+    'receipts',
+    'rounds/evidence',
+  ];
+  const matches = CI_GATES.filter((gate) => gate.id === 'quality-evidence-v2-drills');
+  assert.equal(matches.length, 1);
+  const gate = matches[0];
+  assert.equal(gate.blocking, true);
+  assert.deepEqual(
+    gate.run.slice(0, 2),
+    ['node', '--test'],
+    'the suites must run under node --test, not through an alias',
+  );
+  assert.deepEqual(
+    gate.run.slice(2).sort(),
+    OWNERS.map((owner) => `scripts/check/evidence/framework/${owner}/index.test.mjs`).sort(),
+  );
+  for (const script of gate.run.slice(2)) {
+    assert.ok(existsSync(join(CORE_ROOT, script)), `${script} does not exist`);
+  }
+  // And no other gate may carry one of them: a second carrier would make the
+  // cost and the ordering of these suites ambiguous.
+  for (const script of gate.run.slice(2)) {
+    assert.deepEqual(
+      CI_GATES.filter((candidate) => candidate.run.includes(script)).map((candidate) => candidate.id),
+      ['quality-evidence-v2-drills'],
+    );
+  }
 });

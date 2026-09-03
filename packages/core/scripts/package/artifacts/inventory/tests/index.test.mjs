@@ -171,3 +171,100 @@ test('the shipped lucide allowlist covers the ban-rule subtree and the honesty c
   const cliSource = readFileSync(resolve(findPackageRoot(scriptDir), 'src/entrypoints/suppliers/cli/index.mjs'), 'utf8');
   assert.ok(!/lucide/iu.test(cliSource), 'shipped consumer CLI must stay lucide-free');
 });
+
+const STALE_DIST_HERE = dirname(fileURLToPath(import.meta.url));
+
+/* -------------------------------------------------------------------------- */
+/* stale-dist holes                                                            */
+/* -------------------------------------------------------------------------- */
+
+
+const DECLARATION = 'dist/components/primitives/display/badge/compound/index.d.ts';
+const RUNTIME = 'dist/components/primitives/display/badge/compound/index.js';
+
+function stalePackOf(paths, { unpackedSize = 100, entryCount = paths.length } = {}) {
+  return {
+    name: '@rottay/design-system',
+    version: '1.0.0',
+    entryCount,
+    unpackedSize,
+    files: paths.map((path) => ({ path, size: 1 })),
+  };
+}
+
+function staleAudit({ pack, baseline }) {
+  return auditPackInventory({
+    pack,
+    baseline,
+    additions: [],
+    lucideAllow: { exacts: new Set(), prefixes: [] },
+    forbiddenTokens: { all: new Set(), content: new Set() },
+    readPackedFile: () => '',
+  });
+}
+
+test('N11: a baselined public .d.ts that is no longer packed is a VIOLATION, not a shrink', () => {
+  const baseline = {
+    entryCount: 2,
+    unpackedSize: 100,
+    files: [{ path: DECLARATION, size: 1 }, { path: RUNTIME, size: 1 }],
+  };
+  const { failures, notes } = staleAudit({
+    pack: stalePackOf([RUNTIME], { unpackedSize: 50, entryCount: 1 }),
+    baseline,
+  });
+  assert.ok(
+    failures.some((failure) => failure.includes('baselined public declaration is no longer packed')),
+    `expected a declaration failure, got: ${JSON.stringify({ failures, notes })}`,
+  );
+  assert.equal(
+    notes.some((note) => note.includes(`allowed shrink): ${DECLARATION}`)),
+    false,
+    'a missing declaration must not also be recorded as an allowed shrink',
+  );
+});
+
+test('a non-declaration entry disappearing IS still an allowed shrink', () => {
+  // The bound. Narrowing "allowed shrink" to exclude declarations must not turn
+  // every removal into a failure, or the ratchet stops being decrease-only.
+  const baseline = {
+    entryCount: 2,
+    unpackedSize: 100,
+    files: [{ path: DECLARATION, size: 1 }, { path: RUNTIME, size: 1 }],
+  };
+  const { failures, notes } = staleAudit({
+    pack: stalePackOf([DECLARATION], { unpackedSize: 50, entryCount: 1 }),
+    baseline,
+  });
+  assert.deepEqual(failures, []);
+  assert.ok(notes.some((note) => note.includes(`allowed shrink): ${RUNTIME}`)));
+});
+
+test('N12: packinv:write refuses while distfresh is red', () => {
+  // A baseline seeded over a stale dist bakes the staleness in permanently:
+  // whatever the stale pack was missing stops being required. The coupling is
+  // asserted on the writer's source because running it shells out to
+  // `npm pack --dry-run` over the real tree.
+  const source = readFileSync(resolve(STALE_DIST_HERE, '../index.mjs'), 'utf8');
+  const writeIndex = source.indexOf("if (mode === 'write')");
+  const freshnessIndex = source.indexOf('assertDistFresh(');
+  assert.ok(writeIndex >= 0, 'the writer branch must exist');
+  assert.ok(freshnessIndex > writeIndex, 'the freshness check must run inside the writer branch');
+  assert.match(source, /refusing to seed a baseline over a STALE dist/);
+  // The SEED CALL, not the helper's declaration, is what must follow the
+  // freshness check.
+  const seedIndex = source.indexOf('writeFileSync(BASELINE_PATH');
+  assert.ok(seedIndex > freshnessIndex, 'freshness must be proven BEFORE the baseline is written');
+});
+
+test('the pack ratchet still refuses growth in both size and entry count', () => {
+  // Non-vacuity for the drills above: the ratchet must still be a ratchet.
+  const baseline = { entryCount: 1, unpackedSize: 100, files: [{ path: RUNTIME, size: 1 }] };
+  const grew = staleAudit({
+    pack: stalePackOf([RUNTIME, DECLARATION], { unpackedSize: 200, entryCount: 2 }),
+    baseline,
+  });
+  assert.ok(grew.failures.some((failure) => failure.includes('pack unpacked size grew')));
+  assert.ok(grew.failures.some((failure) => failure.includes('pack entry count grew')));
+  assert.ok(grew.failures.some((failure) => failure.includes('unexpected new packed entry')));
+});

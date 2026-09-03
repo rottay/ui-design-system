@@ -1179,7 +1179,24 @@ function buildReconciliation(report) {
   };
 }
 
-function runChecks(inputs, edges, built, context, { drill } = {}) {
+/**
+ * IN-REPO-ONLY MODE.
+ *
+ * `--write` reaches into the sibling repository: it `mkdirSync`s
+ * `docs-engineering/engineering/design-system/tokens`, writes every generated
+ * view there, and `unlinkSync`s every `.md` under the two family prefixes that
+ * the current run did not produce. Measured read-only, that is up to 343 files
+ * written and up to 332 prune-eligible, landing on top of that repository's own
+ * uncommitted state. `--check` is not a preview of it: it names the one view
+ * that is stale, while `--write` rewrites all of them.
+ *
+ * `--in-repo-only` bounds the generator to the outputs this package owns. The
+ * two checks that read the sibling repo are DEFERRED AND NAMED rather than
+ * dropped, and the full `--check` still runs them, so the cross-repo
+ * reconciliation is postponed by an explicit act rather than by a gate quietly
+ * measuring less.
+ */
+function runChecks(inputs, edges, built, context, { drill, inRepoOnly = false, deferredCrossRepo = [] } = {}) {
   const failures = [];
   const { report, manifest, registry } = inputs;
   const { views, operational, governance, operationalGroups, governanceGroups } = built;
@@ -1317,15 +1334,28 @@ function runChecks(inputs, edges, built, context, { drill } = {}) {
   indexCheck('governance/README.md', governanceGroups, GOVERNANCE_FAMILIES_PREFIX, 'governance');
 
   // 10. docs staleness (every generated view, nested included)
-  for (const [file, content] of Object.entries(views)) {
-    const target = join(DOCS_TOKENS_DIR, file);
-    const disk = existsSync(target) ? readFileSync(target, 'utf8') : null;
-    const fresh = drill === 'stale' && file === 'README.md' ? false : disk === content;
-    if (!fresh) failures.push(`stale/missing generated view: tokens/${file} — run pnpm tokens:catalog:write`);
-  }
-  for (const guide of HAND_WRITTEN) {
-    if (!existsSync(join(DOCS_TOKENS_DIR, guide))) {
-      failures.push(`missing hand-written guide: tokens/${guide}`);
+  //
+  // Checks 10 and 12 are the only two that read the SIBLING repository. Under
+  // `--in-repo-only` they are deferred and named, never silently skipped: the
+  // deferral is printed with the count it would have measured, so a reader can
+  // see exactly what was not checked.
+  if (inRepoOnly) {
+    deferredCrossRepo.push(
+      `docs staleness over ${Object.keys(views).length} generated view(s) in ${DOCS_TOKENS_DIR}`,
+      `orphan family pages under ${CATALOG_FAMILIES_PREFIX}/ and ${GOVERNANCE_FAMILIES_PREFIX}/`,
+      `presence of ${HAND_WRITTEN.length} hand-written guide(s)`,
+    );
+  } else {
+    for (const [file, content] of Object.entries(views)) {
+      const target = join(DOCS_TOKENS_DIR, file);
+      const disk = existsSync(target) ? readFileSync(target, 'utf8') : null;
+      const fresh = drill === 'stale' && file === 'README.md' ? false : disk === content;
+      if (!fresh) failures.push(`stale/missing generated view: tokens/${file} — run pnpm tokens:catalog:write`);
+    }
+    for (const guide of HAND_WRITTEN) {
+      if (!existsSync(join(DOCS_TOKENS_DIR, guide))) {
+        failures.push(`missing hand-written guide: tokens/${guide}`);
+      }
     }
   }
 
@@ -1336,13 +1366,15 @@ function runChecks(inputs, edges, built, context, { drill } = {}) {
   }
 
   // 12. orphan family pages — a retired family must not linger on disk
-  for (const dirPrefix of [CATALOG_FAMILIES_PREFIX, GOVERNANCE_FAMILIES_PREFIX]) {
-    const dir = join(DOCS_TOKENS_DIR, dirPrefix);
-    if (!existsSync(dir)) continue;
-    for (const entry of readdirSync(dir).sort()) {
-      if (!entry.endsWith('.md')) continue;
-      if (!views[`${dirPrefix}/${entry}`]) {
-        failures.push(`orphan generated family page: tokens/${dirPrefix}/${entry} — run pnpm tokens:catalog:write`);
+  if (!inRepoOnly) {
+    for (const dirPrefix of [CATALOG_FAMILIES_PREFIX, GOVERNANCE_FAMILIES_PREFIX]) {
+      const dir = join(DOCS_TOKENS_DIR, dirPrefix);
+      if (!existsSync(dir)) continue;
+      for (const entry of readdirSync(dir).sort()) {
+        if (!entry.endsWith('.md')) continue;
+        if (!views[`${dirPrefix}/${entry}`]) {
+          failures.push(`orphan generated family page: tokens/${dirPrefix}/${entry} — run pnpm tokens:catalog:write`);
+        }
       }
     }
   }
@@ -1396,6 +1428,8 @@ async function main() {
   const built = buildViews(inputs, edges, context, { drill });
   const { views } = built;
 
+  const inRepoOnly = has('--in-repo-only');
+
   if (has('--write')) {
     const reconciliation = buildReconciliation(inputs.report);
     mkdirSync(dirname(RECONCILIATION_PATH), { recursive: true });
@@ -1403,6 +1437,13 @@ async function main() {
       RECONCILIATION_PATH,
       `${JSON.stringify(reconciliation, null, 2)}\n`
     );
+    if (inRepoOnly) {
+      console.log(
+        `tokens-catalog: --in-repo-only — wrote ${RECONCILIATION_PATH} and NOTHING under ${DOCS_TOKENS_DIR}. ` +
+          `${Object.keys(views).length} generated view(s) and the family-page prune are deferred to the ` +
+          'cross-repo documentation reconciliation.'
+      );
+    } else {
     mkdirSync(DOCS_TOKENS_DIR, { recursive: true });
     for (const [file, content] of Object.entries(views)) {
       const target = join(DOCS_TOKENS_DIR, file);
@@ -1429,9 +1470,14 @@ async function main() {
         (pruned > 0 ? `; pruned ${pruned} orphan page(s)` : '') +
         ` — values resolved via ${context.valueLoader} (${context.values.size} names)`
     );
+    }
   }
   if (has('--check') || drill) {
-    const failures = runChecks(inputs, edges, built, context, { drill });
+    const deferredCrossRepo = [];
+    const failures = runChecks(inputs, edges, built, context, { drill, inRepoOnly, deferredCrossRepo });
+    for (const deferred of deferredCrossRepo) {
+      console.log(`tokens-catalog: DEFERRED (cross-repo, --in-repo-only): ${deferred}`);
+    }
     if (failures.length > 0) {
       for (const failure of failures) console.error(`tokens-catalog FAIL — ${failure}`);
       process.exit(1);

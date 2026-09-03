@@ -32,10 +32,13 @@ const SKIN = readFileSync(
   ),
   'utf8'
 );
+// `--ds-font-size-base` is declared by the theme, not by the base ramp: both
+// land in `rottay-tokens` with the theme second, so the theme is the effective
+// declarer and the only file where the density calc can be asserted.
 const TYPOGRAPHY_FOUNDATION = readFileSync(
   join(
     dirname(fileURLToPath(import.meta.url)),
-    '../../../../../foundation/tokens/css/foundation/base/typography/index.css'
+    '../../../../../foundation/tokens/css/foundation/themes/default/index.css'
   ),
   'utf8'
 );

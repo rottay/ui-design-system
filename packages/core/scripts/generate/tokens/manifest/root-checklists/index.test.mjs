@@ -7,13 +7,16 @@
  * (`family-inventory/index.json`, 255 filas), que es la autoridad del programa.
  */
 
+import { spawnSync } from 'node:child_process';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, mkdirSync, mkdtempSync, writeFileSync, rmSync, existsSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 import { INLINE_EXPR } from '../fanout/index.mjs';
+import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
 import { pathForManifestId, readManifestRecords } from '../../../../libraries/manifest/index.mjs';
 import {
   OUTPUT_PATH,
@@ -794,4 +797,58 @@ test('control: las raices no-dial que solo el manifiesto alcanza estan medidas',
     assert.doesNotMatch(row.root, ROOT_PATTERN);
     assert.ok(row.summary.channelsInCascade >= 1);
   }
+});
+
+/* --------------------------------------------------------------------------
+ * clean-checkout regeneration
+ * -------------------------------------------------------------------------- */
+
+const CLEAN_CHECKOUT_HERE = path.dirname(fileURLToPath(import.meta.url));
+const CLEAN_CHECKOUT_CORE_ROOT = findPackageRoot(CLEAN_CHECKOUT_HERE);
+const GENERATOR = path.resolve(CLEAN_CHECKOUT_HERE, 'index.mjs');
+
+
+test('the write creates its own gitignored parent directory', () => {
+  // Asserted on the source rather than by deleting the directory: the
+  // end-to-end experiment lives in mirror-parity's coverage-ownership drill,
+  // and carrying it twice would make the cost of this suite ambiguous.
+  const source = readFileSync(GENERATOR, 'utf8');
+  assert.match(source, /mkdirSync\(path\.dirname\(OUTPUT_PATH\), \{ recursive: true \}\)/);
+  const writeIndex = source.indexOf('writeFileSync(OUTPUT_PATH, text)');
+  const mkdirIndex = source.indexOf('mkdirSync(path.dirname(OUTPUT_PATH)');
+  assert.ok(mkdirIndex >= 0 && writeIndex >= 0 && mkdirIndex < writeIndex, 'mkdir must precede the write');
+});
+
+test('--check asserts determinism, and says so when the ignored artifact is absent', () => {
+  const result = spawnSync(process.execPath, [GENERATOR, '--check'], {
+    cwd: CLEAN_CHECKOUT_CORE_ROOT,
+    encoding: 'utf8',
+  });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(result.stdout, /determinista/);
+});
+
+test('the determinism claim is not vacuous: a perturbed input yields a different document', () => {
+  // A builder that ignored its arguments would satisfy "two builds agree" while
+  // asserting nothing at all.
+  const facts = loadFacts();
+  const canon = loadCanon();
+  const baseline = serialize(buildChecklists(facts, canon));
+  assert.equal(serialize(buildChecklists(facts, canon)), baseline);
+
+  const perturbed = JSON.parse(JSON.stringify(facts));
+  assert.ok(Array.isArray(perturbed.channels) && perturbed.channels.length > 0);
+  // Rename a channel the document actually carries, rather than removing one:
+  // a rename keeps the facts structurally well-formed, so the assertion
+  // measures the builder rather than a crash, and picking a channel that
+  // appears in the baseline keeps it from measuring an unreported input.
+  const carried = perturbed.channels.find((channel) => baseline.includes(`"${channel.channel}"`));
+  assert.ok(carried, 'no channel from the facts appears in the document; the builder is not reading them');
+  carried.channel = `${carried.channel}-drill-perturbation`;
+
+  assert.notEqual(
+    serialize(buildChecklists(perturbed, canon)),
+    baseline,
+    'renaming a carried channel in the facts must change the document',
+  );
 });

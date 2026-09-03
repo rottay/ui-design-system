@@ -1,3 +1,9 @@
+import { existsSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+import { packageRoot as findPackageRoot } from '../../../../libraries/repo-root/index.mjs';
+
 /**
  * The single inventory of gates CI must run.
  *
@@ -48,7 +54,20 @@ export const CI_GATES = Object.freeze([
   { id: 'effects:provenance', run: ['pnpm', 'run', 'effects:provenance'], blocking: true },
   { id: 'contract:check', run: ['pnpm', 'run', 'contract:check'], blocking: true },
   { id: 'daisy-projection-contract', run: ['node', '--test', 'scripts/generate/framework-class-paint/tests/index.test.mjs'], blocking: true },
-  { id: 'quality-evidence-v2-drills', run: ['node', '--test', 'scripts/quality-evidence/v2/drills.test.mjs'], blocking: true },
+  // The 131 evidence-framework invariants, recreated co-located under the eight
+  // real owners the structural refactor left behind. The monolith they came
+  // from was deleted with no successor, so the eight suites -- not a restored
+  // copy -- are what this gate now runs.
+  { id: 'quality-evidence-v2-drills', run: ['node', '--test',
+    'scripts/check/evidence/framework/admission/index.test.mjs',
+    'scripts/check/evidence/framework/craft-scoring/index.test.mjs',
+    'scripts/check/evidence/framework/eligibility/index.test.mjs',
+    'scripts/check/evidence/framework/integration/index.test.mjs',
+    'scripts/check/evidence/framework/inventory-correspondence/index.test.mjs',
+    'scripts/check/evidence/framework/ownership-overlap/index.test.mjs',
+    'scripts/check/evidence/framework/receipts/index.test.mjs',
+    'scripts/check/evidence/framework/rounds/evidence/index.test.mjs',
+  ], blocking: true },
   // The `spacing.rhythm` control census the modern-rescue manifest asks for:
   // rhythm owns the room around a control, never the control's size, capacity,
   // touch target, icon, type or motion -- and never a physical inline side,
@@ -187,7 +206,18 @@ export const CI_GATES = Object.freeze([
   // corruptas de techo con el gate en verde.
   { id: 'public-entrypoint-boundary-drill', run: ['node', '--test', 'scripts/check/boundaries/public-api/index.test.mjs'], blocking: true },
   { id: 'public-entrypoint-boundary', run: ['node', 'scripts/check/boundaries/public-api/index.mjs'], blocking: true },
+  // Drill first: the freeze gate's own self-test was 25/25 green while 43 of its
+  // 78 written exceptions were keyed at paths git has never contained, because
+  // nothing asserted that a key resolves. A detector that cannot be seen
+  // refusing a planted mis-key is not evidence about the ledger.
+  { id: 'engine-freeze-drill', run: ['node', '--test', 'scripts/check/engine/lifecycle/freeze/index.test.mjs'], blocking: true },
   { id: 'engine-freeze-gate', run: ['node', 'scripts/check/engine/lifecycle/freeze/index.mjs', '--check'], blocking: true },
+  // The integration fence had NO manifest entry and NO test owner, so its three
+  // silent-green defects could not be caught by anything. Drill first, for the
+  // usual reason and for one of its own: a rename that disables an emitter and a
+  // correct measurement of zero are indistinguishable by orphan count.
+  { id: 'integration-audit-drill', run: ['node', '--test', 'scripts/check/architecture/audits/integration/tests/index.test.mjs'], blocking: true },
+  { id: 'integration-audit', run: ['node', 'scripts/check/architecture/audits/integration/index.mjs'], blocking: true },
   { id: 'portal-substrate-gate', run: ['node', 'scripts/check/boundaries/surfaces/portals/index.mjs', '--check'], blocking: true },
   // Bidirectional identity between every `--_ds-proto-*` in the sources and its
   // row in `governance/tokens/prototypes/index.json`. It ships with NO
@@ -244,7 +274,13 @@ export const CI_GATES = Object.freeze([
   // derivation cycles, undocumented public hooks, unknown capability
   // channels and unadjudicated dual authorities all block here.
   { id: 'tokens-catalog-drill', run: ['node', '--test', 'scripts/generate/tokens/customization/catalog/tests/index.test.mjs'], blocking: true },
-  { id: 'tokens-catalog', run: ['node', 'scripts/generate/tokens/customization/catalog/index.mjs', '--check'], blocking: true },
+  // `--in-repo-only`: this gate's full `--check` reads the sibling
+  // `docs-engineering` checkout, which CI does not carry and which C0 may not
+  // write. The deferred cross-repo checks are PRINTED by name on every run, so
+  // what is not being measured is visible rather than implied; the full form
+  // stays available as `pnpm tokens:catalog:check` for the documentation
+  // reconciliation that owns it.
+  { id: 'tokens-catalog', run: ['node', 'scripts/generate/tokens/customization/catalog/index.mjs', '--check', '--in-repo-only'], blocking: true },
   // Preserve source provenance for every customization surface.
   { id: 'customization-preservation-drill', run: ['node', '--test', 'scripts/generate/tokens/customization/preservation/index.test.mjs'], blocking: true },
   { id: 'customization-preservation', run: ['node', 'scripts/generate/tokens/customization/preservation/index.mjs', '--check'], blocking: true },
@@ -268,6 +304,10 @@ export const CI_GATES = Object.freeze([
   // in CI instead.
 
   // --- white-label channel + theme parity ---
+  // Drill first: the parity gate's own baseline test runs on synthetic fixtures,
+  // so the transitional obligation -- the instrument that replaced an opaque
+  // ceiling -- had no executable guard at all until now.
+  { id: 'theme-channel-parity-drill', run: ['node', '--test', 'scripts/check/tokens/cascade/channels/theme-parity/index.test.mjs'], blocking: true },
   { id: 'theme-channel-parity', run: ['node', 'scripts/check/tokens/cascade/channels/theme-parity/index.mjs', '--check', '--quiet'], blocking: true },
   { id: 'tenant-channel-consumer', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--check'], blocking: true },
   { id: 'tenant-channel-consumer-modern', run: ['node', 'scripts/check/tokens/cascade/channels/consumers/index.mjs', '--modern-check'], blocking: true },
@@ -534,11 +574,51 @@ export const CI_GATES = Object.freeze([
     run: ['node', '--test', 'scripts/check/automation/gates/honesty/index.test.mjs'],
     blocking: true,
   },
+  // PACKAGE GATES — drills here, gates post-build, and the reason stated.
+  //
+  // `distfresh`, `packinv`, `public-declarations`, `public-barrel` and
+  // `exports-artifact` all READ `dist/`. This manifest is consumed by `pretest`
+  // and by the CI `gates:ci` step, both of which run BEFORE the build, so
+  // listing the gates themselves here would make the inventory claim something
+  // it cannot run: on a clean checkout there is no dist to audit, and a gate
+  // that is red for that reason gets downgraded, which is the failure class this
+  // file exists to prevent.
+  //
+  // WRITTEN EXCEPTION (C0.9): the five gates keep their post-build channel --
+  // `distfresh:check` and `packinv:check` are named steps in `ci.yml` after the
+  // build, and the three public-API gates chain from `postbuild`. What was
+  // genuinely missing is that none of them had a drill proving it can go red,
+  // and four of the dist-freshness mutants (a standalone re-stamp, a post-stamp
+  // dist mutation, an emptied dist, a partial build) were GREEN. Those drills
+  // are fixture-based and dist-independent, so they belong here.
+  { id: 'dist-freshness-drill', run: ['node', '--test', 'scripts/package/artifacts/freshness/tests/index.test.mjs'], blocking: true },
+  { id: 'pack-inventory-drill', run: ['node', '--test', 'scripts/package/artifacts/inventory/tests/index.test.mjs'], blocking: true },
+  // Determinism of the generated cascade coverage document, whose artifact is
+  // gitignored: the drills prove the document is a pure function of its inputs
+  // and that the generator can create the directory it owns on a clean clone.
+  { id: 'cascade-coverage-ownership-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/mirror-parity/index.test.mjs'], blocking: true },
+  { id: 'root-checklists-clean-checkout-drill', run: ['node', '--test', 'scripts/generate/tokens/manifest/root-checklists/index.test.mjs'], blocking: true },
   // The published documentation set has no other mechanical guard: a broken
   // link, a legacy path reference, non-English prose or a malformed diagram
   // is otherwise silent until a reader hits it.
   { id: 'docs-public-set:check', run: ['pnpm', 'run', 'docs-public-set:check'], blocking: true },
 ]);
+
+const MANIFEST_PACKAGE_ROOT = findPackageRoot(dirname(fileURLToPath(import.meta.url)));
+
+/**
+ * The module paths a gate's argv hands to `node`, and nothing else. A flag
+ * value (`--repositories ui-design-system`) is a bare word, and a `pnpm run`
+ * alias resolves through package.json rather than through the filesystem, so
+ * neither is a script target here. The narrow shape is deliberate: this
+ * predicate decides what MUST exist, so a loose one would report a phantom.
+ */
+export function manifestScriptTargets(run) {
+  if (!Array.isArray(run) || run[0] !== 'node') return [];
+  return run
+    .slice(1)
+    .filter((arg) => !arg.startsWith('--') && /\.(mjs|cjs|js|mts|cts)$/.test(arg));
+}
 
 /** Gates the runner will actually enforce. */
 export function blockingGates() {
@@ -572,6 +652,16 @@ export function validateManifest(gates = CI_GATES) {
     // gate goes green without looking at anything.
     if (gate.blocking && Array.isArray(gate.run) && gate.run.includes('--optional')) {
       problems.push(`${gate.id}: a blocking gate must not pass --optional`);
+    }
+    // EXISTENCE. Eight gates spent a whole refactor pointing at scripts the
+    // relocation had deleted, and only ONE of them was ever observed, because
+    // the runner is fail-fast and dies at the first. `MODULE_NOT_FOUND` is not
+    // a gate verdict: a manifest that names a script the tree does not carry is
+    // malformed, and the runner refuses it before running anything.
+    for (const script of manifestScriptTargets(gate.run)) {
+      if (!existsSync(join(MANIFEST_PACKAGE_ROOT, script))) {
+        problems.push(`${gate.id}: names a script that does not exist: ${script}`);
+      }
     }
   }
   return problems;

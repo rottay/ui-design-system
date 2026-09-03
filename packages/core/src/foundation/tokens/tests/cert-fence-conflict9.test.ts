@@ -23,7 +23,7 @@
  * Governance: design authority 2.7 implementation; independent audit 5 + design authority 3 audit; independent code audit DT.
  */
 import { createHash } from "node:crypto";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 
 import postcss from "postcss";
@@ -457,6 +457,25 @@ function readCss(pathInsideTokens: string): string {
   return readFileSync(join(TOKENS_DIR, pathInsideTokens), "utf8");
 }
 
+/**
+ * `executedFiles` is a historical record: it names the file as it was spelled
+ * when the retarget was executed, and the ledger lives under governance/, so it
+ * is not restated here. What IS checked is that the record still resolves to
+ * exactly one owner on disk after the fold to `<family>/index.css` -- otherwise
+ * the entry would quietly become a dead string that no longer points anywhere.
+ */
+function expectExecutedFileResolves(
+  executedFiles: unknown,
+  recorded: string,
+): void {
+  expect(executedFiles as string[]).toContain(recorded);
+  const folded = recorded.replace(/\/([A-Za-z0-9_-]+)\.css$/, "/$1/index.css");
+  const owners = [recorded, folded]
+    .map((candidate) => join(ROOT, candidate))
+    .filter((candidate) => existsSync(candidate));
+  expect(owners, `${recorded} must resolve to exactly one live owner`).toHaveLength(1);
+}
+
 type B6SourceTexts = {
   defaultCss: string;
   inputCss: string;
@@ -508,8 +527,9 @@ function assertSightedPendingB6Sources(
 
   // --ds-input-disabled-bg: retargeted to --ds-input-bg-disabled; declared in input.css and read by framework-bridge.
   expect(entries["--ds-input-disabled-bg"].successor).toBe("--ds-input-bg-disabled");
-  expect(entries["--ds-input-disabled-bg"].executedFiles).toContain(
-    "src/foundation/tokens/css/runtime/engines/modern/framework-bridge/index.css",
+  expectExecutedFileResolves(
+    entries["--ds-input-disabled-bg"].executedFiles,
+    "src/foundation/tokens/css/runtime/engines/modern/framework-bridge.css",
   );
   expect(countExactPropInText(inputCss, "--ds-input-disabled-bg")).toBe(0);
   expect(countExactPropInText(inputCss, "--ds-input-bg-disabled")).toBe(1);
@@ -527,16 +547,18 @@ function assertSightedPendingB6Sources(
   expect(countExactPropInText(exportButtonCss, "--ds-color-bg-success")).toBe(0);
   expect(countVarUsageInText(exportButtonCss, "--ds-color-success-bg")).toBe(1);
   expect(countVarUsageInText(exportButtonCss, "--ds-color-success-ink")).toBe(1);
-  expect(entries["--ds-color-bg-success"].executedFiles).toContain(
-    "src/foundation/tokens/css/presentation/components/skin/export-button/index.css",
+  expectExecutedFileResolves(
+    entries["--ds-color-bg-success"].executedFiles,
+    "src/foundation/tokens/css/presentation/components/skin/export-button.css",
   );
 
   // --ds-motion-duration-fast: retargeted to --ds-motion-fast; 3 consumer rules in chart-foundation.css.
   expect(entries["--ds-motion-duration-fast"].successor).toBe("--ds-motion-fast");
   expect(countExactPropInText(chartCss, "--ds-motion-duration-fast")).toBe(0);
   expect(countRulesUsingChannel(chartCss, "--ds-motion-fast")).toBe(3);
-  expect(entries["--ds-motion-duration-fast"].executedFiles).toContain(
-    "src/foundation/tokens/css/presentation/components/skin/chart-foundation/index.css",
+  expectExecutedFileResolves(
+    entries["--ds-motion-duration-fast"].executedFiles,
+    "src/foundation/tokens/css/presentation/components/skin/chart-foundation.css",
   );
 }
 
@@ -699,12 +721,29 @@ describe("CERT-FENCE-CONFLICT9 matrix A6 (artifact current → live expected)", 
     expect(sha256SortedLines(postMatrix.map(canonicalLine))).toBe(MATRIX12_POST_SHA256);
   });
 
-  it("a partial PRE/POST projection is rejected by the shared phase validator", () => {
-    const partialA6 = [
-      ...projectRowsToPost(A6_ROWS.slice(0, 3)),
-      ...A6_ROWS.slice(3),
-    ];
-    expect(() => assertMatrix12([...partialA6, ...B6_ROWS])).toThrow();
+  it("the tree is POST because every artifact extension segment is drained", () => {
+    // The mixed-phase branch of `detectPhase` is now unreachable BY
+    // CONSTRUCTION, and saying so is the honest version of the drill that used
+    // to prove it: the `_source/extension.css` drain removed the declared
+    // extension segment from every first-party artifact, so
+    // `channelDeclaredInExtensionSegment` is false for every row and the phase
+    // is POST for all six. A partial projection can therefore no longer differ
+    // from a whole one -- projecting an already-POST row is identity -- which is
+    // exactly why the old assertion stopped failing instead of stopping being
+    // true. The premise is pinned here so a returning extension segment is
+    // visible rather than silently re-enabling a branch nothing exercises.
+    for (const slug of new Set(A6_ROWS.map((row) => row.slug))) {
+      expect(extensionSegmentText(slug), slug).toBe("");
+    }
+    expect(detectPhase(A6_ROWS)).toBe("POST");
+  });
+
+  it("a matrix that is not the signed one is rejected by the shared validator", () => {
+    const mutated = A6_ROWS.map((row, index) =>
+      index === 0 ? { ...row, expected: "var(--ds-mutant)" } : row,
+    );
+    expect(() => assertMatrix12([...mutated, ...B6_ROWS])).toThrow();
+    expect(() => assertMatrix12([...A6_ROWS.slice(1), ...B6_ROWS])).toThrow();
   });
 });
 
@@ -902,24 +941,38 @@ describe("CERT-FENCE-CONFLICT9 mutants turn red", () => {
     expect(sha256SortedLines(mutated.map(canonicalLine))).not.toBe(MATRIX12_PRE_SHA256);
   });
 
-  it("mutating a zeroEffective ramp target breaks resolved equivalence", () => {
-    const expected = normalizeWhitespace(
-      compileEffectiveValue(rottayBrandTheme, "rottay", "dark", "--ds-color-error"),
+  it("mutating a zeroEffective alias target breaks resolved equivalence", () => {
+    // The drill needs a zeroEffective channel that is still an ALIAS, or it
+    // proves nothing about resolution. `--ds-color-error` stopped being one:
+    // rottay's base block now declares it as the literal `#F87171`, so mutating
+    // the 400-step ramp underneath it changes nothing and the mutant passes.
+    // `--ds-card-shadow-elevated` is the member of the same zeroEffective
+    // roster that still reads `var(--ds-elevation-3)`, so it carries the drill.
+    const channel = "--ds-card-shadow-elevated";
+    expect(artifactEffectiveValue("rottay", "dark", channel)).toContain(
+      "var(--ds-elevation-3)",
     );
-    expect(normalizeWhitespace(resolvedArtifactValue("rottay", "dark", "--ds-color-error"))).toBe(
-      expected,
+    // The raw artifact value IS the alias, and the compiler agrees with it;
+    // the resolved value is the alias followed one hop. Both halves are stated,
+    // so the mutation below is provably changing a resolution rather than a
+    // literal that happened to move.
+    expect(normalizeWhitespace(artifactEffectiveValue("rottay", "dark", channel))).toBe(
+      normalizeWhitespace(compileEffectiveValue(rottayBrandTheme, "rottay", "dark", channel)),
     );
+    const expected = normalizeWhitespace(resolvedArtifactValue("rottay", "dark", channel));
+    expect(expected).not.toContain("var(--ds-elevation-3)");
 
     const cssText = readFileSync(join(ARTIFACTS_DIR, "rottay/index.css"), "utf8");
     const mutated = cssText.replace(
-      "--ds-color-error-400: #F87171;",
-      "--ds-color-error-400: #000000;",
+      "--ds-elevation-3: inset 0 1px 0 rgba(255, 255, 255, 0.06)",
+      "--ds-elevation-3: inset 0 9px 0 rgba(0, 0, 0, 0.99)",
     );
+    expect(mutated).not.toBe(cssText);
     const mutatedParsed = postcss.parse(mutated, { from: "rottay-mutant.css" });
 
     expect(
       normalizeWhitespace(
-        resolvedArtifactValueFromRoot(mutatedParsed, "rottay", "dark", "--ds-color-error"),
+        resolvedArtifactValueFromRoot(mutatedParsed, "rottay", "dark", channel),
       ),
     ).not.toBe(expected);
   });
